@@ -10,9 +10,12 @@
     echo $OUTPUT->header();
     require_login();
 
-    if(isset($_POST['submit']) && isset( $_POST['fwid']))
+    if((isset($_POST['submit']) && isset( $_POST['fwid'])) || isset($SESSION->fid7))
     {
-        $fw_id=$_POST['fwid'];
+        if(isset($SESSION->fid7))
+            $fw_id=$SESSION->fid7;
+        else
+            $fw_id=$_POST['fwid'];
         //echo "FW ID : $fw_id";
     ?>
 

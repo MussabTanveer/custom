@@ -12,12 +12,12 @@
     echo $OUTPUT->header();
     require_login();
 
-    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || ($id=$SESSION->id)!=0)
+    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || isset($SESSION->cid2))
     {	
-        if (($id=$SESSION->id)!=0)
-                $course_id=$SESSION->id;
+        if(isset($SESSION->cid2))
+            $course_id=$SESSION->cid2;
         else
-                $course_id=$_POST['courseid'];
+            $course_id=$_POST['courseid'];
        
         //echo "Course ID : $course_id";
     

@@ -27,6 +27,13 @@
             $sname = $records->shortname;
             $table->data[] = array($serialno, $sname, '<input type="radio" value="'.$id.'" name="fwid">');
         }
+        if($serialno == 1){
+            
+            global $SESSION;
+            $SESSION->fid1 = $id;
+        
+            redirect('add_peo.php');
+        }
         echo html_writer::table($table);
         ?>
         <input type='submit' value='NEXT' name='submit' class="btn btn-primary">

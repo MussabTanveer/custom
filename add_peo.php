@@ -3,18 +3,21 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
-    $PAGE->set_title("Add PEOs");
-    $PAGE->set_heading("OBE PEOs");
+    $PAGE->set_title("Add OBE PEOs");
+    $PAGE->set_heading("Add PEO");
     $PAGE->set_url($CFG->wwwroot.'/custom/add_peo.php');
     
     echo $OUTPUT->header();
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || isset($_POST['save']))
+	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || isset($SESSION->fid1) || isset($_POST['save']))
     {
-		if(isset($_POST['submit'])){
-			$fw_id=$_POST['fwid'];
+		if(isset($_POST['submit']) || isset($SESSION->fid1)){
+			if(isset($SESSION->fid1))
+				$fw_id=$SESSION->fid1;
+			else
+				$fw_id=$_POST['fwid'];
 			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($fw_id));
 			if($rec){
 				foreach ($rec as $records){

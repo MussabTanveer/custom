@@ -12,10 +12,13 @@
     require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
-    if(isset($_POST['submit']) && isset($_POST['frameworkid']))
+    if((isset($_POST['submit']) && isset($_POST['frameworkid'])) || isset($SESSION->fid4))
     {
-    	$framework_id=$_POST['frameworkid'];
-    	//echo "$framework_id";
+		if(isset($SESSION->fid4))
+			$framework_id=$SESSION->fid4;
+		else
+			$framework_id=$_POST['frameworkid'];
+		//echo "$framework_id";
     	
     	$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
     		WHERE competencyframeworkid = ? 

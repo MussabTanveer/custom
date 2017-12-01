@@ -26,6 +26,13 @@
 			$id = $records->id;
 			$table->data[] = array( $serialno,$shortname, '<input type="radio" value="'.$id.'" name="frameworkid">'); 
 		}
+		if($serialno == 1){
+            
+            global $SESSION;
+            $SESSION->fid4 = $id;
+        
+            redirect('map_plo_peo.php');
+        }
 		echo html_writer::table($table);
 	
 		?>

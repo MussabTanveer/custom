@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Edit OBE PLOs");
-    $PAGE->set_heading("Edit OBE PLOs");
+    $PAGE->set_heading("Edit PLO");
     $PAGE->set_url($CFG->wwwroot.'/custom/edit_plo.php');
     
     echo $OUTPUT->header();

@@ -25,8 +25,15 @@
             $serialno++;
 			$id = $records->id;
             $shortname = $records->shortname;
-		$table->data[] = array($serialno, $shortname,'<input type="radio" value="'.$id.'" name="frameworkid">');
-		}
+		    $table->data[] = array($serialno, $shortname,'<input type="radio" value="'.$id.'" name="frameworkid">');
+        }
+        if($serialno == 1){
+            
+            global $SESSION;
+            $SESSION->fid3 = $id;
+        
+            redirect('add_clo.php');
+        }
 		echo html_writer::table($table);
         ?>
         <input type='submit' value='NEXT' name='submit' class="btn btn-primary">

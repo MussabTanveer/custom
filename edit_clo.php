@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Edit OBE CLOs");
-    $PAGE->set_heading("Edit OBE CLOs");
+    $PAGE->set_heading("Edit CLO");
     $PAGE->set_url($CFG->wwwroot.'/custom/edit_clo.php');
 
     echo $OUTPUT->header();

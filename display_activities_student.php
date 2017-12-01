@@ -12,9 +12,12 @@
     echo $OUTPUT->header();
     require_login();
 
-    if(isset($_POST['submit']) && isset( $_POST['courseid']))
-    {	
-        $course_id=$_POST['courseid'];
+    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || isset($SESSION->cid4))
+    {
+        if(isset($SESSION->cid4))
+            $course_id=$SESSION->cid4;
+        else
+            $course_id=$_POST['courseid'];
         //echo "Course ID : $course_id";
 
         // Dispaly all quizzes

@@ -11,9 +11,12 @@
     require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
-    if(isset($_POST['submit']) && isset( $_POST['fwid']))
+    if((isset($_POST['submit']) && isset( $_POST['fwid'])) || isset($SESSION->fid9)) 
     {
-        $fw_id=$_POST['fwid'];
+        if(isset($SESSION->fid9))
+            $fw_id=$SESSION->fid9;
+        else
+            $fw_id=$_POST['fwid'];
         //echo "FW ID : $fw_id";
     ?>
 

@@ -27,6 +27,13 @@
 			$id = $records->id;
 			$table->data[] = array( $serialno,$shortname, '<input type="radio" value="'.$id.'" name="frameworkid">');
 		}
+		if($serialno == 1){
+            
+            global $SESSION;
+            $SESSION->fid5 = $id;
+        
+            redirect('map_clo_plo.php');
+        }
 		echo html_writer::table($table);
 
 		?>

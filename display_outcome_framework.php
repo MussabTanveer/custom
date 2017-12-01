@@ -27,6 +27,13 @@
             $sname = $records->shortname;
             $table->data[] = array($serialno, $sname, '<input type="radio" value="'.$id.'" name="fwid">');
         }
+        if($serialno == 1){
+            
+            global $SESSION;
+            $SESSION->fid6 = $id;
+        
+            redirect('display_peo_plo_clo.php');
+        }
         echo html_writer::table($table);
         ?>
         <input type='submit' value='NEXT' name='submit' class="btn btn-primary">
