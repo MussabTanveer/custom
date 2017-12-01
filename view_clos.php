@@ -27,6 +27,9 @@
                 $i++;
             }
         }
+        else{
+            echo "<h3>No CLOs in framework found!</h3>";
+        }
         echo $OUTPUT->footer();
 	}
 	else

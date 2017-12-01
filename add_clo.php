@@ -11,10 +11,13 @@
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || isset($_POST['save']))
+	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || isset($SESSION->fid3) || isset($_POST['save']))
 	{
-		if(isset($_POST['submit'])){
-			$frameworkid=$_POST['frameworkid'];
+		if(isset($_POST['submit']) || isset($SESSION->fid3)){
+			if(isset($SESSION->fid3))
+				$frameworkid=$SESSION->fid3;
+			else
+				$frameworkid=$_POST['frameworkid'];
 			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($frameworkid));
 			if($rec){
 				foreach ($rec as $records){
@@ -41,10 +44,10 @@
 					$msg2="<font color='red'>-Please enter ID number</font>";
 				}
 			}
-			elseif(preg_match('/^[a-zA-Z]{2}-\d{3}-(c|C)(l|L)(o|O)-\d{1,}$/',$idnumber))
+			/*elseif(preg_match('/^[a-zA-Z]{2}-\d{3}-(c|C)(l|L)(o|O)-\d{1,}$/',$idnumber))
 			{
 				$msg2="<font color='red'>-Please match the format eg. CS-304-CLO-1</font>";
-			}
+			}*/
 			else{
 				//echo $shortname;
 				//echo $description;
@@ -55,7 +58,7 @@
 				}
 				
 				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
 					$DB->execute($sql);
 					$msg3 = "<font color='green'><b>CLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}

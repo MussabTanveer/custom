@@ -49,10 +49,9 @@
         if($serialno == 1){
             
             global $SESSION;
-            $SESSION->id = $id;
+            $SESSION->cid2 = $id;
         
             redirect('display_quizzes-2.php');
-           // header('Location: display_quizzes-2.php');
         }
         echo html_writer::table($table);
         ?>

@@ -12,12 +12,14 @@
     echo $OUTPUT->header();
     require_login();
 
-    if(isset($_POST['submit']) && isset( $_POST['courseid']))
+    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || isset($SESSION->cid3))
     {
-        $course_id=$_POST['courseid'];
-        //global $SESSION;
-        //$SESSION->courseid = $course_id;
-        //echo "Course ID : $course_id";
+        if(isset($SESSION->cid3))
+            $course_id=$SESSION->cid3;
+        else
+            $course_id=$_POST['courseid'];
+        
+            //echo "Course ID : $course_id";
 
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));

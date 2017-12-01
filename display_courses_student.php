@@ -47,6 +47,13 @@
             $idnum = $records->idnumber;
             $table->data[] = array($serialno, $fname, $sname, $idnum, '<input type="radio" value="'.$id.'" name="courseid">');
         }
+        if($serialno == 1){
+            
+            global $SESSION;
+            $SESSION->cid4 = $id;
+        
+            redirect('display_activities_student.php');
+        }
         echo html_writer::table($table);
         ?>
         <input type='submit' value='NEXT' name='submit' class="btn btn-primary">
