@@ -5,8 +5,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
-    $PAGE->set_title("Outcome Framework");
-    $PAGE->set_heading("Outcome Based Education Framework");
+    $PAGE->set_title("OBE Frameworks");
+    $PAGE->set_heading("OBE Framework Selection");
     $PAGE->set_url($CFG->wwwroot.'/custom/display_outcome_framework-3.php');
     
     echo $OUTPUT->header();
