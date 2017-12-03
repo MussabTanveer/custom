@@ -65,10 +65,10 @@ guidelines.php (Admin steps)
 
 select_course_enrol.php (for Enrolling Users in Course)
 
-reprot_main.php (Show links based on role)
-reprot_admin.php
-reprot_teacher.php
-reprot_student.php
+report_main.php (Show links based on role)
+report_admin.php
+report_teacher.php
+report_student.php
 
 select_course.php (Map CLOs to Courses)
 select_framework_to_map_clo_course.php
