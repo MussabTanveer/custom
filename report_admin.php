@@ -43,9 +43,9 @@
 
         <a href="../course/edit.php?category=1&returnto=guidelines" target="_blank">Create Courses</a><br><br>
 
-        <a href="#" target="_blank">Add CLOs to Courses</a><br><br>
+        <a href="./select_course.php" target="_blank">Add CLOs to Courses</a><br><br>
 
-        <a href="./view_courses.php" target="_blank">Enrol/Unenrol Users</a><br><br>
+        <a href="./select_course_enrol.php" target="_blank">Enrol/Unenrol Users</a><br><br>
     </div>
 <?php
 

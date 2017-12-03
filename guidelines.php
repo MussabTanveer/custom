@@ -207,7 +207,7 @@
 			<div class="cd-timeline-content">
 				<h2>Step 15: Add CLOs to Courses</h2>
 				<p>Add CLOs to courses.</p>
-				<a href="#0" target="_blank" class="cd-read-more">Proceed</a>
+				<a href="./select_course.php" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
 			</div> <!-- cd-timeline-content -->
 		</div> <!-- cd-timeline-block -->
@@ -219,7 +219,7 @@
 			<div class="cd-timeline-content">
 				<h2>Step 16: Enrol/Unenrol Users</h2>
 				<p>Enrol/Unenrol users in course. User roles include Student, Teacher, Manager, etc.</p>
-				<a href="./view_courses.php" target="_blank" class="cd-read-more">Proceed</a>
+				<a href="./select_course_enrol.php" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
 			</div> <!-- cd-timeline-content -->
 		</div> <!-- cd-timeline-block -->
