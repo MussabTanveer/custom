@@ -11,11 +11,14 @@
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || isset($SESSION->fid1) || isset($_POST['save']))
+	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz") || isset($_POST['save']))
     {
-		if(isset($_POST['submit']) || isset($SESSION->fid1)){
-			if(isset($SESSION->fid1))
+		if(isset($_POST['submit']) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz")){
+			if(isset($SESSION->fid1) && $SESSION->fid1 != "xyz")
+			{
 				$fw_id=$SESSION->fid1;
+				$SESSION->fid1 = "xyz";
+			}
 			else
 				$fw_id=$_POST['fwid'];
 			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($fw_id));

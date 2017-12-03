@@ -12,10 +12,13 @@
     echo $OUTPUT->header();
     require_login();
 
-    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || isset($SESSION->cid4))
+    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid4) && $SESSION->cid4 != "xyz"))
     {
-        if(isset($SESSION->cid4))
+        if(isset($SESSION->cid4) && $SESSION->cid4 != "xyz")
+        {
             $course_id=$SESSION->cid4;
+            $SESSION->cid4 = "xyz";
+        }
         else
             $course_id=$_POST['courseid'];
         //echo "Course ID : $course_id";

@@ -14,89 +14,83 @@
     $time = time();
     
  
- if((isset($_POST['submit']) && isset($_POST['frameworkid']))  || isset($SESSION->fid6))
+	if((isset($_POST['submit']) && isset($_POST['frameworkid']))  || (isset($SESSION->fid10) && $SESSION->fid10 != "xyz"))
     {
-
-    	if(isset($SESSION->fid6) && $SESSION->fid6 != "xyz")
-		 {
-		 	$frameworkid=$SESSION->fid6; 
-		 	$SESSION->fid6="xyz";
-		 }
+    	if(isset($SESSION->fid10) && $SESSION->fid10 != "xyz")
+		{
+			$frameworkid=$SESSION->fid10; 
+			$SESSION->fid10="xyz";
+		}
 		else
-   		 $frameworkid=$_POST['frameworkid'];
+			$frameworkid=$_POST['frameworkid'];
     		//echo "$frameworkid";
 
-    		
-    
- 		 $courseid=$SESSION->courseid;
+		$courseid=$SESSION->courseid;
  		//echo "$courseid";
 
- 		 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
+		$course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
     		WHERE id = ? ',
     		 array($courseid));
 
- 		 if ($course != NULL){
+		if ($course != NULL){
  		 	foreach ($course as $rec) {
-							$id =  $rec->id;
-							$idnumber =  $rec->idnumber;
+				$id =  $rec->id;
+				$idnumber =  $rec->idnumber;
+			}
+		}	
 
-
-							}
- 		 }	
-
- 		 $count=0;
-//echo "$frameworkid";
- 		 //echo "$idnumber";
+		$count=0;
+		//echo "$frameworkid";
+		//echo "$idnumber";
 
 		$competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
     		WHERE idnumber like '{$idnumber}%' 
     		AND competencyframeworkid =? ",
     		 array($frameworkid));
 
-	$flag=false;
+		$flag=false;
 
- if ($competencies != NULL){
+ 		if ($competencies != NULL){
  		 	foreach ($competencies as $rec) {
-							$id =  $rec->id;
-							$idnumber =  $rec->idnumber;
-							//echo "$idnumber";
+				$id =  $rec->id;
+				$idnumber =  $rec->idnumber;
+				//echo "$idnumber";
 
-					$check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp` 
-					    		WHERE courseid = ? 
-					    		AND competencyid =? ",
-					    		 array($courseid,$id));
+				$check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
+							WHERE courseid = ?
+							AND competencyid =? ",
+							array($courseid,$id));
 
-							if ($check == NULL)
-							{	
-								$flag=true;
-							
-								$sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
-								$DB->execute($sql);
-								
-							}
+				if ($check == NULL)
+				{	
+					$flag=true;
+				
+					$sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
+					$DB->execute($sql);
+					
+				}
 
+			}
 
-							}
-
-							if($flag == true)
-							{
-								echo " <font color='green'>CLOs successfully mapped with the course </font>";
-							}
+			if($flag == true)
+			{
+				echo " <font color='green'>CLOs successfully mapped with the course </font>";
+			}
 			
 
- 		 }
+		}
 
- 		 else 
- 		 {	echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
+		else 
+		{	echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
 
- 			 goto end;
- 			}
+			goto end;
+		}
 
 
- 		 if ($flag == false)
+		if ($flag == false)
  		{
  			echo " <font color='green'>CLOs are already mapped with the course </font>";
- 		 }
+		}
  		
 		end:
 
