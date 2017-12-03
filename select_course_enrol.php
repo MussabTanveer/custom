@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("View Courses");
     $PAGE->set_heading("View Courses");
-    $PAGE->set_url($CFG->wwwroot.'/custom/view_courses.php');
+    $PAGE->set_url($CFG->wwwroot.'/custom/select_course_enrol.php');
     
     echo $OUTPUT->header();
 	require_login();
@@ -20,7 +20,7 @@
             $shortname = $records->shortname;
             $idnumber = $records->idnumber;
             $id=$records->id;
-            echo "<h4><a href='../enrol/users.php?id=$id' title='Enrol Users'>$i. $fullname ($shortname $idnumber)</a></h4>";
+            echo "<h4><a href='../enrol/users.php?id=$id' title='Enrol Users'>$i. $fullname ($shortname $idnumber)</a></h4><br />";
             $i++;
         }
     }
