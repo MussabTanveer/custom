@@ -2,13 +2,13 @@ Custom File Names:
 
 Used:
 
-display_courses.php
+display_courses.php (Detailed Quiz Report)
 display_quizzes.php
-display_quiz_grid.php (Detailed Quiz Report)
+display_quiz_grid.php
 
-display_courses-2.php
+display_courses-2.php (Map CLO to Ques)
 display_quizzes-2.php
-add_comp_ques.php (Map CLO to Ques)
+add_comp_ques.php
 confirm_comp_ques.php
 
 display_courses-3.php (For Individual Activity & Course CLO Reports)
@@ -37,8 +37,8 @@ display_plo_domain_clo_level.php
 
 display_course_progress.php (Student Course Progress)
 
-add_framework.php (Add OBE framework)
-edit_framework.php (Edit OBE framework)
+add_framework.php (Add/Edit OBE framework)
+edit_framework.php
 
 select_frameworktoPEO.php (Add/Edit PEO to framework)
 add_peo.php
@@ -63,8 +63,16 @@ confirm_clo_plo.php
 
 guidelines.php (Admin steps)
 
-view_courses.php (for enrolling users)
+select_course_enrol.php (for Enrolling Users in Course)
 
+reprot_main.php (Show links based on role)
+reprot_admin.php
+reprot_teacher.php
+reprot_student.php
+
+select_course.php (Map CLOs to Courses)
+select_framework_to_map_clo_course.php
+map_clo_course.php
 
 Unused:
 
