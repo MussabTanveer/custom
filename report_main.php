@@ -1,9 +1,10 @@
 <?php
     require_once('../config.php');
+    $PAGE->set_pagelayout('redirect');
     require_login();
-    $redirect_page='report_admin.php';
-    $redirect_page1='report_teacher.php';
-    $redirect_page2='report_student.php';
+    $redirect_page1='report_admin.php';
+    $redirect_page2='report_teacher.php';
+    $redirect_page3='report_student.php';
   
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname, c.shortname, c.idnumber
   
@@ -24,20 +25,15 @@
       AND usr.id = ?', array('50', 'editingteacher', $USER->id));
   
     if(is_siteadmin()){
-      
-      header('Location:'.$redirect_page);  
-      
+      //echo 'admin';
+      redirect($redirect_page1);
     }
-
     elseif($rec){
-      
       //echo 'teacher';
-      header('Location:'.$redirect_page1);
+      redirect($redirect_page2);
     }
-
     else{
-      
       //echo 'student';
-      header('Location:'.$redirect_page2);	  
+      redirect($redirect_page3);	  
 	  }
 ?>
