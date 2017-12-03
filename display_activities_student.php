@@ -4,7 +4,7 @@
     require_once('../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
-    $PAGE->set_pagelayout('admin');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Activities");
     $PAGE->set_heading("Activities");
     $PAGE->set_url($CFG->wwwroot.'/custom/display_activities_student.php');

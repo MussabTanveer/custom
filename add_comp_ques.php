@@ -2,7 +2,7 @@
     require_once('../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
-    $PAGE->set_pagelayout('admin');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Select CLO");
     $PAGE->set_heading("Select Activity CLO");
     $PAGE->set_url($CFG->wwwroot.'/custom/add_comp_ques.php');

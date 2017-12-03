@@ -5,7 +5,7 @@
     require_once('../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
-    $PAGE->set_pagelayout('admin');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Progress");
     $PAGE->set_heading("Semester Progress");
     $PAGE->set_url($CFG->wwwroot.'/custom/display_course_progress.php');
