@@ -3,8 +3,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
-    $PAGE->set_title("View OBE PLOs");
-    $PAGE->set_heading("View CLOs");
+    $PAGE->set_title("View OBE CLOs");
+    $PAGE->set_heading("Course Learning Outcomes (CLOs)");
     $PAGE->set_url($CFG->wwwroot.'/custom/view_clos.php');
     
     echo $OUTPUT->header();

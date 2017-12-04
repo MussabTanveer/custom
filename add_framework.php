@@ -65,6 +65,32 @@
 	<br />
 	<h3>Add New Framework</h3>
 	<form method='post' action="" class="mform">
+	<div class="form-group row fitem">
+			<div class="col-md-3">
+				<span class="pull-xs-right text-nowrap">
+					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+				</span>
+				<label class="col-form-label d-inline" for="id_idnumber">
+					ID number
+				</label>
+			</div>
+			<div class="col-md-9 form-inline felement" data-fieldtype="text">
+				<input type="text"
+						class="form-control "
+						name="idnumber"
+						id="id_idnumber"
+						size=""
+						required
+						maxlength="100" type="text" >
+				<div class="form-control-feedback" id="id_error_idnumber">
+				<?php
+				if(isset($msg2)){
+					echo $msg2;
+				}
+				?>
+				</div>
+			</div>
+		</div>
 		
 		<div class="form-group row fitem ">
 			<div class="col-md-3">
@@ -112,32 +138,6 @@
 			</div>
 		</div>
 
-		<div class="form-group row fitem">
-			<div class="col-md-3">
-				<span class="pull-xs-right text-nowrap">
-					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-				</span>
-				<label class="col-form-label d-inline" for="id_idnumber">
-					ID number
-				</label>
-			</div>
-			<div class="col-md-9 form-inline felement" data-fieldtype="text">
-				<input type="text"
-						class="form-control "
-						name="idnumber"
-						id="id_idnumber"
-						size=""
-						required
-						maxlength="100" type="text" >
-				<div class="form-control-feedback" id="id_error_idnumber">
-				<?php
-				if(isset($msg2)){
-					echo $msg2;
-				}
-				?>
-				</div>
-			</div>
-		</div>
 		
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>

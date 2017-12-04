@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE PEOs");
-    $PAGE->set_heading("Add PEO");
+    $PAGE->set_heading("Add Program Educational Objective (PEO)");
     $PAGE->set_url($CFG->wwwroot.'/custom/add_peo.php');
     
     echo $OUTPUT->header();
@@ -101,6 +101,36 @@
 				</div>
 			</div>
 
+			<div class="form-group row fitem">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_idnumber">
+						ID number
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="text">
+					<input type="text"
+							class="form-control "
+							name="idnumber"
+							id="id_idnumber"
+							size=""
+							pattern="[p/P][e/E][o/O]-[0-9]{1,}"
+							title="eg. PEO-1"
+							placeholder="eg. PEO-1"
+							required
+							maxlength="100" type="text" >
+					<div class="form-control-feedback" id="id_error_idnumber">
+					<?php
+					if(isset($msg2)){
+						echo $msg2;
+					}
+					?>
+					</div>
+				</div>
+			</div>
+			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -147,34 +177,6 @@
 				</div>
 			</div>
 
-			<div class="form-group row fitem">
-				<div class="col-md-3">
-					<span class="pull-xs-right text-nowrap">
-						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-					</span>
-					<label class="col-form-label d-inline" for="id_idnumber">
-						ID number
-					</label>
-				</div>
-				<div class="col-md-9 form-inline felement" data-fieldtype="text">
-					<input type="text"
-							class="form-control "
-							name="idnumber"
-							id="id_idnumber"
-							size=""
-							pattern="[p/P][e/E][o/O]-[0-9]{1,}"
-							title="eg. PEO-1"
-							required
-							maxlength="100" type="text" >
-					<div class="form-control-feedback" id="id_error_idnumber">
-					<?php
-					if(isset($msg2)){
-						echo $msg2;
-					}
-					?>
-					</div>
-				</div>
-			</div>
 			<input type="hidden" name="fname" value="<?php echo $fw_shortname; ?>"/>
 			<input type="hidden" name="fid" value="<?php echo $fw_id; ?>"/>
 			<input class="btn btn-info" type="submit" name="save" value="Save"/>

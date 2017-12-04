@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE CLOs");
-    $PAGE->set_heading("Add CLO");
+    $PAGE->set_heading("Add Course Learning Outcome (CLO)");
     $PAGE->set_url($CFG->wwwroot.'/custom/add_clo.php');
     
     echo $OUTPUT->header();
@@ -86,6 +86,37 @@
 					<?php echo $framework_shortname; ?>
 				</div>
 			</div>
+
+			<div class="form-group row fitem">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_idnumber">
+						ID number
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="text">
+					<input type="text"
+							class="form-control"
+							name="idnumber"
+							id="id_idnumber"
+							size=""
+							pattern="[a-zA-Z]{2}-[0-9]{3}-[c/C][l/L][o/O]-[0-9]{1,}"
+							title="eg. CS-304-CLO-1"
+							required
+							placeholder="eg. CS-304-CLO-1"
+							maxlength="100" type="text" >
+					<div class="form-control-feedback" id="id_error_idnumber">
+					<?php
+					if(isset($msg2)){
+						echo $msg2;
+					}
+					?>
+					</div>
+				</div>
+			</div>
+			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -132,35 +163,6 @@
 				</div>
 			</div>
 			
-			<div class="form-group row fitem">
-				<div class="col-md-3">
-					<span class="pull-xs-right text-nowrap">
-						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-					</span>
-					<label class="col-form-label d-inline" for="id_idnumber">
-						ID number
-					</label>
-				</div>
-				<div class="col-md-9 form-inline felement" data-fieldtype="text">
-					<input type="text"
-							class="form-control"
-							name="idnumber"
-							id="id_idnumber"
-							size=""
-							pattern="[a-zA-Z]{2}-[0-9]{3}-[c/C][l/L][o/O]-[0-9]{1,}"
-							title="eg. CS-304-CLO-1"
-							required
-							placeholder="eg. CS-304-CLO-1"
-							maxlength="100" type="text" >
-					<div class="form-control-feedback" id="id_error_idnumber">
-					<?php
-					if(isset($msg2)){
-						echo $msg2;
-					}
-					?>
-					</div>
-				</div>
-			</div>
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
 			<input class="btn btn-info" type="submit" name="save" value="Save"/>
