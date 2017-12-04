@@ -26,11 +26,12 @@
         // Get PEO
         $recPEO=$DB->get_records_sql('SELECT * FROM mdl_competency WHERE competencyframeworkid = ? AND parentid = 0 ORDER BY id', array($fw_id));
         // Get PLO PEO
-        $rec=$DB->get_recordset_sql('SELECT plo.parentid AS pparent, plo.idnumber AS pidn, peo.id AS peoid, plo.shortname AS ploname, peo.shortname AS peoname FROM  mdl_competency plo, mdl_competency peo WHERE peo.id=plo.parentid AND peo.parentid = 0 AND peo.competencyframeworkid = ? AND plo.competencyframeworkid = ? ORDER BY RAND()', array($fw_id, $fw_id));
+        $rec=$DB->get_recordset_sql('SELECT plo.parentid AS pparent, plo.idnumber AS pidn, peo.id AS peoid, plo.shortname AS ploname, peo.shortname AS peoname FROM  mdl_competency plo, mdl_competency peo WHERE peo.id=plo.parentid AND peo.parentid = 0 AND peo.competencyframeworkid = ? AND plo.competencyframeworkid = ? ORDER BY plo.id', array($fw_id, $fw_id));
         // Get PLO
-        $recPLO=$DB->get_records_sql("SELECT * FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber LIKE 'plo%' ORDER BY idnumber", array($fw_id));
+        $recPLO=$DB->get_records_sql("SELECT * FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber LIKE 'plo%' ORDER BY id", array($fw_id));
         // Get PLO CLO
         $rec2=$DB->get_recordset_sql('SELECT clo.parentid AS cparent, plo.id AS ploid, clo.idnumber AS cloidnum, clo.shortname AS cloname, plo.shortname AS ploname FROM  mdl_competency clo, mdl_competency plo WHERE plo.id=clo.parentid AND plo.parentid != 0 AND plo.competencyframeworkid = ? AND clo.competencyframeworkid = ? ORDER BY clo.idnumber', array($fw_id, $fw_id));
+        // use ORDER BY RAND() for random ordering of records
 
         if($recPEO){
             ?>
