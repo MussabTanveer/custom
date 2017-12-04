@@ -157,43 +157,7 @@
 				<img src="img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
-				<h2>Step 11: Add a new User</h2>
-				<p>Add a new user. User first name, surname, username, password and e-mail address are required.</p>
-				<a href="../user/editadvanced.php?id=-1" target="_blank" class="cd-read-more">Proceed</a>
-				<span class="cd-date"></span>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
-
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-movie">
-				<img src="img/guideline/circle.svg" alt="">
-			</div> <!-- cd-timeline-img -->
-			<div class="cd-timeline-content">
-				<h2>Step 12: View all Users</h2>
-				<p>View all users present in database.</p>
-				<a href="../admin/user.php" target="_blank" class="cd-read-more">Proceed</a>
-				<span class="cd-date"></span>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
-
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-location">
-				<img src="img/guideline/circle.svg" alt="">
-			</div> <!-- cd-timeline-img -->
-			<div class="cd-timeline-content">
-				<h2>Step 13: Add/Edit/View Cohorts</h2>
-				<p>Cohorts are user groups. The purpose of cohorts is to enable all members of the cohort to be easily enrolled in a course.</p>
-				<a href="../cohort/index.php" target="_blank" class="cd-read-more">Proceed</a>
-				<span class="cd-date"></span>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
-
-		<div class="cd-timeline-block">
-			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
-			</div> <!-- cd-timeline-img -->
-			<div class="cd-timeline-content">
-				<h2>Step 14: Create Courses</h2>
+				<h2>Step 11: Create Courses</h2>
 				<p>Add a new course. Course full name, short name, ID number (course-code), start and end dates are required.</p>
 				<a href="../course/edit.php?category=1&returnto=guidelines" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
@@ -205,9 +169,45 @@
 				<img src="img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
-				<h2>Step 15: Add CLOs to Courses</h2>
+				<h2>Step 12: Add CLOs to Courses</h2>
 				<p>Add CLOs to courses.</p>
 				<a href="./select_course.php" target="_blank" class="cd-read-more">Proceed</a>
+				<span class="cd-date"></span>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-location">
+				<img src="img/guideline/circle.svg" alt="">
+			</div> <!-- cd-timeline-img -->
+			<div class="cd-timeline-content">
+				<h2>Step 13: Add a new User</h2>
+				<p>Add a new user. User first name, surname, username, password and e-mail address are required.</p>
+				<a href="../user/editadvanced.php?id=-1" target="_blank" class="cd-read-more">Proceed</a>
+				<span class="cd-date"></span>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-picture">
+				<img src="img/guideline/circle.svg" alt="">
+			</div> <!-- cd-timeline-img -->
+			<div class="cd-timeline-content">
+				<h2>Step 14: View all Users</h2>
+				<p>View all users present in database.</p>
+				<a href="../admin/user.php" target="_blank" class="cd-read-more">Proceed</a>
+				<span class="cd-date"></span>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+
+		<div class="cd-timeline-block">
+			<div class="cd-timeline-img cd-movie">
+				<img src="img/guideline/circle.svg" alt="">
+			</div> <!-- cd-timeline-img -->
+			<div class="cd-timeline-content">
+				<h2>Step 15: Add/Edit/View Cohorts</h2>
+				<p>Cohorts are user groups. The purpose of cohorts is to enable all members of the cohort to be easily enrolled in a course.</p>
+				<a href="../cohort/index.php" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
 			</div> <!-- cd-timeline-content -->
 		</div> <!-- cd-timeline-block -->
