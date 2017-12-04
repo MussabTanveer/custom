@@ -74,9 +74,9 @@
 			$i = 1;
 			echo "<h3>Already Present PEOs</h3>";
 			foreach ($peos as $records){
-				$shortname = $records->shortname;
+				$shortname1 = $records->shortname;
 				$id=$records->id;
-				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_peo.php?delete=$id&fwid=$fw_id' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>"; //link to edit_peo.php
+				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_peo.php?delete=$id&fwid=$fw_id' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>"; //link to edit_peo.php
 				$i++;
 			}
 		}

@@ -21,9 +21,9 @@
             $i = 1;
             echo "<h3>Already Present CLOs In Framework</h3>";
             foreach ($clos as $records){
-                $shortname = $records->shortname;
+                $shortname1 = $records->shortname;
                 $id=$records->id;
-                echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_clo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_clo.php?delete=$id&fwid=$fw_id' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
+                echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_clo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_clo.php?delete=$id&fwid=$fw_id' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
                 $i++;
             }
         }

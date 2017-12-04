@@ -36,7 +36,7 @@
 			$frameworkid=$_POST['frameworkid'];
 			$framework_shortname=$_POST['framework_shortname'];
 			$time = time();
-
+             echo $shortname;
 			if(empty($shortname) || empty($idnumber))
 			{
 				if(empty($shortname))
@@ -57,6 +57,7 @@
 				//echo $description;
 				//echo $idnumber;
 				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
+				echo $idnumber;
 				if(count($check)){
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
@@ -77,9 +78,9 @@
 				 $i = 1;
 				 echo "<h3>Already Present PLOs In Framework</h3>";
 				 foreach ($plos as $records){
-				 $shortname = $records->shortname;
+				 $shortname1 = $records->shortname;
 			     $id=$records->id;
-				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_plo.php?delete=$id&fwid=$frameworkid' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
+				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_plo.php?delete=$id&fwid=$frameworkid' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
 			    $i++;
 								
 				}
@@ -187,7 +188,12 @@
 			<input class="btn btn-info" type="submit" name="save" value="Save"/>
 		</form>
 		<?php
+		//echo $shortname;
 		if(isset($_POST['save']) && !isset($msg3)){
+          // echo $shortname;
+				//echo $description;
+				//echo $idnumber;
+
 		?>
 		<script>
 			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
