@@ -74,6 +74,10 @@ select_course.php (Map CLOs to Courses)
 select_framework_to_map_clo_course.php
 map_clo_course.php
 
+select_frameworktoCourse.php (Add Course after framework selection)
+add_course.php
+
+
 Unused:
 
 display.php
