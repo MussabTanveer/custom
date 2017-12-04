@@ -3,8 +3,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Teacher Reports");
-    $PAGE->set_heading("Teacher Reports");
+    $PAGE->set_title("Teacher Reports & Forms");
+    $PAGE->set_heading("Teacher Reports & Forms");
     $PAGE->set_url($CFG->wwwroot.'/custom/report_teacher.php');
     echo $OUTPUT->header();
     require_login();

@@ -3,8 +3,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
-    $PAGE->set_title("Admin Reports");
-    $PAGE->set_heading("Admin Reports");
+    $PAGE->set_title("Admin Reports & Forms");
+    $PAGE->set_heading("Admin Reports & Forms");
     $PAGE->set_url($CFG->wwwroot.'/custom/report_admin.php');
     echo $OUTPUT->header();
     require_login();
