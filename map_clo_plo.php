@@ -11,6 +11,32 @@
 
     require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
+
+
+?>
+<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+
+
+<script type="text/javascript">
+	$(document).ready( function () {
+		$('#myForm').submit( function () {
+			var formdata = $(this).serialize();
+			$.ajax({
+			    type: "POST",
+			    url: "confirm_clo_plo.php",
+			    data: formdata,
+			    success:function(){
+           	document.getElementById("msg").innerHTML ="<font color='green'>CLOs successfully mapped with the PLOs!</font>"
+        }
+
+			 });
+			return false;
+		});
+	});
+</script>
+
+
+<?php
    
     if((isset($_POST['submit']) && isset($_POST['frameworkid'])) || (isset($SESSION->fid5) && $SESSION->fid5 != "xyz"))
     {	
@@ -40,27 +66,27 @@
 
 	?>
 
-		<form action="confirm_clo_plo.php" method="post" >
+		<form action="" method="post" id="myForm">
     		<table class="generaltable">
 				<tr class="table-head">
 					<th> S.No</th>
 					<th> CLOs </th>
 					<th> CLO's ID Number </th>
 					<th> Select PLO </th>
-					<th> PLO's ID Number </th>
+					<th> PLO's Name </th>
 					
 					
 				</tr>
 
 <?php 		$cloidarray=array();
-			$ploIdNumberArray=array();
+			$ploNameArray=array();
 			$ploIdArray=array();
 
 			foreach ($plos as $plo) {
 							$id =  $plo->id;
 							$name = $plo->shortname;
 							$idnumber =  $plo->idnumber;
-							array_push($ploIdNumberArray,$idnumber);
+							array_push($ploNameArray,$name);
 							array_push($ploIdArray,$id);
 
 							}
@@ -85,9 +111,10 @@
 							foreach ($plos as $plo) {
 							$id =  $plo->id;
 							$name = $plo->shortname;
+							$idnumber = $plo->idnumber;
 							
 							?>
-							<option value='<?php echo $id; ?>'><?php echo $name; ?></option>
+							<option value='<?php echo $id; ?>'><?php echo $idnumber; ?></option>
 							<?php
 							}
 							?>
@@ -108,6 +135,11 @@
            <input type="submit" value="NEXT" name="ok" class="btn btn-primary">
 			
 		</form>
+		
+		<p id="msg">
+		
+
+		</p>
 
 <?php
 
@@ -133,9 +165,10 @@
 ?>
 <script>
 	//alert("heelo");
-	var ploIdNumber = <?php echo json_encode($ploIdNumberArray); ?>;
+	var ploIdNumber = <?php echo json_encode($ploNameArray); ?>;
 	var ploId = <?php echo json_encode($ploIdArray); ?>;
 		function dropdownTip(value,id){
+			document.getElementById("msg").innerHTML = "";
 				var plosidnumber = "plosidnumber" + id;
 				if(value == 'NULL'){
 					document.getElementById(plosidnumber).innerHTML = "";

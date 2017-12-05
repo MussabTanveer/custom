@@ -14,8 +14,6 @@
 
     $peosIdArray=array();
  
-	if(isset($_POST['ok']))
-	{
 			foreach ($_POST['peosId'] as $peoId)
 			{
 				array_push($peosIdArray,$peoId);	
@@ -43,8 +41,6 @@
 	
 	echo "<font color='green'>PLOs successfully mapped with the PEOs!</font>";
 	echo "<br>";
-
-	}
 ?>
 
 

@@ -12,6 +12,31 @@
     require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
+?>
+<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+
+
+<script type="text/javascript">
+	$(document).ready( function () {
+		$('#myForm').submit( function () {
+			var formdata = $(this).serialize();
+			$.ajax({
+			    type: "POST",
+			    url: "confirm_plo_peo.php",
+			    data: formdata,
+			    success:function(){
+           	document.getElementById("msg").innerHTML = "<font color='green'>PLOs successfully mapped with the PEOs!</font>"	
+        }
+
+			 });
+			return false;
+		});
+	});
+</script>
+
+
+<?php
+
     if((isset($_POST['submit']) && isset($_POST['frameworkid'])) || (isset($SESSION->fid4) && $SESSION->fid4 != "xyz"))
     {
 		if(isset($SESSION->fid4) && $SESSION->fid4 != "xyz")
@@ -40,29 +65,30 @@
 
 	?>
 
-		<form action="confirm_plo_peo.php" method="post" >
+		<form action="" method="post" id="myForm">
     		<table class="generaltable">
 				<tr class="table-head">
 					<th> S.No</th>
 					<th> Name </th>
 					<th> PLO's ID Number </th>
 					<th> Select PEO </th>
-					<th> PEO's ID Number </th>
+					<th> PEO's Name </th>
 				</tr>
 
 	<?php
 			$ploidarray=array();
-			$peoIdNumberArray=array();
+			$peoNameArray=array();
 			$peoIdArray=array();
 
 			foreach ($peos as $peo) {
 				$id =  $peo->id;
 				$name = $peo->shortname;
 				$idnumber =  $peo->idnumber;
-				array_push($peoIdNumberArray,$idnumber);
+				array_push($peoNameArray,$name);
 				array_push($peoIdArray,$id);
 
 			}
+
 
 			$i = 0;
 
@@ -86,9 +112,10 @@
 							foreach ($peos as $peo) {
 							$id =  $peo->id;
 							$name = $peo->shortname;
+							$idnumber = $peo->idnumber;
 							
 							?>
-							<option value='<?php echo $id; ?>'><?php echo $name; ?></option>
+							<option value='<?php echo $id; ?>'><?php echo $idnumber; ?></option>
 							<?php
 							}
 							?>
@@ -110,6 +137,12 @@
            <input type="submit" value="NEXT" name="ok" class="btn btn-primary">
 			
 		</form>
+
+		<p id="msg">
+			
+		</p>
+
+
     <?php
 	}
 	else
@@ -132,9 +165,11 @@
 ?>
 
 <script>
-	var peoIdNumber = <?php echo json_encode($peoIdNumberArray); ?>;
+
+	var peoIdNumber = <?php echo json_encode($peoNameArray); ?>;
 	var peoId = <?php echo json_encode($peoIdArray); ?>;
 		function dropdownTip(value,id){
+			document.getElementById("msg").innerHTML = "";
 				var peosidnumber = "peosidnumber" + id;
 				if(value == 'NULL'){
 					document.getElementById(peosidnumber).innerHTML = "";
