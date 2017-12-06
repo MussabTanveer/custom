@@ -70,11 +70,7 @@ report_admin.php
 report_teacher.php
 report_student.php
 
-select_course.php (Map CLOs to Courses)
-select_framework_to_map_clo_course.php
-map_clo_course.php
-
-select_frameworktoCourse.php (Add Course after framework selection)
+select_frameworktoCourse.php (Add Course after framework selection & Map CLOs)
 add_course.php
 
 
@@ -82,6 +78,7 @@ Unused:
 
 display.php
 display-2.php
+
 select_course.php
 select_framework_to_map_clo_course.php
 map_clo_course.php
