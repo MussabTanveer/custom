@@ -11,7 +11,7 @@
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz") || isset($_POST['save']))
+	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
 	{
 		if(isset($_POST['submit']) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz")){
 			if(isset($SESSION->fid2) && $SESSION->fid2 != "xyz")
@@ -68,6 +68,61 @@
 				}
 			}
 		}
+
+        elseif(isset($_POST['return'])){
+			$shortname=trim($_POST['shortname']);
+			$description=trim($_POST['description']);
+			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
+			$frameworkid=$_POST['frameworkid'];
+			$framework_shortname=$_POST['framework_shortname'];
+			$time = time();
+             echo $shortname;
+			if(empty($shortname) || empty($idnumber))
+			{
+				if(empty($shortname))
+				{
+					$msg1="<font color='red'>-Please enter PLO name</font>";
+				}
+				if(empty($idnumber))
+				{
+					$msg2="<font color='red'>-Please enter ID number</font>";
+				}
+			}
+			elseif(substr($idnumber,0,4) != 'PLO-')
+			{
+				$msg2="<font color='red'>-The ID number must start with PLO</font>";
+			}
+			else{
+				//echo $shortname;
+				//echo $description;
+				//echo $idnumber;
+				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
+				echo $idnumber;
+				if(count($check)){
+					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+				}
+				else{
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-1, '/0/', 0, '$time', '$time', $USER->id)";
+					$DB->execute($sql);
+					$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
+				}
+
+				
+			
+			}
+
+             $redirect_page1='./report_main.php';
+              redirect($redirect_page1); 
+		}
+
+	
+
+
+
+            
+
+
+
 		
 			$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
     		WHERE competencyframeworkid = ? 
@@ -185,7 +240,10 @@
 			
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
-			<input class="btn btn-info" type="submit" name="save" value="Save"/>
+			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
+			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
+            <a     class="btn btn-info"   type="submit"   href="./select_frameworktoPLO.php">Cancel</a>
+			
 		</form>
 		<?php
 		//echo $shortname;

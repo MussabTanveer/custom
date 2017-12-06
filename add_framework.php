@@ -44,6 +44,49 @@
 		}
 	}
 
+elseif(isset($_POST['return'])){
+		$shortname=$_POST['shortname'];
+		$description=$_POST['description'];
+		$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
+		$time = time();
+		
+		if(empty($shortname) || empty($idnumber))
+		{
+			if(empty($shortname))
+			{
+				$msg1="<font color='red'>-Please enter framework name</font>";
+			}
+			if(empty($idnumber))
+			{
+				$msg2="<font color='red'>-Please enter ID number</font>";
+			}
+		}
+		else{
+			//echo $shortname;
+			//echo $description;
+			//echo $idnumber;
+			$check=$DB->get_records_sql('SELECT * from mdl_competency_framework WHERE idnumber=?', array($idnumber));
+			if(count($check)){
+				$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+			}
+			else{
+				$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
+				$DB->execute($sql);
+				$msg3 = "<font color='green'><b>Framework successfully added!</b></font><br />";
+			}
+		}
+
+
+		 $redirect_page1='./report_main.php';
+              redirect($redirect_page1); 
+	
+}
+
+
+
+
+
+
 	$rec=$DB->get_records_sql('SELECT id,shortname from mdl_competency_framework');
 	
 	if($rec){
@@ -139,7 +182,11 @@
 		</div>
 
 		
-		<input class="btn btn-info" type="submit" name="save" value="Save"/>
+		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
+        <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
+            <a     class="btn btn-info"   type="submit"   href="./report_admin.php">Cancel</a>
+
+
 	</form>
 	<?php
 		if(isset($_POST['save']) && !isset($msg3)){

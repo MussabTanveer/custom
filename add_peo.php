@@ -11,7 +11,7 @@
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz") || isset($_POST['save']))
+	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
     {
 		if(isset($_POST['submit']) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz")){
 			if(isset($SESSION->fid1) && $SESSION->fid1 != "xyz")
@@ -29,7 +29,51 @@
 			}
 		}
 	
-		if(isset($_POST['save'])){
+		if(isset($_POST['return'])){
+			$shortname=trim($_POST['shortname']);
+			$description=trim($_POST['description']);
+			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
+			$fw_id=$_POST['fid'];
+			$fw_shortname=$_POST['fname'];
+			$time = time();
+			
+			if(empty($shortname) || empty($idnumber))
+			{
+				if(empty($shortname))
+				{
+					$msg1="<font color='red'>-Please enter PEO name</font>";
+				}
+				if(empty($idnumber))
+				{
+					$msg2="<font color='red'>-Please enter ID number</font>";
+				}
+			}
+			elseif(substr($idnumber,0,4) != 'PEO-')
+			{
+				$msg2="<font color='red'>-The ID number must start with PEO-</font>";
+			}
+			else{
+				//echo $shortname;
+				//echo $description;
+				//echo $idnumber;
+				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $fw_id));
+				if(count($check)){
+					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+				}
+				else{
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber', '$fw_id', '/0/', 0, '$time', '$time', $USER->id)";
+					$DB->execute($sql);
+					$msg3 = "<font color='green'><b>PEO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
+				}
+			}
+
+            $redirect_page1='./report_main.php';
+              redirect($redirect_page1); 
+            
+
+		}
+
+       if(isset($_POST['save'])){
 			$shortname=trim($_POST['shortname']);
 			$description=trim($_POST['description']);
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
@@ -67,6 +111,12 @@
 				}
 			}
 		}
+
+
+
+
+
+
 
 		$peos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND parentid = 0', array($fw_id));
 		
@@ -179,7 +229,13 @@
 
 			<input type="hidden" name="fname" value="<?php echo $fw_shortname; ?>"/>
 			<input type="hidden" name="fid" value="<?php echo $fw_id; ?>"/>
-			<input class="btn btn-info" type="submit" name="save" value="Save"/>
+			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
+             <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
+            <a     class="btn btn-info"   type="submit"   href="./select_frameworktoPEO.php">Cancel</a>
+			
+
+
+
 		</form>
 		<?php
 		if(isset($_POST['save']) && !isset($msg3)){
