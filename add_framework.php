@@ -44,7 +44,7 @@
 		}
 	}
 
-elseif(isset($_POST['return'])){
+	elseif(isset($_POST['return'])){
 		$shortname=$_POST['shortname'];
 		$description=$_POST['description'];
 		$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
@@ -76,16 +76,9 @@ elseif(isset($_POST['return'])){
 			}
 		}
 
-
-		 $redirect_page1='./report_main.php';
-              redirect($redirect_page1); 
-	
-}
-
-
-
-
-
+		$redirect_page1='./report_main.php';
+			redirect($redirect_page1);
+	}
 
 	$rec=$DB->get_records_sql('SELECT id,shortname from mdl_competency_framework');
 	
@@ -184,7 +177,7 @@ elseif(isset($_POST['return'])){
 		
 		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
         <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-            <a     class="btn btn-info"   type="submit"   href="./report_admin.php">Cancel</a>
+		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
 
 
 	</form>

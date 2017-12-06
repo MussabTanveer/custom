@@ -107,40 +107,29 @@
 					$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}
 
-				
-			
 			}
 
              $redirect_page1='./report_main.php';
               redirect($redirect_page1); 
 		}
 
-	
-
-
-
-            
-
-
-
 		
-			$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
-    		WHERE competencyframeworkid = ? 
-    		AND idnumber LIKE "plo%" ',
-    		 array($frameworkid));
-			 
-			 if($plos){
-				 $i = 1;
-				 echo "<h3>Already Present PLOs In Framework</h3>";
-				 foreach ($plos as $records){
-				 $shortname1 = $records->shortname;
-			     $id=$records->id;
+		$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
+		WHERE competencyframeworkid = ? 
+		AND idnumber LIKE "plo%" ',
+			array($frameworkid));
+			
+		if($plos){
+			$i = 1;
+			echo "<h3>Already Present PLOs In Framework</h3>";
+			foreach ($plos as $records){
+				$shortname1 = $records->shortname;
+				$id=$records->id;
 				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_plo.php?delete=$id&fwid=$frameworkid' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
-			    $i++;
-								
-				}
-				 
+				$i++;			
 			}
+				
+		}
 		
 		if(isset($msg3)){
 			echo $msg3;
@@ -242,16 +231,12 @@
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
 			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-            <a     class="btn btn-info"   type="submit"   href="./select_frameworktoPLO.php">Cancel</a>
+            <a class="btn btn-default" type="submit" href="./select_frameworktoPLO.php">Cancel</a>
 			
 		</form>
 		<?php
 		//echo $shortname;
 		if(isset($_POST['save']) && !isset($msg3)){
-          // echo $shortname;
-				//echo $description;
-				//echo $idnumber;
-
 		?>
 		<script>
 			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;

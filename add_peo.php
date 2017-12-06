@@ -112,12 +112,6 @@
 			}
 		}
 
-
-
-
-
-
-
 		$peos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND parentid = 0', array($fw_id));
 		
 		if($peos){
@@ -230,12 +224,9 @@
 			<input type="hidden" name="fname" value="<?php echo $fw_shortname; ?>"/>
 			<input type="hidden" name="fid" value="<?php echo $fw_id; ?>"/>
 			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
-             <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-            <a     class="btn btn-info"   type="submit"   href="./select_frameworktoPEO.php">Cancel</a>
+			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
+            <a class="btn btn-default" type="submit" href="./select_frameworktoPEO.php">Cancel</a>
 			
-
-
-
 		</form>
 		<?php
 		if(isset($_POST['save']) && !isset($msg3)){

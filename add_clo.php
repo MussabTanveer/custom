@@ -111,10 +111,10 @@
               redirect($redirect_page1); 
 		}
 
-if(isset($msg3)){
+		if(isset($msg3)){
 			echo $msg3;
 		}
-echo "<a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a>";
+		echo "<a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a>";
 		?>
 		<br />
 		<h3>Add New CLO</h3>
@@ -210,11 +210,8 @@ echo "<a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
 			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
-             <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-            <a     class="btn btn-info"   type="submit"   href="./select_frameworktoCLO.php">Cancel</a>
-
-
-
+			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
+            <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
 
 		</form>
 		<?php

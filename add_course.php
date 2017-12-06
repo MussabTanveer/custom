@@ -83,8 +83,8 @@
                 
                 $courseid = $DB->insert_record('course', $record);
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
-                    WHERE id = ? ',
-                     array($courseid));
+                WHERE id = ? ',
+                array($courseid));
                 if ($course != NULL){
                     foreach ($course as $rec) {
                         $id =  $rec->id;
@@ -92,53 +92,52 @@
                     }
                 }   
                 $count=0;
-            $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
-            WHERE idnumber like '{$idnumber}%' 
-            AND competencyframeworkid =? ",
-             array($fw_id));
-             $flag=false;
-             if ($competencies != NULL){
-            foreach ($competencies as $rec) {
-                $id =  $rec->id;
-                $idnumber =  $rec->idnumber;
-                //echo "$idnumber";
-                $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
-                            WHERE courseid = ?
-                            AND competencyid =? ",
-                            array($courseid,$id));
-                if ($check == NULL)
-                {   
-                    $flag=true;
+                $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                WHERE idnumber like '{$idnumber}%' 
+                AND competencyframeworkid =? ",
+                array($fw_id));
+                $flag=false;
+                if ($competencies != NULL){
+                    foreach ($competencies as $rec) {
+                        $id =  $rec->id;
+                        $idnumber =  $rec->idnumber;
+                        //echo "$idnumber";
+                        $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
+                                    WHERE courseid = ?
+                                    AND competencyid =? ",
+                                    array($courseid,$id));
+                        if ($check == NULL)
+                        {   
+                            $flag=true;
+                        
+                            $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
+                            $DB->execute($sql);
+                            
+                        }
+                    }
+                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+                    $msg5="<p><b>Add another below.</b></p>";
+                    if($flag == true)
+                    {
+                //     echo " <font color='green'>CLOs successfully mapped with the course </font>";
+                        $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
+                    }
                 
-                    $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
-                    $DB->execute($sql);
-                    
                 }
-            }
-            $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-            $msg5="<p><b>Add another below.</b></p>";
-            if($flag == true)
-            {
-           //     echo " <font color='green'>CLOs successfully mapped with the course </font>";
-                $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
-           }
-            
-        }
-        else 
-        {   echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
-             $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-            $msg5="<p><b>Add another below.</b></p>";
-            goto end;
-        }
-       // if ($flag == false)
-        //{
-        //    echo " <font color='green'>CLOs are already mapped with the course </font>";
-       // }
-        
-    
+                else 
+                {   echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
+                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+                    $msg5="<p><b>Add another below.</b></p>";
+                    goto end;
+                }
+            // if ($flag == false)
+                //{
+                //    echo " <font color='green'>CLOs are already mapped with the course </font>";
+            // }
+            end:
             }
         }
-		  elseif(isset($_POST['return'])){
+        elseif(isset($_POST['return'])){
             $fullname=trim($_POST['fullname']);
             $shortname=trim($_POST['shortname']);
             $idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
@@ -198,63 +197,57 @@
                     }
                 }   
                 $count=0;
-            $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
-            WHERE idnumber like '{$idnumber}%' 
-            AND competencyframeworkid =? ",
-             array($fw_id));
-             $flag=false;
-             if ($competencies != NULL){
-            foreach ($competencies as $rec) {
-                $id =  $rec->id;
-                $idnumber =  $rec->idnumber;
-                //echo "$idnumber";
-                $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
-                            WHERE courseid = ?
-                            AND competencyid =? ",
-                            array($courseid,$id));
-                if ($check == NULL)
-                {   
-                    $flag=true;
-                
-                    $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
-                    $DB->execute($sql);
-                    
-                }
-            }
-            $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-            $msg5="<p><b>Add another below.</b></p>";
-            if($flag == true)
-            {
-           //     echo " <font color='green'>CLOs successfully mapped with the course </font>";
-                $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
-           }
+                $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                WHERE idnumber like '{$idnumber}%' 
+                AND competencyframeworkid =? ",
+                array($fw_id));
+                $flag=false;
+                if ($competencies != NULL){
+                    foreach ($competencies as $rec) {
+                        $id =  $rec->id;
+                        $idnumber =  $rec->idnumber;
+                        //echo "$idnumber";
+                        $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
+                                    WHERE courseid = ?
+                                    AND competencyid =? ",
+                                    array($courseid,$id));
+                        if ($check == NULL)
+                        {   
+                            $flag=true;
+                        
+                            $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
+                            $DB->execute($sql);
+                            
+                        }
+                    }
+                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+                    $msg5="<p><b>Add another below.</b></p>";
+                    if($flag == true)
+                    {
+                        //echo " <font color='green'>CLOs successfully mapped with the course </font>";
+                        $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
+                    }
 
-          $redirect_page1='./report_main.php';
-              redirect($redirect_page1);
-
+                    $redirect_page1='./report_main.php';
+                    redirect($redirect_page1);
             
-        }
-        else 
-        {   echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
-             $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-            $msg5="<p><b>Add another below.</b></p>";
-            goto end;
-        }
-       // if ($flag == false)
-        //{
-        //    echo " <font color='green'>CLOs are already mapped with the course </font>";
-       // }
+                }
+                else 
+                {   
+                    echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
+                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+                    $msg5="<p><b>Add another below.</b></p>";
+                    goto end2;
+                }
+                // if ($flag == false)
+                //{
+                //    echo " <font color='green'>CLOs are already mapped with the course </font>";
+                // }
         
-        end:
+            end2:
             }
         }
-		
-		
-		
-		
-		
-		
-        
+
         if(isset($msg4)){
             echo $msg4;
             echo $msg5;
@@ -461,9 +454,8 @@
             <input type="hidden" name="fname" value="<?php echo $fw_shortname; ?>"/>
             <input type="hidden" name="fid" value="<?php echo $fw_id; ?>"/>
             <input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
-               <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-            <a     class="btn btn-info"   type="submit"   href="./select_frameworktoCourse.php">Cancel</a
-
+            <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
+            <a class="btn btn-default" type="submit" href="./select_frameworktoCourse.php">Cancel</a>
 
         </form>
         <?php
