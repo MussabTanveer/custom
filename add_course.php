@@ -62,10 +62,26 @@
 				$msg3="<font color='red'>-The ID number must start with PEO-</font>";
 			}*/
 			else{
-                $sql="INSERT INTO mdl_course (category, fullname, shortname, idnumber, summary, summaryformat, newsitems, startdate, enddate, timecreated, timemodified, enablecompletion)
+                /*$sql="INSERT INTO mdl_course (category, fullname, shortname, idnumber, summary, summaryformat, newsitems, startdate, enddate, timecreated, timemodified, enablecompletion)
                 VALUES (1, '$fullname', '$shortname', '$idnumber', '$summary', 1, 5, '$startdate', '$enddate', '$time', '$time', 1)";
-                $DB->execute($sql);
-                $msg4 = "<font color='green'><b>Course successfully created & mapped with respective CLOs!</b></font><br /><p><b>Add another below.</b></p>";
+                $DB->execute($sql);*/
+                
+                $record = new stdClass();
+                $record->category = 1;
+                $record->fullname = $fullname;
+                $record->shortname = $shortname;
+                $record->idnumber = $idnumber;
+                $record->summary = $summary;
+                $record->summaryformat = 1;
+                $record->newsitems = 5;
+                $record->startdate = $startdate;
+                $record->enddate = $enddate;
+                $record->timecreated = $time;
+                $record->timemodified = $time;
+                $record->enablecompletion = 1;
+                
+                $lastinsertid = $DB->insert_record('course', $record);
+                $msg4 = "Reocrd ID is $lastinsertid <br><font color='green'><b>Course successfully created & mapped with respective CLOs!</b></font><br /><p><b>Add another below.</b></p>";
 			}
 		}
 		
@@ -276,7 +292,7 @@
 			<input class="btn btn-info" type="submit" name="save" value="Save"/>
 		</form>
 		<?php
-		if(isset($_POST['save']) && !isset($msg3)){
+		if(isset($_POST['save']) && !isset($msg4)){
 		?>
 		<script>
 			document.getElementById("id_fullname").value = <?php echo json_encode($fullname); ?>;
