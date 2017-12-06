@@ -12,6 +12,10 @@
     echo $OUTPUT->header();
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
+
+
+
+  
 	
 	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid11) && $SESSION->fid11 != "xyz") || isset($_POST['save']))
     {
@@ -80,13 +84,85 @@
                 $record->timemodified = $time;
                 $record->enablecompletion = 1;
                 
-                $lastinsertid = $DB->insert_record('course', $record);
-                $msg4 = "Reocrd ID is $lastinsertid <br><font color='green'><b>Course successfully created & mapped with respective CLOs!</b></font><br /><p><b>Add another below.</b></p>";
+                $courseid = $DB->insert_record('course', $record);
+
+
+                $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
+                    WHERE id = ? ',
+                     array($courseid));
+
+                if ($course != NULL){
+                    foreach ($course as $rec) {
+                        $id =  $rec->id;
+                        $idnumber =  $rec->idnumber;
+                    }
+                }   
+
+                $count=0;
+
+
+            $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+            WHERE idnumber like '{$idnumber}%' 
+            AND competencyframeworkid =? ",
+             array($fw_id));
+
+             $flag=false;
+
+             if ($competencies != NULL){
+            foreach ($competencies as $rec) {
+                $id =  $rec->id;
+                $idnumber =  $rec->idnumber;
+                //echo "$idnumber";
+
+                $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
+                            WHERE courseid = ?
+                            AND competencyid =? ",
+                            array($courseid,$id));
+
+                if ($check == NULL)
+                {   
+                    $flag=true;
+                
+                    $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
+                    $DB->execute($sql);
+                    
+                }
+
+            }
+            $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+            $msg5="<p><b>Add another below.</b></p>";
+
+            if($flag == true)
+            {
+           //     echo " <font color='green'>CLOs successfully mapped with the course </font>";
+                $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
+           }
+            
+
+        }
+
+        else 
+        {   echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
+             $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+            $msg5="<p><b>Add another below.</b></p>";
+            goto end;
+        }
+
+       // if ($flag == false)
+        //{
+        //    echo " <font color='green'>CLOs are already mapped with the course </font>";
+       // }
+        
+        end:
+
+
+
 			}
 		}
 		
 		if(isset($msg4)){
 			echo $msg4;
+            echo $msg5;
 		}
 		
 		?>
