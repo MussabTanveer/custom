@@ -157,9 +157,9 @@
 				<img src="img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
-				<h2>Step 11: Create Courses</h2>
-				<p>Add a new course. Course full name, short name, ID number (course-code), start and end dates are required.</p>
-				<a href="../course/edit.php?category=1&returnto=guidelines" target="_blank" class="cd-read-more">Proceed</a>
+				<h2>Step 11: Create Courses & Map CLOs</h2>
+				<p>Add a new course and automatically map CLOs of particular framework. Course full name, short name, ID number (course-code), start and end dates are required.</p>
+				<a href="./select_frameworktoCourse.php" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
 			</div> <!-- cd-timeline-content -->
 		</div> <!-- cd-timeline-block -->
@@ -171,7 +171,7 @@
 			<div class="cd-timeline-content">
 				<h2>Step 12: Add CLOs to Courses</h2>
 				<p>Add CLOs to courses.</p>
-				<a href="./select_course.php" target="_blank" class="cd-read-more">Proceed</a>
+				<a href="#" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
 			</div> <!-- cd-timeline-content -->
 		</div> <!-- cd-timeline-block -->

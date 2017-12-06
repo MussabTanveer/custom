@@ -35,9 +35,9 @@
 
         <a href="./display_outcome_framework-4.php" target="_blank">View Bloom's Taxonomy Mapping</a><br><br>
 
-        <a href="../course/edit.php?category=1&returnto=guidelines" target="_blank">Create Courses</a><br><br>
+        <a href="./select_frameworktoCourse.php" target="_blank">Create Courses &amp; Map CLOs</a><br><br>
 
-        <a href="./select_course.php" target="_blank">Add CLOs to Courses</a><br><br>
+        <!--<a href="./select_course.php" target="_blank">Add CLOs to Courses</a><br><br>-->
 
         <a href="../user/editadvanced.php?id=-1" target="_blank">Add a new User</a><br><br>
 
