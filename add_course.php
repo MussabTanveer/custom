@@ -362,7 +362,7 @@
                             required
                             placeholder="eg. CS-304"
                             size="10"
-                            maxlength="20" type="text" >
+                            maxlength="20" type="text" > (eg. CS-304)
                     <div class="form-control-feedback" id="id_error_idnumber"  style="display: none;">
                     <?php
                     if(isset($msg3)){

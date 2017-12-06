@@ -147,10 +147,10 @@
 							id="id_idnumber"
 							size=""
 							pattern="[a-zA-Z]{2}-[0-9]{3}-[c/C][l/L][o/O]-[0-9]{1,}"
-							title="eg. CS-304-CLO-1"
+							title="eg. CS-304-CLO-12"
 							required
-							placeholder="eg. CS-304-CLO-1"
-							maxlength="100" type="text" >
+							placeholder="eg. CS-304-CLO-12"
+							maxlength="100" type="text" > (eg. CS-304-CLO-12)
 					<div class="form-control-feedback" id="id_error_idnumber">
 					<?php
 					if(isset($msg2)){

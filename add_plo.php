@@ -167,10 +167,10 @@
 							id="id_idnumber"
 							size=""
 							pattern="[p/P][l/L][o/O]-[0-9]{1,}"
-							title="eg. PLO-1"
+							title="eg. PLO-12"
 							required
-							placeholder="eg. PLO-1"
-							maxlength="100" type="text" >
+							placeholder="eg. PLO-12"
+							maxlength="100" type="text" > (eg. PLO-12)
 					<div class="form-control-feedback" id="id_error_idnumber">
 					<?php
 					if(isset($msg2)){
