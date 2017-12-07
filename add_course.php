@@ -82,6 +82,62 @@
                 $record->enablecompletion = 1;
                 
                 $courseid = $DB->insert_record('course', $record);
+
+                $record1 = new stdClass();
+                $record1->courseid = $courseid;
+                $record1->format = 'topics';
+                $record1->sectionid = 0;
+                $record1->name = 'hiddensections';
+                $record1->value = 0;
+                $record2 = new stdClass();
+                $record2->courseid = $courseid;
+                $record2->format = 'topics';
+                $record2->sectionid = 0;
+                $record2->name = 'coursedisplay';
+                $record2->value = 0;
+
+                $records = array($record1, $record2);
+                $DB->insert_records('course_format_options', $records);
+
+                $record1 = new stdClass();
+                $record1->course = $courseid;
+                $record1->section = 0;
+                $record1->summary = '';
+                $record1->summaryformat = 1;
+                $record1->sequence = "";
+                $record1->visible = 1;
+                $record2 = new stdClass();
+                $record2->course = $courseid;
+                $record2->section = 1;
+                $record2->summary = '';
+                $record2->summaryformat = 1;
+                $record2->sequence = "";
+                $record2->visible = 1;
+                $record3 = new stdClass();
+                $record3->course = $courseid;
+                $record3->section = 2;
+                $record3->summary = '';
+                $record3->summaryformat = 1;
+                $record3->sequence = "";
+                $record3->visible = 1;
+                $record4 = new stdClass();
+                $record4->course = $courseid;
+                $record4->section = 3;
+                $record4->summary = '';
+                $record4->summaryformat = 1;
+                $record4->sequence = "";
+                $record4->visible = 1;
+                $record5 = new stdClass();
+                $record5->course = $courseid;
+                $record5->section = 4;
+                $record5->summary = '';
+                $record5->summaryformat = 1;
+                $record5->sequence = "";
+                $record5->visible = 1;
+                
+                $records = array($record1, $record2, $record3, $record4, $record5);
+                $DB->insert_records('course_sections', $records);
+                
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
                 WHERE id = ? ',
                 array($courseid));
@@ -90,7 +146,7 @@
                         $id =  $rec->id;
                         $idnumber =  $rec->idnumber;
                     }
-                }   
+                }  
                 $count=0;
                 $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
                 WHERE idnumber like '{$idnumber}%' 
@@ -112,14 +168,13 @@
                         
                             $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
                             $DB->execute($sql);
-                            
                         }
                     }
                     $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
                     $msg5="<p><b>Add another below.</b></p>";
                     if($flag == true)
                     {
-                //     echo " <font color='green'>CLOs successfully mapped with the course </font>";
+                        // echo " <font color='green'>CLOs successfully mapped with the course </font>";
                         $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
                     }
                 
@@ -187,6 +242,62 @@
                 $record->enablecompletion = 1;
                 
                 $courseid = $DB->insert_record('course', $record);
+                
+                $record1 = new stdClass();
+                $record1->courseid = $courseid;
+                $record1->format = 'topics';
+                $record1->sectionid = 0;
+                $record1->name = 'hiddensections';
+                $record1->value = 0;
+                $record2 = new stdClass();
+                $record2->courseid = $courseid;
+                $record2->format = 'topics';
+                $record2->sectionid = 0;
+                $record2->name = 'coursedisplay';
+                $record2->value = 0;
+
+                $records = array($record1, $record2);
+                $DB->insert_records('course_format_options', $records);
+
+                $record1 = new stdClass();
+                $record1->course = $courseid;
+                $record1->section = 0;
+                $record1->summary = '';
+                $record1->summaryformat = 1;
+                $record1->sequence = "";
+                $record1->visible = 1;
+                $record2 = new stdClass();
+                $record2->course = $courseid;
+                $record2->section = 1;
+                $record2->summary = '';
+                $record2->summaryformat = 1;
+                $record2->sequence = "";
+                $record2->visible = 1;
+                $record3 = new stdClass();
+                $record3->course = $courseid;
+                $record3->section = 2;
+                $record3->summary = '';
+                $record3->summaryformat = 1;
+                $record3->sequence = "";
+                $record3->visible = 1;
+                $record4 = new stdClass();
+                $record4->course = $courseid;
+                $record4->section = 3;
+                $record4->summary = '';
+                $record4->summaryformat = 1;
+                $record4->sequence = "";
+                $record4->visible = 1;
+                $record5 = new stdClass();
+                $record5->course = $courseid;
+                $record5->section = 4;
+                $record5->summary = '';
+                $record5->summaryformat = 1;
+                $record5->sequence = "";
+                $record5->visible = 1;
+                
+                $records = array($record1, $record2, $record3, $record4, $record5);
+                $DB->insert_records('course_sections', $records);
+
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
                     WHERE id = ? ',
                      array($courseid));
