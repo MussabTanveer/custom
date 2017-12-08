@@ -55,7 +55,7 @@
                 }
                 if(empty($idnumber))
                 {
-                    $msg3="<font color='red'>-Please enter course code</font>";
+                    $msg3="<font color='red'>-Please select course code</font>";
                 }
             }/*
             elseif(substr($idnumber,0,4) != 'PEO-')
@@ -215,7 +215,7 @@
                 }
                 if(empty($idnumber))
                 {
-                    $msg3="<font color='red'>-Please enter course code</font>";
+                    $msg3="<font color='red'>-Please select course code</font>";
                 }
             }/*
             elseif(substr($idnumber,0,4) != 'PEO-')
@@ -359,11 +359,18 @@
             }
         }
 
+        $courseCodes=$DB->get_records_sql("SELECT DISTINCT idnumber FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber NOT LIKE 'PLO%' AND parentid !=0 ORDER BY idnumber", array($fw_id));
+        $ccs = array(); // course codes array
+        foreach ($courseCodes as $cc) {
+            $cCode = $cc->idnumber; $cCode = substr($cCode,0,6);
+            array_push($ccs, $cCode);
+        }
+        $ccs = array_unique($ccs); // remove duplicate course codes
+
         if(isset($msg4)){
             echo $msg4;
             echo $msg5;
         }
-        
         ?>
         <br />
         <h3>Add New Course</h3>
@@ -377,6 +384,55 @@
                 </div>
                 <div class="col-md-9 form-inline felement">
                     <?php echo $fw_shortname; ?>
+                </div>
+            </div>
+
+            <div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                        <a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right"
+                        data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;The course official course-code must be entered.&lt;/p&gt;&lt;/div&gt; "
+                        data-html="true" tabindex="0" data-trigger="focus">
+                        <i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Course ID number" aria-label="Help with Course ID number"></i>
+                        </a>
+                    </span>
+                    <label class="col-form-label d-inline" for="id_idnumber">
+                        Course code
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <select required name="idnumber" class="select custom-select" id="id_idnumber">
+                        <option value=''>Select..</option>
+                        <?php
+                        foreach ($ccs as $cc) {
+                            //$cc = substr($cc,0,6);
+                            ?>
+                            <option value='<?php echo $cc; ?>'><?php echo $cc; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <!--
+                    <input type="text"
+                            class="form-control "
+                            name="idnumber"
+                            id="id_idnumber"
+                            pattern="[a-zA-Z]{2}-[0-9]{3}"
+                            title="eg. CS-304"
+                            value=""
+                            required
+                            placeholder="eg. CS-304"
+                            size="10"
+                            maxlength="20" type="text" > (eg. CS-304)
+                    -->
+                    <div class="form-control-feedback" id="id_error_idnumber">
+                    <?php
+                    if(isset($msg3)){
+                        echo $msg3;
+                    }
+                    ?>
+                    </div>
                 </div>
             </div>
             
@@ -401,10 +457,10 @@
                             id="id_fullname"
                             value=""
                             required
-                            placeholder="eg. Software Engineering"
+                            placeholder="eg. Software Engineering - Spring - 18"
                             size="50"
                             maxlength="254" type="text" >
-                    <div class="form-control-feedback" id="id_error_fullname"  style="display: none;">
+                    <div class="form-control-feedback" id="id_error_fullname">
                     <?php
                     if(isset($msg1)){
                         echo $msg1;
@@ -438,46 +494,10 @@
                             placeholder="eg. SE"
                             size="20"
                             maxlength="100" type="text">
-                    <div class="form-control-feedback" id="id_error_shortname" style="display: none;">
+                    <div class="form-control-feedback" id="id_error_shortname">
                     <?php
                     if(isset($msg2)){
                         echo $msg2;
-                    }
-                    ?>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row fitem">
-                <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                        <a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right"
-                        data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;The course official course-code must be entered.&lt;/p&gt;&lt;/div&gt; "
-                        data-html="true" tabindex="0" data-trigger="focus">
-                        <i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Course ID number" aria-label="Help with Course ID number"></i>
-                        </a>
-                    </span>
-                    <label class="col-form-label d-inline" for="id_idnumber">
-                        Course code
-                    </label>
-                </div>
-                <div class="col-md-9 form-inline felement" data-fieldtype="text">
-                    <input type="text"
-                            class="form-control "
-                            name="idnumber"
-                            id="id_idnumber"
-                            pattern="[a-zA-Z]{2}-[0-9]{3}"
-                            title="eg. CS-304"
-                            value=""
-                            required
-                            placeholder="eg. CS-304"
-                            size="10"
-                            maxlength="20" type="text" > (eg. CS-304)
-                    <div class="form-control-feedback" id="id_error_idnumber"  style="display: none;">
-                    <?php
-                    if(isset($msg3)){
-                        echo $msg3;
                     }
                     ?>
                     </div>
@@ -505,7 +525,7 @@
                         id="id_startdate"
                         size="27"
                         maxlength="100" >
-                    <div class="form-control-feedback" id="id_error_idnumber"  style="display: none;">
+                    <div class="form-control-feedback" id="id_error_idnumber">
                     </div>
                 </div>
             </div>
@@ -534,7 +554,7 @@
                         data-start-src="id_startdate"
                         size="27"
                         maxlength="100" >
-                    <div class="form-control-feedback" id="id_error_idnumber"  style="display: none;">
+                    <div class="form-control-feedback" id="id_error_idnumber">
                     </div>
                 </div>
             </div>
@@ -557,7 +577,7 @@
                     <div>
                         <textarea id="id_summary_editor" name="summary_editor" class="form-control" rows="5" cols="80" spellcheck="true" ></textarea>
                     </div>
-                    <div class="form-control-feedback" id="id_error_summary_editor"  style="display: none;">
+                    <div class="form-control-feedback" id="id_error_summary_editor">
                     </div>
                 </div>
             </div>
@@ -575,8 +595,15 @@
         <script>
             document.getElementById("id_fullname").value = <?php echo json_encode($fullname); ?>;
             document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
-            document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
+            //document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
             document.getElementById("id_summary_editor").value = <?php echo json_encode($summary); ?>;
+            var dropDown = document.getElementById("id_idnumber");
+            var dropDownVal = <?php echo json_encode($idnumber); ?>;
+            for(var i=0; i < dropDown.options.length; i++)
+            {
+            if(dropDown.options[i].value == dropDownVal)
+            dropDown.selectedIndex = i;
+            }
         </script>
         <?php
         }
