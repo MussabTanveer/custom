@@ -1,3 +1,4 @@
+<script src="./script/sweet-alert/sweetalert.min.js"></script>
 <?php
     require_once('../config.php');
     $context = context_system::instance();
@@ -77,8 +78,51 @@
 		}
 
 		$redirect_page1='./report_main.php';
-			redirect($redirect_page1);
+		redirect($redirect_page1);
 	}
+	
+	//delete code starts from here
+	if(isset($_GET['delete'])){
+		?>
+		<script>
+		swal({
+		title: "Confirm",
+		text: "Delete competency framework?",
+		icon: "warning",
+		buttons: true,
+		dangerMode: true,
+		})
+		.then((willDelete) => {
+			if (willDelete) {
+				<?php
+				$id_d=$_GET['delete'];
+				$check=$DB->get_records_sql('SELECT * from mdl_competency where competencyframeworkid=?',array($id_d));
+				if($check){
+					?>
+					swal("Alert", "The competency framework cannot be deleted! Remove the mapping before framework deletion.", "info");
+					<?php
+				}
+				else{
+					$sql_delete="DELETE from mdl_competency_framework where id=$id_d";
+					$DB->execute($sql_delete);
+					?>
+					swal("Framework has been deleted!", {
+					icon: "success",
+					});
+					<?php
+				}
+				?>
+			}
+			else {
+				swal("Framework is safe!");
+			}
+		});
+		</script>
+	<?php
+	//unset($_GET['delete']); //Not Working
+	//redirect('./add_framework.php'); //Not Working
+	}
+	// del code ends
 
 	$rec=$DB->get_records_sql('SELECT id,shortname from mdl_competency_framework');
 	
@@ -88,7 +132,13 @@
 		foreach ($rec as $records){
 			$shortname1 = $records->shortname;
 			$id=$records->id;
-			echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_framework.php?edit=$id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_framework.php?delete=$id' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>"; //link to edit_framework.php
+			echo "<div class='row'>
+					<div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
+						<div class='col-md-10 col-sm-8 col-xs-4'>
+							<a href='edit_framework.php?edit=$id' title='Edit'><img src='./img/icons/edit.png' /></a>
+							<a href='add_framework.php?delete=$id' title='Delete'><img src='./img/icons/delete.png' /></a>
+						</div>
+				  </div>"; //link to edit_framework.php and delete
 			$i++;
 		}
 	}
