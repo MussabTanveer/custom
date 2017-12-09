@@ -11,7 +11,7 @@
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
+	if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz") || isset($_POST['save']) || isset($_POST['return']) || isset($_GET['delete']) )
     {
 		if(isset($_POST['submit']) || (isset($SESSION->fid1) && $SESSION->fid1 != "xyz")){
 			if(isset($SESSION->fid1) && $SESSION->fid1 != "xyz")
@@ -73,7 +73,10 @@
 
 		}
 
-       if(isset($_POST['save'])){
+ 
+
+
+        elseif(isset($_POST['save'])){
 			$shortname=trim($_POST['shortname']);
 			$description=trim($_POST['description']);
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
@@ -112,6 +115,30 @@
 			}
 		}
 
+
+
+	elseif(isset($_GET['delete']) && isset($_GET['fwid'])){//delete code from here
+
+      $id_d=$_GET['delete'];
+      $fw_id=$_GET['fwid'];
+      $check=$DB->get_records_sql('SELECT * FROM mdl_competency WHERE parentid=? and competencyframeworkid=?',array($id_d,$fw_id));
+      if($check){
+			$delmsg = "<font color='red'><b>The PEO cannot be deleted! Remove the mapping before PEO deletion.</b></font><br />";
+		}
+		else{
+			$sql_delete="DELETE from mdl_competency where id=$id_d";
+			$DB->execute($sql_delete);
+			$delmsg = "<font color='green'><b>PEO has been deleted!</b></font><br />";
+		}
+	} 
+
+
+        
+
+
+
+
+
 		$peos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND parentid = 0', array($fw_id));
 		
 		if($peos){
@@ -120,7 +147,11 @@
 			foreach ($peos as $records){
 				$shortname1 = $records->shortname;
 				$id=$records->id;
-				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_peo.php?delete=$id&fwid=$fw_id' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>"; //link to edit_peo.php
+				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='add_peo.php?delete=$id&fwid=$fw_id'onClick=\"return confirm('Delete PEO?')\" title='Delete'><img src='./img/icons/delete.png' /></a> 
+
+                  </div>
+                  </div>";
+
 				$i++;
 			}
 		}
@@ -128,6 +159,10 @@
 		if(isset($msg3)){
 			echo $msg3;
 		}
+
+		if(isset($delmsg)){
+		echo $delmsg;
+	}
 		
 		?>
 		<br />

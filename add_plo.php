@@ -11,16 +11,28 @@
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
-	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
+	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz") || isset($_POST['save']) || isset($_POST['return']) || isset($_GET['fwid']))
 	{
-		if(isset($_POST['submit']) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz")){
+		if(isset($_POST['submit']) || (isset($SESSION->fid2) && $SESSION->fid2 != "xyz") || isset($_GET['fwid']) ){
 			if(isset($SESSION->fid2) && $SESSION->fid2 != "xyz")
 			{
 				$frameworkid=$SESSION->fid2;
+				echo "$frameworkid";
+				//echo "hello";
 				$SESSION->fid2 = "xyz";
 			}
-			else
+			else if (isset( $_POST['frameworkid']))
+			{
 				$frameworkid=$_POST['frameworkid'];
+				//echo "$frameworkid";
+			}
+			else
+				{
+					$frameworkid=$_GET['fwid'];
+				//echo "$frameworkid";
+				//echo "else";
+			}
+			
 			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($frameworkid));
 		 	if($rec){
 				foreach ($rec as $records){
@@ -113,6 +125,28 @@
               redirect($redirect_page1); 
 		}
 
+
+
+		//delete code starts from here
+		elseif(isset($_GET['delete']))
+		{
+			$id_d=$_GET['delete'];
+			$check=$DB->get_records_sql('SELECT * from mdl_competency where parentid=?',array($id_d));
+			if($check){
+				$delmsg = "<font color='red'><b>The PLO cannot be deleted! Remove the mapping before  deletion.</b></font><br />";
+			}
+			else
+			{
+
+				$sql_delete="DELETE from mdl_competency where id=$id_d";
+				$DB->execute($sql_delete);
+					$delmsg = "<font color='green'><b>PLO has been deleted!</b></font><br />";
+			}
+	}
+	// del code ends
+
+
+
 		
 		$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
 		WHERE competencyframeworkid = ? 
@@ -125,7 +159,7 @@
 			foreach ($plos as $records){
 				$shortname1 = $records->shortname;
 				$id=$records->id;
-				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='delete_plo.php?delete=$id&fwid=$frameworkid' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
+				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='add_plo.php?delete=$id&fwid=$frameworkid' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
 				$i++;			
 			}
 				
@@ -133,6 +167,10 @@
 		
 		if(isset($msg3)){
 			echo $msg3;
+		}
+		
+		if(isset($delmsg)){
+		echo $delmsg;
 		}
 		
 		?>
