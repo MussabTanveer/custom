@@ -123,7 +123,7 @@
       $fw_id=$_GET['fwid'];
       $check=$DB->get_records_sql('SELECT * FROM mdl_competency WHERE parentid=? and competencyframeworkid=?',array($id_d,$fw_id));
       if($check){
-			$delmsg = "<font color='red'><b>The competency framework cannot be deleted! Remove the mapping before framework deletion.</b></font><br />";
+			$delmsg = "<font color='red'><b>The PEO cannot be deleted! Remove the mapping before PEO deletion.</b></font><br />";
 		}
 		else{
 			$sql_delete="DELETE from mdl_competency where id=$id_d";
