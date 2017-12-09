@@ -74,9 +74,15 @@
 				$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
 				$DB->execute($sql);
 				$msg3 = "<font color='green'><b>Framework successfully added!</b></font><br />";
+				?>
+				<script>
+				swal("Framework has been added!", {
+						icon: "success",
+						});
+				</script>
+				<?php
 			}
 		}
-
 		$redirect_page1='./report_main.php';
 		redirect($redirect_page1);
 	}
@@ -87,15 +93,25 @@
 		$check=$DB->get_records_sql('SELECT * from mdl_competency where competencyframeworkid=?',array($id_d));
 		if($check){
 			$delmsg = "<font color='red'><b>The competency framework cannot be deleted! Remove the mapping before framework deletion.</b></font><br />";
+			?>
+			<script>
+			swal("Alert", "The competency framework cannot be deleted! Remove the mapping before framework deletion.", "info");
+			</script>
+			<?php
 		}
 		else{
 			$sql_delete="DELETE from mdl_competency_framework where id=$id_d";
 			$DB->execute($sql_delete);
 			$delmsg = "<font color='green'><b>Framework has been deleted!</b></font><br />";
+			?>
+			<script>
+			swal("Framework has been deleted!", {
+					icon: "success",
+					});
+			</script>
+			<?php
 		}
 	}
-	//unset($_GET['delete']); //Not Working
-	//redirect('./add_framework.php'); //Not Working
 	// del code ends
 
 	$rec=$DB->get_records_sql('SELECT id,shortname from mdl_competency_framework');
@@ -116,13 +132,15 @@
 			$i++;
 		}
 	}
-
+	
 	if(isset($msg3)){
 		echo $msg3;
 	}
+	/*
 	if(isset($delmsg)){
 		echo $delmsg;
 	}
+	*/
 	
 	?>
 	<br />
