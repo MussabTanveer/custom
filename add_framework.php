@@ -40,7 +40,7 @@
 			else{
 				$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
 				$DB->execute($sql);
-				$msg3 = "<font color='green'><b>Framework successfully added!</b></font><br />";
+				$msg3 = "<font color='green'><b>OBE Framework successfully added!</b></font><br />";
 			}
 		}
 	}
@@ -73,14 +73,7 @@
 			else{
 				$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
 				$DB->execute($sql);
-				$msg3 = "<font color='green'><b>Framework successfully added!</b></font><br />";
-				?>
-				<script>
-				swal("Framework has been added!", {
-						icon: "success",
-						});
-				</script>
-				<?php
+				$msg3 = "<font color='green'><b>OBE Framework successfully added!</b></font><br />";
 			}
 		}
 		$redirect_page1='./report_main.php';
@@ -92,20 +85,20 @@
 		$id_d=$_GET['delete'];
 		$check=$DB->get_records_sql('SELECT * from mdl_competency where competencyframeworkid=?',array($id_d));
 		if($check){
-			$delmsg = "<font color='red'><b>The competency framework cannot be deleted! Remove the mapping before framework deletion.</b></font><br />";
+			$delmsg = "<font color='red'><b>The OBE framework cannot be deleted! Remove the mapping before framework deletion.</b></font><br />";
 			?>
 			<script>
-			swal("Alert", "The competency framework cannot be deleted! Remove the mapping before framework deletion.", "info");
+			swal("Alert", "The OBE framework cannot be deleted! Remove the mapping before framework deletion.", "info");
 			</script>
 			<?php
 		}
 		else{
 			$sql_delete="DELETE from mdl_competency_framework where id=$id_d";
 			$DB->execute($sql_delete);
-			$delmsg = "<font color='green'><b>Framework has been deleted!</b></font><br />";
+			$delmsg = "<font color='green'><b>OBE Framework has been deleted!</b></font><br />";
 			?>
 			<script>
-			swal("Framework has been deleted!", {
+			swal("OBE Framework has been deleted!", {
 					icon: "success",
 					});
 			</script>
@@ -126,7 +119,7 @@
 					<div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
 						<div class='col-md-10 col-sm-8 col-xs-4'>
 							<a href='edit_framework.php?edit=$id' title='Edit'><img src='./img/icons/edit.png' /></a>
-							<a href='add_framework.php?delete=$id' onClick=\"return confirm('Delete competency framework?')\" title='Delete'><img src='./img/icons/delete.png' /></a>
+							<a href='add_framework.php?delete=$id' onClick=\"return confirm('Delete OBE framework?')\" title='Delete'><img src='./img/icons/delete.png' /></a>
 						</div>
 				  </div>"; //link to edit_framework.php and delete
 			$i++;

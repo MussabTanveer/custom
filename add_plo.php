@@ -1,3 +1,4 @@
+<script src="./script/sweet-alert/sweetalert.min.js"></script>
 <?php
     require_once('../config.php');
     $context = context_system::instance();
@@ -18,19 +19,18 @@
 			{
 				$frameworkid=$SESSION->fid2;
 				echo "$frameworkid";
-				//echo "hello";
+				
 				$SESSION->fid2 = "xyz";
 			}
-			else if (isset( $_POST['frameworkid']))
+			elseif(isset( $_POST['frameworkid']))
 			{
 				$frameworkid=$_POST['frameworkid'];
 				//echo "$frameworkid";
 			}
 			else
-				{
-					$frameworkid=$_GET['fwid'];
+			{
+				$frameworkid=$_GET['fwid'];
 				//echo "$frameworkid";
-				//echo "else";
 			}
 			
 			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($frameworkid));
@@ -48,7 +48,6 @@
 			$frameworkid=$_POST['frameworkid'];
 			$framework_shortname=$_POST['framework_shortname'];
 			$time = time();
-             echo $shortname;
 			if(empty($shortname) || empty($idnumber))
 			{
 				if(empty($shortname))
@@ -65,11 +64,7 @@
 				$msg2="<font color='red'>-The ID number must start with PLO</font>";
 			}
 			else{
-				//echo $shortname;
-				//echo $description;
-				//echo $idnumber;
 				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
-				echo $idnumber;
 				if(count($check)){
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
@@ -88,7 +83,7 @@
 			$frameworkid=$_POST['frameworkid'];
 			$framework_shortname=$_POST['framework_shortname'];
 			$time = time();
-             echo $shortname;
+			
 			if(empty($shortname) || empty($idnumber))
 			{
 				if(empty($shortname))
@@ -109,7 +104,7 @@
 				//echo $description;
 				//echo $idnumber;
 				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
-				echo $idnumber;
+				
 				if(count($check)){
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
@@ -125,29 +120,36 @@
               redirect($redirect_page1); 
 		}
 
-
-
-		//delete code starts from here
+		/* delete code */
 		elseif(isset($_GET['delete']))
 		{
 			$id_d=$_GET['delete'];
-			$check=$DB->get_records_sql('SELECT * from mdl_competency where parentid=?',array($id_d));
+			$fw_id=$_GET['fwid'];
+			$check=$DB->get_records_sql('SELECT * from mdl_competency where parentid=? and competencyframeworkid=?',array($id_d,$fw_id));
 			if($check){
-				$delmsg = "<font color='red'><b>The PLO cannot be deleted! Remove the mapping before  deletion.</b></font><br />";
+				$delmsg = "<font color='red'><b>The PLO cannot be deleted! Remove the mapping before PLO deletion.</b></font><br />";
+				?>
+				<script>
+				swal("Alert", "The PLO cannot be deleted! Remove the mapping before PLO deletion.", "info");
+				</script>
+				<?php
 			}
 			else
 			{
-
 				$sql_delete="DELETE from mdl_competency where id=$id_d";
 				$DB->execute($sql_delete);
-					$delmsg = "<font color='green'><b>PLO has been deleted!</b></font><br />";
+				$delmsg = "<font color='green'><b>PLO has been deleted!</b></font><br />";
+				?>
+				<script>
+				swal("PLO has been deleted!", {
+						icon: "success",
+						});
+				</script>
+				<?php
 			}
-	}
-	// del code ends
+		}
+		/* /delete code */
 
-
-
-		
 		$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
 		WHERE competencyframeworkid = ? 
 		AND idnumber LIKE "plo%" ',
@@ -159,20 +161,25 @@
 			foreach ($plos as $records){
 				$shortname1 = $records->shortname;
 				$id=$records->id;
-				echo "<div class='row'><div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div> <div class='col-md-10 col-sm-8 col-xs-4'><a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a> <a href='add_plo.php?delete=$id&fwid=$frameworkid' title='Delete'><img src='./img/icons/delete.png' /></a></div></div>";//link to edit_plo.php 
+				echo "<div class='row'>
+						<div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
+						<div class='col-md-10 col-sm-8 col-xs-4'>
+							<a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='./img/icons/edit.png' /></a>
+							<a href='add_plo.php?delete=$id&fwid=$frameworkid' onClick=\"return confirm('Delete PLO?')\" title='Delete'><img src='./img/icons/delete.png' /></a>
+						</div>
+					  </div>";//link to edit_plo.php and delete
 				$i++;			
 			}
-				
 		}
 		
 		if(isset($msg3)){
 			echo $msg3;
 		}
-		
+		/*
 		if(isset($delmsg)){
 		echo $delmsg;
 		}
-		
+		*/
 		?>
 		<br />
 		<h3>Add New PLO</h3>
