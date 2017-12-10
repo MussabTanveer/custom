@@ -14,7 +14,7 @@
 
 
 ?>
-<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+<script src="./script/jquery/jquery-2.1.3.js"></script>
 
 
 <script type="text/javascript">

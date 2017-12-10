@@ -13,7 +13,7 @@
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
 ?>
-<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+<script src="./script/jquery/jquery-2.1.3.js"></script>
 
 
 <script type="text/javascript">
