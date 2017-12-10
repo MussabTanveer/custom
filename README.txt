@@ -2,6 +2,16 @@ Custom File Names:
 
 Used:
 
+STUDENT:
+
+display_courses_student.php
+display_activities_student.php (Display Quiz, Assign)
+activity_comp_report_student.php (View Student's CLO Report)
+
+display_course_progress.php (Student Course Progress)
+
+TEACHER:
+
 display_courses.php (Detailed Quiz Report)
 display_quizzes.php
 display_quiz_grid.php
@@ -17,9 +27,7 @@ activity_comp_report.php (Activity CLO Report)
 consolidated_report_selection.php (Activity Selection for Course CLO Report)
 consolidated_report.php (Course CLO Report)
 
-display_courses_student.php
-display_activities_student.php (Display Quiz, Assign)
-activity_comp_report_student.php (View Student's CLO Report)
+ADMIN:
 
 display_outcome_framework.php (View PEOs, PLOs, Courses Mapping)
 display_peo_plo_clo.php
@@ -34,8 +42,6 @@ confirm_level_clo.php
 
 display_outcome_framework-4.php (View Domains & Levels Mapping)
 display_plo_domain_clo_level.php
-
-display_course_progress.php (Student Course Progress)
 
 add_framework.php (Add/Edit OBE framework)
 edit_framework.php
