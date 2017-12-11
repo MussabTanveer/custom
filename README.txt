@@ -79,6 +79,8 @@ report_student.php
 select_frameworktoCourse.php (Add Course after framework selection & Map CLOs)
 add_course.php
 
+create_tables.php (Create tables)
+
 
 Unused:
 
