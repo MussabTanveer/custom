@@ -1,8 +1,8 @@
-<script src="./script/chart/Chart.bundle.js"></script>
-<script src="./script/chart/utils.js"></script>
+<script src="../script/chart/Chart.bundle.js"></script>
+<script src="../script/chart/utils.js"></script>
 
 <?php
-    require_once('../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
