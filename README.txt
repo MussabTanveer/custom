@@ -1,6 +1,5 @@
-Custom File Names:
+Folders & File Names:
 
-Used:
 
 STUDENT:
 
@@ -71,7 +70,7 @@ guidelines.php (Admin steps)
 
 select_course_enrol.php (for Enrolling Users in Course)
 
-report_main.php (Show links based on role)
+index.php (Show links based on role)
 report_admin.php
 report_teacher.php
 report_student.php
@@ -82,7 +81,7 @@ add_course.php
 create_tables.php (Create tables)
 
 
-Unused:
+TEMP:
 
 display.php
 display-2.php
