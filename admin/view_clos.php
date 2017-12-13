@@ -1,6 +1,6 @@
-<script src="./script/sweet-alert/sweetalert.min.js"></script>
+<script src="../script/sweet-alert/sweetalert.min.js"></script>
 <?php
-    require_once('../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
@@ -56,8 +56,8 @@
                 echo "<div class='row'>
                         <div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
                         <div class='col-md-10 col-sm-8 col-xs-4'>
-                            <a href='edit_clo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='./img/icons/edit.png' /></a>
-                            <a href='view_clos.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete CLO?')\" title='Delete'><img src='./img/icons/delete.png' /></a>
+                            <a href='edit_clo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='../img/icons/edit.png' /></a>
+                            <a href='view_clos.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete CLO?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
                         </div>
                       </div>";//link to edit_clo.php and delete
                 $i++;

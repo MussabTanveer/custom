@@ -1,5 +1,5 @@
 <?php
-    require_once('../config.php');
+    require_once('../../config.php');
     $PAGE->set_pagelayout('redirect');
     require_login();
     $redirect_page1='./admin/report_admin.php';

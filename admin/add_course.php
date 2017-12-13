@@ -1,7 +1,7 @@
-<link rel="stylesheet" href="./css/datepicker/wbn-datepicker.css">
-<script src="./script/jquery/jquery-3.2.1.js"></script>
+<link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
+<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
-    require_once('../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
@@ -615,7 +615,7 @@
             echo $OUTPUT->footer();
         ?>
         
-            <script src="./script/datepicker/wbn-datepicker.min.js"></script>
+            <script src="../script/datepicker/wbn-datepicker.min.js"></script>
             <script type="text/javascript">
               $(function () {
                 $('.wbn-datepicker').datepicker()

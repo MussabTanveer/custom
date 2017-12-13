@@ -1,5 +1,5 @@
 <?php
-    require_once('../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
@@ -18,11 +18,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="../theme/boost/pix/favicon" />
 	
-	<link href='css/guideline/droid-serif-open-sans.css' rel='stylesheet' type='text/css'>
+	<link href='../css/guideline/droid-serif-open-sans.css' rel='stylesheet' type='text/css'>
 
-	<link rel="stylesheet" href="css/guideline/reset.css"> <!-- CSS reset -->
-	<link rel="stylesheet" href="css/guideline/style.css"> <!-- Resource style -->
-	<script src="script/guideline/modernizr.js"></script> <!-- Modernizr -->
+	<link rel="stylesheet" href="../css/guideline/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="../css/guideline/style.css"> <!-- Resource style -->
+	<script src="../script/guideline/modernizr.js"></script> <!-- Modernizr -->
   	
 	<title>Admin Guidelines</title>
 </head>
@@ -34,7 +34,7 @@
 	<section id="cd-timeline" class="cd-container">
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-location">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 1: Create OBE Framework</h2>
@@ -46,7 +46,7 @@
 		
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 2: Define PEOs</h2>
@@ -58,7 +58,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-movie">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 3: Define PLOs</h2>
@@ -70,7 +70,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-location">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 4: Map PLOs to PEOs</h2>
@@ -82,7 +82,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 5: Define CLOs</h2>
@@ -94,7 +94,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-movie">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 6: Map CLOs to PLOs</h2>
@@ -106,7 +106,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-location">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 7: Map PLOs to Taxonomy Domains</h2>
@@ -118,7 +118,7 @@
 		
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 8: Map CLOs to Taxonomy Levels</h2>
@@ -130,7 +130,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-movie">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 9: View Mapping of OBE Framework</h2>
@@ -142,7 +142,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-location">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 10: View Mapping of Bloom's Taxonomy</h2>
@@ -154,7 +154,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 11: Create Courses & Map CLOs</h2>
@@ -166,7 +166,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-movie">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 12: Add CLOs to Courses</h2>
@@ -190,7 +190,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 14: View all Users</h2>
@@ -214,7 +214,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-location">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 16: Enrol/Unenrol Users</h2>
@@ -226,7 +226,7 @@
 		
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Final Step</h2>
@@ -238,7 +238,7 @@
 
 	</section> <!-- cd-timeline -->
 
-<script src="script/jquery/jquery-3.2.1.min.js"></script>
-<script src="script/guideline/main.js"></script> <!-- Resource jQuery -->
+<script src="../script/jquery/jquery-3.2.1.min.js"></script>
+<script src="../script/guideline/main.js"></script> <!-- Resource jQuery -->
 </body>
 </html>

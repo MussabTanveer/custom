@@ -1,5 +1,5 @@
 <?php
-	require_once('../config.php');
+	require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
@@ -14,7 +14,7 @@
 
 
 ?>
-<script src="./script/jquery/jquery-2.1.3.js"></script>
+<script src="../script/jquery/jquery-2.1.3.js"></script>
 
 
 <script type="text/javascript">
