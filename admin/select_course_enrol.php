@@ -20,7 +20,7 @@
             $shortname = $records->shortname;
             $idnumber = $records->idnumber;
             $id=$records->id;
-            echo "<h4><a href='../enrol/users.php?id=$id' title='Enrol Users'>$i. $fullname ($shortname $idnumber)</a></h4><br />";
+            echo "<h4><a href='../../../enrol/users.php?id=$id' title='Enrol Users'>$i. $fullname ($shortname $idnumber)</a></h4><br />";
             $i++;
         }
     }
@@ -28,4 +28,4 @@
         echo "<h3>No courses found!</h3>";
     }
     echo $OUTPUT->footer();
-	?>
+?>
