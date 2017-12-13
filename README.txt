@@ -78,8 +78,6 @@ report_student.php
 select_frameworktoCourse.php (Add Course after framework selection & Map CLOs)
 add_course.php
 
-create_tables.php (Create tables)
-
 
 TEMP:
 
@@ -89,3 +87,5 @@ display-2.php
 select_course.php
 select_framework_to_map_clo_course.php
 map_clo_course.php
+
+create_tables.php (Create tables)
