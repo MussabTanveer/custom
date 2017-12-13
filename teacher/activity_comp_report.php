@@ -1,11 +1,11 @@
-<script src="./script/chart/Chart.bundle.js"></script>
-<script src="./script/chart/utils.js"></script>
+<script src="../script/chart/Chart.bundle.js"></script>
+<script src="../script/chart/utils.js"></script>
 
-<script src="./script/jquery/jquery-3.2.1.js"></script>
-<script src="./script/table2excel/jquery.table2excel.min.js"></script>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
 
 <?php 
-    require_once('../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
