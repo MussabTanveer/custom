@@ -2,9 +2,9 @@
     require_once('../config.php');
     $PAGE->set_pagelayout('redirect');
     require_login();
-    $redirect_page1='report_admin.php';
-    $redirect_page2='report_teacher.php';
-    $redirect_page3='report_student.php';
+    $redirect_page1='./admin/report_admin.php';
+    $redirect_page2='./teacher/report_teacher.php';
+    $redirect_page3='./student/report_student.php';
   
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname, c.shortname, c.idnumber
   
