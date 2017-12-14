@@ -166,7 +166,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-movie">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 12: Add a new User</h2>
@@ -190,7 +190,7 @@
 
 		<div class="cd-timeline-block">
 			<div class="cd-timeline-img cd-picture">
-				<img src="img/guideline/circle.svg" alt="">
+				<img src="../img/guideline/circle.svg" alt="">
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 14: Add/Edit/View Cohorts</h2>
