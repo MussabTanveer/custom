@@ -1,6 +1,5 @@
 Folders & File Names:
 
-
 STUDENT:
 
 display_courses_student.php
@@ -84,7 +83,7 @@ TEMP:
 display.php
 display-2.php
 
-select_course.php
+select_course.php (Map CLOs to Courses)
 select_framework_to_map_clo_course.php
 map_clo_course.php
 
