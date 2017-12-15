@@ -134,7 +134,7 @@
 				}
 			}
 
-			  $redirect_page1='./report_main.php';
+			  $redirect_page1='../index.php';
               redirect($redirect_page1); 
 		}
 

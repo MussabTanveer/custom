@@ -76,7 +76,7 @@
 					$msg3 = "<font color='green'><b>PEO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}
 			}
-            $redirect_page1='./report_main.php';
+            $redirect_page1='../index.php';
 			redirect($redirect_page1); 
 		}
 
