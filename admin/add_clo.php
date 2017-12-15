@@ -202,6 +202,12 @@
 				</div>
 			</div>
 			
+			<div id="dynamicInput">
+			<div class="row">
+				<div class="col-md-3"><b>Enter CLO</b></div>
+				<div class="col-md-9"></div>
+			</div>
+
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -250,6 +256,15 @@
 					</div>
 				</div>
 			</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-9">
+					<input class="btn btn-success" type="button" value="Add another CLO" onClick="addInput('dynamicInput');">
+				</div>
+			</div>
+			<br />
 			
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
@@ -258,6 +273,9 @@
             <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
 
 		</form>
+		<br />
+		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
+		
 		<?php
 		if(isset($_POST['save']) && !isset($msg3)){
 		?>
@@ -269,9 +287,9 @@
 		<?php
 		}
 		?>
-		<br />
-		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
+		
 		<script>
+		// script to create dynamic list of clos on course code input
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
 		$(document).ready(function(){
@@ -290,7 +308,27 @@
 				$("#list").html("<font color='green'><b>Present CLOs for " + n + ":</font></b><br />" + cnames);
 			});
 		});
-		</script>		
+		</script>
+		
+		<script>
+			// script to add name and desc fields to form
+			//var counter = 1;
+			function addInput(divName){
+				var newdiv = document.createElement('div');
+				newdiv.innerHTML = '<div class="row"><div class="col-md-3"><b>Enter CLO</b></div><div class="col-md-9"></div></div>';
+				document.getElementById(divName).appendChild(newdiv);
+
+				var newdiv1 = document.createElement('div');
+				newdiv1.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_shortname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="shortname" id="id_shortname" size="" pattern="[c/C][l/L][o/O]-[0-9]{1,}" title="eg. CLO-12" required placeholder="eg. CLO-12" maxlength="100" type="text" > (eg. CLO-12)<div class="form-control-feedback" id="id_error_shortname"><?php if(isset($msg1)){echo $msg1;} ?></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv1);
+
+				var newdiv2 = document.createElement('div');
+				newdiv2.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_description">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_description"  style="display: none;"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv2);
+				counter++;
+			}
+		</script>	
+		
 		<?php 
 			echo $OUTPUT->footer();
     
