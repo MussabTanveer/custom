@@ -1,3 +1,4 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -30,7 +31,7 @@
 		}
 	
 		if(isset($_POST['save'])){
-			$shortname=trim($_POST['shortname']);
+			$shortname=trim($_POST['shortname']); $shortname=strtoupper($shortname);
 			$description=trim($_POST['description']);
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
 			$frameworkid=$_POST['frameworkid'];
@@ -44,9 +45,17 @@
 				}
 				if(empty($idnumber))
 				{
-					$msg2="<font color='red'>-Please enter ID number</font>";
+					$msg2="<font color='red'>-Please enter course code</font>";
 				}
 			}
+			elseif(substr($shortname,0,4) != 'CLO-')
+			{
+				$msg1="<font color='red'>-The CLO name must start with CLO-</font>";
+			}
+			/*elseif(fnmatch("[a-zA-Z][a-zA-Z]-[0-9][0-9][0-9]", $idnumber))
+			{
+				$msg2="<font color='red'>-The course code must be of valid format</font>";
+			}*/
 			/*elseif(preg_match('/^[a-zA-Z]{2}-\d{3}-(c|C)(l|L)(o|O)-\d{1,}$/',$idnumber))
 			{
 				$msg2="<font color='red'>-Please match the format eg. CS-304-CLO-1</font>";
@@ -55,9 +64,14 @@
 				//echo $shortname;
 				//echo $description;
 				//echo $idnumber;
+				// Combine CLO course code and name for idnumber column
+				$temp = $idnumber;
+				$idnumber=$idnumber."-".$shortname;
+				//echo $idnumber;
 				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
 				if(count($check)){
-					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+					$msg1="<font color='red'>-Please enter UNIQUE CLO name</font>";
+					$idnumber = $temp;
 				}
 				
 				else{
@@ -70,7 +84,7 @@
 		
 
 		elseif(isset($_POST['return'])){
-			$shortname=trim($_POST['shortname']);
+			$shortname=trim($_POST['shortname']); $shortname=strtoupper($shortname);
 			$description=trim($_POST['description']);
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
 			$frameworkid=$_POST['frameworkid'];
@@ -84,9 +98,17 @@
 				}
 				if(empty($idnumber))
 				{
-					$msg2="<font color='red'>-Please enter ID number</font>";
+					$msg2="<font color='red'>-Please enter course code</font>";
 				}
 			}
+			elseif(substr($shortname,0,4) != 'CLO-')
+			{
+				$msg1="<font color='red'>-The CLO name must start with CLO-</font>";
+			}
+			/*elseif(fnmatch("[a-zA-Z][a-zA-Z]-[0-9][0-9][0-9]", $idnumber))
+			{
+				$msg2="<font color='red'>-The course code must be of valid format</font>";
+			}*/
 			/*elseif(preg_match('/^[a-zA-Z]{2}-\d{3}-(c|C)(l|L)(o|O)-\d{1,}$/',$idnumber))
 			{
 				$msg2="<font color='red'>-Please match the format eg. CS-304-CLO-1</font>";
@@ -95,9 +117,14 @@
 				//echo $shortname;
 				//echo $description;
 				//echo $idnumber;
+				// Combine CLO course code and name for idnumber column
+				$temp = $idnumber;
+				$idnumber= $idnumber."-".$shortname;
+				//echo $idnumber;
 				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
 				if(count($check)){
-					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+					$msg1="<font color='red'>-Please enter UNIQUE CLO name</font>";
+					$idnumber = $temp;
 				}
 				
 				else{
@@ -111,10 +138,24 @@
               redirect($redirect_page1); 
 		}
 
+		$clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($frameworkid));
+        
+        if($clos){
+			$clocourses = array(); $clonames = array();
+            foreach ($clos as $records){
+				$clocourse = $records->idnumber; $clocourse = substr($clocourse,0,6);
+				$cloname = $records->shortname;
+				array_push($clocourses, $clocourse); // array of clo course codes
+				array_push($clonames, $cloname); // array of clo names
+				//echo "$clocourse   $cloname <br>";
+            }
+        }
+
 		if(isset($msg3)){
 			echo $msg3;
 		}
-		echo "<a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a>";
+
+		echo "<div class='row'><div class='col-md-6'><a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a></div><div id='list' class='col-md-6'></div></div>";
 		?>
 		<br />
 		<h3>Add New CLO</h3>
@@ -137,7 +178,7 @@
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 					</span>
 					<label class="col-form-label d-inline" for="id_idnumber">
-						ID number
+						Course code
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement" data-fieldtype="text">
@@ -146,11 +187,11 @@
 							name="idnumber"
 							id="id_idnumber"
 							size=""
-							pattern="[a-zA-Z]{2}-[0-9]{3}-[c/C][l/L][o/O]-[0-9]{1,}"
-							title="eg. CS-304-CLO-12"
+							pattern="[a-zA-Z]{2}-[0-9]{3}"
+							title="eg. CS-304"
 							required
-							placeholder="eg. CS-304-CLO-12"
-							maxlength="100" type="text" > (eg. CS-304-CLO-12)
+							placeholder="eg. CS-304"
+							maxlength="100" type="text" > (eg. CS-304)
 					<div class="form-control-feedback" id="id_error_idnumber">
 					<?php
 					if(isset($msg2)){
@@ -176,8 +217,11 @@
 							name="shortname"
 							id="id_shortname"
 							size=""
+							pattern="[c/C][l/L][o/O]-[0-9]{1,}"
+							title="eg. CLO-12"
 							required
-							maxlength="100" type="text" >
+							placeholder="eg. CLO-12"
+							maxlength="100" type="text" > (eg. CLO-12)
 					<div class="form-control-feedback" id="id_error_shortname">
 					<?php
 					if(isset($msg1)){
@@ -227,7 +271,26 @@
 		?>
 		<br />
 		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
-					
+		<script>
+		var clonames = <?php echo json_encode($clonames); ?>;
+		var clocourses = <?php echo json_encode($clocourses); ?>;
+		$(document).ready(function(){
+			$("#id_idnumber").change(function(){
+				var n = $('#id_idnumber').val().toUpperCase();
+				var cnames = ""; var flag = 0;
+				for (var i = 0; i < clonames.length; ++i) {
+					if(clocourses[i] == n){
+						flag = 1;
+						cnames += clonames[i] + "<br />";
+					}
+				}
+				if(flag == 0){
+					cnames = "<font color='red'>-No CLOs found!</font>";
+				}
+				$("#list").html("<font color='green'><b>Present CLOs for " + n + ":</font></b><br />" + cnames);
+			});
+		});
+		</script>		
 		<?php 
 			echo $OUTPUT->footer();
     
