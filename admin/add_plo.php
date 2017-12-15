@@ -61,7 +61,7 @@
 			}
 			elseif(substr($idnumber,0,4) != 'PLO-')
 			{
-				$msg2="<font color='red'>-The ID number must start with PLO</font>";
+				$msg2="<font color='red'>-The ID number must start with PLO-</font>";
 			}
 			else{
 				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
@@ -97,7 +97,7 @@
 			}
 			elseif(substr($idnumber,0,4) != 'PLO-')
 			{
-				$msg2="<font color='red'>-The ID number must start with PLO</font>";
+				$msg2="<font color='red'>-The ID number must start with PLO-</font>";
 			}
 			else{
 				//echo $shortname;
