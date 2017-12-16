@@ -1,3 +1,6 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -41,7 +44,7 @@
             <!-- CLO-Level Mapping -->
             <br />
             <h3>Mapping of CLOs to Taxonomy Levels</h3>
-            <table class="generaltable">
+            <table class="generaltable" id="clo_level">
                 <tr>
                     <th>CLOs</th>
                     <th>Level Names</th>
@@ -65,10 +68,25 @@
                 
             </table>
 
+            <button id="myButton" class="btn btn-primary">Export to Excel</button><br />
+
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton").click(function(e){ 
+                        $("#clo_level").table2excel({
+                            name: "file name",
+                            filename: "clo-level",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
+
             <!-- PLO-Domain Mapping -->
             <br />
             <h3>Mapping of PLOs to Taxonomy Domains</h3>
-            <table class="generaltable">
+            <table class="generaltable" id="plo_domain">
                 <tr>
                     <th>PLOs</th>
                     <?php
@@ -185,6 +203,21 @@
                         </tr>
 
             </table>
+
+            <button id="myButton2" class="btn btn-primary">Export to Excel</button><br /><br />
+
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton2").click(function(e){ 
+                        $("#plo_domain").table2excel({
+                            name: "file name",
+                            filename: "plo-domain",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
 
             <a href="./display_outcome_framework-4.php">Back</a>
 

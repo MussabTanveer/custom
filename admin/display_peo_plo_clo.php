@@ -1,3 +1,6 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -38,7 +41,7 @@
             <!-- PEO-PLO Mapping -->
             <br />
             <h3>Mapping of PLOs to PEOs</h3>
-            <table class="generaltable">
+            <table class="generaltable" id="peo_plo">
                 <tr>
                     <th>PLOS</th>
                     <?php
@@ -85,10 +88,25 @@
                 
             </table>
 
+            <button id="myButton" class="btn btn-primary">Export to Excel</button><br />
+
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton").click(function(e){ 
+                        $("#peo_plo").table2excel({
+                            name: "file name",
+                            filename: "peo-plo",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
+
             <!-- PLO-CLO Mapping -->
             <br />
             <h3>Mapping of Courses to PLOs</h3>
-            <table class="generaltable">
+            <table class="generaltable" id="plo_clo">
                 <tr>
                     <th>Courses</th>
                     <?php
@@ -227,6 +245,21 @@
                         </tr>
 
             </table>
+
+            <button id="myButton2" class="btn btn-primary">Export to Excel</button><br /><br />
+
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton2").click(function(e){ 
+                        $("#plo_clo").table2excel({
+                            name: "file name",
+                            filename: "plo-courses",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
 
             <a href="./display_outcome_framework.php">Back</a>
 
