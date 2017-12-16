@@ -19,56 +19,78 @@
         <?php
         // Display Quiz Info
         echo "<h3>Question category wise grid</h3>";
+       //$rec1=$DB->get_recordset_sql('SELECT DISTINCT us.idnumber FROM mdl_user us, mdl_quiz_attempts qa 
+       // WHERE us.id=qa.userid');
+          
         $rec=$DB->get_recordset_sql(
-        'SELECT
-            qa.userid,
+         
+
+
+'SELECT 
+          qa.userid,
+         us.idnumber,
             qa.attempt,
             qu.name,
-			c.shortname,
+            c.shortname,
             qu.questiontext,
             qua.rightanswer,
             qua.responsesummary,
             qua.maxmark,
             qua.maxmark*qas.fraction AS marksobtained,
             qc.name AS category
-
         FROM
+         
             mdl_quiz q,
             mdl_quiz_slots qs,
+            mdl_user us,
             mdl_question qu,
             mdl_question_categories qc,
             mdl_quiz_attempts qa,
             mdl_question_attempts qua,
-			mdl_competency c,
+            mdl_competency c,
             mdl_question_attempt_steps qas
-
-        WHERE
-            q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-
+        WHERE 
+            q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
+            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
         ORDER BY qa.attempt, qa.userid',
         
         array($quiz_id));
 
+
+
         if($rec){
             $table = new html_table();
-            $table->head = array('Student ID', 'No. of Attempts', 'Question Name','Competency', 'Question', 'Correct Ans', 'Student Ans', 'Max Marks', 'Marks Obtained', 'Question Category');
-            foreach ($rec as $records) {
-                $uid = $records->userid;
+            $table->head = array('Student ID', 'No. of Attempts', 'Question Name','CLO', 'Question',  'Max Marks', 'Marks Obtained');
+      
+
+             
+            foreach ($rec as $records  ) {
+                $uid = $records->idnumber;
                 $attempt = $records->attempt;
                 $qname = $records->name;
-				$competency=$records->shortname;
+                $competency=$records->shortname;
                 $qtext = $records->questiontext;
-                $qrightans = $records->rightanswer;
-                $qresponse = $records->responsesummary;
+                 
+             
+
+               // $qrightans = $records->rightanswer;
+               // $qresponse = $records->responsesummary;
                 $qmax = $records->maxmark; $qmax = number_format($qmax, 2); // 2 dp
                 $mobtained = $records->marksobtained; $mobtained = number_format($mobtained, 2);
-                $cname = $records->category;
-                $table->data[] = array($uid, $attempt, $qname,$competency ,$qtext, $qrightans, $qresponse, $qmax, $mobtained, $cname);
+                //$cname = $records->category;
+                $table->data[] = array($uid, $attempt, $qname,$competency ,$qtext,  $qmax, $mobtained);
             }
             $rec->close(); // Don't forget to close the recordset!
             echo html_writer::table($table);
         }
+
+
+     
+
+
+
+
+
         else{
             echo "<h3>No students have attempted the quiz!</h3>";
         }
