@@ -1,17 +1,44 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
-    require_once('../../../config.php');
+require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE CLOs");
     $PAGE->set_heading("Add Course Learning Outcome (CLO)");
     $PAGE->set_url($CFG->wwwroot.'/custom/add_clo.php');
-    
-    echo $OUTPUT->header();
+   echo $OUTPUT->header();
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 	
+
+    ?>
+
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/jquery/jquery-2.1.3.js"></script>
+<script type="text/javascript" >
+
+	$(document).ready(function(){
+    $("button").click(function(){
+        var formdata = $("form").serialize();
+			$.ajax({
+			    type: "POST",
+			    url: "save_clo.php",
+			    data: formdata,
+			    success:function(){
+           	document.getElementById("msg").innerHTML ="<font color='green'>CLO successfully defined!</font>"
+        }
+
+			 });
+			return false;
+
+    });
+});
+</script>
+
+
+<?php
+    
+    
 	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
 	{
 		if(isset($_POST['submit']) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz")){
@@ -29,113 +56,46 @@
 				}
 			}
 		}
-	
-		if(isset($_POST['save'])){
-			$shortname=trim($_POST['shortname']); $shortname=strtoupper($shortname);
-			$description=trim($_POST['description']);
-			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
-			$frameworkid=$_POST['frameworkid'];
-			$framework_shortname=$_POST['framework_shortname'];
-			$time = time();
-			if(empty($shortname) || empty($idnumber))
-			{
-				if(empty($shortname))
-				{
-					$msg1="<font color='red'>-Please enter CLO name</font>";
-				}
-				if(empty($idnumber))
-				{
-					$msg2="<font color='red'>-Please enter course code</font>";
-				}
-			}
-			elseif(substr($shortname,0,4) != 'CLO-')
-			{
-				$msg1="<font color='red'>-The CLO name must start with CLO-</font>";
-			}
-			/*elseif(fnmatch("[a-zA-Z][a-zA-Z]-[0-9][0-9][0-9]", $idnumber))
-			{
-				$msg2="<font color='red'>-The course code must be of valid format</font>";
-			}*/
-			/*elseif(preg_match('/^[a-zA-Z]{2}-\d{3}-(c|C)(l|L)(o|O)-\d{1,}$/',$idnumber))
-			{
-				$msg2="<font color='red'>-Please match the format eg. CS-304-CLO-1</font>";
-			}*/
-			else{
-				//echo $shortname;
-				//echo $description;
-				//echo $idnumber;
-				// Combine CLO course code and name for idnumber column
-				$temp = $idnumber;
-				$idnumber=$idnumber."-".$shortname;
-				//echo $idnumber;
-				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
-				if(count($check)){
-					$msg1="<font color='red'>-Please enter UNIQUE CLO name</font>";
-					$idnumber = $temp;
-				}
-				
-				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
-					$DB->execute($sql);
-					$msg3 = "<font color='green'><b>CLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
-				}
-			}
-		}
+
+		elseif(isset($_POST['return'])) {
+
+
+		$coursecode = $_POST["idnumber"];
+		$frameworkid = $_POST["frameworkid"];
+
 		
 
-		elseif(isset($_POST['return'])){
-			$shortname=trim($_POST['shortname']); $shortname=strtoupper($shortname);
-			$description=trim($_POST['description']);
-			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
-			$frameworkid=$_POST['frameworkid'];
-			$framework_shortname=$_POST['framework_shortname'];
-			$time = time();
-			if(empty($shortname) || empty($idnumber))
+		
+	for ($i=0; $i <count($_POST["shortname"]) ; $i++) { 
+		# code...
+		$idnumber=$coursecode."-".$_POST["shortname"][$i];
+		//echo $idnumber. "<br>";
+		$shortname=$_POST["shortname"][$i];
+		$description=trim($_POST["description"][$i]);
+
+		$time = time();
+		$cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
+    		WHERE competencyframeworkid = ? AND idnumber = ?',
+    		 array($frameworkid,$idnumber));
+
+		if($cloidnumbers == NULL) 
 			{
-				if(empty($shortname))
-				{
-					$msg1="<font color='red'>-Please enter CLO name</font>";
-				}
-				if(empty($idnumber))
-				{
-					$msg2="<font color='red'>-Please enter course code</font>";
-				}
-			}
-			elseif(substr($shortname,0,4) != 'CLO-')
-			{
-				$msg1="<font color='red'>-The CLO name must start with CLO-</font>";
-			}
-			/*elseif(fnmatch("[a-zA-Z][a-zA-Z]-[0-9][0-9][0-9]", $idnumber))
-			{
-				$msg2="<font color='red'>-The course code must be of valid format</font>";
-			}*/
-			/*elseif(preg_match('/^[a-zA-Z]{2}-\d{3}-(c|C)(l|L)(o|O)-\d{1,}$/',$idnumber))
-			{
-				$msg2="<font color='red'>-Please match the format eg. CS-304-CLO-1</font>";
-			}*/
-			else{
-				//echo $shortname;
-				//echo $description;
-				//echo $idnumber;
-				// Combine CLO course code and name for idnumber column
-				$temp = $idnumber;
-				$idnumber= $idnumber."-".$shortname;
-				//echo $idnumber;
-				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
-				if(count($check)){
-					$msg1="<font color='red'>-Please enter UNIQUE CLO name</font>";
-					$idnumber = $temp;
-				}
-				
-				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
-					$DB->execute($sql);
-					$msg3 = "<font color='green'><b>CLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
-				}
+
+
+			$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1,     '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
+		
+		$DB->execute($sql);
+
+		}
+		else 
+		{//echo $idnumber . "already exists<br>";
+		
 			}
 
-			  $redirect_page1='../index.php';
-              redirect($redirect_page1); 
+			}
+
+		$redirect_page1='../index.php';
+        redirect($redirect_page1); 
 		}
 
 		$clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($frameworkid));
@@ -159,7 +119,7 @@
 		?>
 		<br />
 		<h3>Add New CLO</h3>
-		<form method='post' action="" class="mform">
+		<form method='post' action="" class="mform" id="cloForm" >
 			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
@@ -220,7 +180,7 @@
 				<div class="col-md-9 form-inline felement" data-fieldtype="text">
 					<input type="text"
 							class="form-control"
-							name="shortname"
+							name="shortname[]"
 							id="id_shortname"
 							size=""
 							pattern="[c/C][l/L][o/O]-[0-9]{1,}"
@@ -249,7 +209,7 @@
 				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
 					<div>
 						<div>
-							<textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+							<textarea id="id_description" name="description[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
 						</div>
 					</div>
 					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
@@ -268,13 +228,22 @@
 			
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
-			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
+			<button class="btn btn-info" type="submit"  name="save" /> Save and continue </button>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
             <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
 
 		</form>
 		<br />
 		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
+
+
+
+		<p id="msg">
+		
+
+		</p>
+
+
 		
 		<?php
 		if(isset($_POST['save']) && !isset($msg3)){
@@ -319,11 +288,11 @@
 				document.getElementById(divName).appendChild(newdiv);
 
 				var newdiv1 = document.createElement('div');
-				newdiv1.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_shortname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="shortname" id="id_shortname" size="" pattern="[c/C][l/L][o/O]-[0-9]{1,}" title="eg. CLO-12" required placeholder="eg. CLO-12" maxlength="100" type="text" > (eg. CLO-12)<div class="form-control-feedback" id="id_error_shortname"><?php if(isset($msg1)){echo $msg1;} ?></div></div></div>';
+				newdiv1.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_shortname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="shortname[]" id="id_shortname" size="" pattern="[c/C][l/L][o/O]-[0-9]{1,}" title="eg. CLO-12" required placeholder="eg. CLO-12" maxlength="100" type="text" > (eg. CLO-12)<div class="form-control-feedback" id="id_error_shortname"><?php if(isset($msg1)){echo $msg1;} ?></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv1);
 
 				var newdiv2 = document.createElement('div');
-				newdiv2.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_description">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_description"  style="display: none;"></div></div></div>';
+				newdiv2.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_description">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_description" name="description[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_description"  style="display: none;"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv2);
 				counter++;
 			}
