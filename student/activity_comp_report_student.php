@@ -39,6 +39,7 @@
             $rec=$DB->get_recordset_sql(
                 'SELECT
                 qa.userid,
+                u.idnumber AS std_id,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
@@ -62,9 +63,11 @@
             
             if($rec ){
                 ?>
+                <h3>Quiz CLO Report</h3>
                 <!-- Display Students' Quiz Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
+                        <th> Student ID </th>
                         <th> Student Name </th>
                         <?php
                         $temp = '';
@@ -78,7 +81,7 @@
                             array_push($label, $comp); // array of clo names
                             $tot_comp++;
                         ?>
-                        <th> <?php echo $comp; ?> Competency </th>
+                        <th> <?php echo $comp; ?> </th>
                         <?php
                         }
                         ?>
@@ -102,17 +105,19 @@
                             <?php
                             foreach($data_temp as $data){ // loop as many times as comp count
                                 $uid = $data->userid;
+                                $sid = $data->std_id;
                                 $uname = $data->std_name;
                                 $max = $data->maxmark;
                                 $obt = $data->marksobtained;
                                 
                                 if($first === 0){ // display stud name only once
                                     ?>
+                                    <td><?php echo $sid;?></td>
                                     <td><?php echo $uname;?></td>
                                     <?php
                                     $first++;
                                 }
-                    ?>
+                            ?>
                             <td><?php
                                 if( (($obt/$max)*100) > 50){
                                     $pass[$i]++;
@@ -146,12 +151,14 @@
                         $tot_stdnt++;
                         foreach($data_temp as $data){
                             $uid = $data->userid;
+                            $sid = $data->std_id;
                             $uname = $data->std_name;
                             $max = $data->maxmark;
                             $obt = $data->marksobtained;
                             
                             if($first === 0){
                                 ?>
+                                <td><?php echo $sid;?></td>
                                 <td><?php echo $uname;?></td>
                                 <?php
                                 $first++;
@@ -173,12 +180,10 @@
                         }
                         ?>
                     </tr>
-
-
                     
                 </table>
                 
-                <button id="myButton" class="btn btn-primary">Export to xls</button>
+                <button id="myButton" class="btn btn-primary">Export to Excel</button>
                 
                 <div id="container" style="width: 100%;">
                     <canvas id="canvas"></canvas>
@@ -235,6 +240,7 @@
             $rec=$DB->get_recordset_sql(
                 'SELECT
                 ag.userid,
+                u.idnumber AS std_id,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 a.grade AS maxmark,
                 ag.grade AS marksobtained
@@ -250,10 +256,11 @@
 
             if($rec){
             ?>
-
+                <h3>Assignment CLO Report</h3>
                 <!-- Display Students' Assign Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
+                        <th> Student ID </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
@@ -266,7 +273,7 @@
                             array_push($label, $comp); // array of clo names
                             $tot_comp++;
                         ?>
-                        <th> <?php echo $comp; ?> Competency </th>
+                        <th> <?php echo $comp; ?> </th>
                         <?php
                         }
                         ?>
@@ -285,12 +292,14 @@
                         <tr>
                         <?php
                         $uid = $records->userid;
+                        $sid = $records->std_id;
                         $uname = $records->std_name;
                         $max = $records->maxmark;
                         $obt = $records->marksobtained;
                         $result = ($obt/$max)*100;
 
                         ?>
+                        <td><?php echo $sid;?></td>
                         <td><?php echo $uname;?></td>
                         <?php
                             for($k=0;$k<$tot_comp;$k++){
@@ -318,7 +327,7 @@
                     
                 </table>
 
-                <button id="myButton" class="btn btn-primary">Export to xls</button>
+                <button id="myButton" class="btn btn-primary">Export to Excel</button>
                 
                 <div id="container" style="width: 100%;">
                     <canvas id="canvas"></canvas>

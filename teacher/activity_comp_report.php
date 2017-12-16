@@ -92,7 +92,7 @@
                             array_push($label, $comp); // array of clo names
                             $tot_comp++;
                         ?>
-                        <th> <?php echo $comp; ?> Competency </th>
+                        <th> <?php echo $comp; ?> </th>
                         <?php
                         }
                         ?>
@@ -285,7 +285,7 @@
                             array_push($label, $comp); // array of clo names
                             $tot_comp++;
                         ?>
-                        <th> <?php echo $comp; ?> Competency </th>
+                        <th> <?php echo $comp; ?> </th>
                         <?php
                         }
                         ?>
