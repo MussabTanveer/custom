@@ -1,3 +1,6 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -157,7 +160,21 @@
                         <?php
                     }
                     ?>
-                    </table>
+                </table>
+                <button id="myButton" class="btn btn-primary">Export to Excel</button>
+
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton").click(function(e){ 
+                        $(".generaltable").table2excel({
+                            name: "file name",
+                            filename: "quiz-report",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
             <?php
         }
         else{
