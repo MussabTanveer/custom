@@ -47,6 +47,7 @@
             $rec=$DB->get_recordset_sql(
                 'SELECT
                 qa.userid,
+                u.idnumber AS std_id,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
@@ -77,6 +78,7 @@
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> S. No. </th>
+                        <th> Student ID </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
@@ -113,6 +115,7 @@
                             <?php
                             foreach($data_temp as $data){ // loop as many times as comp count
                                 $uid = $data->userid;
+                                $sid = $data->std_id;
                                 $uname = $data->std_name;
                                 $max = $data->maxmark;
                                 $obt = $data->marksobtained;
@@ -121,6 +124,7 @@
                                     $serialno++;
                                     ?>
                                     <td><?php echo $serialno;?></td>
+                                    <td><?php echo $sid;?></td>
                                     <td><?php echo $uname;?></td>
                                     <?php
                                     $first++;
@@ -159,6 +163,7 @@
                         $tot_stdnt++;
                         foreach($data_temp as $data){
                             $uid = $data->userid;
+                            $sid = $data->std_id;
                             $uname = $data->std_name;
                             $max = $data->maxmark;
                             $obt = $data->marksobtained;
@@ -167,6 +172,7 @@
                                 $serialno++;
                                 ?>
                                 <td><?php echo $serialno;?></td>
+                                <td><?php echo $sid;?></td>
                                 <td><?php echo $uname;?></td>
                                 <?php
                                 $first++;
@@ -243,6 +249,7 @@
             $rec=$DB->get_recordset_sql(
                 'SELECT
                 ag.userid,
+                u.idnumber AS std_id,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 a.grade AS maxmark,
                 ag.grade AS marksobtained
@@ -264,6 +271,7 @@
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> S. No. </th>
+                        <th> Student ID </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
@@ -296,6 +304,7 @@
                         <tr>
                         <?php
                         $uid = $records->userid;
+                        $sid = $records->std_id;
                         $uname = $records->std_name;
                         $max = $records->maxmark;
                         $obt = $records->marksobtained;
@@ -303,6 +312,7 @@
 
                         ?>
                         <td><?php echo $serialno;?></td>
+                        <td><?php echo $sid;?></td>
                         <td><?php echo $uname;?></td>
                         <?php
                             for($k=0;$k<$tot_comp;$k++){
