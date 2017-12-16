@@ -147,7 +147,7 @@
                                     if($ploids[$i] == $clopids[$j]){
                                         $counter[$i]++;
                                         ?>
-                                        <td>&#10003;</td>
+                                        <td>&#10005;</td>
                                         <?php
                                         $flag = 1;
                                         break;
@@ -198,7 +198,7 @@
                                     if($ploids[$i] == $clopids[$j]){
                                         $counter[$i]++;
                                         ?>
-                                        <td>&#10003;</td>
+                                        <td>&#10005;</td>
                                         <?php
                                         $flag = 1;
                                         break;
