@@ -3,8 +3,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
-    $PAGE->set_title("View Courses");
-    $PAGE->set_heading("View Courses");
+    $PAGE->set_title("Choose Course");
+    $PAGE->set_heading("Choose Course for User Enrolment");
     $PAGE->set_url($CFG->wwwroot.'/custom/select_course_enrol.php');
     
     echo $OUTPUT->header();
