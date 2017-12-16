@@ -330,7 +330,7 @@
                     
                 </table>
 
-                <button id="myButton" class="btn btn-primary">Export to xls</button>
+                <button id="myButton" class="btn btn-primary">Export to Excel</button>
                 
                 <div id="container" style="width: 100%;">
                     <canvas id="canvas"></canvas>
