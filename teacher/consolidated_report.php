@@ -77,7 +77,7 @@
         <table class="generaltable">
         <tr>
             <th>CLOs</th>
-            <th>Attempts</th>
+            <th>Attempts Given</th>
         </tr>
         <?php
         $arrlength = count($cloids);
