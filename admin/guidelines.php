@@ -170,7 +170,7 @@
 			</div> <!-- cd-timeline-img -->
 			<div class="cd-timeline-content">
 				<h2>Step 12: Add a new User</h2>
-				<p>Add a new user. User first name, surname, username, password and e-mail address are required.</p>
+				<p>Add a new user. User first name, surname, username, password and e-mail address are required. For user role student, use ID number in Optional Tab to enter Seat Number of student.</p>
 				<a href="../../../user/editadvanced.php?id=-1" target="_blank" class="cd-read-more">Proceed</a>
 				<span class="cd-date"></span>
 			</div> <!-- cd-timeline-content -->

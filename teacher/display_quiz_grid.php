@@ -1,10 +1,13 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Quiz Results");
-    $PAGE->set_heading("Results");
+    $PAGE->set_heading("Quiz Results");
     $PAGE->set_url($CFG->wwwroot.'/custom/display_quiz_grid.php');
     
     echo $OUTPUT->header();
@@ -14,21 +17,17 @@
     {
         $quiz_id=$_POST['quizid'];
         //echo "Quiz ID : $quiz_id";
-        ?>
-
-        <?php
+        
         // Display Quiz Info
-        echo "<h3>Question category wise grid</h3>";
+        echo "<h3>Quiz Question Grid</h3>";
        //$rec1=$DB->get_recordset_sql('SELECT DISTINCT us.idnumber FROM mdl_user us, mdl_quiz_attempts qa 
        // WHERE us.id=qa.userid');
-          
+        $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($quiz_id));
+        $tot_ques = count($quiz_ques);
         $rec=$DB->get_recordset_sql(
-         
-
-
-'SELECT 
-          qa.userid,
-         us.idnumber,
+        'SELECT 
+            qa.userid,
+            us.idnumber,
             qa.attempt,
             qu.name,
             c.shortname,
@@ -39,7 +38,6 @@
             qua.maxmark*qas.fraction AS marksobtained,
             qc.name AS category
         FROM
-         
             mdl_quiz q,
             mdl_quiz_slots qs,
             mdl_user us,
@@ -56,43 +54,131 @@
         
         array($quiz_id));
 
-
-
         if($rec){
-            $table = new html_table();
-            $table->head = array('Student ID', 'No. of Attempts', 'Question Name','CLO', 'Question',  'Max Marks', 'Marks Obtained');
-      
+            ?>
+            <table class="generaltable">
+                <tr class="table-head">
+                    <th> Student ID </th>
+                    <th> Question # </th>
+                    <th> Question </th>
+                    <th> CLO </th>
+                    <th> Max Marks </th>
+                    <th> Marks Obtained </th>
+                </tr>
+                <?php
+                    $count = 0; $first = 0;
+                    foreach ($rec as $records){
+                        if($count === $tot_ques){ // 1 student record collected
+                            //echo $count;
+                            
+                            foreach($data_temp as $data){ // loop as many times as comp count
+                                ?>
+                                <tr>
+                                <?php
+                                $uid = $data->idnumber;
+                                // $attempt = $data->attempt;
+                                $qname = $data->name;
+                                $qtext = $data->questiontext;
+                                $competency=$data->shortname;
+                                // $qrightans = $data->rightanswer;
+                                // $qresponse = $data->responsesummary;
+                                $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                                $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
+                                //$cname = $data->category;
+                                
+                                if($first === 0){ // display stud no & name only once
+                                    ?>
+                                    <td><?php echo $uid;?></td>
+                                    <td><?php echo $qname;?></td>
+                                    <td><?php echo $qtext;?></td>
+                                    <td><?php echo $competency;?></td>
+                                    <td><?php echo $qmax;?></td>
+                                    <td><?php echo $mobtained;?></td>
+                                    <?php
+                                    $first++;
+                                }
+                                else{
+                                    ?>
+                                    <td> </td>
+                                    <td><?php echo $qname;?></td>
+                                    <td><?php echo $qtext;?></td>
+                                    <td><?php echo $competency;?></td>
+                                    <td><?php echo $qmax;?></td>
+                                    <td><?php echo $mobtained;?></td>
+                                    <?php
+                                }
+                                ?>
+                                </tr>
+                                <?php
+                            }
+                            $count = 0;
+                            $first = 0;
+                            unset($data_temp);
+                        }
+                        //echo $count;
+                        $data_temp[] = $records;
+                        $count++;
+                    }
+                    foreach($data_temp as $data){ //  // now print very last student record
+                        ?>
+                        <tr>
+                        <?php
+                        $uid = $data->idnumber;
+                        // $attempt = $data->attempt;
+                        $qname = $data->name;
+                        $qtext = $data->questiontext;
+                        $competency=$data->shortname;
+                        // $qrightans = $data->rightanswer;
+                        // $qresponse = $data->responsesummary;
+                        $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                        $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
+                        //$cname = $data->category;
+                        
+                        if($first === 0){ // display stud no & name only once
+                            ?>
+                            <td><?php echo $uid;?></td>
+                            <td><?php echo $qname;?></td>
+                            <td><?php echo $qtext;?></td>
+                            <td><?php echo $competency;?></td>
+                            <td><?php echo $qmax;?></td>
+                            <td><?php echo $mobtained;?></td>
+                            <?php
+                            $first++;
+                        }
+                        else{
+                            ?>
+                            <td> </td>
+                            <td><?php echo $qname;?></td>
+                            <td><?php echo $qtext;?></td>
+                            <td><?php echo $competency;?></td>
+                            <td><?php echo $qmax;?></td>
+                            <td><?php echo $mobtained;?></td>
+                            <?php
+                        }
+                        ?>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                </table>
+                <button id="myButton" class="btn btn-primary">Export to Excel</button>
 
-             
-            foreach ($rec as $records  ) {
-                $uid = $records->idnumber;
-                $attempt = $records->attempt;
-                $qname = $records->name;
-                $competency=$records->shortname;
-                $qtext = $records->questiontext;
-                 
-             
-
-               // $qrightans = $records->rightanswer;
-               // $qresponse = $records->responsesummary;
-                $qmax = $records->maxmark; $qmax = number_format($qmax, 2); // 2 dp
-                $mobtained = $records->marksobtained; $mobtained = number_format($mobtained, 2);
-                //$cname = $records->category;
-                $table->data[] = array($uid, $attempt, $qname,$competency ,$qtext,  $qmax, $mobtained);
-            }
-            $rec->close(); // Don't forget to close the recordset!
-            echo html_writer::table($table);
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton").click(function(e){ 
+                        $(".generaltable").table2excel({
+                            name: "file name",
+                            filename: "quiz-report",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
+            <?php
         }
-
-
-     
-
-
-
-
-
         else{
-            echo "<h3>No students have attempted the quiz!</h3>";
+            echo "<h3>No students have attempted this quiz!</h3>";
         }
 
         /*

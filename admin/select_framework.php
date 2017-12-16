@@ -1,6 +1,6 @@
-<script src="./script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
-	require_once('../config.php');
+	require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('admin');
@@ -31,7 +31,7 @@
             global $SESSION;
             $SESSION->fid4 = $id;
         
-            redirect('map_plo_peo.php');
+            redirect('./map_plo_peo.php');
         }
 		echo html_writer::table($table);
 	
