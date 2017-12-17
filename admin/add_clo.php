@@ -60,7 +60,7 @@ require_once('../../../config.php');
 		elseif(isset($_POST['return'])) {
 
 
-		$coursecode = $_POST["idnumber"];
+		$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
 		$frameworkid = $_POST["frameworkid"];
 
 		
@@ -68,9 +68,9 @@ require_once('../../../config.php');
 		
 	for ($i=0; $i <count($_POST["shortname"]) ; $i++) { 
 		# code...
-		$idnumber=$coursecode."-".$_POST["shortname"][$i];
+		$idnumber=$coursecode."-".$_POST["shortname"][$i]; $idnumber=strtoupper($idnumber);
 		//echo $idnumber. "<br>";
-		$shortname=$_POST["shortname"][$i];
+		$shortname=$_POST["shortname"][$i];  $shortname=strtoupper($shortname);
 		$description=trim($_POST["description"][$i]);
 
 		$time = time();
@@ -118,6 +118,12 @@ require_once('../../../config.php');
 		echo "<div class='row'><div class='col-md-6'><a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a></div><div id='list' class='col-md-6'></div></div>";
 		?>
 		<br />
+
+		<p id="msg">
+		
+
+		</p>
+		
 		<h3>Add New CLO</h3>
 		<form method='post' action="" class="mform" id="cloForm" >
 			
@@ -236,12 +242,6 @@ require_once('../../../config.php');
 		<br />
 		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 
-
-
-		<p id="msg">
-		
-
-		</p>
 
 
 		
