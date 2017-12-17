@@ -59,43 +59,34 @@ require_once('../../../config.php');
 
 		elseif(isset($_POST['return'])) {
 
-
-		$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
-		$frameworkid = $_POST["frameworkid"];
-
-		
-
-		
-	for ($i=0; $i <count($_POST["shortname"]) ; $i++) { 
-		# code...
-		$idnumber=$coursecode."-".$_POST["shortname"][$i]; $idnumber=strtoupper($idnumber);
-		//echo $idnumber. "<br>";
-		$shortname=$_POST["shortname"][$i];  $shortname=strtoupper($shortname);
-		$description=trim($_POST["description"][$i]);
-
-		$time = time();
-		$cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
-    		WHERE competencyframeworkid = ? AND idnumber = ?',
-    		 array($frameworkid,$idnumber));
-
-		if($cloidnumbers == NULL) 
-			{
-
-
-			$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1,     '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
-		
-		$DB->execute($sql);
-
-		}
-		else 
-		{//echo $idnumber . "already exists<br>";
-		
-			}
+			$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
+			$frameworkid = $_POST["frameworkid"];
+			
+			for ($i=0; $i <count($_POST["shortname"]) ; $i++) {
+				# code...
+				$shortname=trim($_POST["shortname"][$i]);  $shortname=strtoupper($shortname);
+				$idnumber=$coursecode."-".$shortname; $idnumber=strtoupper($idnumber);
+				$description=trim($_POST["description"][$i]);
+				//echo $idnumber. "<br>";
+				$time = time();
+				$cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
+					WHERE competencyframeworkid = ? AND idnumber = ?',
+					array($frameworkid,$idnumber));
+				
+				if($cloidnumbers == NULL) 
+					{
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1,     '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
+					$DB->execute($sql);
+				}
+				else 
+				{//echo $idnumber . "already exists<br>";
+				
+				}
 
 			}
 
-		$redirect_page1='../index.php';
-        redirect($redirect_page1); 
+			$redirect_page1='../index.php';
+			redirect($redirect_page1); 
 		}
 
 		$clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($frameworkid));

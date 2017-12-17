@@ -7,7 +7,7 @@
     $PAGE->set_heading("Add Course Learning Outcome (CLO)");
     $PAGE->set_url($CFG->wwwroot.'/custom/add_clo.php');
     
-	$time = time();
+	
 	$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
 	$frameworkid = $_POST["frameworkid"];
 
@@ -19,6 +19,7 @@
 		//echo $idnumber. "<br>";
 		//echo $shortname . "<br>";
 		//echo $description . "<br>";
+		$time = time();
 
 		$cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
     		WHERE competencyframeworkid = ? AND idnumber = ?',
