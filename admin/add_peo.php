@@ -20,15 +20,13 @@
 				$fw_id=$SESSION->fid1;
 				$SESSION->fid1 = "xyz";
 			}
-			elseif(isset( $_POST['frameworkid']))
+			elseif(isset( $_POST['fwid']))
 			{
 				$fw_id=$_POST['fwid'];
-				//echo "$frameworkid";
 			}
 			else
 			{
 				$fw_id=$_GET['fwid'];
-				//echo "$frameworkid";
 			}
 
 			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($fw_id));
@@ -155,8 +153,8 @@
 				$shortname1 = $records->shortname;
 				$id=$records->id;
 				echo "<div class='row'>
-						<div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
-						<div class='col-md-10 col-sm-8 col-xs-4'>
+						<div class='col-md-3 col-sm-4 col-xs-8'>$i. $shortname1</div>
+						<div class='col-md-9 col-sm-8 col-xs-4'>
 							<a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='../img/icons/edit.png' /></a>
 							<a href='add_peo.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete PEO?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
 		                </div>
