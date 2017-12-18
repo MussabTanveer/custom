@@ -1,0 +1,8 @@
+# === This is a .gitignore file ===
+
+# Ignore plugin files
+
+db/
+lang/
+lib.php
+version.php
