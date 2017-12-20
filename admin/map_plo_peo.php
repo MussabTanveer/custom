@@ -13,7 +13,7 @@
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
 ?>
-<script src="./script/jquery/jquery-2.1.3.js"></script>
+<script src="../script/jquery/jquery-2.1.3.js"></script>
 
 
 <script type="text/javascript">
@@ -36,6 +36,7 @@
 
 
 <?php
+//echo "$SESSION->fid4";
 
     if((isset($_POST['submit']) && isset($_POST['frameworkid'])) || (isset($SESSION->fid4) && $SESSION->fid4 != "xyz"))
     {
@@ -43,6 +44,7 @@
         {
             $framework_id=$SESSION->fid4;
             $SESSION->fid4 = "xyz";
+           // echo "hello";
         }
 		else
 			$framework_id=$_POST['frameworkid'];

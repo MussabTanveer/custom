@@ -30,7 +30,7 @@
             
             global $SESSION;
             $SESSION->fid4 = $id;
-        
+        	
             redirect('./map_plo_peo.php');
         }
 		echo html_writer::table($table);

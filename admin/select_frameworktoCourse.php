@@ -32,7 +32,7 @@
             global $SESSION;
             $SESSION->fid11 = $id;
         
-            redirect('add_peo.php');
+            redirect('add_course.php');
         }
         echo html_writer::table($table);
         ?>
