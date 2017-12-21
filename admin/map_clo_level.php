@@ -25,7 +25,7 @@
 
         <?php
         // Get CLOs
-        $rec=$DB->get_records_sql("SELECT * FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber NOT LIKE 'PLO%' AND parentid !=0 ORDER BY id", array($fw_id));
+        $rec=$DB->get_records_sql("SELECT * FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber NOT LIKE 'PLO%' AND parentid !=0 ORDER BY idnumber", array($fw_id));
 
         //Get level with its name and domain name
         $recLevels=$DB->get_records_sql("SELECT txl.id, txl.name AS level_name, txl.level, txd.name AS domain_name FROM mdl_taxonomy_levels txl, mdl_taxonomy_domain txd WHERE txl.domainid=txd.id");

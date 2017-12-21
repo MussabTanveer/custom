@@ -45,7 +45,7 @@
         }
         /* /delete code */
 
-       $clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%"', array($fw_id));
+       $clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($fw_id));
         
         if($clos){
             $i = 1;
