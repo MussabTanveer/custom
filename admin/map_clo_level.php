@@ -58,11 +58,12 @@
                     {
                         $cid = $records->id;
                         $sname = $records->shortname;
+                        $cidnum = $records->idnumber;
                         array_push($cloids,$cid);
                     ?>
                                 
                     <tr>
-                        <td><?php echo $sname;?> </td>
+                        <td><?php echo $cidnum;?> </td>
                         <td>
                             <select required onChange="dropdownTip(this.value, <?php echo $i ?>)" name="level[]" class="select custom-select">
                                 <option value=''>Choose..</option>

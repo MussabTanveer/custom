@@ -53,8 +53,9 @@
             foreach ($clos as $records){
                 $shortname1 = $records->shortname;
                 $id=$records->id;
+                $cidnum = $records->idnumber;
                 echo "<div class='row'>
-                        <div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
+                        <div class='col-md-2 col-sm-4 col-xs-8'>$i. $cidnum</div>
                         <div class='col-md-10 col-sm-8 col-xs-4'>
                             <a href='edit_clo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='../img/icons/edit.png' /></a>
                             <a href='view_clos.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete CLO?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
