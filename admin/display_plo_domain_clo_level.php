@@ -33,11 +33,11 @@
         $rec2=$DB->get_recordset_sql('SELECT clo.parentid AS cparent, plo.id AS ploid, clo.idnumber AS cloidnum, clo.shortname AS cloname, plo.shortname AS ploname FROM  mdl_competency clo, mdl_competency plo WHERE plo.id=clo.parentid AND plo.parentid != 0 AND plo.competencyframeworkid = ? AND clo.competencyframeworkid = ? ORDER BY clo.idnumber', array($fw_id, $fw_id));
         */
         // Get CLO & Level
-        $rec=$DB->get_recordset_sql('SELECT clo.shortname AS cname, levels.name AS lname, levels.level AS lvl FROM mdl_competency clo, mdl_taxonomy_levels levels, mdl_taxonomy_clo_level clolevel WHERE clo.id=clolevel.cloid AND levels.id=clolevel.levelid AND clolevel.frameworkid = ?', array($fw_id, $fw_id));
+        $rec=$DB->get_recordset_sql('SELECT clo.shortname AS cname, clo.idnumber AS cidnum, levels.name AS lname, levels.level AS lvl FROM mdl_competency clo, mdl_taxonomy_levels levels, mdl_taxonomy_clo_level clolevel WHERE clo.id=clolevel.cloid AND levels.id=clolevel.levelid AND clolevel.frameworkid = ?', array($fw_id, $fw_id));
         // Get Domains
         $recDom=$DB->get_records_sql("SELECT * FROM mdl_taxonomy_domain ORDER BY id");
         // Get PLO Domain
-        $rec2=$DB->get_recordset_sql('SELECT plo.id AS pid, plo.shortname AS pname, plodom.domainid AS domid FROM mdl_competency plo, mdl_taxonomy_domain dom, mdl_taxonomy_plo_domain plodom WHERE plo.id=plodom.ploid AND dom.id=plodom.domainid AND plodom.frameworkid = ?', array($fw_id));
+        $rec2=$DB->get_recordset_sql('SELECT plo.id AS pid, plo.shortname AS pname, plo.idnumber AS pidnum, plodom.domainid AS domid FROM mdl_competency plo, mdl_taxonomy_domain dom, mdl_taxonomy_plo_domain plodom WHERE plo.id=plodom.ploid AND dom.id=plodom.domainid AND plodom.frameworkid = ?', array($fw_id));
 
         if($rec){
             ?>
@@ -54,11 +54,12 @@
                 <?php
                 foreach ($rec as $records) {
                     $cn = $records->cname;
+                    $cidn = $records->cidnum;
                     $ln = $records->lname;
                     $lvl = $records->lvl;
                     ?>
                     <tr>
-                        <td><?php echo $cn ?></td>
+                        <td><?php echo $cidn ?></td>
                         <td><?php echo $ln ?></td>
                         <td><?php echo $lvl ?></td>
                     </tr>
@@ -121,11 +122,12 @@
                             <?php
                             foreach($ploid_temp as $data){ // loop as many times as course clo count
                                 $pn = $data->pname;
+                                $pidn = $data->pidnum;
                                 $did = $data->domid;
                                 
                                 if($first == 0){ // display plo name only once
                                     ?>
-                                    <td><?php echo $pn; ?></td>
+                                    <td><?php echo "$pidn: $pn"; ?></td>
                                     <?php
                                     $first++;
                                 }
@@ -158,7 +160,7 @@
                         $first = 0;
                         unset($ploid_temp);
                         unset($domids);
-                        $ploid_temp[] = $records;
+                        $ploid_temp[] = $records; // push record
                     }
                     $temp_plidn = $pidn; // store last record clo idnum
                 }
@@ -168,11 +170,12 @@
                             <?php // now print very last course record
                             foreach($ploid_temp as $data){ // loop as many times as course clo count
                                 $pn = $data->pname;
+                                $pidn = $data->pidnum;
                                 $did = $data->domid;
                                 
                                 if($first == 0){ // display plo name only once
                                     ?>
-                                    <td><?php echo $pn; ?></td>
+                                    <td><?php echo "$pidn: $pn"; ?></td>
                                     <?php
                                     $first++;
                                 }

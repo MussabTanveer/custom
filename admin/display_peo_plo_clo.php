@@ -66,7 +66,7 @@
                     $pen = $records->peoname;
                     ?>
                     <tr>
-                        <td><?php echo "$pln ($pidnum)" ?></td>
+                        <td><?php echo "$pidnum: $pln" ?></td>
                         <?php
                         for($x = 0; $x<$arrlength; $x++){
                             if($peoids[$x] == $plparentid){
