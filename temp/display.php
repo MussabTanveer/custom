@@ -7,7 +7,7 @@ table, th, td{
 
 <?php
 
-require_once('../config.php');
+require_once('../../../config.php');
     //echo "hello1";
     //$query = mysql_query("SELECT * FROM `mdl_competency_framework`");
     /*$query = $DB->get_record_sql('SELECT * FROM {competency_framework}');

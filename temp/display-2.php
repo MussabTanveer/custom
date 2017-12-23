@@ -7,7 +7,7 @@ table, th, td{
 
 <?php
 
-    require_once('../config.php');
+    require_once('../../../config.php');
     
     /*
     Queries related to competencies:
