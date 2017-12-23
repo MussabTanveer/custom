@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Quizzes");
     $PAGE->set_heading("Quizzes");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_quizzes.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_quizzes.php');
     
     echo $OUTPUT->header();
     require_login();

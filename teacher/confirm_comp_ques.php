@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Add CLO");
     $PAGE->set_heading("Add Activity CLO");
-    $PAGE->set_url($CFG->wwwroot.'/custom/confirm_comp_ques.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/confirm_comp_ques.php');
     
 	echo $OUTPUT->header();
 	require_login();

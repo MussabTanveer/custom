@@ -8,7 +8,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Quiz Results");
     $PAGE->set_heading("Quiz Results");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_quiz_grid.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_quiz_grid.php');
     
     echo $OUTPUT->header();
     require_login();

@@ -8,7 +8,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Course CLO");
     $PAGE->set_heading("Consolidated Report");
-    $PAGE->set_url($CFG->wwwroot.'/custom/consolidated_report.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/consolidated_report.php');
     
     echo $OUTPUT->header();
     require_login();

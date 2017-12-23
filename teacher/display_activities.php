@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Activities");
     $PAGE->set_heading("Activities");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_activities.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_activities.php');
     
     echo $OUTPUT->header();
     require_login();
