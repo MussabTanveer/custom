@@ -17,6 +17,9 @@
         <a href="./display_courses-2.php" >Map Questions to CLO</a><br><br>
 
         <a href="./display_courses-3.php" >Activity/Course CLO Report</a><br><br>
+
+         <a href="./display_courses-4.php" >Course Mapping to CLO and levels</a><br><br>
+    </div>
     </div>
 <?php
 
