@@ -1,6 +1,7 @@
 <?php
     require_once('../../config.php');
     $PAGE->set_pagelayout('redirect');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/index.php');
     require_login();
     $redirect_page1='./admin/report_admin.php';
     $redirect_page2='./teacher/report_teacher.php';
