@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Student Reports");
     $PAGE->set_heading("Student Reports");
-    $PAGE->set_url($CFG->wwwroot.'/custom/report_student.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/report_student.php');
     echo $OUTPUT->header();
     require_login();
 ?>

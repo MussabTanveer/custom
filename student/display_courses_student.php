@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Courses");
     $PAGE->set_heading("Courses");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_courses_student.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_courses_student.php');
     
     echo $OUTPUT->header();
     require_login();

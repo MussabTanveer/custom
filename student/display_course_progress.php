@@ -8,7 +8,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Progress");
     $PAGE->set_heading("Semester Progress");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_course_progress.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_course_progress.php');
     
     echo $OUTPUT->header();
     require_login();
