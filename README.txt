@@ -25,6 +25,9 @@ activity_comp_report.php (Activity CLO Report)
 consolidated_report_selection.php (Activity Selection for Course CLO Report)
 consolidated_report.php (Course CLO Report)
 
+display_courses-4.php (Display Course CLOs with their Levels, Domains, PLOs)
+display_course_clos.php
+
 ADMIN:
 
 display_outcome_framework.php (View PEOs, PLOs, Courses Mapping)
