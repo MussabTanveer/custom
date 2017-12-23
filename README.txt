@@ -77,6 +77,7 @@ report_student.php
 select_frameworktoCourse.php (Add Course after framework selection & Map CLOs)
 add_course.php
 
+define_vision_mission.php (Define Uni/Dept Vision/Mission)
 
 TEMP:
 
