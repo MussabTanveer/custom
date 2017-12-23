@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE Framework");
     $PAGE->set_heading("OBE Frameworks");
-    $PAGE->set_url($CFG->wwwroot.'/custom/add_framework.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_framework.php');
     
     echo $OUTPUT->header();
 	require_login();

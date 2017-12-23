@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add Domain");
     $PAGE->set_heading("Add PLO Domain");
-    $PAGE->set_url($CFG->wwwroot.'/custom/confirm_domain_plo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/confirm_domain_plo.php');
     
 	echo $OUTPUT->header();
 	require_login();

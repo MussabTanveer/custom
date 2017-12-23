@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Map PLOs to PEOs");
     $PAGE->set_heading("Map PLOs to PEOs");
-    $PAGE->set_url($CFG->wwwroot.'/custom/map_plo_peo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/map_plo_peo.php');
     
     echo $OUTPUT->header();
 

@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("PLOs and Domains");
     $PAGE->set_heading("Map PLOs to Taxonomy Domains");
-    $PAGE->set_url($CFG->wwwroot.'/custom/map_plo_domain.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/map_plo_domain.php');
     
     echo $OUTPUT->header();
     require_login();

@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("View OBE CLOs");
     $PAGE->set_heading("Course Learning Outcomes (CLOs)");
-    $PAGE->set_url($CFG->wwwroot.'/custom/view_clos.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/view_clos.php');
     
     echo $OUTPUT->header();
 	require_login();

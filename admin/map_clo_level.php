@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("CLOs and Levels");
     $PAGE->set_heading("Map CLOs to Taxonomy Levels");
-    $PAGE->set_url($CFG->wwwroot.'/custom/map_clo_level.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/map_clo_level.php');
     
     echo $OUTPUT->header();
     require_login();

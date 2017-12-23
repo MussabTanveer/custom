@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Admin Guidelines");
     $PAGE->set_heading("Admin Guidelines");
-    $PAGE->set_url($CFG->wwwroot.'/custom/guidelines.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/guidelines.php');
     
     //echo $OUTPUT->header();
 	require_login();

@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Edit OBE PLOs");
     $PAGE->set_heading("Edit PLO");
-    $PAGE->set_url($CFG->wwwroot.'/custom/edit_plo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/edit_plo.php');
     
     echo $OUTPUT->header();
 	require_login();

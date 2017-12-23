@@ -8,7 +8,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Objectives & Outcomes");
     $PAGE->set_heading("Mapping of Objectives & Outcomes");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_peo_plo_clo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/display_peo_plo_clo.php');
     
     echo $OUTPUT->header();
     require_login();

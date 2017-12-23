@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Edit OBE Framework");
     $PAGE->set_heading("Edit OBE Framework");
-    $PAGE->set_url($CFG->wwwroot.'/custom/edit_framework.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/edit_framework.php');
     
     echo $OUTPUT->header();
 	require_login();

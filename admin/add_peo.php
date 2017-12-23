@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE PEOs");
     $PAGE->set_heading("Add Program Educational Objective (PEO)");
-    $PAGE->set_url($CFG->wwwroot.'/custom/add_peo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_peo.php');
     
     echo $OUTPUT->header();
 	require_login();

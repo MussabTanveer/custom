@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Map CLOS to PLOS");
     $PAGE->set_heading("Map CLOs to PLOs");
-    $PAGE->set_url($CFG->wwwroot.'/custom/confirm_clo_plo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/confirm_clo_plo.php');
     
     echo $OUTPUT->header();
 

@@ -8,7 +8,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Domains & Levels");
     $PAGE->set_heading("Mapping of Domains & Levels");
-    $PAGE->set_url($CFG->wwwroot.'/custom/display_plo_domain_clo_level.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/display_plo_domain_clo_level.php');
     
     echo $OUTPUT->header();
     require_login();

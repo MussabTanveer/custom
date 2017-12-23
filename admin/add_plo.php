@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE PLOs");
     $PAGE->set_heading("Add Program Learning Outcome (PLO)");
-    $PAGE->set_url($CFG->wwwroot.'/custom/add_plo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_plo.php');
     
     echo $OUTPUT->header();
 	require_login();

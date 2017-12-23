@@ -5,7 +5,7 @@ require_once('../../../config.php');
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE CLOs");
     $PAGE->set_heading("Add Course Learning Outcome (CLO)");
-    $PAGE->set_url($CFG->wwwroot.'/custom/add_clo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_clo.php');
    echo $OUTPUT->header();
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());

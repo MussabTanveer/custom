@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Admin Reports & Forms");
     $PAGE->set_heading("Admin Reports & Forms");
-    $PAGE->set_url($CFG->wwwroot.'/custom/report_admin.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/report_admin.php');
     echo $OUTPUT->header();
     require_login();
     is_siteadmin() || die($OUTPUT->header().'<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());

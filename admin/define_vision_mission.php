@@ -8,7 +8,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Vision & Mission");
     $PAGE->set_heading("Define Vision & Mission");
-    $PAGE->set_url($CFG->wwwroot.'/custom/define_vision_mission.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/define_vision_mission.php');
 
 
     echo $OUTPUT->header();

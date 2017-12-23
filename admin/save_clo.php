@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Add OBE CLOs");
     $PAGE->set_heading("Add Course Learning Outcome (CLO)");
-    $PAGE->set_url($CFG->wwwroot.'/custom/add_clo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_clo.php');
     
 	
 	$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);

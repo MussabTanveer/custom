@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("OBE Frameworks");
     $PAGE->set_heading("OBE Framework Selection");
-    $PAGE->set_url($CFG->wwwroot.'/custom/select_frameworktoPEO.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/select_frameworktoPEO.php');
     
     echo $OUTPUT->header();
     require_login();

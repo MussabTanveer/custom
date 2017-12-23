@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('admin');
     $PAGE->set_title("Choose Course");
     $PAGE->set_heading("Choose Course for User Enrolment");
-    $PAGE->set_url($CFG->wwwroot.'/custom/select_course_enrol.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/select_course_enrol.php');
     
     echo $OUTPUT->header();
 	require_login();
