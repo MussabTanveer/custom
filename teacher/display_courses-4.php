@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Courses");
     $PAGE->set_heading("Courses");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_courses.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_courses-4.php');
     
     echo $OUTPUT->header();
     require_login();
@@ -33,7 +33,7 @@
         AND usr.id = ?', array('50', 'editingteacher', $USER->id));
     if($rec){
         ?>
-        <form method="post" action="display_courses_clo.php" id="form_check">
+        <form method="post" action="display_course_clos.php" id="form_check">
         <?php
         $serialno = 0;
         $table = new html_table();
@@ -49,9 +49,9 @@
         if($serialno == 1){
             
             global $SESSION;
-            $SESSION->cid1 = $id;
+            $SESSION->cid4 = $id;
         
-            redirect('display_courses_clo.php');
+            redirect('display_course_clos.php');
         }
         echo html_writer::table($table);
         ?>

@@ -5,28 +5,22 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Course CLOs");
     $PAGE->set_heading("Course Mapping");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_courses_clo.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_course_clos.php');
     
     echo $OUTPUT->header();
     require_login();
-
     
-
-
-    if(isset($_POST['submit']) && isset( $_POST['courseid']))
+    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid4) && $SESSION->cid4 != "xyz"))
     {
-
-          $course_id=$_POST['courseid'];
-
-
-          //echo $course_id;
-}
-        ?>
-
-         <?php
-        // 
-
-        echo "<h3>Associated CLOs with course and their Mapping </h3>" ;
+        if(isset($SESSION->cid4) && $SESSION->cid4 != "xyz")
+        {
+            $course_id=$SESSION->cid4;
+            $SESSION->cid4 = "xyz";
+        }
+        else
+            $course_id=$_POST['courseid'];
+    
+        echo "<h3> Associated CLOs with Course and their Mapping </h3>" ;
 
         $rec=$DB->get_recordset_sql('SELECT
 
@@ -38,7 +32,7 @@
             taxlvl.name,
             taxlvl.level,
             taxdom.name as taxname
-     
+        
             FROM 
             mdl_competency clo,
             mdl_competency plo, 
@@ -48,12 +42,10 @@
             mdl_taxonomy_domain taxdom
             WHERE clo.id=compcour.competencyid and clo.id=taxclolvl.cloid and taxclolvl.levelid=taxlvl.id and taxlvl.domainid=taxdom.id and plo.id=clo.parentid and courseid=?'
             ,array($course_id));
-
-      
+        
         if($rec){
-
-           $serial=0;
-             $table = new html_table();
+            $serial=0;
+                $table = new html_table();
             $table->head = array('S.No','CLO Name','Description','Taxonomy level','PLO');
             foreach ($rec as $records) {
                 $serial++;
@@ -66,22 +58,22 @@
                 $shortname1=$records->ploname;
                 $idnumber=$records->idnumber;
                 //$peo=$records->peo;
-  $table->data[] = array($serial,$shortname, $description,ucwords($name1)."<br>"."(".ucwords($level)." ".ucwords($name).")",$idnumber."<br>".$shortname1);
-
+                $table->data[] = array($serial,$shortname, $description,ucwords($name1)."<br>"."(".ucwords($level)." ".ucwords($name).")",$idnumber."<br>".$shortname1);
             }
 
- $rec->close(); 
- echo html_writer::table($table);
-
-
-
-
-
-
-
+            $rec->close(); 
+            echo html_writer::table($table);
         }
-echo $OUTPUT->footer();
-        ?>
-
-
-
+        else{
+            echo "<h3> Found no CLO of this course! </h3>";
+        }
+        echo $OUTPUT->footer();
+    }
+    else
+    {?>
+        <h2 style="color:red;"> Invalid Selection </h2>
+        <a href="./display_courses-4.php">Back</a>
+    <?php
+        echo $OUTPUT->footer();
+    }?>
+?>
