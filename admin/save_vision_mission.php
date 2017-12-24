@@ -18,6 +18,11 @@
 	echo "$departmentVision <br>";
 	echo "$departmentMission <br> ";*/
 
+	 $universityVision = mysql_real_escape_string($universityVision);
+        $universityMission = mysql_real_escape_string($universityMission);
+        $departmentVision = mysql_real_escape_string($departmentVision);
+        $departmentMission = mysql_real_escape_string($departmentMission);
+
 	
 	$sql="UPDATE `mdl_vision_mission` SET description = '$universityVision' WHERE idnumber='uv'";
 	$DB->execute($sql);

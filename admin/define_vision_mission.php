@@ -47,8 +47,17 @@
         $universityMission = trim($_POST["um"]);
         $departmentVision = trim($_POST["dv"]);
         $departmentMission = trim($_POST["dm"]);
+        
+        $universityVision = mysql_real_escape_string($universityVision);
+        $universityMission = mysql_real_escape_string($universityMission);
+        $departmentVision = mysql_real_escape_string($departmentVision);
+        $departmentMission = mysql_real_escape_string($departmentMission);
 
-        $sql="UPDATE `mdl_vision_mission` SET description = '$universityVision' WHERE idnumber='uv'";
+
+        $sql="UPDATE `mdl_vision_mission` SET description = '$universityVision'
+         WHERE idnumber='uv'";
+
+    
         $DB->execute($sql);
 
         $sql="UPDATE `mdl_vision_mission` SET description = '$universityMission' WHERE idnumber='um'";
