@@ -15,6 +15,10 @@
 
         <a href="./guidelines.php" target="_blank">Admin Guidelines</a><br><br>
 
+        <a href="./define_vision_mission.php" >Define Vision &amp; Mission</a><br><br>
+
+        <a href="./view_vision_mission.php" >View Vision &amp; Mission</a><br><br>
+
         <a href="./add_framework.php" >Create OBE Framework</a><br><br>
 
         <a href="./select_frameworktoPEO.php" >Define PEOs</a><br><br>
