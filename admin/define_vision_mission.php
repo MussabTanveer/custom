@@ -15,7 +15,65 @@
     require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
-    //var_dump($_POST);
+    ?>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/jquery/jquery-2.1.3.js"></script>
+
+<script type="text/javascript" >
+
+    $(document).ready(function(){
+    $("button").click(function(){
+        var formdata = $("form").serialize();
+            $.ajax({
+                type: "POST",
+                url: "save_vision_mission.php",
+                data: formdata,
+                success:function(){
+                    
+            document.getElementById("msg").innerHTML ="<font color='green'>Vision and Mission successfully defined!</font>"
+        }
+
+             });
+            return false;
+
+    });
+});
+</script>
+
+
+<p id=msg> </p>
+
+<?php
+
+    if(isset($_POST['return']))
+    {
+        $universityVision = trim($_POST["uv"]);
+        $universityMission = trim($_POST["um"]);
+        $departmentVision = trim($_POST["dv"]);
+        $departmentMission = trim($_POST["dm"]);
+
+        $sql="UPDATE `mdl_vision_mission` SET description = '$universityVision' WHERE idnumber='uv'";
+    $DB->execute($sql);
+
+    $sql="UPDATE `mdl_vision_mission` SET description = '$universityMission' WHERE idnumber='um'";
+    $DB->execute($sql);
+
+    $sql="UPDATE `mdl_vision_mission` SET description = '$departmentVision' WHERE idnumber='dv'";
+    $DB->execute($sql);
+
+    $sql="UPDATE `mdl_vision_mission` SET description = '$departmentMission' WHERE idnumber='dm'";
+        
+    $DB->execute($sql);
+    
+
+    $redirect_page1='../index.php';
+    redirect($redirect_page1); 
+
+
+    }
+
+
+
     $temp = array();
     $editor = \editors_get_preferred_editor();
     $editor->use_editor("id_uv",$temp);
@@ -103,7 +161,7 @@
                 </div>
             </div>
         </div>
-        <input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
+        <button class="btn btn-info" type="submit"  name="save" /> Save and continue </button>
         <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
 		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
     </form>
