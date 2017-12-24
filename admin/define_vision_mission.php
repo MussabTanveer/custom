@@ -16,32 +16,28 @@
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
     ?>
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/jquery/jquery-2.1.3.js"></script>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <script src="../script/jquery/jquery-2.1.3.js"></script>
 
-<script type="text/javascript" >
+    <script type="text/javascript" >
 
-    $(document).ready(function(){
-    $("button").click(function(){
-        var formdata = $("form").serialize();
-            $.ajax({
-                type: "POST",
-                url: "save_vision_mission.php",
-                data: formdata,
-                success:function(){
-                    
-            document.getElementById("msg").innerHTML ="<font color='green'>Vision and Mission successfully defined!</font>"
-        }
+        $(document).ready(function(){
+            $("button").click(function(){
+                var formdata = $("form").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "save_vision_mission.php",
+                    data: formdata,
+                    success:function(){
+                        document.getElementById("msg").innerHTML ="<font color='green'>Vision and Mission successfully defined!</font>"
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
 
-             });
-            return false;
-
-    });
-});
-</script>
-
-
-<p id=msg> </p>
+    <p id=msg> </p>
 
 <?php
 
@@ -53,25 +49,22 @@
         $departmentMission = trim($_POST["dm"]);
 
         $sql="UPDATE `mdl_vision_mission` SET description = '$universityVision' WHERE idnumber='uv'";
-    $DB->execute($sql);
+        $DB->execute($sql);
 
-    $sql="UPDATE `mdl_vision_mission` SET description = '$universityMission' WHERE idnumber='um'";
-    $DB->execute($sql);
+        $sql="UPDATE `mdl_vision_mission` SET description = '$universityMission' WHERE idnumber='um'";
+        $DB->execute($sql);
 
-    $sql="UPDATE `mdl_vision_mission` SET description = '$departmentVision' WHERE idnumber='dv'";
-    $DB->execute($sql);
+        $sql="UPDATE `mdl_vision_mission` SET description = '$departmentVision' WHERE idnumber='dv'";
+        $DB->execute($sql);
 
-    $sql="UPDATE `mdl_vision_mission` SET description = '$departmentMission' WHERE idnumber='dm'";
+        $sql="UPDATE `mdl_vision_mission` SET description = '$departmentMission' WHERE idnumber='dm'";
+            
+        $DB->execute($sql);
         
-    $DB->execute($sql);
-    
-
-    $redirect_page1='../index.php';
-    redirect($redirect_page1); 
-
+        $redirect_page1='../index.php';
+        redirect($redirect_page1); 
 
     }
-
 
 
     $temp = array();
@@ -166,13 +159,5 @@
 		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
     </form>
     <?php
-    /*
-    echo "<form method='post'>";
-    echo \html_writer::tag('textarea', 'default',
-        array('id' => "someid", 'name' => 'somename', 'rows' => 5, 'cols' => 10));
-
-    echo "<input type='submit' name='submit' />";
-    echo "</form>";
-    */
     echo $OUTPUT->footer();
 ?>
