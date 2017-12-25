@@ -9,17 +9,18 @@
     echo $OUTPUT->header();
     require_login();
 ?>
+    <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
+
 	<div>
         <h3>Click the links down below as per need </h3><br>
 
-        <a href="./display_courses.php" >View Quiz Grid</a><br><br>
+        <a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>
 
-        <a href="./display_courses-2.php" >Map Questions to CLO</a><br><br>
+        <a href="./display_courses-2.php" class="cool-link">Map Quiz Questions to CLOs</a><br><br>
 
-        <a href="./display_courses-3.php" >Activity/Course CLO Report</a><br><br>
+        <a href="./display_courses.php" class="cool-link">View Quiz Detailed Report</a><br><br>
 
-         <a href="./display_courses-4.php" >Course Mapping to CLO and levels</a><br><br>
-    </div>
+        <a href="./display_courses-3.php" class="cool-link">Activity/Course CLO Report</a><br><br>
     </div>
 <?php
 
