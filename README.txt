@@ -57,6 +57,7 @@ edit_plo.php
 
 select_frameworktoCLO.php (Add/Edit CLO to framework)
 add_clo.php
+save_clo.php
 view_clos.php
 edit_clo.php
 
@@ -81,6 +82,8 @@ select_frameworktoCourse.php (Add Course after framework selection & Map CLOs)
 add_course.php
 
 define_vision_mission.php (Define Uni/Dept Vision/Mission)
+save_vision_mission.php
+view_vision_mission.php (View Uni/Dept Vision/Mission)
 
 TEMP:
 
