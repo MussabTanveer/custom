@@ -45,7 +45,7 @@
         
         if($rec){
             $serial=0;
-                $table = new html_table();
+            $table = new html_table();
             $table->head = array('S.No','CLO Name','Description','Taxonomy level','PLO');
             foreach ($rec as $records) {
                 $serial++;
@@ -58,15 +58,17 @@
                 $shortname1=$records->ploname;
                 $idnumber=$records->idnumber;
                 //$peo=$records->peo;
-                $table->data[] = array($serial,$shortname, $description,ucwords($name1)."<br>"."(".ucwords($level)." ".ucwords($name).")",$idnumber."<br>".$shortname1);
+                $table->data[] = array($serial,$shortname, $description,ucwords($name1)."<br>"."(".ucwords($level)." ".ucwords($name).")",strtoupper($idnumber)."<br>".$shortname1);
             }
 
-            $rec->close(); 
-            echo html_writer::table($table);
+            $rec->close();
+
+            if($serial)
+                echo html_writer::table($table);
+            else
+                echo "<h5 style='color:red'> <br />Found no CLO of this Course! </h5>";
         }
-        else{
-            echo "<h3> Found no CLO of this course! </h3>";
-        }
+
         echo $OUTPUT->footer();
     }
     else
