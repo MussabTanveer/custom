@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Course CLOs");
-    $PAGE->set_heading("Course Mapping");
+    $PAGE->set_heading("Course CLO Mapping");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_course_clos.php');
     
     echo $OUTPUT->header();
