@@ -30,7 +30,6 @@
         $(document).ready(function(){
             $("h3").animate({color: "#0072A4"}, 1500);
             $(".effect").animate({color: "green"}, 1500);
-            $(".effect").animate({color: "#C03B44"}, 1500);
             $(".effect").animate({color: "#373A3C"}, 1500);
         });
     </script>
