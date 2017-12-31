@@ -5,7 +5,7 @@
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
-    $PAGE->set_pagelayout('admin');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Objectives & Outcomes");
     $PAGE->set_heading("Mapping of Objectives & Outcomes");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/display_peo_plo_clo.php');

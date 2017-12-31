@@ -14,12 +14,13 @@
 
 	<div>
         <h3>Click the links down below as per need </h3><br>
- <a href="./view_vision_mission.php" class="cool-link">View Vision &amp; Mission</a><br><br>
+        
+        <a href="./view_vision_mission.php" class="cool-link">View Vision &amp; Mission</a><br><br>
 
- <a href="./display_outcome_framework.php" class="cool-link">View OBE Framework Mapping</a><br><br>
+        <a href="./display_outcome_framework.php" class="cool-link">View OBE Framework Mapping</a><br><br>
 
         <a href="./display_outcome_framework-4.php" class="cool-link">View Bloom's Taxonomy Mapping</a><br><br>
-</div>
+    </div>
 
 <?php
 

@@ -3,15 +3,14 @@
 
     $context = context_system::instance();
     $PAGE->set_context($context);
-    $PAGE->set_pagelayout('admin');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Vision & Mission");
     $PAGE->set_heading("Vision & Mission Statements");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/view_vision_mission.php');
 
     echo $OUTPUT->header();
     require_login();
-    //is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
-
+    
     ?>
     <style>
         h3{
