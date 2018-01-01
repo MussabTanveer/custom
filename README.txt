@@ -85,6 +85,28 @@ define_vision_mission.php (Define Uni/Dept Vision/Mission)
 save_vision_mission.php
 view_vision_mission.php (View Uni/Dept Vision/Mission)
 
+CHAIRMAN
+
+report_chairman.php
+
+view_vision_mission.php
+
+display_outcome_framework.php
+display_peo_plo_clo.php
+
+display_outcome_framework-4.php
+display_plo_domain_clo_level.php
+
+ITM
+
+report_itm.php
+
+select_frameworktoCourse.php
+add_course.php
+
+select_course_enrol.php
+
+
 TEMP:
 
 display.php
