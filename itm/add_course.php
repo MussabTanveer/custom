@@ -137,6 +137,55 @@
                 
                 $records = array($record1, $record2, $record3, $record4, $record5);
                 $DB->insert_records('course_sections', $records);
+
+                $record1 = new stdClass();
+                $record1->enrol = "manual";
+                $record1->status = 0;
+                $record1->courseid = $courseid;
+                $record1->sortorder = 0;
+                $record1->expirythreshold = 86400;
+                $record1->roleid = 5;
+                $record1->customint1 = NULL;
+                $record1->customint2 = NULL;
+                $record1->customint3 = NULL;
+                $record1->customint4 = NULL;
+                $record1->customint5 = NULL;
+                $record1->customint6 = NULL;
+                $record1->timecreated = $time;
+                $record1->timemodified = $time;
+                $record2 = new stdClass();
+                $record2->enrol = "guest";
+                $record2->status = 1;
+                $record2->courseid = $courseid;
+                $record2->sortorder = 1;
+                $record2->expirythreshold = 0;
+                $record2->roleid = 0;
+                $record2->customint1 = NULL;
+                $record2->customint2 = NULL;
+                $record2->customint3 = NULL;
+                $record2->customint4 = NULL;
+                $record2->customint5 = NULL;
+                $record2->customint6 = NULL;
+                $record2->timecreated = $time;
+                $record2->timemodified = $time;
+                $record3 = new stdClass();
+                $record3->enrol = "self";
+                $record3->status = 1;
+                $record3->courseid = $courseid;
+                $record3->sortorder = 2;
+                $record3->expirythreshold = 86400;
+                $record3->roleid = 5;
+                $record3->customint1 = 0;
+                $record3->customint2 = 0;
+                $record3->customint3 = 0;
+                $record3->customint4 = 1;
+                $record3->customint5 = 0;
+                $record3->customint6 = 1;
+                $record3->timecreated = $time;
+                $record3->timemodified = $time;
+                
+                $records = array($record1, $record2, $record3);
+                $DB->insert_records('enrol', $records);
                 
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
                 WHERE id = ? ',
@@ -297,6 +346,55 @@
                 
                 $records = array($record1, $record2, $record3, $record4, $record5);
                 $DB->insert_records('course_sections', $records);
+
+                $record1 = new stdClass();
+                $record1->enrol = "manual";
+                $record1->status = 0;
+                $record1->courseid = $courseid;
+                $record1->sortorder = 0;
+                $record1->expirythreshold = 86400;
+                $record1->roleid = 5;
+                $record1->customint1 = NULL;
+                $record1->customint2 = NULL;
+                $record1->customint3 = NULL;
+                $record1->customint4 = NULL;
+                $record1->customint5 = NULL;
+                $record1->customint6 = NULL;
+                $record1->timecreated = $time;
+                $record1->timemodified = $time;
+                $record2 = new stdClass();
+                $record2->enrol = "guest";
+                $record2->status = 1;
+                $record2->courseid = $courseid;
+                $record2->sortorder = 1;
+                $record2->expirythreshold = 0;
+                $record2->roleid = 0;
+                $record2->customint1 = NULL;
+                $record2->customint2 = NULL;
+                $record2->customint3 = NULL;
+                $record2->customint4 = NULL;
+                $record2->customint5 = NULL;
+                $record2->customint6 = NULL;
+                $record2->timecreated = $time;
+                $record2->timemodified = $time;
+                $record3 = new stdClass();
+                $record3->enrol = "self";
+                $record3->status = 1;
+                $record3->courseid = $courseid;
+                $record3->sortorder = 2;
+                $record3->expirythreshold = 86400;
+                $record3->roleid = 5;
+                $record3->customint1 = 0;
+                $record3->customint2 = 0;
+                $record3->customint3 = 0;
+                $record3->customint4 = 1;
+                $record3->customint5 = 0;
+                $record3->customint6 = 1;
+                $record3->timecreated = $time;
+                $record3->timemodified = $time;
+                
+                $records = array($record1, $record2, $record3);
+                $DB->insert_records('enrol', $records);
 
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
                     WHERE id = ? ',
