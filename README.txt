@@ -97,6 +97,12 @@ display_peo_plo_clo.php
 display_outcome_framework-4.php
 display_plo_domain_clo_level.php
 
+display_courses-3.php
+display_activities.php
+activity_comp_report.php
+consolidated_report_selection.php
+consolidated_report.php
+
 ITM
 
 report_itm.php
