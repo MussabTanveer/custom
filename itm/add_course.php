@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Add Courses");
     $PAGE->set_heading("Add Courses");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_course.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/itm/add_course.php');
     
     echo $OUTPUT->header();
     require_login();
