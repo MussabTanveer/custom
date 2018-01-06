@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("OBE Frameworks");
     $PAGE->set_heading("OBE Framework Selection");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/display_outcome_framework.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/display_outcome_framework.php');
     
     echo $OUTPUT->header();
     require_login();

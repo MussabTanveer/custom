@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Vision & Mission");
     $PAGE->set_heading("Vision & Mission Statements");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/view_vision_mission.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/view_vision_mission.php');
 
     echo $OUTPUT->header();
     require_login();
