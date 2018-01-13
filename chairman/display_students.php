@@ -16,23 +16,61 @@
     $rec=$DB->get_records_sql('SELECT distinct u.id, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid ORDER BY u.idnumber');
     
     $serialno=0;
+    $batches=array();
 
     if($rec)//executing query to display all students
    	{
-        $table = new html_table();
-        $table->head = array('S. No.','Name', 'Seat No.', 'Batch');
+        foreach ($rec as $records)
+        {
+            $flag=1;
+            $studentName=$records->student;
+            $studentIdNumber=$records->idnumber;
+            $sid=$records->id;
+            $sbatch = substr($studentIdNumber,3,2);
+
+            foreach ($batches as $batch) {
+                //echo $batch;
+                if ($sbatch == $batch)
+                    $flag=0;
+            }
+            //echo $flag;
+            if ($flag == 1)
+                array_push($batches, $sbatch);
+        }
+        //var_dump($batches);
+        $batchIndex=0;
+         
+         //var_dump($batches);
+
+    foreach ($batches as $batch)
+       {
+        $serialno=0;
+           // echo "$batch <br>";
+            $table = new html_table();
+            echo "<h3 align=center> Batch-$batch</h3>";
+         $table->head = array('S. No.','Name', 'Seat No.');
+
         foreach ($rec as $records)
         {
             $studentName=$records->student;
             $studentIdNumber=$records->idnumber;
             $sid=$records->id;
-            $batch = substr($studentIdNumber,3,2);
-            $serialno++;
-            $table->data[] = array($serialno, "<a href='display_course_progress.php?sid=$sid'>$studentName</a>", "<a href='display_course_progress.php?sid=$sid'>$studentIdNumber", "<a href='display_course_progress.php?sid=$sid'>Batch-$batch</a>");
-            //echo "<h4>$serialno. <a href='display_course_progress.php?sid=$sid'>$studentName ($studentIdNumber) (Batch-$batch)</a></h4>";
-            //echo "<br>";
+            $sbatch = substr($studentIdNumber,3,2);
+           // array_push($batches, $batch);
+
+            if ($sbatch == $batch)
+            {
+                 $serialno++;
+            $table->data[] = array($serialno, "<a href='display_course_progress.php?sid=$sid'>$studentName</a>", "<a href='display_course_progress.php?sid=$sid'>$studentIdNumber");
+
+            }
+           
         }
-        echo html_writer::table($table);
+
+     echo html_writer::table($table);
+        }
+
+       
    	}
     echo $OUTPUT->footer();
 ?>
