@@ -216,14 +216,14 @@
                 }
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                /*$rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
                         $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x])";
                         $DB->execute($sql);
                     }
-                }
+                }*/
                 
             }
             else{
@@ -356,14 +356,14 @@
 
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                /*$rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
                         $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x])";
                         $DB->execute($sql);
                     }
-                }
+                }*/
             
             }
             else{
