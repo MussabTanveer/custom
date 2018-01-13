@@ -21,11 +21,11 @@
    			foreach ($rec as $records)
    			 {
    			 	$studentName=$records->student;
-          $studentIdNumber=$records->idnumber;
-   			 	$tid=$records->id;
+                $studentIdNumber=$records->idnumber;
+   			 	$sid=$records->id;
    			 	$serialno++;
 
-   			 echo "<font size=5><a href='display_courses-3.php?tid=$tid'>$serialno. $studentName ($studentIdNumber)</a></font>";
+   			 echo "<font size=5><a href='display_course_progress.php?sid=$sid'>$serialno. $studentName ($studentIdNumber)</a></font>";
    			 echo "<br>";
    				
    			}
