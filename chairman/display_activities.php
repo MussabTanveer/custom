@@ -47,7 +47,7 @@
             <?php
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Select', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro', 'Select');
             foreach ($recQ as $records) {
                 $serialno++;
                 $Status='<span style="color: red;">PENDING</span>';
@@ -64,7 +64,7 @@
                         $name = $records->name;
                         $intro = $records->intro;
                         
-                        $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+                        $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">');
                         break;
                     }
                 }
@@ -84,7 +84,7 @@
                         $name = $records->name;
                         $intro = $records->intro;
                         
-                        $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+                        $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">');
                         break;
                     }
 

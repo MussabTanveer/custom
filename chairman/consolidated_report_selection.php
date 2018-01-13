@@ -39,7 +39,7 @@
             <?php
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', "<input type=\"checkbox\" id=\"select_all\" onChange=\"selectAll(this,'chkbox')\"> Select All",'Status');
+            $table->head = array('S. No.', 'Name', 'Intro', "<input type=\"checkbox\" id=\"select_all\" onChange=\"selectAll(this,'chkbox')\"> Select All");
             foreach ($recQ as $records) {
                 $serialno++;
                 $Status='<span style="color: red;">PENDING</span>';
@@ -56,7 +56,7 @@
                         $name = $records->name;
                         $intro = $records->intro;
                         
-                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">');
                         break;
                     }
                 }
@@ -76,7 +76,7 @@
                         $courseid = $records->course;
                         $name = $records->name;
                         $intro = $records->intro;
-                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">');
                         break;
                     }
                 }
