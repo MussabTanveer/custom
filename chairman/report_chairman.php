@@ -21,7 +21,7 @@
 
         <a href="./display_outcome_framework-4.php" class="cool-link">View Bloom's Taxonomy Mapping</a><br><br>
 
-        <a href="./display_courses-3.php" class="cool-link">View Activity/Course CLO Report</a><br><br>
+        <a href="./display_teachers.php" class="cool-link">View Activity/Course CLO Report</a><br><br>
     </div>
 
 <?php

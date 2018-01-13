@@ -24,7 +24,7 @@
    			 	$tid=$records->id;
    			 	$serialno++;
 
-   			 echo "<font size=5><a href='display_courses-3.php?tid=$tid'>$serialno $teacherName</a></font>";
+   			 echo "<font size=5><a href='display_courses-3.php?tid=$tid'>$serialno. $teacherName</a></font>";
    			 echo "<br>";
    				
    			}
