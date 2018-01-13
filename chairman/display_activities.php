@@ -5,8 +5,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("My Activities");
-    $PAGE->set_heading("Activities");
+    $PAGE->set_title("Activities");
+    $PAGE->set_heading("Select Activity");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/display_activities.php');
     
     echo $OUTPUT->header();
