@@ -59,7 +59,7 @@
                 //Get all course competencies that user cleared
                 $recClear=$DB->get_records_sql('SELECT DISTINCT cloid FROM mdl_consolidated_report_student crs
                 WHERE course=? AND userid=? AND status=?',
-                array($id,$USER->id,1));
+                array($id,$sid,1));
 
                 $all = count($recAll);
                 array_push($allarray,$all);
