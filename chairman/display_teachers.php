@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Teachers");
     $PAGE->set_heading("Select Teacher");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/display_techers-3.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/display_techers.php');
     
     echo $OUTPUT->header();
     require_login();
