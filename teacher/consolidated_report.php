@@ -27,7 +27,7 @@
         
 
         $rec=$DB->get_recordset_sql(
-            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass,cr.fail, c.shortname
+            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass,cr.fail, c.idnumber
             FROM mdl_consolidated_report cr, mdl_competency c
             WHERE cr.cloid=c.id AND cr.course=? AND cr.instance IN (".implode(',',$activities).")
             ORDER BY cr.cloid",
@@ -40,7 +40,7 @@
         $names = array();
         foreach($rec as $records){
             $i = $records->cloid;
-            $c = $records->shortname;
+            $c = $records->idnumber;
             $p = $records->pass;
             $f = $records->fail;
             $m = $records->module;

@@ -27,7 +27,7 @@
             $mod = 16;
 
             //Get ques comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
         
                 FROM mdl_competency c, mdl_quiz q, mdl_quiz_slots qs, mdl_question qu
         
@@ -87,9 +87,9 @@
                         $cloids = array();
                         foreach ($recordsComp as $recC) {
                             $compid = $recC->id;
-                            $comp = $recC->shortname;
+                            $comp = $recC->idnumber;
                             array_push($cloids, $compid); // array of clo ids
-                            array_push($label, $comp); // array of clo names
+                            array_push($label, $comp); // array of clo idnumbers
                             $tot_comp++;
                         ?>
                         <th> <?php echo $comp; ?> </th>
