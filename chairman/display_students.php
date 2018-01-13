@@ -19,6 +19,8 @@
 
     if($rec)//executing query to display all students
    	{
+        $table = new html_table();
+        $table->head = array('S. No.','Name', 'Seat No.', 'Batch');
         foreach ($rec as $records)
         {
             $studentName=$records->student;
@@ -26,9 +28,11 @@
             $sid=$records->id;
             $batch = substr($studentIdNumber,3,2);
             $serialno++;
-            echo "<h4>$serialno. <a href='display_course_progress.php?sid=$sid'>$studentName ($studentIdNumber) (Batch-$batch)</a></h4>";
-            echo "<br>";
+            $table->data[] = array($serialno, "<a href='display_course_progress.php?sid=$sid'>$studentName</a>", "<a href='display_course_progress.php?sid=$sid'>$studentIdNumber", "<a href='display_course_progress.php?sid=$sid'>Batch-$batch</a>");
+            //echo "<h4>$serialno. <a href='display_course_progress.php?sid=$sid'>$studentName ($studentIdNumber) (Batch-$batch)</a></h4>";
+            //echo "<br>";
         }
+        echo html_writer::table($table);
    	}
     echo $OUTPUT->footer();
 ?>
