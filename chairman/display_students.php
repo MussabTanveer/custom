@@ -24,9 +24,9 @@
             $studentName=$records->student;
             $studentIdNumber=$records->idnumber;
             $sid=$records->id;
-            
+            $batch = substr($studentIdNumber,3,2);
             $serialno++;
-            echo "<h4>$serialno. <a href='display_course_progress.php?sid=$sid'>$studentName ($studentIdNumber)</a></h4>";
+            echo "<h4>$serialno. <a href='display_course_progress.php?sid=$sid'>$studentName ($studentIdNumber) (Batch-$batch)</a></h4>";
             echo "<br>";
         }
    	}
