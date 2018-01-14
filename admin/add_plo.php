@@ -18,7 +18,7 @@
 			if(isset($SESSION->fid2) && $SESSION->fid2 != "xyz")
 			{
 				$frameworkid=$SESSION->fid2;
-				echo "$frameworkid";
+				//echo "$frameworkid";
 				
 				$SESSION->fid2 = "xyz";
 			}
