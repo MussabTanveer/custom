@@ -23,6 +23,8 @@
 
         <a href="../../../admin/user.php" class="cool-link">View all Users</a><br><br>
 
+        <a href="../../../cohort/index.php" class="cool-link">Add/Edit/View Cohorts</a><br><br>
+
         <a href="./select_course_enrol.php" class="cool-link">Enrol/Unenrol Users from Courses</a><br><br>
     </div>
 <?php
