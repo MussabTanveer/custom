@@ -11,7 +11,7 @@
 
     $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
 
-    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id));
+    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('coursecreator',$USER->id));
 
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname, c.shortname, c.idnumber
   
