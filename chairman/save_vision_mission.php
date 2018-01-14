@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Vision & Mission");
     $PAGE->set_heading("Define Vision & Mission");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/save_vision_mission.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/save_vision_mission.php');
     
 	$universityVision = trim($_POST["uv"]);
 	$universityMission = trim($_POST["um"]);

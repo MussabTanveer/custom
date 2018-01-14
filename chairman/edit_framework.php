@@ -2,10 +2,10 @@
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
-    $PAGE->set_pagelayout('admin');
+    $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Edit OBE Framework");
     $PAGE->set_heading("Edit OBE Framework");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/edit_framework.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_framework.php');
     
     echo $OUTPUT->header();
 	require_login();
