@@ -89,13 +89,48 @@ CHAIRMAN
 
 report_chairman.php
 
-view_vision_mission.php
+define_vision_mission.php (Define Uni/Dept Vision/Mission)
+save_vision_mission.php
+view_vision_mission.php (View Uni/Dept Vision/Mission)
 
-display_outcome_framework.php
+display_outcome_framework.php (View PEOs, PLOs, Courses Mapping)
 display_peo_plo_clo.php
 
-display_outcome_framework-4.php
+display_outcome_framework-2.php (Map PLO to Domain)
+map_plo_domain.php
+confirm_domain_plo.php
+
+display_outcome_framework-3.php (Map CLO to Level)
+map_clo_level.php
+confirm_level_clo.php
+
+display_outcome_framework-4.php (View Domains & Levels Mapping)
 display_plo_domain_clo_level.php
+
+add_framework.php (Add/Edit OBE framework)
+edit_framework.php
+
+select_frameworktoPEO.php (Add/Edit PEO to framework)
+add_peo.php
+edit_peo.php
+
+select_frameworktoPLO.php (Add/Edit PLO to framework)
+add_plo.php
+edit_plo.php
+
+select_frameworktoCLO.php (Add/Edit CLO to framework)
+add_clo.php
+save_clo.php
+view_clos.php
+edit_clo.php
+
+select_framework.php (Map PLO to PEO)
+map_plo_peo.php
+confirm_plo_peo.php
+
+select_framework-2.php (Map CLO to PLO)
+map_clo_plo.php
+confirm_clo_plo.php
 
 display_teachers.php
 display_courses-3.php
