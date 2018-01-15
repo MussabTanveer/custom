@@ -81,7 +81,7 @@
         foreach($dm as $u){
             $desc = $u->description;
             ?>
-            <h3>Department Vision</h3><br />
+            <h3>Department Mission</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
