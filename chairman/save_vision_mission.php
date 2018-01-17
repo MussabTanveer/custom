@@ -6,6 +6,8 @@
     $PAGE->set_title("Vision & Mission");
     $PAGE->set_heading("Define Vision & Mission");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/save_vision_mission.php');
+    $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
+    $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
     
 	$universityVision = trim($_POST["uv"]);
 	$universityMission = trim($_POST["um"]);
