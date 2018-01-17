@@ -11,6 +11,8 @@
     
     echo $OUTPUT->header();
     require_login();
+    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id));
+     $rec2 || die('<h2>This page is for ITM only!</h2>'.$OUTPUT->footer());
    // is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
   
     
