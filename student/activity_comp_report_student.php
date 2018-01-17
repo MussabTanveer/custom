@@ -40,6 +40,7 @@
                 'SELECT
                 qa.userid,
                 u.idnumber AS std_id,
+                u.username AS seat_no,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
@@ -106,13 +107,14 @@
                             foreach($data_temp as $data){ // loop as many times as comp count
                                 $uid = $data->userid;
                                 $sid = $data->std_id;
+                                $seat = $data->seat_no;
                                 $uname = $data->std_name;
                                 $max = $data->maxmark;
                                 $obt = $data->marksobtained;
                                 
                                 if($first === 0){ // display stud name only once
                                     ?>
-                                    <td><?php echo $sid;?></td>
+                                    <td><?php echo $seat;?></td>
                                     <td><?php echo $uname;?></td>
                                     <?php
                                     $first++;
@@ -152,13 +154,14 @@
                         foreach($data_temp as $data){
                             $uid = $data->userid;
                             $sid = $data->std_id;
+                            $seat = $data->seat_no;
                             $uname = $data->std_name;
                             $max = $data->maxmark;
                             $obt = $data->marksobtained;
                             
                             if($first === 0){
                                 ?>
-                                <td><?php echo $sid;?></td>
+                                <td><?php echo $seat;?></td>
                                 <td><?php echo $uname;?></td>
                                 <?php
                                 $first++;
