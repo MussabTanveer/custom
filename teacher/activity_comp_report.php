@@ -48,6 +48,7 @@
                 'SELECT
                 qa.userid,
                 u.idnumber AS std_id,
+                u.username AS seat_no,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
@@ -117,6 +118,7 @@
                             foreach($data_temp as $data){ // loop as many times as comp count
                                 $uid = $data->userid;
                                 $sid = $data->std_id;
+                                $seat = $data->seat_no;
                                 $uname = $data->std_name;
                                 $max = $data->maxmark;
                                 $obt = $data->marksobtained;
@@ -125,7 +127,7 @@
                                     $serialno++;
                                     ?>
                                     <td><?php echo $serialno;?></td>
-                                    <td><?php echo $sid;?></td>
+                                    <td><?php echo $seat;?></td>
                                     <td><?php echo $uname;?></td>
                                     <?php
                                     $first++;
@@ -165,6 +167,7 @@
                         foreach($data_temp as $data){
                             $uid = $data->userid;
                             $sid = $data->std_id;
+                            $seat = $data->seat_no;
                             $uname = $data->std_name;
                             $max = $data->maxmark;
                             $obt = $data->marksobtained;
@@ -173,7 +176,7 @@
                                 $serialno++;
                                 ?>
                                 <td><?php echo $serialno;?></td>
-                                <td><?php echo $sid;?></td>
+                                <td><?php echo $seat;?></td>
                                 <td><?php echo $uname;?></td>
                                 <?php
                                 $first++;
@@ -251,6 +254,7 @@
                 'SELECT
                 ag.userid,
                 u.idnumber AS std_id,
+                u.username AS seat_no,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 a.grade AS maxmark,
                 ag.grade AS marksobtained
@@ -306,6 +310,7 @@
                         <?php
                         $uid = $records->userid;
                         $sid = $records->std_id;
+                        $seat = $data->seat_no;
                         $uname = $records->std_name;
                         $max = $records->maxmark;
                         $obt = $records->marksobtained;
@@ -313,7 +318,7 @@
 
                         ?>
                         <td><?php echo $serialno;?></td>
-                        <td><?php echo $sid;?></td>
+                        <td><?php echo $seat;?></td>
                         <td><?php echo $uname;?></td>
                         <?php
                             for($k=0;$k<$tot_comp;$k++){

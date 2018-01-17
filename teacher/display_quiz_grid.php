@@ -28,6 +28,7 @@
         'SELECT 
             qa.userid,
             us.idnumber,
+            us.username,
             qa.attempt,
             qu.name,
             c.shortname,
@@ -76,6 +77,7 @@
                                 <tr>
                                 <?php
                                 $uid = $data->idnumber;
+                                $un = $data->username;
                                 // $attempt = $data->attempt;
                                 $qname = $data->name;
                                 $qtext = $data->questiontext;
@@ -88,7 +90,7 @@
                                 
                                 if($first === 0){ // display stud no & name only once
                                     ?>
-                                    <td><?php echo $uid;?></td>
+                                    <td><?php echo $un;?></td>
                                     <td><?php echo $qname;?></td>
                                     <td><?php echo $qtext;?></td>
                                     <td><?php echo $competency;?></td>
@@ -124,6 +126,7 @@
                         <tr>
                         <?php
                         $uid = $data->idnumber;
+                        $un = $data->username;
                         // $attempt = $data->attempt;
                         $qname = $data->name;
                         $qtext = $data->questiontext;
@@ -136,7 +139,7 @@
                         
                         if($first === 0){ // display stud no & name only once
                             ?>
-                            <td><?php echo $uid;?></td>
+                            <td><?php echo $un;?></td>
                             <td><?php echo $qname;?></td>
                             <td><?php echo $qtext;?></td>
                             <td><?php echo $competency;?></td>
