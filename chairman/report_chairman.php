@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Chairman Reports");
-    $PAGE->set_heading("Chairman Reports");
+    $PAGE->set_heading("Chairman Reports & Forms");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/report_chairman.php');
     echo $OUTPUT->header();
     require_login();
@@ -43,7 +43,7 @@
 
         <a href="./display_teachers.php" class="cool-link">View Teacher's Course CLO Report</a><br><br>
 
-        <a href="./display_students.php" class="cool-link">View Student CLO Progress</a><br><br>
+        <a href="./display_students.php" class="cool-link">View Student's CLO Progress</a><br><br>
     </div>
 
 <?php
