@@ -26,9 +26,9 @@
     
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? ', array($course_id));
-        $recA=$DB->get_records_sql('SELECT * FROM  `mdl_assign` WHERE course = ? ', array($course_id));
+        //$recA=$DB->get_records_sql('SELECT * FROM  `mdl_assign` WHERE course = ? ', array($course_id));
         
-        if($recQ || $recA){
+        if($recQ /*|| $recA*/){
             ?>
             <form method='post' action='add_comp_ques.php' id="form_check">
             <?php
@@ -43,6 +43,7 @@
                 $intro = $records->intro;
                 $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">');
             }
+            /*
             foreach ($recA as $records) {
                 $serialno++;
                 $id = 'A'.$records->id;
@@ -51,6 +52,7 @@
                 $intro = $records->intro;
                 $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">');
             }
+            */
 			
             echo html_writer::table($table);
             ?>
