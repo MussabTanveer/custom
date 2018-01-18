@@ -12,7 +12,7 @@
     echo $OUTPUT->header();
     require_login();
 
-    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid3) && $SESSION->cid3 != "xyz"))
+    /*if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid3) && $SESSION->cid3 != "xyz"))
     {
         if(isset($SESSION->cid3) && $SESSION->cid3 != "xyz")
         {
@@ -20,7 +20,11 @@
             $SESSION->cid3 = "xyz";
         }
         else
-            $course_id=$_POST['courseid'];
+            $course_id=$_POST['courseid'];*/
+
+    if(isset($_GET['course']))
+    {
+        $course_id=$_GET['course'];
         
             //echo "Course ID : $course_id";
 
@@ -128,7 +132,7 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="./display_courses-3.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php
         echo $OUTPUT->footer();
     }?>

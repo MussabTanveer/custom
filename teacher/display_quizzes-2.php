@@ -12,7 +12,7 @@
     echo $OUTPUT->header();
     require_login();
 
-    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid2) && $SESSION->cid2 != "xyz"))
+    /*if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid2) && $SESSION->cid2 != "xyz"))
     {
         if(isset($SESSION->cid2) && $SESSION->cid2 != "xyz")
         {
@@ -21,14 +21,18 @@
         }
         else
             $course_id=$_POST['courseid'];
+    */
+    if(isset($_GET['course']))
+    {
+        $course_id=$_GET['course'];
        
         //echo "Course ID : $course_id";
     
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? ', array($course_id));
-        $recA=$DB->get_records_sql('SELECT * FROM  `mdl_assign` WHERE course = ? ', array($course_id));
+        //$recA=$DB->get_records_sql('SELECT * FROM  `mdl_assign` WHERE course = ? ', array($course_id));
         
-        if($recQ || $recA){
+        if($recQ /*|| $recA*/){
             ?>
             <form method='post' action='add_comp_ques.php' id="form_check">
             <?php
@@ -43,6 +47,7 @@
                 $intro = $records->intro;
                 $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">');
             }
+            /*
             foreach ($recA as $records) {
                 $serialno++;
                 $id = 'A'.$records->id;
@@ -51,6 +56,7 @@
                 $intro = $records->intro;
                 $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">');
             }
+            */
 			
             echo html_writer::table($table);
             ?>
@@ -81,7 +87,7 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="./display_courses-2.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php
         echo $OUTPUT->footer();
     }?>

@@ -32,21 +32,24 @@
 
         <a href="javascript:void(0)" onclick="toggle_visibility('tools');" class="cool-link">Course Evaluation Tools</a><br><br>
         <div id="tools" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a href="./abcd.php" class="cool-link">- Define Quiz</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./abcd.php" class="cool-link">- Define Assignment</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./abcd.php" class="cool-link">- Define Project</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./abcd.php" class="cool-link">- Define Mid Term</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./abcd.php" class="cool-link">- Define Final Exam</a><br><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Quiz</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=assign&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Assignment</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=assign&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Project</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Mid Term</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Final Exam</a><br><br>
         </div>
 
-        <a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>
+        <!--<a "href='../../../question/edit.php?cmid=13'" class="cool-link">Add Questions to Assessment</a><br><br>-->
 
-        <a href="./display_courses-2.php" class="cool-link">Map Quiz Questions to CLOs</a><br><br>
+        <!--<a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>-->
 
-        <a href="./display_courses.php" class="cool-link">View Quiz Detailed Report</a><br><br>
+        <a <?php echo "href='./display_quizzes-2.php?course=$course_id'" ?> class="cool-link">Map Quiz Questions to CLOs</a><br><br>
 
-        <a href="./display_courses-3.php" class="cool-link">Activity/Course CLO Report</a><br><br>
+        <a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">View Quiz Detailed Report</a><br><br>
+
+        <a <?php echo "href='./display_activities.php?course=$course_id'" ?> class="cool-link">Activity/Course CLO Report</a><br><br>
     </div>
+
     <script type="text/javascript">
         function toggle_visibility(id) {
         var e = document.getElementById(id);
@@ -61,9 +64,9 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="../index.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php
     }
     echo $OUTPUT->footer();
-    
+
 ?>
