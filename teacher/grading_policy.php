@@ -8,28 +8,31 @@
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_policy.php');
     echo $OUTPUT->header();
     require_login();
-
+echo $course_id;
     ?>
 
 <?php
+if(isset($_GET['course'])){
+$course_id=$_GET['course'];
 
+echo $course_id;
 if(isset($_POST['save'])){
 
 
 $activity=$_POST['activity'];
 $percentage=$_POST['percentage'];
 
-//echo $activity;
-//echo $percentage;
-if($activity=='finals'){
-$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES (2,$activity,$percentage)";
+echo $activity;
+echo $percentage;
+$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','$activity','$percentage')";
 
 $DB->execute($sql);
 
 	
+
+
+
 }
-
-
 }
 
 

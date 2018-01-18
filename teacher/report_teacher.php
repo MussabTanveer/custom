@@ -28,7 +28,7 @@
 
         <a href="./abcd.php" class="cool-link">View Course Profile</a><br><br>
 
-        <a href="./abcd.php" class="cool-link">Define Grading Policy</a><br><br>
+        <a <?php echo "href='./grading_policy.php?course=$course_id'" ?>  class="cool-link">Define Grading Policy</a><br><br>
 
         <a href="javascript:void(0)" onclick="toggle_visibility('tools');" class="cool-link">Course Evaluation Tools</a><br><br>
         <div id="tools" style="display: none">
