@@ -4,7 +4,7 @@
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/index.php');
     require_login();
     $redirect_page1='./admin/report_admin.php';
-    $redirect_page2='./teacher/report_teacher.php';
+    $redirect_page2='./teacher/teacher_courses.php';
     $redirect_page3='./student/report_student.php';
     $redirect_page4='./chairman/report_chairman.php';
     $redirect_page5='./itm/report_itm.php';
