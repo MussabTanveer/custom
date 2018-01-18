@@ -50,7 +50,7 @@
             global $SESSION;
             $SESSION->cid = $id;
         
-            redirect('display_quizzes.php');
+            redirect('report_teacher.php');
         }
         echo html_writer::table($table);
         ?>
