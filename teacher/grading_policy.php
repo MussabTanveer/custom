@@ -4,8 +4,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Grading policy");
-    $PAGE->set_heading("Grading policy");
+    $PAGE->set_title("Grading Policy");
+    $PAGE->set_heading("Add Grading Policy Items");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_policy.php');
     echo $OUTPUT->header();
 	require_login();
