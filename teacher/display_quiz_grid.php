@@ -6,8 +6,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Quiz Results");
-    $PAGE->set_heading("Quiz Results");
+    $PAGE->set_title("Activity Results");
+    $PAGE->set_heading("Activity Results");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_quiz_grid.php');
     
     echo $OUTPUT->header();
@@ -19,7 +19,7 @@
         //echo "Quiz ID : $quiz_id";
         
         // Display Quiz Info
-        echo "<h3>Quiz Question Grid</h3>";
+        echo "<h3>Question Grid</h3>";
        //$rec1=$DB->get_recordset_sql('SELECT DISTINCT us.idnumber FROM mdl_user us, mdl_quiz_attempts qa 
        // WHERE us.id=qa.userid');
         $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($quiz_id));

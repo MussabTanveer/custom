@@ -38,9 +38,9 @@
 
         <!--<a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>-->
 
-        <a <?php echo "href='./display_quizzes-2.php?course=$course_id'" ?> class="cool-link">Map Quiz Questions to CLOs</a><br><br>
+        <a <?php echo "href='./display_quizzes-2.php?course=$course_id'" ?> class="cool-link">Map Questions to CLOs</a><br><br>
 
-        <a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">View Quiz Detailed Report</a><br><br>
+        <a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">View Activity Detailed Report</a><br><br>
 
         <a <?php echo "href='./display_activities.php?course=$course_id'" ?> class="cool-link">Activity/Course CLO Report</a><br><br>
     </div>

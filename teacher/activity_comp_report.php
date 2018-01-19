@@ -75,7 +75,7 @@
             if($rec){
                 $serialno = 0;
                 ?>
-                <h3>Quiz CLO Report</h3>
+                <h3>Activity CLO Report</h3>
                 <!-- Display Students' Quiz Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
