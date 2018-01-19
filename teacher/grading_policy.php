@@ -26,6 +26,11 @@
 		//echo $course_id;
 		if(isset($_POST['save'])){
 			$sum = 0;
+			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
+			foreach ($rec as $records){
+                $percentage=$records->percentage;
+                $sum+=$percentage;
+            }
 			for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
 			}
@@ -55,6 +60,11 @@
 		}
 		elseif(isset($_POST['return'])) {
 			$sum = 0;
+			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
+			foreach ($rec as $records){
+                $percentage=$records->percentage;
+                $sum+=$percentage;
+            }
 			for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
 			}
