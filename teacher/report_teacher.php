@@ -20,7 +20,7 @@
 	<div>
         <h3>Click the links down below as per need </h3><br>
 
-        <a href="./abcd.php" class="cool-link">View Course Profile</a><br><br>
+        <a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>
 
         <a <?php echo "href='./grading_policy.php?course=$course_id'" ?>  class="cool-link">Define Grading Policy</a><br><br>
         <a <?php echo "href='./display_grading_policy.php?course=$course_id'" ?>  class="cool-link">Display Grading Policy</a><br><br>
