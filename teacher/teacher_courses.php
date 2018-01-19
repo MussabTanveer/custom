@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -31,43 +29,25 @@
 
     AND usr.id = ?', array('50', 'editingteacher', $USER->id));
     if($rec){
-        ?>
-        <form method="post" action="report_teacher.php" id="form_check">
-        <?php
         $serialno = 0;
         $table = new html_table();
-        $table->head = array('S. No.','Full Name', 'Short Name' , 'Course Code', 'Select');
+        $table->head = array('S. No.','Full Name', 'Short Name' , 'Course Code');
         foreach ($rec as $records) {
             $serialno++;
             $id = $records->id;
             $fname = $records->fullname;
             $sname = $records->shortname;
             $idnum = $records->idnumber;
-            $table->data[] = array($serialno, $fname, $sname, $idnum, '<input type="radio" value="'.$id.'" name="courseid">');
+            $table->data[] = array($serialno, "<a href='./report_teacher.php?course=$id'>$fname</a>", "<a href='./report_teacher.php?course=$id'>$sname</a>", "<a href='./report_teacher.php?course=$id'>$idnum</a>");
         }
         if($serialno == 1){
-            
-            global $SESSION;
-            $SESSION->cid = $id;
-        
-            redirect('report_teacher.php');
+            redirect("./report_teacher.php?course=$id");
         }
         echo html_writer::table($table);
         ?>
-        <input type='submit' value='NEXT' name='submit' class="btn btn-primary">
-        </form>
+        
         <br />
         <p id="msg"></p>
-
-        <script>
-        $('#form_check').on('submit', function (e) {
-            if ($("input[type=radio]:checked").length === 0) {
-                e.preventDefault();
-                $("#msg").html("<font color='red'>Select any one course!</font>");
-                return false;
-            }
-        });
-        </script>
         
         <?php
     }
@@ -75,6 +55,6 @@
         echo "<h3>You are not enrolled as teacher in any course!</h3>";
     }
 
-echo $OUTPUT->footer();
+    echo $OUTPUT->footer();
 
 ?>

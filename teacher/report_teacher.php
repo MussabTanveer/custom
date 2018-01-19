@@ -11,16 +11,10 @@
     echo $OUTPUT->header();
     require_login();
 
-    if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid) && $SESSION->cid != "xyz"))
+    if(isset($_GET['course']))
     {
-        if(isset($SESSION->cid) && $SESSION->cid != "xyz")
-        {
-            $course_id=$SESSION->cid;
-            $SESSION->cid = "xyz";
-        }
-        else
-            $course_id=$_POST['courseid'];
-?>
+        $course_id=$_GET['course'];
+    ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
 	<div>
@@ -59,7 +53,7 @@
             e.style.display = 'block';
         }
     </script>
-<?php
+    <?php
     }
     else
     {?>
@@ -68,5 +62,4 @@
     <?php
     }
     echo $OUTPUT->footer();
-
 ?>
