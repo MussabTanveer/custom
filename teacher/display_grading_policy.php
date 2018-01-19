@@ -11,125 +11,56 @@
 
 
 ?>
- <style>
-        h3{
-            text-decoration: underline;
-        }
-        .wrapper{
-            text-align: center;
-        }
-        .effect{
-            font-size: 1.2em;
-        }
-    </style>
+ 
  
 <?php
+     
 if(isset($_GET['course'])){
 
+    
+
 $course_id=$_GET['course'];
-
-
 //echo $course_id;
 
-$rec=$DB->get_recordset_sql(
-	'SELECT percentage FROM mdl_grading_policy WHERE name = ? and courseid= ? ', array('mid-terms',$course_id) );
-$rec1=$DB->get_recordset_sql(
-	'SELECT percentage FROM mdl_grading_policy WHERE name = ? and courseid= ? ', array('finals',$course_id) );
-$rec2=$DB->get_recordset_sql(
-	'SELECT percentage FROM mdl_grading_policy WHERE name = ? and courseid= ? ', array('others',$course_id) );
+echo "<h3>Grading policy View</h3>";
+
+$rec=$DB->get_records_sql('SELECT name, percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
+
+if($rec){
+            
+             $serial=0;
+            $table = new html_table();
+            $table->head = array('S.No','Activity','Perecentage');
+         foreach ($rec as $records) {
+
+                $serial++;
+
+                $name=$records->name;
+                $percentage=$records->percentage;
 
 
-?>
-<div class="wrapper">
-
-
-   <h3>Mid-terms</h3><br />
-   <?php
-    if($rec){
-        foreach($rec as $midterm){
-
-        	$mid=$midterm->percentage;
-
-?>
-
-<?php
-if(!empty($mid))
-                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $mid %</i></b></div><div class='col-md-2'></div></div><br />";
-
-else
-    echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-
-}
-
-
+                 $table->data[] = array($serial,strtoupper($name), $percentage);
+                   
 
 }
 
 
 
 
-?>
-<h3>Finals</h3><br />
-<?php
- if($rec1){
-        foreach($rec1 as $final){
+ if($serial)
+                echo html_writer::table($table);
+            else
+               echo "<h5 style='color:red'> <br />Found no Graded Activity of this Course! </h5>";
 
-        	$final=$final->percentage;
+}
+
+}
+
+
 
 ?>
 
 <?php
-if(!empty($mid))
-                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $final %</i></b></div><div class='col-md-2'></div></div><br />";
-else
-    echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-
-
-
-}
-
-
-
-}
-?>
-
-<h3>Others</h3><br />
-<?php
- if($rec2){
-        foreach($rec2 as $others){
-
-        	$other=$others->percentage;
-
-?>
-
-<?php
-if(!empty($other))
-                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $other %</i></b></div><div class='col-md-2'></div></div><br />";
-
-else
-    echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-}
-
-?>
-</div>
-
-<?php
-
 echo $OUTPUT->footer();
 
 ?>
