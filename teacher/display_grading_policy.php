@@ -39,7 +39,7 @@ if($rec){
                 $percentage=$records->percentage;
 
 
-                 $table->data[] = array($serial,strtoupper($name), $percentage);
+                 $table->data[] = array($serial,strtoupper($name), $percentage.'%');
                    
 
 }
