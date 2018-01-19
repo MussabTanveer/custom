@@ -17,20 +17,21 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 <script type="text/javascript" >
 
 	$(document).ready(function(){
-    $("button").click(function(){
-        var formdata = $("form").serialize();
-			$.ajax({
-			    type: "POST",
-			    url: "save_clo.php",
-			    data: formdata,
-			    success:function(){
-           	document.getElementById("msg").innerHTML ="<font color='green'>CLO successfully defined!</font>"
-        }
+ $("#button").click(function (event) {
+	 //var formdata = $("form").serialize();
+	$.ajax({
+		type : "POST",
+		url : "save_clo.php",
+		data : new FormData($("#cloForm")[0]),
+		contentType : false,
+		processData : false,
+		success : function(feedback){
+			$("#msg").html(feedback);
+		}
+	});
+	return false;
 
-			 });
-			return false;
-
-    });
+});
 });
 </script>
 
@@ -82,7 +83,37 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 				
 				}
 
+
 			}
+
+			if($_FILES['myfile']['size'] > 0)
+   			 {
+   			 
+			   $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_course_profile` where coursecode = ?', array($coursecode));
+
+			  $rev=0;
+			   if($revisions){
+            foreach ($revisions as $revision){
+				$rev = $revision->revision; 
+            }
+        }
+        		$rev++;
+			    $file = rand(1000,100000)."-".$_FILES['myfile']['name'];
+			    $file_loc = $_FILES['myfile']['tmp_name'];
+			    $file_size = $_FILES['myfile']['size'];
+			    $file_type = $_FILES['myfile']['type'];
+			    if ($file_type == "application/pdf")
+			       {   
+			              $blobObj = new Blob();
+			              //test insert pdf
+			             $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
+			             echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
+			        }
+			        else
+			            echo "Incorrect File Type. Only PDFs are allowed";
+			    }
+
+
 
 			$redirect_page1='../index.php';
 			redirect($redirect_page1); 
@@ -115,7 +146,7 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 		</p>
 		
 		<h3>Add New CLO</h3>
-		<form method='post' action="" class="mform" id="cloForm" >
+		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data" >
 			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
@@ -149,6 +180,12 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 							placeholder="eg. CS-304"
 							maxlength="100" type="text" > (eg. CS-304)
 					<div class="form-control-feedback" id="id_error_idnumber">
+
+						<div>
+					    <label>Choose File</label>
+					    <input type="file" name="myfile" id="file">
+					</div>	
+
 					<?php
 					if(isset($msg2)){
 						echo $msg2;
@@ -224,7 +261,7 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 			
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
-			<button class="btn btn-info" type="submit"  name="save" /> Save and continue </button>
+			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save and continue </button>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
             <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
 
@@ -299,3 +336,82 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
     	<?php
         echo $OUTPUT->footer();
     }?>
+
+
+<?php
+
+class Blob{
+ 
+    const DB_HOST = 'localhost';
+    const DB_NAME = 'bitnami_moodle';
+    const DB_USER = 'bn_moodle';
+    const DB_PASSWORD = '274001b456';
+ 
+    /**
+     * Open the database connection
+     */
+    public function __construct() {
+        // open database connection
+        $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8", self::DB_HOST, self::DB_NAME);
+ 
+        try {
+            $this->pdo = new PDO($conStr, self::DB_USER, self::DB_PASSWORD);
+            //for prior PHP 5.3.6
+            //$conn->exec("set names utf8");
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+ 
+ /**
+     * insert blob into the files table
+     * @param string $filePath
+     * @param string $mime mimetype
+     * @return bool
+     */
+    public function insertBlob($filePath, $mime,$coursecode,$rev) {
+        $blob = fopen($filePath, 'rb');
+       // $coursecode=$SESSION->coursecode;
+        //echo "$coursecode";
+			
+ 
+        $sql = "INSERT INTO mdl_course_profile (coursecode,mime,data,revision) VALUES('$coursecode',:mime,:data,'$rev')";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':mime', $mime);
+        $stmt->bindParam(':data', $blob, PDO::PARAM_LOB);
+ 
+        return $stmt->execute();
+    }
+
+
+
+public function selectBlob($id) {
+ 
+        $sql = "SELECT mime,
+                        data
+                   FROM mdl_course_profile
+                  WHERE id = :id;";
+ 
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(array(":id" => $id));
+        $stmt->bindColumn(1, $mime);
+        $stmt->bindColumn(2, $data, PDO::PARAM_LOB);
+ 
+        $stmt->fetch(PDO::FETCH_BOUND);
+ 
+        return array("mime" => $mime,
+            "data" => $data);
+    }
+
+
+    /**
+     * close the database connection
+     */
+    public function __destruct() {
+        // close the database connection
+        $this->pdo = null;
+    }
+
+ 
+}
+?>
