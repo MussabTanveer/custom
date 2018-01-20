@@ -115,8 +115,8 @@
                         }
                         $qnameUnique = array_unique($qnamesF);
                     ?>
-                    <th>Seat Number</th>
-                    <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
+                    <th style="text-align:center;">Seat Number</th>
+                    <th colspan="<?php echo $tot_ques ?>" style="text-align:center;">Final Exam</th>
                     <?php
                 }
                 ?>
@@ -125,7 +125,7 @@
                     <th></th>
                     <?php
                     foreach($qnameUnique as $q){
-                        echo "<th>$q</th>";
+                        echo "<th style='text-align:center;'>$q</th>";
                     }
                     ?>
                 </tr>
