@@ -24,7 +24,7 @@
 
         <a <?php echo "href='./grading_policy.php?course=$course_id'" ?>  class="cool-link">Define Grading Policy</a><br><br>
         <a <?php echo "href='./display_grading_policy.php?course=$course_id'" ?>  class="cool-link">Display Grading Policy</a><br><br>
-
+         
         <a href="javascript:void(0)" onclick="toggle_visibility('tools');" class="cool-link">Course Evaluation Tools</a><br><br>
         <div id="tools" style="display: none">
             &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Quiz</a><br>
@@ -38,6 +38,8 @@
 
         <!--<a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>-->
 
+        <a <?php echo "href='./map_grading_item.php?course=$course_id'" ?> class="cool-link">Map Activities to Grading items</a><br><br>
+        
         <a <?php echo "href='./display_quizzes-2.php?course=$course_id'" ?> class="cool-link">Map Questions to CLOs</a><br><br>
 
         <a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">View Activity Detailed Report</a><br><br>
