@@ -16,14 +16,22 @@
         $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));
 
         if($rec){
-            $gids = array();
+            $modules = array();
+            $instances = array();
             $gnames = array();
             foreach($rec as $records){
-                $gid = $records->id;
+                $module = $records->module;
+                $instance = $records->instance ;
                 $gname = $records->name;
-                array_push($gids,$gid);
+                array_push($modules,$module);
                 array_push($gnames,$gname);
+                array_push($instances,$instance);
+
             }
+            var_dump($modules);
+            var_dump($gnames);
+
+            var_dump($instances);
             ?>
             <table class="generaltable">
                 <tr>
