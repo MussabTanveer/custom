@@ -149,11 +149,12 @@ th{
                 
                            //var_dump($seatnosQ);
                            echo "<br>";
-                           }
                            array_push($seatnosQMulti,$seatnosQ);
                            array_push($qnamesQMulti,$qnameQuizUnique);
                            array_push($closQMulti,$closQ);
                            array_push($resultQMulti,$resultQ);
+                           }
+                           
                     }
                    // echo "$quizCount";
                 }
@@ -297,12 +298,9 @@ th{
                     for($i=0; $i<$quizCount; $i++)
                     {
                         for($j=0; $j<$tot_quesQuiz[$i]; $j++){
-                          
-                           
                            ?> <th> <?php echo $qnamesQMulti[$i][$j]; ?> </th>
-                       
-                       <?php }
-                     
+                       <?php 
+                       }
                     }
                     
                     /****** MID TERM ******/
@@ -319,6 +317,15 @@ th{
                 <tr>
                     <th></th>
                     <?php
+                    /****** QUIZZES ******/
+                    for($i=0; $i<$quizCount; $i++)
+                    {
+                        for($j=0; $j<$tot_quesQuiz[$i]; $j++){
+                           ?> <th> <?php echo $closQMulti[$i][$j]; ?> </th>
+                       <?php 
+                       }
+                    }
+
                     /****** MID TERM ******/
                     for($i=0; $i < count($qnameMidUnique); $i++){
                         echo "<th>$closM[$i]</th>";
