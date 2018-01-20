@@ -28,19 +28,20 @@
                 array_push($instances,$instance);
 
             }
-            var_dump($modules);
-            var_dump($gnames);
-
-            var_dump($instances);
+            //var_dump($modules);
+            //var_dump($gnames);
+            //var_dump($instances);
             ?>
-            <table class="generaltable">
+            <table class="generaltable" border="1">
                 <tr>
                 <?php
                 if(in_array("final exam", $gnames)){
-
+                    $pos = array_search('final exam', $gnames);
+                    $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($instances[$pos]));
+                    $tot_ques = count($quiz_ques); //echo $tot_ques;
                     ?>
                     <th></th>
-                    <th>Final Exam</th>
+                    <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
                     <?php
                 }
                 ?>
