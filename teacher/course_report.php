@@ -296,9 +296,13 @@ th{
                     /****** QUIZZES ******/
                     for($i=0; $i<$quizCount; $i++)
                     {
-                        for($j=0; $j<count($tot_quesQuiz[$i]); $j++){
-                            echo "<th>$qnamesQMulti[$i][$j]</th>";
-                        }
+                        for($j=0; $j<$tot_quesQuiz[$i]; $j++){
+                          
+                           
+                           ?> <th> <?php echo $qnamesQMulti[$i][$j]; ?> </th>
+                       
+                       <?php }
+                     
                     }
                     
                     /****** MID TERM ******/
