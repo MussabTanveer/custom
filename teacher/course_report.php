@@ -72,6 +72,7 @@ th{
                 $flagmid = 0;
                 $flagfinal = 0;
 
+                /****** QUIZZES ******/
                 if(in_array("quiz", $gnames)){
                     $flagquiz = 1;
                     
@@ -79,8 +80,9 @@ th{
                     
                     $seatnosQMulti = array();
                     $qnamesQMulti = array();
-                     $closQMulti = array();
-                     $resultQMulti = array();
+                    $closQMulti = array();
+                    $resultQMulti = array();
+                    $tot_quesQuiz = array();
 
                     for($i=0; $i<count($gnames); $i++)
                     {
@@ -88,7 +90,7 @@ th{
                         { 
                             $quizCount++;
 
-                    $recQuiz=$DB->get_recordset_sql(
+                        $recQuiz=$DB->get_recordset_sql(
                         'SELECT
                             qa.userid,
                             us.idnumber,
@@ -143,22 +145,18 @@ th{
                             array_push($closQ,$clo);
                         }
                         $qnameQuizUnique = array_unique($qnamesQ);
-                        $tot_quesQuiz = count($qnameQuizUnique);
+                        array_push($tot_quesQuiz,count($qnameQuizUnique));
                 
                            //var_dump($seatnosQ);
                            echo "<br>";
                            }
-                           
                            array_push($seatnosQMulti,$seatnosQ);
-                           array_push($qnamesQMulti,$qnamesQ);
+                           array_push($qnamesQMulti,$qnameQuizUnique);
                            array_push($closQMulti,$closQ);
                            array_push($resultQMulti,$resultQ);
-
-
                     }
                    // echo "$quizCount";
                 }
-
 
                 /****** MID TERM ******/
                 if(in_array("mid term", $gnames)){
@@ -279,21 +277,30 @@ th{
                 ?>
                 <tr>
                     <th>Seat Number</th>
+                    <?php /****** QUIZZES ******/
+                    for($i=0 ; $i<$quizCount; $i++)
+                    {?>
+                        <th colspan="<?php echo $tot_quesQuiz[$i] ?>">Quiz</th>
+                    <?php
+                    }
+                    ?>
                     <?php /****** MID TERM ******/ ?>
                     <th colspan="<?php echo $tot_quesMid ?>">Mid Term</th>
                     <?php /****** FINAL EXAM ******/ ?>
                     <th colspan="<?php echo $tot_quesFinal ?>">Final Exam</th>
-
-                    <?php /****** Quizes ******/
-                        for($i=0 ; $i<$quizCount; $i++)
-                            {
-                                 echo "<th>Quiz</th>"; 
-                            }
-                         ?> 
+                    
                 </tr>
                 <tr>
                     <th></th>
                     <?php
+                    /****** QUIZZES ******/
+                    for($i=0; $i<$quizCount; $i++)
+                    {
+                        for($j=0; $i<$tot_quesQuiz[$i]; $j++){
+                            echo "<th>$qnamesQMulti[$i][$j]</th>";
+                        }
+                    }
+                    
                     /****** MID TERM ******/
                     foreach($qnameMidUnique as $q){
                         echo "<th>$q</th>";
@@ -328,7 +335,7 @@ th{
                         <?php
 
 
-                        /****** Quizes ******/
+                            /****** QUIZZES ******/
                             $flag=0;
                             for($i=0 ; $i<count($seatnosQ); $i++)
                             {
@@ -345,10 +352,6 @@ th{
                                     echo "<td>x</td>";
                                 }
                             }
-
-                           
-
-
 
                             /****** MID TERM ******/
                             $flag=0;
