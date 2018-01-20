@@ -184,9 +184,11 @@ th{
 
                 ?>
 
-
             </table>
             <?php
+        }
+        else{
+            echo "<h5 style='color:red'> <br />Found no mapped graded activity item of this course! </h5> <br /><a href=./grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><a href=./map_grading_item.php?course=$course_id>Map activities to grading policy item</a>.";
         }
     }
     else
