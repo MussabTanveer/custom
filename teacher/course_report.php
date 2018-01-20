@@ -113,14 +113,22 @@
                             array_push($qnamesF,$qname);
                             array_push($closF,$clo);
                         }
+                        $qnameUnique = array_unique($qnamesF);
                     ?>
-                    <th></th>
+                    <th>Seat Number</th>
                     <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
                     <?php
                 }
                 ?>
                 </tr>
-                <tr><td></td><td></td><td></td></tr>
+                <tr>
+                    <th></th>
+                    <?php
+                    foreach($qnameUnique as $q){
+                        echo "<th>$q</th>";
+                    }
+                    ?>
+                </tr>
             </table>
             <?php
         }
