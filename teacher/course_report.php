@@ -8,6 +8,17 @@
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/course_report.php');
     echo $OUTPUT->header();
     require_login();
+?>
+<style>
+td{
+    text-align:center;
+}
+th{
+    text-align:center;
+}
+</style>
+
+<?php
 
     if(isset($_GET['course']))
     {
@@ -104,19 +115,20 @@
                             $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                             $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
                             if( (($mobtained/$qmax)*100) > 50){
-                                array_push($resultF,"<font color='green'>Pass</font>");
+                                array_push($resultF,"<font color='green'>P</font>");
                             }
                             else{
-                                array_push($resultF,"<font color='red'>Fail</font>");
+                                array_push($resultF,"<font color='red'>F</font>");
                             }
                             array_push($seatnosF,$un);
                             array_push($qnamesF,$qname);
                             array_push($closF,$clo);
                         }
                         $qnameUnique = array_unique($qnamesF);
+                        $cloUnique = array_unique($closF);
                     ?>
-                    <th style="text-align:center;">Seat Number</th>
-                    <th colspan="<?php echo $tot_ques ?>" style="text-align:center;">Final Exam</th>
+                    <th>Seat Number</th>
+                    <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
                     <?php
                 }
                 ?>
@@ -125,7 +137,15 @@
                     <th></th>
                     <?php
                     foreach($qnameUnique as $q){
-                        echo "<th style='text-align:center;'>$q</th>";
+                        echo "<th>$q</th>";
+                    }
+                    ?>
+                </tr>
+                <tr>
+                    <th></th>
+                    <?php
+                    for($i=0; $i < count($qnameUnique); $i++){
+                        echo "<th>$closF[$i]</th>";
                     }
                     ?>
                 </tr>
@@ -146,18 +166,14 @@
                                 {
                                     $flag=1;
                                      echo "<td>$resultF[$i]</td>";
-                        
                                 }
-
                             }
                             if($flag==0)
                             {
-
                                 foreach ($qnameUnique as $quesUnique)
                                 {
                                     echo "<td>x</td>";
                                 }
-                                    
                             }
                         ?>
 
