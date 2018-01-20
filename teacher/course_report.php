@@ -64,6 +64,7 @@ th{
             //var_dump($instances);
             //var_dump($stdids);
             //var_dump($seatnos);
+            $quizCount=0;
             
             ?>
             <table class="generaltable" border="1">
@@ -73,15 +74,19 @@ th{
 
                 if(in_array("quiz", $gnames)){
                     $flagquiz = 1;
+                    
                     //$pos = array_search('mid term', $gnames);
                     
                     $seatnosQMulti = array();
+                    $qnamesQMulti = array();
+                     $closQMulti = array();
+                     $resultQMulti = array();
+
                     for($i=0; $i<count($gnames); $i++)
                     {
                         if ($gnames[$i]=="quiz")
-                        {
-                            $pos= $gnames[$i];    
-                     
+                        { 
+                            $quizCount++;
 
                     $recQuiz=$DB->get_recordset_sql(
                         'SELECT
@@ -112,15 +117,15 @@ th{
                             AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
                         ORDER BY qa.attempt, qa.userid, qu.id',
                         
-                        array($instances[$pos]));
+                        array($instances[$i]));
                         
                         $seatnosQ = array();
                         $qnamesQ = array();
                         $closQ = array();
                         $resultQ = array();
-                        //echo "hello";
+                        
                         foreach($recQuiz as $fe){
-                             echo "hello";
+                            
                             $un = $fe->username;
                             $qname = $fe->name;
                             $clo=$fe->shortname;
@@ -140,19 +145,19 @@ th{
                         $qnameQuizUnique = array_unique($qnamesQ);
                         $tot_quesQuiz = count($qnameQuizUnique);
                 
-                           }
-                           var_dump($seatnosQ);
+                           //var_dump($seatnosQ);
                            echo "<br>";
+                           }
+                           
                            array_push($seatnosQMulti,$seatnosQ);
+                           array_push($qnamesQMulti,$qnamesQ);
+                           array_push($closQMulti,$closQ);
+                           array_push($resultQMulti,$resultQ);
+
 
                     }
-
-                    var_dump($seatnosQMulti);
-                   // echo "$seatnosQMulti[0][2]";
+                   // echo "$quizCount";
                 }
-
-
-
 
 
                 /****** MID TERM ******/
@@ -278,6 +283,13 @@ th{
                     <th colspan="<?php echo $tot_quesMid ?>">Mid Term</th>
                     <?php /****** FINAL EXAM ******/ ?>
                     <th colspan="<?php echo $tot_quesFinal ?>">Final Exam</th>
+
+                    <?php /****** Quizes ******/
+                        for($i=0 ; $i<$quizCount; $i++)
+                            {
+                                 echo "<th>Quiz</th>"; 
+                            }
+                         ?> 
                 </tr>
                 <tr>
                     <th></th>
@@ -314,6 +326,30 @@ th{
                     <tr> 
                         <td>  <?php echo "$seatno" ?> </td>
                         <?php
+
+
+                        /****** Quizes ******/
+                            $flag=0;
+                            for($i=0 ; $i<count($seatnosQ); $i++)
+                            {
+                                if($seatno == $seatnosM[$i])
+                                {
+                                    $flag=1;
+                                     echo "<td>$resultM[$i]</td>";
+                                }
+                            }
+                            if($flag==0)
+                            {
+                                foreach ($qnameMidUnique as $quesUnique)
+                                {
+                                    echo "<td>x</td>";
+                                }
+                            }
+
+                           
+
+
+
                             /****** MID TERM ******/
                             $flag=0;
                             for($i=0 ; $i<count($seatnosM); $i++)
