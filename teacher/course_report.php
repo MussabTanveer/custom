@@ -26,14 +26,18 @@
             }
             ?>
             <table class="generaltable">
+                <tr>
                 <?php
                 if(in_array("final exam", $gnames)){
+
                     ?>
                     <th></th>
                     <th>Final Exam</th>
                     <?php
                 }
                 ?>
+                </tr>
+                <tr></tr>
             </table>
             <?php
         }
