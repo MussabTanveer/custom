@@ -129,6 +129,46 @@
                     }
                     ?>
                 </tr>
+
+                <?php
+
+                foreach ($seatnos as $seatno) {
+
+                    ?>
+                    <tr> 
+                        <td>  <?php echo "$seatno"  ?> </td>    
+                    
+                        <?php
+                            $flag=0;
+                            for($i=0 ; $i<count($seatnosF); $i++)
+                            {
+                                if($seatno == $seatnosF[$i])
+                                {
+                                    $flag=1;
+                                     echo "<td>$resultF[$i]</td>";
+                        
+                                }
+
+                            }
+                            if($flag==0)
+                            {
+
+                                foreach ($qnameUnique as $quesUnique)
+                                {
+                                    echo "<td>x</td>";
+                                }
+                                    
+                            }
+                        ?>
+
+                     </tr>
+
+                <?php
+                }
+
+                ?>
+
+
             </table>
             <?php
         }
