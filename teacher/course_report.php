@@ -71,8 +71,6 @@ th{
                 <?php
                 if(in_array("final exam", $gnames)){
                     $pos = array_search('final exam', $gnames);
-                    $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($instances[$pos]));
-                    $tot_ques = count($quiz_ques); //echo $tot_ques;
                     $recFinal=$DB->get_recordset_sql(
                         'SELECT 
                             qa.userid,
@@ -126,6 +124,7 @@ th{
                         }
                         $qnameUnique = array_unique($qnamesF);
                         $cloUnique = array_unique($closF);
+                        $tot_ques = count($qnameUnique);
                     ?>
                     <th>Seat Number</th>
                     <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
