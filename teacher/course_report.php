@@ -62,6 +62,57 @@
                     $pos = array_search('final exam', $gnames);
                     $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($instances[$pos]));
                     $tot_ques = count($quiz_ques); //echo $tot_ques;
+                    $recFinal=$DB->get_recordset_sql(
+                        'SELECT 
+                            qa.userid,
+                            us.idnumber,
+                            us.username,
+                            qa.attempt,
+                            qu.name,
+                            c.shortname,
+                            qu.questiontext,
+                            qua.rightanswer,
+                            qua.responsesummary,
+                            qua.maxmark,
+                            qua.maxmark*qas.fraction AS marksobtained,
+                            qc.name AS category
+                        FROM
+                            mdl_quiz q,
+                            mdl_quiz_slots qs,
+                            mdl_user us,
+                            mdl_question qu,
+                            mdl_question_categories qc,
+                            mdl_quiz_attempts qa,
+                            mdl_question_attempts qua,
+                            mdl_competency c,
+                            mdl_question_attempt_steps qas
+                        WHERE 
+                            q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
+                            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
+                        ORDER BY qa.attempt, qa.userid, qu.id',
+                        
+                        array($instances[$pos]));
+                        
+                        $seatnosF = array();
+                        $qnamesF = array();
+                        $closF = array();
+                        $resultF = array();
+                        foreach($recFinal as $fe){
+                            $un = $fe->username;
+                            $qname = $fe->name;
+                            $clo=$fe->shortname;
+                            $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                            $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
+                            if( (($mobtained/$qmax)*100) > 50){
+                                array_push($resultF,"<font color='green'>Pass</font>");
+                            }
+                            else{
+                                array_push($resultF,"<font color='red'>Fail</font>");
+                            }
+                            array_push($seatnosF,$un);
+                            array_push($qnamesF,$qname);
+                            array_push($closF,$clo);
+                        }
                     ?>
                     <th></th>
                     <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
