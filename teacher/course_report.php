@@ -296,7 +296,7 @@ th{
                     /****** QUIZZES ******/
                     for($i=0; $i<$quizCount; $i++)
                     {
-                        for($j=0; $i<$tot_quesQuiz[$i]; $j++){
+                        for($j=0; $j<count($tot_quesQuiz[$i]); $j++){
                             echo "<th>$qnamesQMulti[$i][$j]</th>";
                         }
                     }
