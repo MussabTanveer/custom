@@ -13,7 +13,7 @@
     {
         $course_id=$_GET['course'];
         // Get Grading Items
-        $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy WHERE courseid = ? ORDER BY id", array($course_id));
+        $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));
 
         if($rec){
             $gids = array();
