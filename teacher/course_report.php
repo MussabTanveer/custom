@@ -67,9 +67,70 @@ th{
             
             ?>
             <table class="generaltable" border="1">
-                <tr>
                 <?php
+                $flagmid = 0;
+                $flagfinal = 0;
+                /****** MID TERM ******/
+                if(in_array("mid term", $gnames)){
+                    $flagmid = 1;
+                    $pos = array_search('mid term', $gnames);
+                    $recMid=$DB->get_recordset_sql(
+                        'SELECT
+                            qa.userid,
+                            us.idnumber,
+                            us.username,
+                            qa.attempt,
+                            qu.name,
+                            c.shortname,
+                            qu.questiontext,
+                            qua.rightanswer,
+                            qua.responsesummary,
+                            qua.maxmark,
+                            qua.maxmark*qas.fraction AS marksobtained,
+                            qc.name AS category
+                        FROM
+                            mdl_quiz q,
+                            mdl_quiz_slots qs,
+                            mdl_user us,
+                            mdl_question qu,
+                            mdl_question_categories qc,
+                            mdl_quiz_attempts qa,
+                            mdl_question_attempts qua,
+                            mdl_competency c,
+                            mdl_question_attempt_steps qas
+                        WHERE 
+                            q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
+                            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
+                        ORDER BY qa.attempt, qa.userid, qu.id',
+                        
+                        array($instances[$pos]));
+                        
+                        $seatnosM = array();
+                        $qnamesM = array();
+                        $closM = array();
+                        $resultM = array();
+                        foreach($recMid as $fe){
+                            $un = $fe->username;
+                            $qname = $fe->name;
+                            $clo=$fe->shortname;
+                            $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                            $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
+                            if( (($mobtained/$qmax)*100) > 50){
+                                array_push($resultM,"<font color='green'>P</font>");
+                            }
+                            else{
+                                array_push($resultM,"<font color='red'>F</font>");
+                            }
+                            array_push($seatnosM,$un);
+                            array_push($qnamesM,$qname);
+                            array_push($closM,$clo);
+                        }
+                        $qnameMidUnique = array_unique($qnamesM);
+                        $tot_quesMid = count($qnameMidUnique);
+                }
+                /****** FINAL EXAM ******/
                 if(in_array("final exam", $gnames)){
+                    $flagfinal = 1;
                     $pos = array_search('final exam', $gnames);
                     $recFinal=$DB->get_recordset_sql(
                         'SELECT 
@@ -122,20 +183,27 @@ th{
                             array_push($qnamesF,$qname);
                             array_push($closF,$clo);
                         }
-                        $qnameUnique = array_unique($qnamesF);
-                        $cloUnique = array_unique($closF);
-                        $tot_ques = count($qnameUnique);
-                    ?>
-                    <th>Seat Number</th>
-                    <th colspan="<?php echo $tot_ques ?>">Final Exam</th>
-                    <?php
+                        $qnameFinalUnique = array_unique($qnamesF);
+                        $tot_quesFinal = count($qnameFinalUnique);
                 }
                 ?>
+                <tr>
+                    <th>Seat Number</th>
+                    <?php /****** MID TERM ******/ ?>
+                    <th colspan="<?php echo $tot_quesMid ?>">Mid Term</th>
+                    <?php /****** FINAL EXAM ******/ ?>
+                    <th colspan="<?php echo $tot_quesFinal ?>">Final Exam</th>
                 </tr>
                 <tr>
                     <th></th>
                     <?php
-                    foreach($qnameUnique as $q){
+                    /****** MID TERM ******/
+                    foreach($qnameMidUnique as $q){
+                        echo "<th>$q</th>";
+                    }
+                    
+                    /****** FINAL EXAM ******/
+                    foreach($qnameFinalUnique as $q){
                         echo "<th>$q</th>";
                     }
                     ?>
@@ -143,21 +211,42 @@ th{
                 <tr>
                     <th></th>
                     <?php
-                    for($i=0; $i < count($qnameUnique); $i++){
+                    /****** MID TERM ******/
+                    for($i=0; $i < count($qnameMidUnique); $i++){
+                        echo "<th>$closM[$i]</th>";
+                    }
+                    
+                    /****** FINAL EXAM ******/
+                    for($i=0; $i < count($qnameFinalUnique); $i++){
                         echo "<th>$closF[$i]</th>";
                     }
                     ?>
                 </tr>
 
                 <?php
-
                 foreach ($seatnos as $seatno) {
-
                     ?>
                     <tr> 
-                        <td>  <?php echo "$seatno"  ?> </td>    
-                    
+                        <td>  <?php echo "$seatno" ?> </td>
                         <?php
+                            /****** MID TERM ******/
+                            $flag=0;
+                            for($i=0 ; $i<count($seatnosM); $i++)
+                            {
+                                if($seatno == $seatnosM[$i])
+                                {
+                                    $flag=1;
+                                     echo "<td>$resultM[$i]</td>";
+                                }
+                            }
+                            if($flag==0)
+                            {
+                                foreach ($qnameMidUnique as $quesUnique)
+                                {
+                                    echo "<td>x</td>";
+                                }
+                            }
+                            /****** FINAL EXAM ******/
                             $flag=0;
                             for($i=0 ; $i<count($seatnosF); $i++)
                             {
@@ -169,15 +258,13 @@ th{
                             }
                             if($flag==0)
                             {
-                                foreach ($qnameUnique as $quesUnique)
+                                foreach ($qnameFinalUnique as $quesUnique)
                                 {
                                     echo "<td>x</td>";
                                 }
                             }
                         ?>
-
                      </tr>
-
                 <?php
                 }
 
