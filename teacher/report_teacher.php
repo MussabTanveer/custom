@@ -45,6 +45,8 @@
         <a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">View Activity Detailed Report</a><br><br>
 
         <a <?php echo "href='./display_activities.php?course=$course_id'" ?> class="cool-link">Activity/Course CLO Report</a><br><br>
+
+        <a <?php echo "href='./course_report.php?course=$course_id'" ?> class="cool-link">Course Report</a><br><br>
     </div>
 
     <script type="text/javascript">
