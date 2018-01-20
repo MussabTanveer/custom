@@ -67,7 +67,7 @@
 	echo "<font color='green'>Grading items successfully mapped with activities!</font>";
 	echo "<br>";
 ?>
-<a href="./teacher_courses.php.php">Back</a>
+<a href="./teacher_courses.php">Back</a>
 
 <?php 	
 	echo $OUTPUT->footer();
