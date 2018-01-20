@@ -16,24 +16,8 @@
         $course_id=$_GET['course'];
         //echo "Course ID : $course_id";
 
-        /*// Get CLOs
-        $rec=$DB->get_records_sql("SELECT * FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber NOT LIKE 'PLO%' AND parentid !=0 ORDER BY idnumber", array($fw_id));
-        */
         // Get Grading Items
         $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy WHERE courseid = ? ORDER BY id", array($course_id));
-
-        /*//Get level with its name and domain name
-        $recLevels=$DB->get_records_sql("SELECT txl.id, txl.name AS level_name, txl.level, txd.name AS domain_name FROM mdl_taxonomy_levels txl, mdl_taxonomy_domain txd WHERE txl.domainid=txd.id");
-        $levelid = array(); $lname = array(); $dname = array();
-        foreach ($recLevels as $recL) {
-            $lid = $recL->id;
-            $lvl = $recL->level;
-            $ln = $recL->level_name;
-            $dn = $recL->domain_name;
-            array_push($levelid, $lid); // array of level ids
-            array_push($lname, $ln); // array of level names
-            array_push($dname, $dn); // array of domain names
-        }*/
 
         if($rec){
             $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ?', array($course_id));
