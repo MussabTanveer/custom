@@ -12,8 +12,19 @@
     if(isset($_GET['course']))
     {
         $course_id=$_GET['course'];
+        
         // Get Grading Items
         $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));
+
+        // Get all students of course
+        $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
+        FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
+        WHERE ra.userid = u.id
+        AND ra.contextid = cxt.id
+        AND cxt.contextlevel = ?
+        AND cxt.instanceid = c.id
+        AND c.id = ?
+        AND (roleid=5)", array(50, $course_id));
 
         if($rec){
             $modules = array();
@@ -28,9 +39,21 @@
                 array_push($instances,$instance);
 
             }
+            $stdids = array();
+            $seatnos = array();
+            foreach($recStudents as $records){
+                $id = $records->sid;
+                $seatno = $records->seatnum ;
+                array_push($stdids,$id);
+                array_push($seatnos,$seatno);
+
+            }
             //var_dump($modules);
             //var_dump($gnames);
             //var_dump($instances);
+            //var_dump($stdids);
+            //var_dump($seatnos);
+            
             ?>
             <table class="generaltable" border="1">
                 <tr>
@@ -46,7 +69,7 @@
                 }
                 ?>
                 </tr>
-                <tr></tr>
+                <tr><td></td><td></td><td></td></tr>
             </table>
             <?php
         }
