@@ -12,7 +12,31 @@
     if(isset($_GET['course']))
     {
         $course_id=$_GET['course'];
+        // Get Grading Items
+        $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy WHERE courseid = ? ORDER BY id", array($course_id));
 
+        if($rec){
+            $gids = array();
+            $gnames = array();
+            foreach($rec as $records){
+                $gid = $records->id;
+                $gname = $records->name;
+                array_push($gids,$gid);
+                array_push($gnames,$gname);
+            }
+            ?>
+            <table class="generaltable">
+                <?php
+                if(in_array("final exam", $gnames)){
+                    ?>
+                    <th></th>
+                    <th>Final Exam</th>
+                    <?php
+                }
+                ?>
+            </table>
+            <?php
+        }
     }
     else
     {?>
