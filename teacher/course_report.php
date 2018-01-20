@@ -345,25 +345,27 @@ th{
                         <td>  <?php echo "$seatno" ?> </td>
                         <?php
 
-
                             /****** QUIZZES ******/
-                            $flag=0;
-                            for($i=0 ; $i<count($seatnosQ); $i++)
+                            for($i=0; $i<$quizCount; $i++)
                             {
-                                if($seatno == $seatnosM[$i])
+                                $flag=0;
+                                for($j=0; $j<count($seatnosQMulti[$i]); $j++){
+                                    if($seatno == $seatnosQMulti[$i][$j])
+                                    {
+                                        $flag=1;
+                                        ?>
+                                        <td> <?php echo $resultQMulti[$i][$j]; ?> </td>
+                                        <?php
+                                    }
+                                }
+                                if($flag==0)
                                 {
-                                    $flag=1;
-                                     echo "<td>$resultM[$i]</td>";
+                                    for($j=0; $j<$tot_quesQuiz[$i]; $j++){
+                                        echo "<td>x</td>";
+                                    }
                                 }
                             }
-                            if($flag==0)
-                            {
-                                foreach ($qnameMidUnique as $quesUnique)
-                                {
-                                    echo "<td>x</td>";
-                                }
-                            }
-
+                            
                             /****** MID TERM ******/
                             $flag=0;
                             for($i=0 ; $i<count($seatnosM); $i++)
