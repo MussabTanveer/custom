@@ -72,6 +72,88 @@ th{
                 $flagmid = 0;
                 $flagfinal = 0;
 
+                /****** ASSIGNMENT ******/
+                if(in_array("assignment", $gnames)){
+                    $flagquiz = 1;
+                    
+                    //$pos = array_search('mid term', $gnames);
+                    
+                    $seatnosQMulti = array();
+                    $qnamesQMulti = array();
+                    $closQMulti = array();
+                    $resultQMulti = array();
+                    $tot_quesQuiz = array();
+
+                    for($i=0; $i<count($gnames); $i++)
+                    {
+                        if ($gnames[$i]=="quiz")
+                        { 
+                            $quizCount++;
+
+                            //Get assign comp
+                            $recAssignCLO=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+                            
+                            FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+                    
+                            WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
+                            
+                            ORDER BY cmc.competencyid",
+                            
+                            array($instances[$i],$course_id,1));
+                            
+                            $recAssign=$DB->get_recordset_sql(
+                                'SELECT
+                                u.username AS seat_no,
+                                a.grade AS maxmark,
+                                ag.grade AS marksobtained
+                                FROM
+                                    mdl_assign a,
+                                    mdl_assign_grades ag,
+                                    mdl_user u
+                                WHERE
+                                    a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment
+                                ORDER BY ag.userid',
+                                
+                            array($instances[$i],-1));
+                        
+                        $seatnosQ = array();
+                        $qnamesQ = array();
+                        $closQ = array();
+                        $resultQ = array();
+                        
+                        foreach($recQuiz as $fe){
+                            
+                            $un = $fe->username;
+                            $qname = $fe->name;
+                            $clo=$fe->shortname;
+                            $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                            $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
+                            if( (($mobtained/$qmax)*100) > 50){
+                                array_push($resultQ,"<font color='green'>P</font>");
+                            }
+                            else{
+                                array_push($resultQ,"<font color='red'>F</font>");
+                            }
+
+                            array_push($seatnosQ,$un);
+                            array_push($qnamesQ,$qname);
+                            array_push($closQ,$clo);
+                        }
+                        $qnameQuizUnique = array_unique($qnamesQ);
+                        array_push($tot_quesQuiz,count($qnameQuizUnique));
+                
+                           //var_dump($seatnosQ);
+                           echo "<br>";
+                           array_push($seatnosQMulti,$seatnosQ);
+                           array_push($qnamesQMulti,$qnameQuizUnique);
+                           array_push($closQMulti,$closQ);
+                           array_push($resultQMulti,$resultQ);
+                           }
+                           
+                    }
+                   // echo "$quizCount";
+                }
+
                 /****** QUIZZES ******/
                 if(in_array("quiz", $gnames)){
                     $flagquiz = 1;
