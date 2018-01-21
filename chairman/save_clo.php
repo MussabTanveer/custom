@@ -12,6 +12,9 @@
 	$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
 	$frameworkid = $_POST["frameworkid"];
 
+     global $CFG;
+    $x= $CFG->dbpass;
+
 	
 	if($_FILES['myfile']['size'] > 0)
     {
@@ -34,7 +37,7 @@
 
 		if ($file_type == "application/pdf")
 		{   
-			  $blobObj = new Blob();
+			  $blobObj = new Blob($x);
 			  //test insert pdf
 			  $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
 			  	echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
@@ -82,21 +85,23 @@
 
 <?php
 class Blob{
- 
+    
     const DB_HOST = 'localhost';
     const DB_NAME = 'bitnami_moodle';
     const DB_USER = 'bn_moodle';
-    const DB_PASSWORD = '274001b456';
+    protected $DB_PASSWORD='';
  
     /**
      * Open the database connection
      */
-    public function __construct() {
+    public function __construct($x) {
+        //echo "$x";
+        $DB_PASSWORD=$x;
         // open database connection
         $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8", self::DB_HOST, self::DB_NAME);
  
         try {
-            $this->pdo = new PDO($conStr, self::DB_USER, self::DB_PASSWORD);
+            $this->pdo = new PDO($conStr, self::DB_USER, $DB_PASSWORD);
             //for prior PHP 5.3.6
             //$conn->exec("set names utf8");
         } catch (PDOException $e) {

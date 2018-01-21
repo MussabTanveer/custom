@@ -10,6 +10,8 @@ require_once('../../../config.php');
 	require_login();
 $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
+    global $CFG;
+    $x= $CFG->dbpass;
 ?>
 
 <script src="../script/jquery/jquery-3.2.1.js"></script>
@@ -104,7 +106,7 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 			    $file_type = $_FILES['myfile']['type'];
 			    if ($file_type == "application/pdf")
 			       {   
-			              $blobObj = new Blob();
+			                $blobObj = new Blob($x);
 			              //test insert pdf
 			             $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
 			             echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
@@ -341,21 +343,23 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
 <?php
 
 class Blob{
- 
+	
     const DB_HOST = 'localhost';
     const DB_NAME = 'bitnami_moodle';
     const DB_USER = 'bn_moodle';
-    const DB_PASSWORD = '274001b456';
+    protected $DB_PASSWORD='';
  
     /**
      * Open the database connection
      */
-    public function __construct() {
+    public function __construct($x) {
+    	//echo "$x";
+    	$DB_PASSWORD=$x;
         // open database connection
         $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8", self::DB_HOST, self::DB_NAME);
  
         try {
-            $this->pdo = new PDO($conStr, self::DB_USER, self::DB_PASSWORD);
+            $this->pdo = new PDO($conStr, self::DB_USER, $DB_PASSWORD);
             //for prior PHP 5.3.6
             //$conn->exec("set names utf8");
         } catch (PDOException $e) {

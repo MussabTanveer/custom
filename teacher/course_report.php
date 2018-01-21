@@ -281,6 +281,7 @@ th{
 
                         $recQuiz=$DB->get_recordset_sql(
                         'SELECT
+                            q.name as quizname,
                             qa.userid,
                             us.idnumber,
                             us.username,
@@ -314,9 +315,11 @@ th{
                         $qnamesQ = array();
                         $closQ = array();
                         $resultQ = array();
+                        $quiznames = array();
                         
                         foreach($recQuiz as $fe){
-                            
+                            $quizname = $fe->quizname;
+                           // echo $name;
                             $un = $fe->username;
                             $qname = $fe->name;
                             $clo=$fe->shortname;
@@ -329,9 +332,14 @@ th{
                                 array_push($resultQ,"<font color='red'>F</font>");
                             }
 
+                            array_push($quiznames,$quizname);
+                           // var_dump($quiznames);
+                           // echo "<br>";
                             array_push($seatnosQ,$un);
                             array_push($qnamesQ,$qname);
                             array_push($closQ,$clo);
+                             
+                             //echo $quizname;
                         }
                         $qnameQuizUnique = array_unique($qnamesQ);
                         array_push($tot_quesQuiz,count($qnameQuizUnique));
@@ -346,6 +354,7 @@ th{
                            
                     }
                    // echo "$quizCount";
+                    //var_dump($quiznames);
                 }
 
                 /****** MID TERM ******/
