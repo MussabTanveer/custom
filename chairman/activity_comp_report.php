@@ -312,7 +312,7 @@
                         <?php
                         $uid = $records->userid;
                         $sid = $records->std_id;
-                        $seat = $data->seat_no;
+                        $seat = $records->seat_no;
                         $uname = $records->std_name;
                         $max = $records->maxmark;
                         $obt = $records->marksobtained;
