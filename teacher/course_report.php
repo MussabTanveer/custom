@@ -66,12 +66,112 @@ th{
             //var_dump($seatnos);
             $quizCount=0;
             $assignCount=0;
+            $projectCount=0;
             
             ?>
             <table class="generaltable" border="1">
                 <?php
                 $flagmid = 0;
                 $flagfinal = 0;
+                $flagproject = 0;
+                $flagassign = 0;
+
+
+
+                /****** PROJECT ******/
+                if(in_array("project", $gnames)){
+                    $flagproject = 1;
+                    
+                    //$pos = array_search('mid term', $gnames);
+                    
+                    $seatnosPMulti = array();
+                    //$qnamesAMulti = array();
+                    $closPMulti = array();
+                    $resultPMulti = array();
+                    //$tot_quesQuiz = array();
+
+                    for($i=0; $i<count($gnames); $i++)
+                    {
+                        if ($gnames[$i]=="project")
+                        { 
+                            $projectCount++;
+
+                            //Get assign comp
+                            $recProjectCLO=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname AS clo_name
+                            
+                            FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+                    
+                            WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
+                            
+                            ORDER BY cmc.competencyid",
+                            
+                            array($instances[$i],$course_id,1));
+                            
+                            $recProject=$DB->get_recordset_sql(
+                                'SELECT
+                                u.username AS seat_no,
+                                a.grade AS maxmark,
+                                ag.grade AS marksobtained
+                                FROM
+                                    mdl_assign a,
+                                    mdl_assign_grades ag,
+                                    mdl_user u
+                                WHERE
+                                    a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment
+                                ORDER BY ag.userid',
+                                
+                            array($instances[$i],-1));
+                        
+                        $seatnosP = array();
+                        //$qnamesQ = array();
+                        $closP = array();
+                        $resultP = array();
+                        
+                        foreach($recProject as $as){
+                            
+                            $un = $as->seat_no;
+                            //$qname = $as->name;
+                            //$clo=$as->shortname;
+                            $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                            $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                            if( (($mobtained/$amax)*100) > 50){
+                                array_push($resultP,"<font color='green'>P</font>");
+                            }
+                            else{
+                                array_push($resultP,"<font color='red'>F</font>");
+                            }
+
+                            array_push($seatnosP,$un);
+                            //array_push($qnamesQ,$qname);
+                            //array_push($closQ,$clo);
+                        }
+                        foreach($recProjectCLO as $asCLO){
+                            $clo = $asCLO->clo_name;
+                            
+                            array_push($closP,$clo);
+                        }
+
+                        //$qnameQuizUnique = array_unique($qnamesQ);
+                        //array_push($tot_quesQuiz,count($qnameQuizUnique));
+                
+                           //var_dump($seatnosQ);
+                           //echo "<br>";
+                           array_push($seatnosPMulti,$seatnosP);
+                           //array_push($qnamesQMulti,$qnameQuizUnique);
+                           array_push($closPMulti,$closP);
+                           array_push($resultPMulti,$resultP);
+                        }
+                           
+                    }
+                   // echo "$quizCount";
+                }
+
+
+
+
+
+
+
 
                 /****** ASSIGNMENT ******/
                 if(in_array("assignment", $gnames)){
@@ -367,6 +467,15 @@ th{
                 ?>
                 <tr>
                     <th>Seat Number</th>
+
+                    <?php /****** PROJECT ******/
+                    for($i=0 ; $i<$assignCount; $i++)
+                    {?>
+                        <th>Project</th>
+                        <?php
+                    }
+
+                    ?>
                     <?php /****** ASSIGNMENT ******/
                     for($i=0 ; $i<$assignCount; $i++)
                     {?>
@@ -389,6 +498,16 @@ th{
                 </tr>
                 <tr>
                     <th></th>
+
+                    <?php /****** ASSIGNMENT ******/
+                    for($i=0 ; $i<$projectCount; $i++)
+                    {?>
+                        <th></th>
+                    <?php
+                    }
+                    ?>
+
+
                     <?php /****** ASSIGNMENT ******/
                     for($i=0 ; $i<$assignCount; $i++)
                     {?>
@@ -419,7 +538,26 @@ th{
                 </tr>
                 <tr>
                     <th></th>
+                    
+
                     <?php
+
+                      /****** PROJECT ******/
+                    for($i=0; $i<$projectCount; $i++)
+                    {
+                        ?>
+                        <th> 
+                        <?php
+                        for($j=0; $j<count($closPMulti[$i]); $j++){
+                           echo $closPMulti[$i][$j];
+                           echo " ";
+                        }
+                        ?>
+                        </th>
+                        <?php
+                    }
+
+
                     /****** ASSIGNMENT ******/
                     for($i=0; $i<$assignCount; $i++)
                     {
@@ -462,6 +600,27 @@ th{
                     <tr> 
                         <td>  <?php echo "$seatno" ?> </td>
                         <?php
+
+
+                              /****** PROJECT ******/
+                            for($i=0; $i<$projectCount; $i++)
+                            {
+                                $flag=0;
+                                for($j=0; $j<count($seatnosPMulti[$i]); $j++){
+                                    if($seatno == $seatnosPMulti[$i][$j])
+                                    {
+                                        $flag=1;
+                                        ?>
+                                        <td> <?php echo $resultPMulti[$i][$j]; ?> </td>
+                                        <?php
+                                    }
+                                }
+                                if($flag==0)
+                                {
+                                    echo "<td>x</td>";
+                                }
+                            }
+
 
                             /****** ASSIGNMENT ******/
                             for($i=0; $i<$assignCount; $i++)
