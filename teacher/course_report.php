@@ -65,6 +65,7 @@ th{
             //var_dump($stdids);
             //var_dump($seatnos);
             $quizCount=0;
+            $assignCount=0;
             
             ?>
             <table class="generaltable" border="1">
@@ -78,20 +79,20 @@ th{
                     
                     //$pos = array_search('mid term', $gnames);
                     
-                    $seatnosQMulti = array();
-                    $qnamesQMulti = array();
-                    $closQMulti = array();
-                    $resultQMulti = array();
-                    $tot_quesQuiz = array();
+                    $seatnosAMulti = array();
+                    //$qnamesAMulti = array();
+                    $closAMulti = array();
+                    $resultAMulti = array();
+                    //$tot_quesQuiz = array();
 
                     for($i=0; $i<count($gnames); $i++)
                     {
-                        if ($gnames[$i]=="quiz")
+                        if ($gnames[$i]=="assignment")
                         { 
-                            $quizCount++;
+                            $assignCount++;
 
                             //Get assign comp
-                            $recAssignCLO=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+                            $recAssignCLO=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname AS clo_name
                             
                             FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
                     
@@ -116,39 +117,45 @@ th{
                                 
                             array($instances[$i],-1));
                         
-                        $seatnosQ = array();
-                        $qnamesQ = array();
-                        $closQ = array();
-                        $resultQ = array();
+                        $seatnosA = array();
+                        //$qnamesQ = array();
+                        $closA = array();
+                        $resultA = array();
                         
-                        foreach($recQuiz as $fe){
+                        foreach($recAssign as $as){
                             
-                            $un = $fe->username;
-                            $qname = $fe->name;
-                            $clo=$fe->shortname;
-                            $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
-                            $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
-                            if( (($mobtained/$qmax)*100) > 50){
-                                array_push($resultQ,"<font color='green'>P</font>");
+                            $un = $as->seat_no;
+                            //$qname = $as->name;
+                            //$clo=$as->shortname;
+                            $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                            $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                            if( (($mobtained/$amax)*100) > 50){
+                                array_push($resultA,"<font color='green'>P</font>");
                             }
                             else{
-                                array_push($resultQ,"<font color='red'>F</font>");
+                                array_push($resultA,"<font color='red'>F</font>");
                             }
 
-                            array_push($seatnosQ,$un);
-                            array_push($qnamesQ,$qname);
-                            array_push($closQ,$clo);
+                            array_push($seatnosA,$un);
+                            //array_push($qnamesQ,$qname);
+                            //array_push($closQ,$clo);
                         }
-                        $qnameQuizUnique = array_unique($qnamesQ);
-                        array_push($tot_quesQuiz,count($qnameQuizUnique));
+                        foreach($recAssignCLO as $asCLO){
+                            $clo = $asCLO->clo_name;
+                            
+                            array_push($closA,$clo);
+                        }
+
+                        //$qnameQuizUnique = array_unique($qnamesQ);
+                        //array_push($tot_quesQuiz,count($qnameQuizUnique));
                 
                            //var_dump($seatnosQ);
                            echo "<br>";
-                           array_push($seatnosQMulti,$seatnosQ);
-                           array_push($qnamesQMulti,$qnameQuizUnique);
-                           array_push($closQMulti,$closQ);
-                           array_push($resultQMulti,$resultQ);
-                           }
+                           array_push($seatnosAMulti,$seatnosA);
+                           //array_push($qnamesQMulti,$qnameQuizUnique);
+                           array_push($closAMulti,$closA);
+                           array_push($resultAMulti,$resultA);
+                        }
                            
                     }
                    // echo "$quizCount";
