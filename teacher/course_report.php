@@ -469,7 +469,7 @@ th{
                     <th>Seat Number</th>
 
                     <?php /****** PROJECT ******/
-                    for($i=0 ; $i<$assignCount; $i++)
+                    for($i=0 ; $i<$projectCount; $i++)
                     {?>
                         <th>Project</th>
                         <?php
@@ -499,14 +499,13 @@ th{
                 <tr>
                     <th></th>
 
-                    <?php /****** ASSIGNMENT ******/
+                    <?php /****** PROJECT ******/
                     for($i=0 ; $i<$projectCount; $i++)
                     {?>
                         <th></th>
                     <?php
                     }
                     ?>
-
 
                     <?php /****** ASSIGNMENT ******/
                     for($i=0 ; $i<$assignCount; $i++)
@@ -602,7 +601,7 @@ th{
                         <?php
 
 
-                              /****** PROJECT ******/
+                            /****** PROJECT ******/
                             for($i=0; $i<$projectCount; $i++)
                             {
                                 $flag=0;
