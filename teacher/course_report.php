@@ -150,7 +150,7 @@ th{
                         //array_push($tot_quesQuiz,count($qnameQuizUnique));
                 
                            //var_dump($seatnosQ);
-                           echo "<br>";
+                           //echo "<br>";
                            array_push($seatnosAMulti,$seatnosA);
                            //array_push($qnamesQMulti,$qnameQuizUnique);
                            array_push($closAMulti,$closA);
@@ -237,7 +237,7 @@ th{
                         array_push($tot_quesQuiz,count($qnameQuizUnique));
                 
                            //var_dump($seatnosQ);
-                           echo "<br>";
+                           //echo "<br>";
                            array_push($seatnosQMulti,$seatnosQ);
                            array_push($qnamesQMulti,$qnameQuizUnique);
                            array_push($closQMulti,$closQ);
@@ -367,6 +367,13 @@ th{
                 ?>
                 <tr>
                     <th>Seat Number</th>
+                    <?php /****** ASSIGNMENT ******/
+                    for($i=0 ; $i<$assignCount; $i++)
+                    {?>
+                        <th>Assignment</th>
+                    <?php
+                    }
+                    ?>
                     <?php /****** QUIZZES ******/
                     for($i=0 ; $i<$quizCount; $i++)
                     {?>
@@ -382,6 +389,13 @@ th{
                 </tr>
                 <tr>
                     <th></th>
+                    <?php /****** ASSIGNMENT ******/
+                    for($i=0 ; $i<$assignCount; $i++)
+                    {?>
+                        <th></th>
+                    <?php
+                    }
+                    ?>
                     <?php
                     /****** QUIZZES ******/
                     for($i=0; $i<$quizCount; $i++)
@@ -406,6 +420,21 @@ th{
                 <tr>
                     <th></th>
                     <?php
+                    /****** ASSIGNMENT ******/
+                    for($i=0; $i<$assignCount; $i++)
+                    {
+                        ?>
+                        <th> 
+                        <?php
+                        for($j=0; $j<count($closAMulti[$i]); $j++){
+                           echo $closAMulti[$i][$j];
+                           echo " ";
+                        }
+                        ?>
+                        </th>
+                        <?php
+                    }
+
                     /****** QUIZZES ******/
                     for($i=0; $i<$quizCount; $i++)
                     {
@@ -433,6 +462,25 @@ th{
                     <tr> 
                         <td>  <?php echo "$seatno" ?> </td>
                         <?php
+
+                            /****** ASSIGNMENT ******/
+                            for($i=0; $i<$assignCount; $i++)
+                            {
+                                $flag=0;
+                                for($j=0; $j<count($seatnosAMulti[$i]); $j++){
+                                    if($seatno == $seatnosAMulti[$i][$j])
+                                    {
+                                        $flag=1;
+                                        ?>
+                                        <td> <?php echo $resultAMulti[$i][$j]; ?> </td>
+                                        <?php
+                                    }
+                                }
+                                if($flag==0)
+                                {
+                                    echo "<td>x</td>";
+                                }
+                            }
 
                             /****** QUIZZES ******/
                             for($i=0; $i<$quizCount; $i++)
