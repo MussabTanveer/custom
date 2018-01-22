@@ -21,6 +21,7 @@
 
         <a href="./view_vision_mission.php" class="cool-link">View Vision &amp; Mission</a><br><br>
 
+        <a href="./upload_verb_list.php" class="cool-link">Upload Verb List</a><br><br>
         <a href="./add_framework.php" class="cool-link">Create OBE Framework</a><br><br>
 
         <a href="./select_frameworktoPEO.php" class="cool-link">Define PEOs</a><br><br>
