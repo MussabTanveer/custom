@@ -22,6 +22,7 @@
         <a href="./view_vision_mission.php" class="cool-link">View Vision &amp; Mission</a><br><br>
 
         <a href="./upload_verb_list.php" class="cool-link">Upload Verb List</a><br><br>
+        
         <a href="./add_framework.php" class="cool-link">Create OBE Framework</a><br><br>
 
         <a href="./select_frameworktoPEO.php" class="cool-link">Define PEOs</a><br><br>
@@ -32,11 +33,11 @@
 
         <a href="./select_frameworktoCLO.php" class="cool-link">Define CLOs</a><br><br>
 
-        <a href="./select_framework-2.php" class="cool-link">Map CLOs to PLOs</a><br><br>
+        <!--<a href="./select_framework-2.php" class="cool-link">Map CLOs to PLOs</a><br><br>-->
 
         <!--<a href="./display_outcome_framework-2.php" class="cool-link">Map PLOs to Domains</a><br><br>-->
 
-        <a href="./display_outcome_framework-3.php" class="cool-link">Map CLOs to Levels</a><br><br>
+        <!--<a href="./display_outcome_framework-3.php" class="cool-link">Map CLOs to Levels</a><br><br>-->
 
         <a href="./display_outcome_framework.php" class="cool-link">View OBE Framework Mapping</a><br><br>
 
