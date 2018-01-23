@@ -1,6 +1,3 @@
-
-
-
 <?php
 require_once('../../../config.php');
     $context = context_system::instance();
@@ -9,39 +6,49 @@ require_once('../../../config.php');
     $PAGE->set_title("Add OBE CLOs");
     $PAGE->set_heading("Add Course Learning Outcome (CLO)");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/admin/add_clo.php');
-   echo $OUTPUT->header();
+	echo $OUTPUT->header();
 	require_login();
     is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
 
     global $CFG;
     $x= $CFG->dbpass;
-   
+?>
 
-    ?>
+<style>
+	input[type='number'] {
+		-moz-appearance:textfield;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+</style>
 
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 <script src="../script/jquery/jquery-2.1.3.js"></script>
+
 <script type="text/javascript" >
+	$(document).ready(function(){
+		$("#button").click(function (event) {
+			//var formdata = $("form").serialize();
+			$.ajax({
+				type : "POST",
+				url : "save_clo.php",
+				data : new FormData($("#cloForm")[0]),
+				contentType : false,
+				processData : false,
+				success : function(feedback){
+					$("#msg").html(feedback);
+				}
+			});
+			return false;
 
-$(document).ready(function(){
- $("#button").click(function (event) {
-	 //var formdata = $("form").serialize();
-	$.ajax({
-		type : "POST",
-		url : "save_clo.php",
-		data : new FormData($("#cloForm")[0]),
-		contentType : false,
-		processData : false,
-		success : function(feedback){
-			$("#msg").html(feedback);
-		}
+		});
 	});
-	return false;
-
-});
-});
 </script>
-<?php    
+
+<?php
+    
 	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
 	{
 		if(isset($_POST['submit']) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz")){
@@ -63,67 +70,100 @@ $(document).ready(function(){
 		elseif(isset($_POST['return'])) {
 
 			$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
-			
-
-
 			$frameworkid = $_POST["frameworkid"];
-			
-			for ($i=0; $i <count($_POST["shortname"]) ; $i++) {
+			$plosIdArray=array();
+			foreach ($_POST['plos'] as $ploId)
+			{
+				array_push($plosIdArray,$ploId);	
+			}
+			$levelsIdArray=array();
+			foreach ($_POST['levels'] as $levelId)
+			{
+				array_push($levelsIdArray,$levelId);	
+			}
+			for ($i=0; $i < count($_POST["shortname"]) ; $i++) {
 				# code...
+				$cloid = 0;
 				$shortname=trim($_POST["shortname"][$i]);  $shortname=strtoupper($shortname);
 				$idnumber=$coursecode."-".$shortname; $idnumber=strtoupper($idnumber);
 				$description=trim($_POST["description"][$i]);
-				//echo $idnumber. "<br>";
+				$kpi=$_POST["kpi"][$i];
+				$plo=$plosIdArray[$i];
+				$level=$levelsIdArray[$i];
 				$time = time();
+
+				if($shortname == "")
+				{
+					goto down;
+				}
+
+				//query to check if clo of same name already entered
 				$cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
 					WHERE competencyframeworkid = ? AND idnumber = ?',
 					array($frameworkid,$idnumber));
 				
 				if($cloidnumbers == NULL) 
-					{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1,     '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
-					$DB->execute($sql);
+				{
+					$record = new stdClass();
+					$record->shortname = $shortname;
+					$record->description = $description;
+					$record->descriptionformat = 1;
+					$record->idnumber = $idnumber;
+					$record->competencyframeworkid = $frameworkid;
+					$record->parentid = $plo;
+					$record->path = '/0/';
+					$record->sortorder = 0;
+					$record->timecreated = $time;
+					$record->timemodified = $time;
+					$record->usermodified = $USER->id;
+					
+					$cloid = $DB->insert_record('competency', $record);
+					
+					//$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
+					//$DB->execute($sql);
 				}
-				else 
+				else
 				{//echo $idnumber . "already exists<br>";
 				
 				}
-
+				if($cloid){
+					$sql="INSERT INTO mdl_taxonomy_clo_level (frameworkid, cloid, levelid) VALUES($frameworkid, $cloid, $level)";
+					$DB->execute($sql);
+					$sql="INSERT INTO mdl_clo_kpi (cloid, kpi) VALUES($cloid, $kpi)";
+					$DB->execute($sql);
+				}
+				down:
 			}
 
-			 if($_FILES['myfile']['size'] > 0)
-   			 {
-			   $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_course_profile` where coursecode = ?', array($coursecode));
-
-			  $rev=0;
-			   if($revisions){
-            foreach ($revisions as $revision){
-				$rev = $revision->revision; 
-            }
-        }
+			if($_FILES['myfile']['size'] > 0){
+				$revisions=$DB->get_records_sql('SELECT revision FROM `mdl_course_profile` where coursecode = ?', array($coursecode));
+				$rev=0;
+				if($revisions){
+            		foreach ($revisions as $revision){
+						$rev = $revision->revision; 
+            		}
+        		}
         		$rev++;
 			    $file = rand(1000,100000)."-".$_FILES['myfile']['name'];
 			    $file_loc = $_FILES['myfile']['tmp_name'];
 			    $file_size = $_FILES['myfile']['size'];
 			    $file_type = $_FILES['myfile']['type'];
-			    if ($file_type == "application/pdf")
-			       {   
-			              $blobObj = new Blob($x);
-			              //test insert pdf
-			             $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
-			             echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
-			        }
-			        else
-			            echo "Incorrect File Type. Only PDFs are allowed";
+			    if ($file_type == "application/pdf"){   
+			        $blobObj = new Blob($x);
+			        //test insert pdf
+			        $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
+			        echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
 			    }
-
+			    else
+			        echo "<font color=red>Incorrect File Type. Only PDFs are allowed</font>";
+			}
 
 			$redirect_page1='../index.php';
-			redirect($redirect_page1); 
+			redirect($redirect_page1);
 		}
 
+		//Get all clos of selected framework
 		$clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($frameworkid));
-        
         if($clos){
 			$clocourses = array(); $clonames = array();
             foreach ($clos as $records){
@@ -133,7 +173,38 @@ $(document).ready(function(){
 				array_push($clonames, $cloname); // array of clo names
 				//echo "$clocourse   $cloname <br>";
             }
-        }
+		}
+
+		//Get plo with its name and idnumber
+		$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "plo%" ', array($frameworkid));
+		
+		if($plos){
+			$ploNameArray=array(); $ploIdArray=array(); $ploIdnumberArray=array();
+			foreach ($plos as $plo) {
+				$id =  $plo->id;
+				$name = $plo->shortname;
+				$idnumber =  $plo->idnumber;
+				array_push($ploIdnumberArray,$idnumber);
+				array_push($ploNameArray,$name);
+				array_push($ploIdArray,$id);
+			}
+		}
+		
+		//Get level with its name and domain name
+        $recLevels=$DB->get_records_sql("SELECT txl.id, txl.name AS level_name, txl.level, txd.name AS domain_name FROM mdl_taxonomy_levels txl, mdl_taxonomy_domain txd WHERE txl.domainid=txd.id");
+		if($recLevels){
+			$levelid = array(); $lname = array(); $dname = array(); $lvlshortname = array();
+			foreach ($recLevels as $recL) {
+				$lid = $recL->id;
+				$lvl = $recL->level;
+				$ln = $recL->level_name;
+				$dn = $recL->domain_name;
+				array_push($levelid, $lid); // array of level ids
+				array_push($lvlshortname, $lvl); // array of level names
+				array_push($lname, $ln); // array of level names
+				array_push($dname, $dn); // array of domain names
+			}
+		}
 
 		if(isset($msg3)){
 			echo $msg3;
@@ -145,7 +216,6 @@ $(document).ready(function(){
 
 		<p id="msg">
 		
-
 		</p>
 		
 		<h3>Add New CLO</h3>
@@ -183,19 +253,23 @@ $(document).ready(function(){
 							placeholder="eg. CS-304"
 							maxlength="100" type="text" > (eg. CS-304)
 					<div class="form-control-feedback" id="id_error_idnumber">
-
-
-						<div>
-					    <label>Choose File</label>
-					    <input type="file" name="myfile" id="file">
-					</div>			
-
 					<?php
 					if(isset($msg2)){
 						echo $msg2;
 					}
 					?>
 					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem">
+				<div class="col-md-3">
+					<label class="col-form-label d-inline" for="file">
+						Upload Course Profile
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<input type="file" name="myfile" id="file" class="form-control">
 				</div>
 			</div>
 			
@@ -253,6 +327,91 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_kpi">
+						KPI
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="number">
+					<input type="number"
+							class="form-control"
+							name="kpi[]"
+							id="id_kpi"
+							size=""
+							required
+							placeholder="eg. 0.6"
+							maxlength="100"
+							step="0.001"
+							min="0" max="1"> (eg. 0.6)
+					<div class="form-control-feedback" id="id_error_kpi">
+					
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_plo">
+						Map to PLO
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select  onChange="dropdownPlo(this.value, 0)" name="plos[]" class="select custom-select">
+						<option value='NULL'>Choose..</option>
+						<?php
+						foreach ($plos as $plo) {
+							$id =  $plo->id;
+							$name = $plo->shortname;
+							$idnumber = $plo->idnumber;
+						?>
+						<option value='<?php echo $id; ?>'><?php echo $idnumber; ?></option>
+						<?php
+						}
+						?>
+					</select>
+					<span id="plosidnumber0"></span>
+					<div class="form-control-feedback" id="id_error_plo">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_level">
+						Level
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select required onChange="dropdownLevel(this.value, 0)" name="levels[]" class="select custom-select">
+						<option value=''>Choose..</option>
+						<?php
+						foreach ($recLevels as $recL) {
+							$lid = $recL->id;
+							$lvl = $recL->level;
+							?>
+							<option value="<?php echo $lid; ?>"><?php echo $lvl; ?></option>
+						<?php
+						}
+						?>
+					</select>
+					<span id="dname0"></span>
+					<span id="lname0"></span>
+					<div class="form-control-feedback" id="id_error_level">
+					</div>
+				</div>
+			</div>
+			
 			</div>
 
 			<div class="row">
@@ -265,7 +424,7 @@ $(document).ready(function(){
 			
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
-			<button class="btn btn-info" type="submit"  name="save" id="button"/> Save and continue </button>
+			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save and continue </button>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
             <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
 
@@ -309,8 +468,13 @@ $(document).ready(function(){
 		</script>
 		
 		<script>
-			// script to add name and desc fields to form
-			//var counter = 1;
+			// script to add name, desc, kpi, plo and level fields to form
+			var i = 1;
+			var levelid = <?php echo json_encode($levelid); ?>;
+			var lshortnames = <?php echo json_encode($lvlshortname); ?>;
+			var ploId = <?php echo json_encode($ploIdArray); ?>;
+			var ploIdNumber = <?php echo json_encode($ploIdnumberArray); ?>;
+			
 			function addInput(divName){
 				var newdiv = document.createElement('div');
 				newdiv.innerHTML = '<div class="row"><div class="col-md-3"><b>Enter CLO</b></div><div class="col-md-9"></div></div>';
@@ -323,9 +487,118 @@ $(document).ready(function(){
 				var newdiv2 = document.createElement('div');
 				newdiv2.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_description">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_description" name="description[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_description"  style="display: none;"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv2);
-				counter++;
+
+				var newdiv3 = document.createElement('div');
+				newdiv3.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_kpi">KPI</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 0.6" maxlength="100" step="0.001" min="0" max="1"> (eg. 0.6)<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv3);
+				
+				//Create select element for PLO selection
+				var selectPLO = document.createElement("select");
+				selectPLO.className = "select custom-select";
+				selectPLO.name = "plos[]";
+				jsFuncVal = "dropdownPlo(this.value, "+i+")";
+				selectPLO.setAttribute("required", "required");
+				selectPLO.setAttribute("onChange", jsFuncVal);
+
+				//Create and append the options
+				var option = document.createElement("option");
+				option.value = "";
+				option.text = "Choose..";
+				selectPLO.appendChild(option);
+				for (var l = 0; l < ploIdNumber.length; l++) {
+					var option = document.createElement("option");
+					option.value = ploId[l];
+					option.text = ploIdNumber[l];
+					selectPLO.appendChild(option);
+				}
+
+				var newdivforselectPLO = document.createElement('div');
+				newdivforselectPLO.appendChild(selectPLO);
+
+				var newdiv4 = document.createElement('div');
+				newdiv4.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_plo">Map to PLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectPLO.innerHTML+' <span id="plosidnumber'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv4);
+				
+				//Create select element for Level selection
+				var selectLevel = document.createElement("select");
+				selectLevel.className = "select custom-select";
+				selectLevel.name = "levels[]";
+				jsFuncVal = "dropdownLevel(this.value, "+i+")";
+				selectLevel.setAttribute("required", "required");
+				selectLevel.setAttribute("onChange", jsFuncVal);
+
+				//Create and append the options
+				var option = document.createElement("option");
+				option.value = "";
+				option.text = "Choose..";
+				selectLevel.appendChild(option);
+				for (var l = 0; l < lshortnames.length; l++) {
+					var option = document.createElement("option");
+					option.value = levelid[l];
+					option.text = lshortnames[l];
+					selectLevel.appendChild(option);
+				}
+
+				var newdivforselectLevel = document.createElement('div');
+				newdivforselectLevel.appendChild(selectLevel);
+				
+				var newdiv5 = document.createElement('div');
+				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv5);
+				
+				i++;
 			}
-		</script>	
+		</script>
+
+		<script>
+			// display plo name of particular plo
+			var ploIdName = <?php echo json_encode($ploNameArray); ?>;
+			var ploId = <?php echo json_encode($ploIdArray); ?>;
+			function dropdownPlo(value,id){
+				document.getElementById("msg").innerHTML = "";
+				var plosidnumber = "plosidnumber" + id;
+				if(value == 'NULL'){
+					document.getElementById(plosidnumber).innerHTML = "";
+				}
+				else{
+					for(var i=0; i<ploIdName.length ; i++){
+						if(ploId[i] == value){
+							document.getElementById(plosidnumber).innerHTML = ploIdName[i];
+							break;
+						}
+					}
+				}
+			}
+		</script>
+
+		<script>
+			// display level and domain names of particular level 
+			var levelid = <?php echo json_encode($levelid); ?>;
+			var lnames = <?php echo json_encode($lname); ?>;
+			var dnames = <?php echo json_encode($dname); ?>;
+			/*alert(closid);
+			alert(plos);
+			alert(peos);*/
+			function dropdownLevel(value,id){
+				var lname = "lname" + id;
+				var dname = "dname" + id;
+				//console.log(value);
+				//console.log(id);
+				if(value == ''){
+					document.getElementById(lname).innerHTML = "";
+					document.getElementById(dname).innerHTML = "";
+				}
+				else{
+					for(var i=0; i<levelid.length ; i++){
+						if(levelid[i] == value){
+							document.getElementById(dname).innerHTML = dnames[i];
+							document.getElementById(lname).innerHTML = "("+lnames[i]+")";
+							break;
+						}
+					}
+				}
+			}
+		</script>
 		
 		<?php 
 			echo $OUTPUT->footer();
@@ -338,6 +611,7 @@ $(document).ready(function(){
     	<?php
         echo $OUTPUT->footer();
     }?>
+
 
 <?php
 
@@ -388,12 +662,12 @@ class Blob{
 
 
 
-public function selectBlob($id) {
+	public function selectBlob($id) {
  
         $sql = "SELECT mime,
-                        data
-                   FROM mdl_course_profile
-                  WHERE id = :id;";
+                data
+                FROM mdl_course_profile
+                WHERE id = :id;";
  
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(array(":id" => $id));
@@ -406,7 +680,6 @@ public function selectBlob($id) {
             "data" => $data);
     }
 
-
     /**
      * close the database connection
      */
@@ -414,7 +687,6 @@ public function selectBlob($id) {
         // close the database connection
         $this->pdo = null;
     }
-
  
 }
 ?>
