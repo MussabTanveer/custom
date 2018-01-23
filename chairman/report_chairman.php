@@ -34,7 +34,7 @@
 
         <a href="./select_framework-2.php" class="cool-link">Map CLOs to PLOs</a><br><br>
 
-        <a href="./display_outcome_framework-2.php" class="cool-link">Map PLOs to Domains</a><br><br>
+        <!--<a href="./display_outcome_framework-2.php" class="cool-link">Map PLOs to Domains</a><br><br>-->
 
         <a href="./display_outcome_framework-3.php" class="cool-link">Map CLOs to Levels</a><br><br>
 
