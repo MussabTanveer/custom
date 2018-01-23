@@ -23,19 +23,84 @@
         $departmentVision = mysql_real_escape_string($departmentVision);
         $departmentMission = mysql_real_escape_string($departmentMission);
 
-	
-	$sql="UPDATE `mdl_vision_mission` SET description = '$universityVision' WHERE idnumber='uv'";
-	$DB->execute($sql);
 
-	$sql="UPDATE `mdl_vision_mission` SET description = '$universityMission' WHERE idnumber='um'";
-	$DB->execute($sql);
 
-	$sql="UPDATE `mdl_vision_mission` SET description = '$departmentVision' WHERE idnumber='dv'";
-	$DB->execute($sql);
+	if($universityVision != "")
+        {
 
-	$sql="UPDATE `mdl_vision_mission` SET description = '$departmentMission' WHERE idnumber='dm'";
-		
-	$DB->execute($sql);
+           $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('uv'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+
+              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university vision','uv','$universityVision','$rev')";
+
+                $DB->execute($sql);
+        }
+
+
+        if($universityMission != "")
+        {
+
+         $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('um'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university mission','um','$universityMission','$rev')";
+        $DB->execute($sql);
+
+        }
+
+
+        if($departmentVision != "")
+        {
+
+        $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dv'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+
+        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department vision','dv','$departmentVision','$rev')";
+        $DB->execute($sql);
+         }
+
+
+         if($departmentMission != "")
+        {
+          $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dm'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department mission','dm','$departmentMission','$rev')";
+            
+        $DB->execute($sql);
+
+        }
+
 		
 	
 

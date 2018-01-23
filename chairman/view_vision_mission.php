@@ -35,16 +35,25 @@
     </script>
     <?php
 
-    $uv=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE idnumber = ?', array("uv"));
-    $um=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE idnumber = ?', array("um"));
-    $dv=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dv"));
-    $dm=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dm"));
+    $uv=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("uv"));
+    $um=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("um"));
+    $dv=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dv"));
+    $dm=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dm"));
     ?>
     <div class="wrapper">
     <?php
     if($uv){
+
+        foreach($uv as $u){
+            $id = $u->id;
+
+        }
+
+         $uv=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
         foreach($uv as $u){
             $desc = $u->description;
+        }
             ?>
             <h3>University Vision</h3><br />
             <?php
@@ -52,11 +61,22 @@
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
             else
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-        }
+        
     }
     if($um){
+
+         foreach($um as $u){
+            $id = $u->id;
+
+        }
+
+        $um=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+
+
         foreach($um as $u){
             $desc = $u->description;
+        }
             ?>
             <h3>University Mission</h3><br />
             <?php
@@ -64,11 +84,20 @@
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
             else
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-        }
+        
     }
     if($dv){
+
+             foreach($dv as $u){
+            $id = $u->id;
+
+        }
+
+        $dv=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
         foreach($dv as $u){
             $desc = $u->description;
+        }
             ?>
             <h3>Department Vision</h3><br />
             <?php
@@ -76,11 +105,21 @@
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
             else
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-        }
+        
     }
     if($dm){
+
+
+          foreach($dm as $u){
+            $id = $u->id;
+
+        }
+
+        $dm=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
         foreach($dm as $u){
             $desc = $u->description;
+        }
             ?>
             <h3>Department Mission</h3><br />
             <?php
@@ -88,7 +127,7 @@
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
             else
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
-        }
+        
     }
     ?>
     </div>
