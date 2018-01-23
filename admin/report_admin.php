@@ -27,7 +27,7 @@
 
         <a href="./select_frameworktoPLO.php" class="cool-link">Define PLOs</a><br><br>
 
-        <a href="./select_framework.php" class="cool-link">Map PLOs to PEOs</a><br><br>
+        <!--<a href="./select_framework.php" class="cool-link">Map PLOs to PEOs</a><br><br>-->
 
         <a href="./select_frameworktoCLO.php" class="cool-link">Define CLOs</a><br><br>
 
