@@ -9,10 +9,8 @@
     
 	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
-	$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
-	$frameworkid = $_POST["frameworkid"];
 
-     global $CFG;
+    global $CFG;
     $x= $CFG->dbpass;
 
 	
@@ -21,13 +19,13 @@
 
     	$revisions=$DB->get_records_sql('SELECT revision FROM `mdl_course_profile` where coursecode = ?', array($coursecode));
 
-			  $rev=0;
-			   if($revisions){
+        $rev=0;
+        if($revisions){
             foreach ($revisions as $revision){
-				$rev = $revision->revision; 
+                $rev = $revision->revision; 
             }
         }
-        		$rev++;
+        $rev++;
 
      	$file_name = $_FILES["myfile"]['name'];
 	 	$file_loc = $_FILES["myfile"]['tmp_name'];
@@ -37,53 +35,83 @@
 
 		if ($file_type == "application/pdf")
 		{   
-			  $blobObj = new Blob($x);
-			  //test insert pdf
-			  $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
-			  	echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
-		 }
-		  else
-			   echo "Incorrect File Type. Only PDFs are allowed";
-    }
-
-
-
-
-
-	for ($i=0; $i <count($_POST["shortname"]) ; $i++) {
-		# code...
-		$shortname=trim($_POST["shortname"][$i]); $shortname=strtoupper($shortname);
-		$idnumber=$coursecode."-".$shortname; $idnumber=strtoupper($idnumber);
-		$description=trim($_POST["description"][$i]);
-		//echo $idnumber. "<br>";
-		//echo $shortname . "<br>";
-		//echo $description . "<br>";
-		$time = time();
-
-		if($shortname == "")
-		{
-			goto down;
-		}
-
-		$cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
-    		WHERE competencyframeworkid = ? AND idnumber = ?',
-    		 array($frameworkid,$idnumber));
-
-		if($cloidnumbers == NULL) 
-		{
-			$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
-			$DB->execute($sql);
-			echo "<font color = green>".$idnumber . " sucessfully defined</font><br>";
+            $blobObj = new Blob($x);
+            //test insert pdf
+            $blobObj->insertBlob($file_loc,"application/pdf",$coursecode,$rev);
+            echo "<font color = green>Course Profile Updated sucessfully!</font><br>";
 		}
 		else
-			echo "<font color = red>".$idnumber . " already exists</font><br>";
+            echo "Incorrect File Type. Only PDFs are allowed";
+    }
+
+    $coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
+    $frameworkid = $_POST["frameworkid"];
+    $plosIdArray=array();
+    foreach ($_POST['plos'] as $ploId)
+    {
+        array_push($plosIdArray,$ploId);	
+    }
+    $levelsIdArray=array();
+    foreach ($_POST['levels'] as $levelId)
+    {
+        array_push($levelsIdArray,$levelId);	
+    }
+	for ($i=0; $i <count($_POST["shortname"]) ; $i++) {
+		# code...
+        $cloid = 0;
+        $shortname=trim($_POST["shortname"][$i]);  $shortname=strtoupper($shortname);
+        $idnumber=$coursecode."-".$shortname; $idnumber=strtoupper($idnumber);
+        $description=trim($_POST["description"][$i]);
+        $kpi=$_POST["kpi"][$i];
+        $plo=$plosIdArray[$i];
+        $level=$levelsIdArray[$i];
+        $time = time();
+        
+        if($shortname == "")
+		{
+			goto down;
+        }
+        
+        //query to check if clo of same name already entered
+        $cloidnumbers=$DB->get_records_sql('SELECT * FROM  `mdl_competency` 
+            WHERE competencyframeworkid = ? AND idnumber = ?',
+            array($frameworkid,$idnumber));
+        
+        if($cloidnumbers == NULL) 
+        {
+            $record = new stdClass();
+            $record->shortname = $shortname;
+            $record->description = $description;
+            $record->descriptionformat = 1;
+            $record->idnumber = $idnumber;
+            $record->competencyframeworkid = $frameworkid;
+            $record->parentid = $plo;
+            $record->path = '/0/';
+            $record->sortorder = 0;
+            $record->timecreated = $time;
+            $record->timemodified = $time;
+            $record->usermodified = $USER->id;
+            
+            $cloid = $DB->insert_record('competency', $record);
+            
+            //$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
+            //$DB->execute($sql);
+        }
+        else
+        {//echo $idnumber . "already exists<br>";
+        
+        }
+        if($cloid){
+            $sql="INSERT INTO mdl_taxonomy_clo_level (frameworkid, cloid, levelid) VALUES($frameworkid, $cloid, $level)";
+            $DB->execute($sql);
+            $sql="INSERT INTO mdl_clo_kpi (cloid, kpi) VALUES($cloid, $kpi)";
+            $DB->execute($sql);
+        }
+        
 		down:
 	}
 
-?>
 
-
-<?php
 class Blob{
     
     const DB_HOST = 'localhost';
@@ -129,14 +157,12 @@ class Blob{
         return $stmt->execute();
     }
 
-
-
 public function selectBlob($id) {
  
         $sql = "SELECT mime,
-                        data
-                   FROM mdl_course_profile
-                  WHERE id = :id;";
+                data
+                FROM mdl_course_profile
+                WHERE id = :id;";
  
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(array(":id" => $id));
@@ -149,7 +175,6 @@ public function selectBlob($id) {
             "data" => $data);
     }
 
-
     /**
      * close the database connection
      */
@@ -157,7 +182,6 @@ public function selectBlob($id) {
         // close the database connection
         $this->pdo = null;
     }
-
  
 }
 ?>
