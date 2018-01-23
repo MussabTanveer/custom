@@ -47,6 +47,7 @@
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
 			$frameworkid=$_POST['frameworkid'];
 			$framework_shortname=$_POST['framework_shortname'];
+			$peo=$_POST['peo'];
 			$time = time();
 			if(empty($shortname) || empty($idnumber))
 			{
@@ -69,7 +70,7 @@
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
 				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-1, '/0/', 0, '$time', '$time', $USER->id)";
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid , $peo, '/0/$peo/', 0, '$time', '$time', $USER->id)";
 					$DB->execute($sql);
 					$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}
@@ -82,6 +83,7 @@
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
 			$frameworkid=$_POST['frameworkid'];
 			$framework_shortname=$_POST['framework_shortname'];
+			$peo=$_POST['peo'];
 			$time = time();
 			
 			if(empty($shortname) || empty($idnumber))
@@ -109,7 +111,7 @@
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
 				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-1, '/0/', 0, '$time', '$time', $USER->id)";
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,$peo, '/0/$peo/', 0, '$time', '$time', $USER->id)";
 					$DB->execute($sql);
 					$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}
@@ -149,6 +151,22 @@
 			}
 		}
 		/* /delete code */
+
+		$peos=$DB->get_records_sql('SELECT * FROM `mdl_competency` 
+		WHERE competencyframeworkid = ?
+		AND parentid = 0 ',
+		array($frameworkid));
+
+		$peoNameArray=array();
+		$peoIdArray=array();
+
+		foreach ($peos as $peo) {
+			$id =  $peo->id;
+			$name = $peo->shortname;
+			$idnumber =  $peo->idnumber;
+			array_push($peoNameArray,$name);
+			array_push($peoIdArray,$id);
+		}
 
 		$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
 		WHERE competencyframeworkid = ? 
@@ -272,6 +290,40 @@
 				</div>
 			</div>
 			
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_shortname">
+						Map to PEO
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select onChange="dropdownTip(this.value)" name="peo" class="select custom-select">
+						<option value='NULL'>Choose..</option>
+						<?php
+						foreach ($peos as $peo) {
+						$id =  $peo->id;
+						$name = $peo->shortname;
+						$idnumber = $peo->idnumber;
+						?>
+						<option value='<?php echo $id; ?>'><?php echo $idnumber; ?></option>
+						<?php
+						}
+						?>
+					</select>
+					<span id="peosidnumber"></span>
+					<div class="form-control-feedback" id="id_error_shortname">
+					<?php
+					if(isset($msg1)){
+						echo $msg1;
+					}
+					?>
+					</div>
+				</div>
+			</div>
+
 			<input type="hidden" name="framework_shortname" value="<?php echo $framework_shortname; ?>"/>
 			<input type="hidden" name="frameworkid" value="<?php echo $frameworkid; ?>"/>
 			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
@@ -293,7 +345,26 @@
 		?>
 		<br />
 		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
-					
+
+		<script>
+			var peoIdNumber = <?php echo json_encode($peoNameArray); ?>;
+			var peoId = <?php echo json_encode($peoIdArray); ?>;
+			function dropdownTip(value){
+				//var peosidnumber = "peosidnumber";
+				if(value == 'NULL'){
+					document.getElementById("peosidnumber").innerHTML = "";
+				}
+				else{
+					for(var i=0; i<peoIdNumber.length ; i++){
+						if(peoId[i] == value){
+							document.getElementById("peosidnumber").innerHTML = peoIdNumber[i];
+							break;
+						}
+					}
+				}
+			}
+		</script>
+
 		<?php 
 			echo $OUTPUT->footer();
 	}
