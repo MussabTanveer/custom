@@ -90,7 +90,7 @@
 					<th> Question </th>
 					<th> Select CLO </th>
 					<th> PLO </th>
-					<th> PEO </th>
+					<!--<th> PEO </th>-->
 					<th> Taxonomy Level </th>
 				</tr>
 				<?php
@@ -126,7 +126,7 @@
 						</select>
 					</td>
 					<td id="plo<?php echo $i ?>"></td>
-					<td id="peo<?php echo $i ?>"></td>
+					<!--<td id="peo<?php echo $i ?>"></td>-->
 					<td id="tax<?php echo $i ?>"></td>
 				</tr>
 				<?php
