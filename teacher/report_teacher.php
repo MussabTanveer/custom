@@ -22,31 +22,42 @@
 
         <a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>
 
-        <a <?php echo "href='./grading_policy.php?course=$course_id'" ?>  class="cool-link">Define Grading Policy</a><br><br>
-        <a <?php echo "href='./display_grading_policy.php?course=$course_id'" ?>  class="cool-link">Display Grading Policy</a><br><br>
-         
-        <a href="javascript:void(0)" onclick="toggle_visibility('tools');" class="cool-link">Course Evaluation Tools</a><br><br>
-        <div id="tools" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Quiz</a><br>
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=assign&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Assignment</a><br>
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=assign&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Project</a><br>
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Mid Term</a><br>
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">- Define Final Exam</a><br><br>
+        <a href="javascript:void(0)" onclick="toggle_visibility('gp');" class="cool-link">Grading Policy</a><br><br>
+        <div id="gp" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_policy.php?course=$course_id'" ?>  class="cool-link">&#10070; Define Grading Policy</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./display_grading_policy.php?course=$course_id'" ?>  class="cool-link">&#10070; Display Grading Policy</a><br><br>
         </div>
 
+        <a href="javascript:void(0)" onclick="toggle_visibility('tools');" class="cool-link">Course Evaluation Tools &amp; Mappings</a><br><br>
+        <div id="tools" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual');" class="cool-link">&#10070; Manual Evaluation</a><br><br>
+            <div id="manual" style="display: none">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?add=quiz&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Quiz</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?add=assign&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Assignment</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?add=project&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Project</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?add=quiz&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Mid Term</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?add=quiz&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Final Exam</a><br><br>
+            </div>
+            &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('online');" class="cool-link">&#10070; Online Evaluation</a><br><br>
+            <div id="online" style="display: none">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=quiz&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">&#10022; Define Quiz/Mid Term</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='../../../course/modedit.php?add=assign&type=&course=$course_id&section=0&return=0&sr=0'" ?> class="cool-link">&#10022; Define Assignment</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./map_grading_item.php?course=$course_id'" ?> class="cool-link">&#10022; Map Activities to Grading items</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./display_quizzes-2.php?course=$course_id'" ?> class="cool-link">&#10022; Map Questions to CLOs</a><br><br>
+            </div>
+        </div>
+        
         <!--<a "href='../../../question/edit.php?cmid=13'" class="cool-link">Add Questions to Assessment</a><br><br>-->
 
         <!--<a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>-->
-
-        <a <?php echo "href='./map_grading_item.php?course=$course_id'" ?> class="cool-link">Map Activities to Grading items</a><br><br>
         
-        <a <?php echo "href='./display_quizzes-2.php?course=$course_id'" ?> class="cool-link">Map Questions to CLOs</a><br><br>
-
-        <a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">View Activity Detailed Report</a><br><br>
-
-        <a <?php echo "href='./display_activities.php?course=$course_id'" ?> class="cool-link">Activity/Course CLO Report</a><br><br>
-
-        <a <?php echo "href='./course_report.php?course=$course_id'" ?> class="cool-link">Course Report</a><br><br>
+        <a href="javascript:void(0)" onclick="toggle_visibility('clorep');" class="cool-link">CLO Reports</a><br><br>
+        <div id="clorep" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">&#10070; View Activity Detailed Report</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./display_activities.php?course=$course_id'" ?> class="cool-link">&#10070; Activity/Course CLO Report</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./course_report.php?course=$course_id'" ?> class="cool-link">&#10070; Course Report</a><br><br>
+        </div>
+        
     </div>
 
     <script type="text/javascript">
