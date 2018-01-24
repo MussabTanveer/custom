@@ -450,7 +450,7 @@ require_once('../../../config.php');
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
 		$(document).ready(function(){
-			$("#id_idnumber").change(function(){
+			$("#id_idnumber").keyup(function(){
 				var n = $('#id_idnumber').val().toUpperCase();
 				var cnames = ""; var flag = 0;
 				for (var i = 0; i < clonames.length; ++i) {
