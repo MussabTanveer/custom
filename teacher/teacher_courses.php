@@ -11,8 +11,9 @@
 ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 <?php
-$time=time();
-	$rec=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
+    $time=time();
+    
+    $rec=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
     
     FROM mdl_course c
 
@@ -45,9 +46,6 @@ $time=time();
             redirect("./report_teacher.php?course=$id");
         }
         echo html_writer::table($table);
-
-   
-
 ?>
         
         <br />
@@ -56,11 +54,11 @@ $time=time();
         <?php
     }
     else{
-        echo "<h3>You are not enrolled as teacher in any course!</h3>";
+        echo "<h3>You are not currently enrolled as teacher in any course!</h3>";
     }
 
 
-$rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
+    $rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
     
     FROM mdl_course c
 
@@ -79,8 +77,7 @@ $rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
     AND usr.id = ?', array('50','editingteacher',$time, $USER->id));
 
 
-
- if($rec1){
+    if($rec1){
         $serialno = 0;
         $table = new html_table();
         $table->head = array('S. No.','Past Courses', 'Short Name' , 'Course Code');
@@ -97,8 +94,6 @@ $rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
        // }
         echo html_writer::table($table);
 
-   
-
 ?>
         
         <br />
@@ -106,12 +101,9 @@ $rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
         
         <?php
     }
-    else{
+    /*else{
         echo "<h3>You were not enrolled in the past!</h3>";
-    }
-
-
-
+    }*/
 
     echo $OUTPUT->footer();
 
