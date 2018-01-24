@@ -75,7 +75,7 @@
 	<br />
 	<h3>Edit CLO</h3>
 	<form method='post' action="" class="mform">
-		
+		<!--
 		<div class="form-group row fitem ">
 			<div class="col-md-3">
 				<span class="pull-xs-right text-nowrap">
@@ -94,15 +94,16 @@
 						required
 						maxlength="100" type="text" >
 				<div class="form-control-feedback" id="id_error_shortname">
-				<?php
+				<?php/*
 				if(isset($msg1)){
 					echo $msg1;
-				}
+				}*/
 				?>
 				</div>
 			</div>
 		</div>
-		
+		-->
+
 		<div class="form-group row fitem">
 			<div class="col-md-3">
 				<span class="pull-xs-right text-nowrap">
@@ -121,7 +122,7 @@
 				</div>
 			</div>
 		</div>
-        
+        <!--
 		<div class="form-group row fitem">
 			<div class="col-md-3">
 				<span class="pull-xs-right text-nowrap">
@@ -142,15 +143,41 @@
 						required
 						maxlength="100" type="text" >
 				<div class="form-control-feedback" id="id_error_idnumber">
-				<?php
+				<?php/*
 				if(isset($msg2)){
 					echo $msg2;
-				}
+				}*/
 				?>
 				</div>
 			</div>
 		</div>
-		
+		-->
+		<div class="form-group row fitem ">
+			<div class="col-md-3">
+				<span class="pull-xs-right text-nowrap">
+					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+				</span>
+				<label class="col-form-label d-inline" for="id_kpi">
+					KPI
+				</label>
+			</div>
+			<div class="col-md-9 form-inline felement" data-fieldtype="number">
+				<input type="number"
+						class="form-control"
+						name="kpi"
+						id="id_kpi"
+						size=""
+						required
+						placeholder="eg. 0.6"
+						maxlength="100"
+						step="0.001"
+						min="0" max="1"> (eg. 0.6)
+				<div class="form-control-feedback" id="id_error_kpi">
+				
+				</div>
+			</div>
+		</div>
+
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
 	
@@ -160,6 +187,7 @@
 		<?php
 		$id=$_GET['edit'];
 		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber FROM mdl_competency WHERE id=?',array($id));
+		$recKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_kpi WHERE cloid=?',array($id));
 		if($rec){
 			foreach ($rec as $records){
 				$shortname=$records->shortname;
@@ -167,12 +195,18 @@
 				$idnumber=$records->idnumber;
 			}
 		}
+		if($recKPI){
+			foreach ($recKPI as $rKPI){
+				$kpi=$rKPI->kpi;
+			}
+		}
 		
 		?>
 	<script>
-	    document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
+	    //document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
         document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
-        document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
+        //document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
+		document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
     </script>
 	
 	<?php
