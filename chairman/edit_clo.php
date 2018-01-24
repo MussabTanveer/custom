@@ -23,28 +23,47 @@
 			$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
 			$time = time();
 
-			if(empty($shortname) || empty($idnumber))
-			{
-				if(empty($shortname))
-				{
-					$msg1="<font color='red'>-Please enter PLO name</font>";
-				}
-				if(empty($idnumber))
-				{
-					$msg2="<font color='red'>-Please enter ID number</font>";
-				}
-			}
-			else{
-				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=? AND id!=?', array($idnumber,$fw_id,$id));
-				if(count($check)){
-					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
-				}
-				else{
-					$sql_update="UPDATE mdl_competency SET shortname='$shortname',description='$description',idnumber='$idnumber', timemodified='$time', usermodified=$USER->id WHERE id=$id";
-					$DB->execute($sql_update);
+					/*$record = new stdClass();
+					$record->shortname = $shortname;
+					$record->description = $description;
+					$record->descriptionformat = 1;
+					$record->idnumber = $idnumber;
+					$record->competencyframeworkid = 1;
+					$record->parentid = 1;
+					$record->revision = '1';
+					$record->path = '/0/';
+					$record->sortorder = 0;
+					$record->timecreated = $time;
+					$record->timemodified = $time;
+					$record->usermodified = $USER->id;
+
+				
+					
+					
+					$cloid = $DB->insert_record('competency', $record);*/
+
+
+				$revisions=$DB->get_records_sql('SELECT revision,parentid,competencyframeworkid FROM `mdl_competency` where idnumber = ?', array($idnumber));
+					$rev=0;
+					if($revisions){
+	            		foreach ($revisions as $revision){
+							$rev = $revision->revision;
+							$plo = $revision->parentid;
+							$fwidd= $revision->competencyframeworkid; 
+	            		}
+        			}
+
+        			$rev++;
+        			
+
+					$sql="INSERT INTO mdl_competency (revision,shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$rev','$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time', $USER->id)";
+				$DB->execute($sql);
+
+				//	$sql_update="UPDATE mdl_competency SET shortname='$shortname',description='$description',idnumber='$idnumber', timemodified='$time', usermodified=$USER->id WHERE id=$id";
+					//$DB->execute($sql_update);
 					$msg3 = "<font color='green'><b>CLO successfully updated!</b></font><br />";
-				}
-			}
+				
+			
 		}
 		
 		if(isset($msg3)){
