@@ -45,7 +45,7 @@
             &nbsp;&nbsp;&nbsp;<a href="./display_teachers.php" class="cool-link">View Teacher's Course CLO Report</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">View Student's CLO Progress</a><br><br>
         </div>
-
+        <a href="./display_teachers2.php" class="cool-link">Grade Mid-terms & Finals</a><br>
         <!--
         <a href="./define_vision_mission.php" class="cool-link">Define Vision &amp; Mission</a><br><br>
 

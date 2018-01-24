@@ -6,7 +6,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Grading Policy");
     $PAGE->set_heading("Add Grading Policy Items");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_policy.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/add_mid_and_final.php');
     echo $OUTPUT->header();
 	require_login();
 ?>
@@ -21,8 +21,8 @@
 </style>
 <?php
 
-	if(isset($_GET['course'])){
-		$course_id=$_GET['course'];
+	if(isset($_POST['courseid'])){
+		$course_id=$_POST['courseid'];
 		//echo $course_id;
 		if(isset($_POST['save'])){
 			$sum = 0;
@@ -36,8 +36,8 @@
 				$sum+=trim($_POST["percentage"][$i]);
 			}
 			//echo $sum;
-			if($sum != 100){
-				$msgP = "<font color = red>Total percentage of all activities should be 100%</font><br />";
+			if($sum != 60){
+				$msgP = "<font color = red>Total percentage of all activities should be 60%</font><br />";
 			}
 			else{
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
@@ -70,8 +70,8 @@
 				$sum+=trim($_POST["percentage"][$i]);
 			}
 			//echo $sum;
-			if($sum != 100){
-				$msgP = "<font color = red>Total percentage of all evaluation methods should be 100%</font><br />";
+			if($sum != 60){
+				$msgP = "<font color = red>Total percentage of all evaluation methods should be 60%</font><br />";
 			}
 			else{
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
@@ -91,7 +91,7 @@
 					}
 				}
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
-				$redirect_page="./report_teacher.php?course=$course_id";
+				$redirect_page="./report_chairman.php?course=$course_id";
 				redirect($redirect_page);
 			}
 		}
@@ -112,12 +112,10 @@
 					<select
 						id="activity" class="select custom-select" name="activity[]">
 						<option value="">Choose</option>
-						<option value="quiz">Quiz</option>
-						<option value="assignment">Assignment</option>
-						<option value="project">Project</option>
+						
 						<option value="mid term">Mid Term</option>
 						<option value="final exam">Final Exam</option>
-						<option value="other">Other</option>
+						
 					</select>
 				</div>
 				<div class="col-md-4 form-inline felement" data-fieldtype="number">
@@ -142,7 +140,7 @@
 		<br />
 		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
 		<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-		<a class="btn btn-default" type="submit" <?php echo "href='./report_teacher.php?course=$course_id'" ?>>Cancel</a>
+		<a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php?course=$course_id'" ?>>Cancel</a>
 		</form>
 
 		<script>
@@ -150,7 +148,7 @@
 			//var counter = 1;
 			function addInput(divName){
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="mid term">Mid Term</option><option value="final exam">Final Exam</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
+				newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose<option value="mid term">Mid Term</option><option value="final exam">Final Exam</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
 				document.getElementById(divName).appendChild(newdiv);
 				//counter++;
 			}
