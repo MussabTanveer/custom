@@ -20,30 +20,30 @@
         
         <a href="javascript:void(0)" onclick="toggle_visibility('vnm');" class="cool-link">Vision & Mission</a><br><br>
         <div id="vnm" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a href="./define_vision_mission.php" class="cool-link">Define Vision &amp; Mission</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./view_vision_mission.php" class="cool-link">View Vision &amp; Mission</a><br><br>
+            &nbsp;&nbsp;&nbsp;<a href="./define_vision_mission.php" class="cool-link">&#10070; Define Vision &amp; Mission</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./view_vision_mission.php" class="cool-link">&#10070; View Vision &amp; Mission</a><br><br>
         </div>
 
         <a href="javascript:void(0)" onclick="toggle_visibility('vl');" class="cool-link">Verb List</a><br><br>
         <div id="vl" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a href="./upload_verb_list.php" class="cool-link">Upload Verb List</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="../view_verb_list.php" class="cool-link">View Verb List</a><br><br>
+            &nbsp;&nbsp;&nbsp;<a href="./upload_verb_list.php" class="cool-link">&#10070; Upload Verb List</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../view_verb_list.php" class="cool-link">&#10070; View Verb List</a><br><br>
         </div>
 
         <a href="javascript:void(0)" onclick="toggle_visibility('obef');" class="cool-link">OBE Framework</a><br><br>
         <div id="obef" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a href="./add_framework.php" class="cool-link">Create OBE Framework</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoPEO.php" class="cool-link">Define PEOs</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoPLO.php" class="cool-link">Define PLOs</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoCLO.php" class="cool-link">Define CLOs</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework.php" class="cool-link">View OBE Framework Mapping</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework-4.php" class="cool-link">View Bloom's Taxonomy Mapping</a><br><br>
+            &nbsp;&nbsp;&nbsp;<a href="./add_framework.php" class="cool-link">&#10070; Create OBE Framework</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoPEO.php" class="cool-link">&#10070; Define PEOs</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoPLO.php" class="cool-link">&#10070; Define PLOs</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoCLO.php" class="cool-link">&#10070; Define CLOs</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework.php" class="cool-link">&#10070; View OBE Framework Mapping</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework-4.php" class="cool-link">&#10070; View Bloom's Taxonomy Mapping</a><br><br>
         </div>
 
         <a href="javascript:void(0)" onclick="toggle_visibility('cr');" class="cool-link">CLO Reports</a><br><br>
         <div id="cr" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a href="./display_teachers.php" class="cool-link">View Teacher's Course CLO Report</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">View Student's CLO Progress</a><br><br>
+            &nbsp;&nbsp;&nbsp;<a href="./display_teachers.php" class="cool-link">&#10070; View Teacher's Course CLO Report</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">&#10070; View Student's CLO Progress</a><br><br>
         </div>
         <a href="./display_teachers2.php" class="cool-link">Grade Mid-terms & Finals</a><br>
         <!--
