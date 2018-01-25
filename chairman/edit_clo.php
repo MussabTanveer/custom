@@ -18,49 +18,60 @@
 		
 		if(isset($_POST['save']))
 		{	
-			$shortname=$_POST['shortname'];
+			//$shortname=$_POST['shortname'];
 			$description=$_POST['description'];
-			$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
+			//$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
+			
+
+			$id = $_GET['edit'];
+			$fw_id=$_GET['fwid'];
+			$kpi = $_POST['kpi'];
+		
+			
 			$time = time();
 
-					/*$record = new stdClass();
-					$record->shortname = $shortname;
-					$record->description = $description;
-					$record->descriptionformat = 1;
-					$record->idnumber = $idnumber;
-					$record->competencyframeworkid = 1;
-					$record->parentid = 1;
-					$record->revision = '1';
-					$record->path = '/0/';
-					$record->sortorder = 0;
-					$record->timecreated = $time;
-					$record->timemodified = $time;
-					$record->usermodified = $USER->id;
+	
+				$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ?', array($id));
+					$rev=0;
+					if($revisions){
+	            		foreach ($revisions as $revision){	
+							$idnumber = $revision->idnumber;
 
-				
-					
-					
-					$cloid = $DB->insert_record('competency', $record);*/
+	            		}
+        			}
+		
 
-
-				$revisions=$DB->get_records_sql('SELECT revision,parentid,competencyframeworkid FROM `mdl_competency` where idnumber = ?', array($idnumber));
+        			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where idnumber = ? AND competencyframeworkid = ?', array($idnumber , $fw_id));
 					$rev=0;
 					if($revisions){
 	            		foreach ($revisions as $revision){
 							$rev = $revision->revision;
 							$plo = $revision->parentid;
 							$fwidd= $revision->competencyframeworkid; 
+							$shortname = $revision->shortname;
+							$idnumber = $revision->idnumber;
+
 	            		}
         			}
-
         			$rev++;
-        			
-
+       			
 					$sql="INSERT INTO mdl_competency (revision,shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$rev','$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time', $USER->id)";
-				$DB->execute($sql);
+					$DB->execute($sql);
 
-				//	$sql_update="UPDATE mdl_competency SET shortname='$shortname',description='$description',idnumber='$idnumber', timemodified='$time', usermodified=$USER->id WHERE id=$id";
-					//$DB->execute($sql_update);
+					
+						$query=$DB->get_records_sql("SELECT MAX(id) as id FROM  mdl_competency");
+
+							foreach ($query as $q){
+
+								$lastId = $q->id;
+
+							}
+							
+							
+					$sql="INSERT INTO mdl_clo_kpi (cloid , kpi) VALUES ('$lastId','$kpi')";
+
+						$DB->execute($sql);
+				
 					$msg3 = "<font color='green'><b>CLO successfully updated!</b></font><br />";
 				
 			
@@ -193,6 +204,7 @@
 				$shortname=$records->shortname;
 				$description=$records->description;
 				$idnumber=$records->idnumber;
+
 			}
 		}
 		if($recKPI){
