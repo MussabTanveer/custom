@@ -63,15 +63,10 @@ public function selectBlob($id) {
     }
 }
 
-    $query=$DB->get_records_sql('SELECT DISTINCT r.shortname FROM  mdl_role r,
-    mdl_role_assignments ra 
-    WHERE (ra.userid= ? AND ra.roleid=r.id AND r.shortname= ?)', array($USER->id, 'editingteacher'));
 
-    $query2=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
-
-    if($query || $query2 || is_siteadmin())
+    if(($SESSION->oberole == "noneditingteacher") || ($SESSION->oberole == "teacher") || ($SESSION->oberole == "chairman") || is_siteadmin())
     {
-        echo "Teacher";
+        //echo "Teacher";
     
         $recs=$DB->get_records_sql('SELECT * FROM mdl_verb_list');
 
