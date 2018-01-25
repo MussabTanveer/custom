@@ -49,7 +49,7 @@ require_once('../../../config.php');
 
 <?php
     
-	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
+	if((isset($_POST['submit']) && isset( $_POST['frameworkid'])) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz") || isset($_POST['save']) || isset($_POST['return']) || isset($_GET['delete']))
 	{
 		if(isset($_POST['submit']) || (isset($SESSION->fid3) && $SESSION->fid3 != "xyz")){
 			if(isset($SESSION->fid3) && $SESSION->fid3 != "xyz")
@@ -66,7 +66,7 @@ require_once('../../../config.php');
 				}
 			}
 		}
-
+		/* if user press save and return */
 		elseif(isset($_POST['return'])) {
 
 			$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
@@ -162,13 +162,51 @@ require_once('../../../config.php');
 			redirect($redirect_page1);
 		}
 
+		/* delete code */
+        elseif(isset($_GET['delete']))
+        {
+			$id_d=$_GET['delete'];
+			$frameworkid=$_GET['fwid'];
+			$rec=$DB->get_records_sql('SELECT shortname from mdl_competency_framework WHERE id=?', array($frameworkid));
+			if($rec){
+				foreach ($rec as $records){
+				$framework_shortname = $records->shortname;
+				}
+			}
+            $check=$DB->get_records_sql('SELECT * from mdl_competency_coursecomp where competencyid=?',array($id_d));
+            if($check){
+                $delmsg = "<font color='red'><b>The CLO cannot be deleted! Remove the mapping before CLO deletion.</b></font><br />";
+                ?>
+				<script>
+					swal("Alert", "The CLO cannot be deleted! Remove the mapping before CLO deletion.", "info");
+				</script>
+				<?php
+            }
+            else
+            {
+                $sql_delete="DELETE from mdl_competency where id=$id_d";
+                $DB->execute($sql_delete);
+                $delmsg = "<font color='green'><b>CLO has been deleted!</b></font><br />";
+                ?>
+				<script>
+				swal("CLO has been deleted!", {
+						icon: "success",
+						});
+				</script>
+				<?php
+            }
+        }
+        /* /delete code */
+
 		//Get all clos of selected framework
 		$clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($frameworkid));
         if($clos){
-			$clocourses = array(); $clonames = array();
+			$cloids = array(); $clocourses = array(); $clonames = array();
             foreach ($clos as $records){
+				$cloid = $records->id;
 				$clocourse = $records->idnumber; $clocourse = substr($clocourse,0,6);
 				$cloname = $records->shortname;
+				array_push($cloids, $cloid); // array of clo ids
 				array_push($clocourses, $clocourse); // array of clo course codes
 				array_push($clonames, $cloname); // array of clo names
 				//echo "$clocourse   $cloname <br>";
@@ -210,7 +248,8 @@ require_once('../../../config.php');
 			echo $msg3;
 		}
 
-		echo "<div class='row'><div class='col-md-6'><a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a></div><div id='list' class='col-md-6'></div></div>";
+		//echo "<div class='row'><div class='col-md-6'><a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a></div><div id='list' class='col-md-6'></div></div>";
+		//echo "<div class='row'><div class='col-md-6'></div><div id='list' class='col-md-6'></div></div>";
 		?>
 		<br />
 
@@ -219,6 +258,7 @@ require_once('../../../config.php');
 		</p>
 		
 		<h3>Add New CLO</h3>
+		<div class='row'><div class='col-md-9'>
 		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data" >
 			
 			<div class="form-group row fitem ">
@@ -427,10 +467,12 @@ require_once('../../../config.php');
 			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save and continue </button>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
             <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
-
+			<br /><br />
+			<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 		</form>
-		<br />
-		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
+		</div>
+		<div id='list' class='col-md-3'></div>
+		</div>
 
 		
 		<?php
@@ -447,6 +489,8 @@ require_once('../../../config.php');
 		
 		<script>
 		// script to create dynamic list of clos on course code input
+		var frameworkid = <?php echo json_encode($frameworkid); ?>;
+		var cloids = <?php echo json_encode($cloids); ?>;
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
 		$(document).ready(function(){
@@ -456,13 +500,17 @@ require_once('../../../config.php');
 				for (var i = 0; i < clonames.length; ++i) {
 					if(clocourses[i] == n){
 						flag = 1;
-						cnames += clonames[i] + "<br />";
+						cnames += clonames[i] + " <a href='edit_clo.php?edit="+cloids[i]+"&fwid="+frameworkid+"' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='add_clo.php?delete="+cloids[i]+"&fwid="+frameworkid+"' onClick=\"return confirm('Delete CLO?')\" title='Delete'><img src='../img/icons/delete.png' /></a><br />";
 					}
 				}
 				if(flag == 0){
 					cnames = "<font color='red'>-No CLOs found!</font>";
 				}
 				$("#list").html("<font color='green'><b>Present CLOs for " + n + ":</font></b><br />" + cnames);
+				/*
+				<a href='edit_clo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='../img/icons/edit.png' /></a>
+				<a href='view_clos.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete CLO?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
+				*/
 			});
 		});
 		</script>
