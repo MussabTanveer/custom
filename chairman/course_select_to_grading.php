@@ -12,14 +12,14 @@
  <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
 <?php
-
+ $time=time();
 $rec=$DB->get_records_sql('SELECT id, fullname, shortname, idnumber
     
-    FROM mdl_course where fullname NOT LIKE "CIS" ');
-
+    FROM mdl_course where fullname NOT LIKE "CIS" AND enddate > ? ',array($time));
+if($rec){
  $serialno = 0;
         $table = new html_table();
-        $table->head = array('S. No.','Full Name', 'Short Name' , 'Course Code');
+        $table->head = array('S. No.','Present Courses', 'Short Name' , 'Course Code');
         foreach ($rec as $records) {
             $serialno++;
             $id = $records->id;
@@ -28,10 +28,42 @@ $rec=$DB->get_records_sql('SELECT id, fullname, shortname, idnumber
             $idnum = $records->idnumber;
             $table->data[] = array($serialno, "<a href='./add_mid_and_final.php?course=$id'>$fname</a>", "<a href='./add_mid_and_final.php?course=$id'>$sname</a>", "<a href='./add_mid_and_final.php?course=$id'>$idnum</a>");
         }
-        if($serialno == 1){
-            redirect("./add_mid_and_final.php?course=$id");
-        }
+        //if($serialno == 1){
+            //redirect("./add_mid_and_final.php?course=$id");
+      //  }
         echo html_writer::table($table);
 
-        echo $OUTPUT->footer();
+
+        }
+
+$rec1=$DB->get_records_sql('SELECT id, fullname, shortname, idnumber
+    
+    FROM mdl_course where fullname NOT LIKE "CIS" AND enddate <= ? ',array($time));
+
+
+if($rec1){
+ $serialno = 0;
+        $table = new html_table();
+        $table->head = array('S. No.','Past Courses', 'Short Name' , 'Course Code');
+        foreach ($rec1 as $records) {
+
+ $serialno++;
+            $id1 = $records->id;
+            $fname1 = $records->fullname;
+            $sname1 = $records->shortname;
+            $idnum1= $records->idnumber;
+            $table->data[] = array($serialno, "<a href='./report_teacher.php?course=$id1'>$fname1</a>", "<a href='./report_teacher.php?course=$id'>$sname1</a>", "<a href='./report_teacher.php?course=$id'>$idnum1</a>");
+        }
+
+  echo html_writer::table($table);
+
+}
+?>
+        
+    
+<?php
+
+echo $OUTPUT->footer();
+
+
         ?>
