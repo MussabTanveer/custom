@@ -42,9 +42,9 @@
             $idnum = $records->idnumber;
             $table->data[] = array($serialno, "<a href='./report_teacher.php?course=$id'>$fname</a>", "<a href='./report_teacher.php?course=$id'>$sname</a>", "<a href='./report_teacher.php?course=$id'>$idnum</a>");
         }
-        if($serialno == 1){
-            redirect("./report_teacher.php?course=$id");
-        }
+       // if($serialno == 1){
+            //redirect("./report_teacher.php?course=$id");
+       // }
         echo html_writer::table($table);
 ?>
         
@@ -93,6 +93,46 @@
            // redirect("./report_teacher.php?course=$id");
        // }
         echo html_writer::table($table);
+    }
+
+$rec2=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
+    
+    FROM mdl_course c
+
+    INNER JOIN mdl_context cx ON c.id = cx.instanceid
+
+    AND cx.contextlevel = ? 
+
+    INNER JOIN mdl_role_assignments ra ON cx.id = ra.contextid
+
+    INNER JOIN mdl_role r ON ra.roleid = r.id
+
+    INNER JOIN mdl_user usr ON ra.userid = usr.id
+
+    WHERE r.shortname = ?
+
+    AND usr.id = ?', array('50','teacher', $USER->id));
+
+if($rec2){
+
+$serialno = 0;
+        $table = new html_table();
+        $table->head = array('S. No.','Non-Editing Courses', 'Short Name' , 'Course Code');
+        foreach ($rec2 as $records) {
+            $serialno++;
+            $id2 = $records->id;
+            $fname2 = $records->fullname;
+            $sname2 = $records->shortname;
+            $idnum2= $records->idnumber;
+            $table->data[] = array($serialno, "<a href=' ../../../course/view.php?course=$id2'>$fname2</a>", "<a href='./report_teacher.php?course=$id2'>$sname2</a>", "<a href='./report_teacher.php?course=$id2'>$idnum2</a>");
+
+
+
+
+}
+
+}
+echo html_writer::table($table);
 
 ?>
         
@@ -100,7 +140,7 @@
         <p id="msg"></p>
         
         <?php
-    }
+    
     /*else{
         echo "<h3>You were not enrolled in the past!</h3>";
     }*/
