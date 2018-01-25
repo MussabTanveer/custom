@@ -8,10 +8,14 @@
     $redirect_page3='./student/report_student.php';
     $redirect_page4='./chairman/report_chairman.php';
     $redirect_page5='./itm/report_itm.php';
+    $redirect_page6='./noneditingteacher/report_noneditingteacher.php';
 
-    $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
+    $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id)); // for Chairman
 
-    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id));
+    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id)); // for itm
+
+   $rec3=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('teacher',$USER->id)); //for non editing teacher
+   
 
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname, c.shortname, c.idnumber
   
@@ -46,6 +50,11 @@ redirect($redirect_page4); #chairman
     }
     elseif($rec2){
 redirect($redirect_page5); #itm
+
+   }
+   elseif($rec3){
+
+redirect($redirect_page6); #nonediting teacher
 
    }
     else{
