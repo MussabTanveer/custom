@@ -9,11 +9,11 @@
     $PAGE->set_heading("Add Courses");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/itm/add_course.php');
     
-    echo $OUTPUT->header();
     require_login();
-    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id));
-     $rec2 || die('<h2>This page is for ITM only!</h2>'.$OUTPUT->footer());
-   // is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
+    if($SESSION->oberole != "itm"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
   
     
     if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid11) && $SESSION->fid11 != "xyz") || isset($_POST['save']) || isset($_POST['return']))

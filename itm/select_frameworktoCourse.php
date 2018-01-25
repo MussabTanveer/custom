@@ -8,11 +8,11 @@
     $PAGE->set_heading("OBE Framework Selection");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/itm/select_frameworktoCourse.php');
     
-    echo $OUTPUT->header();
     require_login();
-    $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id));
-     $rec2 || die('<h2>This page is for ITM only!</h2>'.$OUTPUT->footer());
-    //is_siteadmin() || die('<h2>This page is for site admins only!</h2>'.$OUTPUT->footer());
+    if($SESSION->oberole != "itm"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     // Dispaly all frameworks
     $rec=$DB->get_records_sql('SELECT * FROM mdl_competency_framework');
