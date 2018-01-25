@@ -7,8 +7,11 @@
     $PAGE->set_heading("Add Activity CLO");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/confirm_comp_ques.php');
     
-	echo $OUTPUT->header();
 	require_login();
+	if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+	}
+	echo $OUTPUT->header();
 
 	$competencyarray=array();
  

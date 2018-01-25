@@ -7,8 +7,12 @@
     $PAGE->set_title("Display Grading Policy");
     $PAGE->set_heading("Display Grading Policy");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_grading_policy.php');
-    echo $OUTPUT->header();
+    
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
      
     if(isset($_GET['course'])){
         $course_id=$_GET['course'];

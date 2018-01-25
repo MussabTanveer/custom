@@ -9,8 +9,11 @@
     $PAGE->set_heading("Activities");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/consolidated_report_selection.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     if(isset($_POST['view_consolidated']) && isset( $_POST['courseid']))
     {	

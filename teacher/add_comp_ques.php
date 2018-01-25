@@ -7,8 +7,11 @@
     $PAGE->set_heading("Select Activity CLO");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/add_comp_ques.php');
     
-	echo $OUTPUT->header();
 	require_login();
+	if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+	}
+	echo $OUTPUT->header();
 
     if(isset($_POST['submit']) && isset( $_POST['activityid']) && isset( $_POST['courseid']))
     {

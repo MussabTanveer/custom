@@ -8,7 +8,11 @@
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_course_profile.php');
    
     require_login();
-     global $CFG;
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+
+    global $CFG;
     $x= $CFG->dbpass;
 
   

@@ -6,8 +6,12 @@
     $PAGE->set_title("Course Report");
     $PAGE->set_heading("Course Report");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/course_report.php');
-    echo $OUTPUT->header();
+    
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 ?>
 <style>
 td{

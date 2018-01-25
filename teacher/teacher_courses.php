@@ -6,8 +6,12 @@
     $PAGE->set_title("Teacher");
     $PAGE->set_heading("Courses");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/report_teacher.php');
-    echo $OUTPUT->header();
+    
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
     <?php

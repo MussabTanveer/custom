@@ -9,8 +9,11 @@
     $PAGE->set_heading("Activities");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_quizzes.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     /*if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid1) && $SESSION->cid1 != "xyz"))
     {

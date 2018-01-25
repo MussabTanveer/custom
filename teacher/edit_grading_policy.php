@@ -7,8 +7,11 @@
     $PAGE->set_heading("Edit Grading Policy");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/edit_grading_policy.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 ?>
 <style>
 	input[type='number'] {

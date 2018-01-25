@@ -8,8 +8,12 @@
     $PAGE->set_title("Teacher Reports");
     $PAGE->set_heading("Teacher Reports");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/report_teacher_past.php');
-    echo $OUTPUT->header();
+    
     require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     if(isset($_GET['course']))
     {
