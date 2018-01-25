@@ -10,51 +10,42 @@
     require_login();
     //$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     //$rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
-?>
-
-<link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
 
-    <div>
-        <h3>Click the links down below as per need </h3><br>
-        
-        
-      
-        <a href="./.php" class="cool-link">My Courses</a><br><br>
-          <!--
+    $rec=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
+    
+    FROM mdl_course c
 
-        <a href="./view_vision_mission.php" class="cool-link">View Vision &amp; Mission</a><br><br>
+    INNER JOIN mdl_context cx ON c.id = cx.instanceid
 
-        <a href="./upload_verb_list.php" class="cool-link">Upload Verb List</a><br><br>
-        
-        <a href="./add_framework.php" class="cool-link">Create OBE Framework</a><br><br>
+    AND cx.contextlevel = ? 
 
-        <a href="./select_frameworktoPEO.php" class="cool-link">Define PEOs</a><br><br>
+    INNER JOIN mdl_role_assignments ra ON cx.id = ra.contextid
 
-        <a href="./select_frameworktoPLO.php" class="cool-link">Define PLOs</a><br><br>
+    INNER JOIN mdl_role r ON ra.roleid = r.id
 
-        <a href="./select_framework.php" class="cool-link">Map PLOs to PEOs</a><br><br>
+    INNER JOIN mdl_user usr ON ra.userid = usr.id
 
-        <a href="./select_frameworktoCLO.php" class="cool-link">Define CLOs</a><br><br>
+    WHERE r.shortname = ?
 
-        <a href="./select_framework-2.php" class="cool-link">Map CLOs to PLOs</a><br><br>
+    AND usr.id = ?', array('50','teacher', $USER->id));
 
-        <a href="./display_outcome_framework-2.php" class="cool-link">Map PLOs to Domains</a><br><br>
+    if($rec){
 
-        <a href="./display_outcome_framework-3.php" class="cool-link">Map CLOs to Levels</a><br><br>
-
-        <a href="./display_outcome_framework.php" class="cool-link">View OBE Framework Mapping</a><br><br>
-
-        <a href="./display_outcome_framework-4.php" class="cool-link">View Bloom's Taxonomy Mapping</a><br><br>
-
-        <a href="./display_teachers.php" class="cool-link">View Teacher's Course CLO Report</a><br><br>
-
-        <a href="./display_students.php" class="cool-link">View Student's CLO Progress</a><br><br>
-        -->
-    </div>
-
-
-<?php
+        $serialno = 0;
+        $table = new html_table();
+        $table->head = array('S. No.','Non-Editing Courses', 'Short Name' , 'Course Code');
+        foreach ($rec as $records) {
+            $serialno++;
+            $id2 = $records->id;
+            $fname2 = $records->fullname;
+            $sname2 = $records->shortname;
+            $idnum2= $records->idnumber;
+            $table->data[] = array($serialno, "<a href='../../../course/view.php?id=$id2'>$fname2</a>", "<a href='../../../course/view.php?id=$id2'>$sname2</a>", "<a href='../../../course/view.php?id=$id2'>$idnum2</a>");
+        }
+        echo html_writer::table($table);
+        echo "<br />";
+    }
 
 echo $OUTPUT->footer();
 
