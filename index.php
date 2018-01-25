@@ -3,6 +3,8 @@
     $PAGE->set_pagelayout('redirect');
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/index.php');
     require_login();
+    global $SESSION;
+
     $redirect_page1='./admin/report_admin.php';
     $redirect_page2='./teacher/teacher_courses.php';
     $redirect_page3='./student/report_student.php';
@@ -14,9 +16,8 @@
 
     $rec2=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('itm',$USER->id)); // for itm
 
-   $rec3=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('teacher',$USER->id)); //for non editing teacher
-   
-
+    $rec3=$DB->get_records_sql('SELECT us.username from mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND r.shortname=? AND us.id=?',array('teacher',$USER->id)); //for non editing teacher
+    
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname, c.shortname, c.idnumber
   
       FROM mdl_course c
@@ -36,29 +37,26 @@
       AND usr.id = ?', array('50', 'editingteacher', $USER->id));
   
     if(is_siteadmin()){
-      //echo 'admin';
-      redirect($redirect_page1);
+      redirect($redirect_page1); // admin
     }
     elseif($rec){
-      //echo 'teacher';
-      redirect($redirect_page2);
+      $SESSION->oberole = "teacher";
+      redirect($redirect_page2); // teacher
     }
     elseif($rec1){
-     
-redirect($redirect_page4); #chairman
-       
+      $SESSION->oberole = "chairman";
+      redirect($redirect_page4); // chairman   
     }
     elseif($rec2){
-redirect($redirect_page5); #itm
-
-   }
-   elseif($rec3){
-
-redirect($redirect_page6); #nonediting teacher
-
-   }
+      $SESSION->oberole = "itm";
+      redirect($redirect_page5); // itm
+    }
+    elseif($rec3){
+      $SESSION->oberole = "noneditingteacher";
+      redirect($redirect_page6); // nonediting teacher
+    }
     else{
-      //echo 'student';
-      redirect($redirect_page3);	  
-	  }
+      $SESSION->oberole = "student";
+      redirect($redirect_page3); // student
+    }
 ?>
