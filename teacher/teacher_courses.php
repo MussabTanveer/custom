@@ -10,7 +10,7 @@
     require_login();
 ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
-<?php
+    <?php
     $time=time();
     
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
@@ -46,17 +46,11 @@
             //redirect("./report_teacher.php?course=$id");
        // }
         echo html_writer::table($table);
-?>
-        
-        <br />
-        <p id="msg"></p>
-        
-        <?php
+        echo "<br />";
     }
     else{
         echo "<h3>You are not currently enrolled as teacher in any course!</h3>";
     }
-
 
     $rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
     
@@ -76,7 +70,6 @@
 
     AND usr.id = ?', array('50','editingteacher',$time, $USER->id));
 
-
     if($rec1){
         $serialno = 0;
         $table = new html_table();
@@ -93,9 +86,10 @@
            // redirect("./report_teacher.php?course=$id");
        // }
         echo html_writer::table($table);
+        echo "<br />";
     }
 
-$rec2=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
+    $rec2=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
     
     FROM mdl_course c
 
@@ -113,9 +107,9 @@ $rec2=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
 
     AND usr.id = ?', array('50','teacher', $USER->id));
 
-if($rec2){
+    if($rec2){
 
-$serialno = 0;
+        $serialno = 0;
         $table = new html_table();
         $table->head = array('S. No.','Non-Editing Courses', 'Short Name' , 'Course Code');
         foreach ($rec2 as $records) {
@@ -124,27 +118,12 @@ $serialno = 0;
             $fname2 = $records->fullname;
             $sname2 = $records->shortname;
             $idnum2= $records->idnumber;
-            $table->data[] = array($serialno, "<a href=' ../../../course/view.php?course=$id2'>$fname2</a>", "<a href='./report_teacher.php?course=$id2'>$sname2</a>", "<a href='./report_teacher.php?course=$id2'>$idnum2</a>");
-
-
-
-
-}
-
-}
-echo html_writer::table($table);
-
-?>
-        
-        <br />
-        <p id="msg"></p>
-        
-        <?php
+            $table->data[] = array($serialno, "<a href='../../../course/view.php?id=$id2'>$fname2</a>", "<a href='../../../course/view.php?id=$id2'>$sname2</a>", "<a href='../../../course/view.php?id=$id2'>$idnum2</a>");
+        }
+        echo html_writer::table($table);
+        echo "<br />";
+    }
     
-    /*else{
-        echo "<h3>You were not enrolled in the past!</h3>";
-    }*/
-
     echo $OUTPUT->footer();
 
 ?>
