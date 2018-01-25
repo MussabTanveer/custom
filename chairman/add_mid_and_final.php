@@ -21,25 +21,26 @@
 </style>
 <?php
 
-	if(isset($_POST['courseid'])){
-		$course_id=$_POST['courseid'];
+	if(isset($_GET['course'])){
+		$course_id=$_GET['course'];
 		//echo $course_id;
 		if(isset($_POST['save'])){
-			$sum = 0;
+			/*$sum = 0;
 			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
 			foreach ($rec as $records){
                 $percentage=$records->percentage;
                 $sum+=$percentage;
             }
-           
+			*/
 			for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
 			}
 			//echo $sum;
+			/*
 			if($sum != 60){
 				$msgP = "<font color = red>Total percentage of all activities should be 60%</font><br />";
 			}
-			else{
+			else{*/
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
 					# code...
 					$activity=trim($_POST["activity"][$i]);
@@ -57,23 +58,24 @@
 					}
 				}
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
-			}
+			//}
 		}
 		elseif(isset($_POST['return'])) {
-			$sum = 0;
+			/*$sum = 0;
 			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
 			foreach ($rec as $records){
                 $percentage=$records->percentage;
                 $sum+=$percentage;
-            }
+			}*/
+			
 			for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
 			}
 			//echo $sum;
-			if($sum != 60){
+			/*if($sum != 60){
 				$msgP = "<font color = red>Total percentage of all evaluation methods should be 60%</font><br />";
 			}
-			else{
+			else{*/
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
 					# code...
 					$activity=trim($_POST["activity"][$i]);
@@ -91,9 +93,9 @@
 					}
 				}
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
-				$redirect_page="./report_chairman.php?course=$course_id";
+				$redirect_page="./report_chairman.php";
 				redirect($redirect_page);
-			}
+			//}
 		}
 		if(isset($msgP)){
 			echo $msgP;
@@ -140,7 +142,7 @@
 		<br />
 		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
 		<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-		<a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php?course=$course_id'" ?>>Cancel</a>
+		<a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php'" ?>>Cancel</a>
 		</form>
 
 		<script>
