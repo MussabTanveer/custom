@@ -6,8 +6,12 @@
     $PAGE->set_title("Student Reports");
     $PAGE->set_heading("Student Reports");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/report_student.php');
-    echo $OUTPUT->header();
+    
     require_login();
+    if($SESSION->oberole != "student"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
     

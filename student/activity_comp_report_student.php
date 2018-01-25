@@ -13,8 +13,11 @@
     $PAGE->set_heading("Activity CLO Report");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/activity_comp_report_student.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "student"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     if(isset($_POST['submit']) && isset( $_POST['activityid']) && isset($_POST['courseid']))
     {

@@ -9,8 +9,11 @@
     $PAGE->set_heading("Courses");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_courses_student.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "student"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     // Dispaly all courses
     //$rec=$DB->get_records_sql('SELECT * FROM  `mdl_course` WHERE startdate != ? AND visible = ?', array( 0 , 1 ));

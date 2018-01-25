@@ -9,8 +9,11 @@
     $PAGE->set_heading("Activities");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_activities_student.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "student"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid4) && $SESSION->cid4 != "xyz"))
     {

@@ -10,8 +10,11 @@
     $PAGE->set_heading("Semester Progress");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_course_progress.php');
     
-    echo $OUTPUT->header();
     require_login();
+    if($SESSION->oberole != "student"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
 
     //Get student courses
     $rec=$DB->get_records_sql('SELECT c.id, c.fullname, c.shortname, c.idnumber
