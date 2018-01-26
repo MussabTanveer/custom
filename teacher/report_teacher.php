@@ -36,11 +36,11 @@
         <div id="tools" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual');" class="cool-link">&#10070; Manual Evaluation</a><br><br>
             <div id="manual" style="display: none">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?add=quiz&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Quiz</a><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?add=assign&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Assignment</a><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?add=project&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Project</a><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?add=quiz&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Mid Term</a><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?add=quiz&type=&course=$course_id'" ?> class="cool-link">&#10022; Define Final Exam</a><br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10022; Define Quiz</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10022; Define Assignment</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10022; Define Project</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10022; Define Mid Term</a><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10022; Define Final Exam</a><br><br>
             </div>
             &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('online');" class="cool-link">&#10070; Online Evaluation</a><br><br>
             <div id="online" style="display: none">

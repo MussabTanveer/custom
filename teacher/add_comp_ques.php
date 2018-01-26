@@ -151,7 +151,7 @@
 		<script>
 			var closid = <?php echo json_encode($closid); ?>;
 			var plos = <?php echo json_encode($plos); ?>;
-			var peos = <?php echo json_encode($peos); ?>;
+			//var peos = <?php echo json_encode($peos); ?>;
 			var levels = <?php echo json_encode($levels); ?>;
 			var levelnos = <?php echo json_encode($lvlno); ?>;
 			/*alert(closid);
@@ -159,20 +159,20 @@
 			alert(peos);*/
 			function dropdownTip(value,id){
 				var plo = "plo" + id;
-				var peo = "peo" + id;
+				//var peo = "peo" + id;
 				var tax = "tax" + id;
 				//console.log(value);
 				//console.log(id);
 				if(value == 'NULL'){
 					document.getElementById(plo).innerHTML = "";
-					document.getElementById(peo).innerHTML = "";
+					//document.getElementById(peo).innerHTML = "";
 					document.getElementById(tax).innerHTML = "";
 				}
 				else{
 					for(var i=0; i<closid.length ; i++){
 						if(closid[i] == value){
 							document.getElementById(plo).innerHTML = plos[i];
-							document.getElementById(peo).innerHTML = peos[i];
+							//document.getElementById(peo).innerHTML = peos[i];
 							document.getElementById(tax).innerHTML = levels[i] + " (" + levelnos[i] + ")";
 							break;
 						}
