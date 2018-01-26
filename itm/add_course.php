@@ -209,6 +209,22 @@
                         $id =  $rec->id;
                         $idnumber =  $rec->idnumber;
                         //echo "$idnumber";
+
+
+                 $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                                WHERE idnumber = ? 
+                                AND competencyframeworkid =? ",
+                                array($idnumber,$fw_id));
+
+
+                 foreach ($competenciesRev as $competencyRev) {
+                   // echo "Working";
+                        $id =  $competencyRev->id;
+                        $idnumber =  $competencyRev->idnumber;
+                        //echo "$idnumber";
+                    }
+
+                   
                         $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
                                     WHERE courseid = ?
                                     AND competencyid =? ",
@@ -220,6 +236,10 @@
                             $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
                             $DB->execute($sql);
                         }
+
+
+
+
                     }
                     $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
                     $msg5="<p><b>Add another below.</b></p>";
@@ -418,6 +438,25 @@
                         $id =  $rec->id;
                         $idnumber =  $rec->idnumber;
                         //echo "$idnumber";
+
+
+                         $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                                WHERE idnumber = ? 
+                                AND competencyframeworkid =? ",
+                                array($idnumber,$fw_id));
+
+
+                 foreach ($competenciesRev as $competencyRev) {
+                   // echo "Working";
+                        $id =  $competencyRev->id;
+                        $idnumber =  $competencyRev->idnumber;
+                        //echo "$idnumber";
+                    }
+
+
+
+
+
                         $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
                                     WHERE courseid = ?
                                     AND competencyid =? ",
