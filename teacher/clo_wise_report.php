@@ -64,11 +64,71 @@
             array_push($lvlno, $lvl); // array of level nos
         }
 
+        // Get course quiz ids
+        $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
+        $quizids = array();
+        foreach ($courseQuizId as $qid) {
+            $id = $qid->id;
+            $lvl = $recC->lvl;
+            array_push($quizids, $cid); // array of quiz ids
+        }
+
+        for($i=0; $i < count($quizids); $i++){
+            $rec=$DB->get_recordset_sql(
+            'SELECT
+            qa.userid,
+            u.idnumber AS std_id,
+            u.username AS seat_no,
+            CONCAT(u.firstname, " ", u.lastname) AS std_name,
+            qu.competencyid,
+            SUM(qua.maxmark) AS maxmark,
+            SUM(qua.maxmark*qas.fraction) AS marksobtained
+            FROM
+                mdl_quiz q,
+                mdl_quiz_slots qs,
+                mdl_question qu,
+                mdl_question_categories qc,
+                mdl_quiz_attempts qa,
+                mdl_question_attempts qua,
+                mdl_question_attempt_steps qas,
+                mdl_user u
+            WHERE
+                q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
+                AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
+            GROUP BY qa.userid, qu.competencyid
+            ORDER BY qa.userid, qu.competencyid',
+            
+            array($quizids[$i],1));
+
+            foreach ($recordsComp as $recC) {
+                
+            }
+        }
+
     }
-    
+
+    ?>
+
+    <table class="generaltable" border="1">
+        <tr>
+            <th>Seat Number</th>
+            <?php /****** CLOS ******/
+            foreach ($courseclos as $recC) {
+                $cid =  $recC->cloid;
+                $cname = $recC->cloname;
+                $plname = $recC->ploname;
+                $pename = $recC->peoname;
+                ?>
+                <th><?php echo $cname; ?></th>
+                <?php
+            }
+            ?>
+
+        </tr>
+    </table>
 
 
-
+<?php
     echo $OUTPUT->footer();
 
 ?>
