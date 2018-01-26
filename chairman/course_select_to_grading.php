@@ -52,7 +52,7 @@ if($rec1){
             $fname1 = $records->fullname;
             $sname1 = $records->shortname;
             $idnum1= $records->idnumber;
-            $table->data[] = array($serialno, "<a href='./report_teacher.php?course=$id1'>$fname1</a>", "<a href='./report_teacher.php?course=$id'>$sname1</a>", "<a href='./report_teacher.php?course=$id'>$idnum1</a>");
+            $table->data[] = array($serialno, "<a href='./add_mid_and_final.php?course=$id1'>$fname1</a>", "<a href='./add_mid_and_final.php?course=$id'>$sname1</a>", "<a href='./add_mid_and_final.php?course=$id'>$idnum1</a>");
         }
 
   echo html_writer::table($table);

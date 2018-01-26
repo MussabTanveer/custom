@@ -119,8 +119,8 @@
 						<option value="quiz">Quiz</option>
 						<option value="assignment">Assignment</option>
 						<option value="project">Project</option>
-						<option value="mid term">Mid Term</option>
-						<option value="final exam">Final Exam</option>
+						<!--<option value="mid term">Mid Term</option>-->
+					   <!-- <option value="final exam">Final Exam</option>-->
 						<option value="other">Other</option>
 					</select>
 				</div>
