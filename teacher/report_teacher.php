@@ -59,6 +59,7 @@
         <div id="clorep" style="display: none">
             &nbsp;&nbsp;&nbsp;<a <?php echo "href='./display_quizzes.php?course=$course_id'" ?> class="cool-link">&#10070; View Activity Detailed Report</a><br>
             &nbsp;&nbsp;&nbsp;<a <?php echo "href='./display_activities.php?course=$course_id'" ?> class="cool-link">&#10070; Activity/Course CLO Report</a><br>
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./clo_wise_report.php?course=$course_id'" ?> class="cool-link">&#10070; Student CLO-wise Report</a><br>
             &nbsp;&nbsp;&nbsp;<a <?php echo "href='./course_report.php?course=$course_id'" ?> class="cool-link">&#10070; Course Report</a><br><br>
         </div>
         
