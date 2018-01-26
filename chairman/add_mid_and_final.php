@@ -24,7 +24,57 @@
 	if(isset($_GET['course'])){
 		$course_id=$_GET['course'];
 		//echo $course_id;
+
+$rec1=$DB->get_records_sql('SELECT sum(percentage) as sum1 FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
+$rec2=$DB->get_records_sql('SELECT sum(percentage) as sum2 FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
+
+foreach ($rec1 as $records1){
+                $sum1=$records1->sum1;
+               }
+foreach ($rec2 as $records2){
+                $sum2=$records2->sum2;
+               }
+
+$sum=$sum1+$sum2;
+
+               if($sum >= 80){
+
+              //goto end;
+              redirect("to_editing_deleting.php?courseid=$course_id");
+              //$msg1="<font color = green>Grading Policy is already 80% or greater<br />Cannot Grade anymore.<br />Either <a href=display_grading_policy.php?course=$course_id>delete</a> or <a href=display_grading_policy.php?course=$course_id>edit</a> grading policy.</font>";
+            }
+
 		if(isset($_POST['save'])){
+
+
+$rec1=$DB->get_records_sql('SELECT sum(percentage) as sum1 FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
+$rec2=$DB->get_records_sql('SELECT sum(percentage) as sum2 FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
+
+foreach ($rec1 as $records1){
+                $sum1=$records1->sum1;
+               }
+foreach ($rec2 as $records2){
+                $sum2=$records2->sum2;
+               }
+
+$sum=$sum1+$sum2;
+
+//echo $sum;
+
+               if($sum >= 80){
+              
+              //goto end;
+
+               	redirect('to_editing_deleting.php');
+
+              //$msg1="<font color = green>Grading Policy is already 80% or greater<br />Cannot Grade anymore.<br />Either <a href=display_grading_policy.php?course=$course_id>delete</a> or <a href=display_grading_policy.php?course=$course_id>edit</a> grading policy.</font>";
+            }
+
+
+else{
+
+
+
 			/*$sum = 0;
 			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
 			foreach ($rec as $records){
@@ -60,7 +110,17 @@
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
 			//}
 		}
+	}
 		elseif(isset($_POST['return'])) {
+
+
+
+
+
+
+
+
+
 			/*$sum = 0;
 			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
 			foreach ($rec as $records){
@@ -135,9 +195,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
-				<input class="btn btn-success" type="button" value="Add another" onClick="addInput('dynamicInput');">
-			</div>
+			
 		</div>
 		<br />
 		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
@@ -148,18 +206,24 @@
 		<script>
 			// script to add activity and percent fields to form
 			//var counter = 1;
-			function addInput(divName){
-				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose<option value="mid term">Mid Term</option><option value="final exam">Final Exam</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
-				document.getElementById(divName).appendChild(newdiv);
+			//function addInput(divName){
+				//var newdiv = document.createElement('div');
+				//newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose<option value="mid term">Mid Term</option><option value="final exam">Final Exam</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
+				//document.getElementById(divName).appendChild(newdiv);
 				//counter++;
-			}
+			//}
 		</script>
 		<?php
 		}
-		else{
-			echo "<font color = green>Grading Policy is already 100%<br />Cannot add another evaluation method.<br />Either <a href=display_grading_policy.php?course=$course_id>delete</a> or <a href=display_grading_policy.php?course=$course_id>edit</a> grading policy.</font>";
-		}
+       // if(isset($msg1)){
+
+
+        	//echo $msg1;
+        //}     
+		//echo "<font color = green>Grading Policy is already 80% or greater<br />Cannot add another evaluation method.<br />Either <a href=display_grading_policy.php?course=$course_id>delete</a> or <a href=display_grading_policy.php?course=$course_id>edit</a> grading policy.</font>";
+		//else{
+			//echo "<font color = green>Grading Policy is already 100%<br />Cannot add another evaluation method.<br />Either <a href=display_grading_policy.php?course=$course_id>delete</a> or <a href=display_grading_policy.php?course=$course_id>edit</a> grading policy.</font>";
+		//}
 	}
 	else{
 		?>

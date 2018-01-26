@@ -29,5 +29,8 @@ $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_
             echo "<br>";
         }
     }
+
+
+    
     echo $OUTPUT->footer();
 ?>
