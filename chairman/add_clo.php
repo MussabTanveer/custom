@@ -202,15 +202,41 @@ require_once('../../../config.php');
 		$clos=$DB->get_records_sql('SELECT * FROM `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "%%-%%%-clo%" ORDER BY idnumber', array($frameworkid));
         if($clos){
 			$cloids = array(); $clocourses = array(); $clonames = array();
+			//$revs = array();
             foreach ($clos as $records){
 				$cloid = $records->id;
 				$clocourse = $records->idnumber; $clocourse = substr($clocourse,0,6);
 				$cloname = $records->shortname;
+				$rev = $records->revision;
 				array_push($cloids, $cloid); // array of clo ids
 				array_push($clocourses, $clocourse); // array of clo course codes
 				array_push($clonames, $cloname); // array of clo names
-				//echo "$clocourse   $cloname <br>";
+			
             }
+         //   var_dump($clonames);
+          //  echo "<br>";
+           // var_dump($clocourses);
+           // echo "<br>";
+            //var_dump($revs); 
+
+            //Loop to Filter-out old clos
+            for($i=0 ; $i<(sizeof($clonames)*3); $i++)
+            {
+
+            	if(($clonames[$i] == $clonames [$i+1]) && ($clocourses[$i] == $clocourses[$i+1])) 
+            	{
+
+            		unset($clonames[$i]);
+            		unset($clocourses[$i]);
+            		 unset($cloids[$i]);
+       		
+            	} 
+            }
+         	
+         	//Reindexing the arrays!
+             $clonames = array_values($clonames);
+			  $clocourses = array_values($clocourses);
+			   $cloids = array_values($cloids);		 
 		}
 
 		//Get plo with its name and idnumber
@@ -493,6 +519,8 @@ require_once('../../../config.php');
 		var cloids = <?php echo json_encode($cloids); ?>;
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
+		//var revs = <?php echo json_encode($revs)?>;
+
 		$(document).ready(function(){
 			$("#id_idnumber").keyup(function(){
 				var n = $('#id_idnumber').val().toUpperCase();
