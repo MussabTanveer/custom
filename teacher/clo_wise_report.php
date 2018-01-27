@@ -170,32 +170,25 @@ th{
         $assignnames = array();
         
         for($i=0; $i < count($assignids); $i++){
-            //Get assign comp
-            $recAssignCLO=$DB->get_records_sql("SELECT DISTINCT c.id AS clo_id, c.shortname AS clo_name
-            
-            FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
-    
-            WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
-            
-            ORDER BY cmc.competencyid",
-            
-            array($assignids[$i],$course_id,1));
             // Get assign records
             $recAssign=$DB->get_recordset_sql(
                 'SELECT
                 u.username AS seat_no,
                 a.name AS assign_name,
                 a.grade AS maxmark,
-                ag.grade AS marksobtained
+                ag.grade AS marksobtained,
+                cmc.competencyid AS clo_id
                 FROM
                     mdl_assign a,
                     mdl_assign_grades ag,
-                    mdl_user u
+                    mdl_user u,
+                    mdl_course_modules cm,
+                    mdl_competency_modulecomp cmc
                 WHERE
-                    a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment
+                    a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid
                 ORDER BY ag.userid',
                 
-            array($assignids[$i],-1));
+            array($assignids[$i],-1,$course_id,1));
 
             $seatnosA = array();
             $closA = array();
@@ -205,6 +198,7 @@ th{
             foreach($recAssign as $as){
                 $assignname = $as->assign_name;
                 $un = $as->seat_no;
+                $clo = $as->clo_id;
                 $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
                 $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
                 if( (($mobtained/$amax)*100) > 50){
@@ -214,9 +208,6 @@ th{
                     array_push($resultA,"F");
                 }
                 array_push($seatnosA,$un);
-            }
-            foreach($recAssignCLO as $asCLO){
-                $clo = $asCLO->clo_id;
                 array_push($closA,$clo);
             }
 
@@ -237,7 +228,10 @@ th{
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
         
-        
+        for($i=0; $i<count($assignids); $i++)
+            for($j=0; $j<count($closid); $j++)
+                if(in_array($closid[$j], $closUniqueAMulti[$i]))
+                    $closidCountActivity[$j]++;
         
     }
 
@@ -259,13 +253,20 @@ th{
         <tr>
             <th></th>
             <?php /****** Activity Names ******/
-            for($i=0; $i<count($closid); $i++)
+            for($i=0; $i<count($closid); $i++){
                 for($j=0; $j<count($quizids); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
                     <th><?php echo $quiznames[$j]; ?></th>
                     <?php
                     }
+                for($j=0; $j<count($assignids); $j++)
+                    if(in_array($closid[$i], $closUniqueAMulti[$j])){
+                    ?>
+                    <th><?php echo $assignnames[$j]; ?></th>
+                    <?php
+                }
+            }
             ?>
         </tr>
         <?php
@@ -274,8 +275,8 @@ th{
         <tr> 
             <td>  <?php echo "$seatno" ?> </td>
             <?php
-            /****** QUIZZES RECORDS ******/
-            for($i=0; $i<count($closid); $i++)
+            /****** QUIZZES/ASSIGNMENTS RECORDS ******/
+            for($i=0; $i<count($closid); $i++){
                 for($j=0; $j<count($quizids); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                         $flag=0;
@@ -287,7 +288,6 @@ th{
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
                                 else
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
-                                
                             }
                         }
                         if($flag==0)
@@ -295,6 +295,25 @@ th{
                             echo "<td>x</td>";
                         }
                     }
+                for($j=0; $j<count($assignids); $j++)
+                    if(in_array($closid[$i], $closUniqueAMulti[$j])){
+                        $flag=0;
+                        for($k=0; $k<count($seatnosAMulti[$j]); $k++){
+                            if($seatno == $seatnosAMulti[$j][$k] && $closid[$i] == $closAMulti[$j][$k])
+                            {
+                                $flag=1;
+                                if($resultAMulti[$j][$k] == 'P')
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                                else
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                            }
+                        }
+                        if($flag==0)
+                        {
+                            echo "<td>x</td>";
+                        }
+                    }
+            }
             ?>
         </tr>
         <?php
