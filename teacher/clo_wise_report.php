@@ -158,7 +158,7 @@
                 }
         
         //var_dump($closidCountActivity);
-        /var_dump($closid);
+        var_dump($closid);
         var_dump($closUniqueQMulti);
 
     }
