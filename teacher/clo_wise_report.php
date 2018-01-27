@@ -293,7 +293,7 @@ th{
                         }
                         if($flag==0)
                         {
-                            echo "<td>&#10006;</td>";
+                            echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                         }
                     }
                 for($j=0; $j<count($assignids); $j++)
@@ -311,7 +311,7 @@ th{
                         }
                         if($flag==0)
                         {
-                            echo "<td>&#10006;</td>";
+                            echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                         }
                     }
             }
