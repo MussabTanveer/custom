@@ -254,16 +254,17 @@ th{
             <th></th>
             <?php /****** Activity Names ******/
             for($i=0; $i<count($closid); $i++){
+                $attemptno = 1;
                 for($j=0; $j<count($quizids); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
-                    <th><?php echo $quiznames[$j]; ?></th>
+                    <th><?php echo $quiznames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
                     <?php
                     }
                 for($j=0; $j<count($assignids); $j++)
                     if(in_array($closid[$i], $closUniqueAMulti[$j])){
                     ?>
-                    <th><?php echo $assignnames[$j]; ?></th>
+                    <th><?php echo $assignnames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
                     <?php
                 }
             }
