@@ -293,7 +293,7 @@ th{
                         }
                         if($flag==0)
                         {
-                            echo "<td>x</td>";
+                            echo "<td>&#10006;</td>";
                         }
                     }
                 for($j=0; $j<count($assignids); $j++)
@@ -311,7 +311,7 @@ th{
                         }
                         if($flag==0)
                         {
-                            echo "<td>x</td>";
+                            echo "<td>&#10006;</td>";
                         }
                     }
             }
