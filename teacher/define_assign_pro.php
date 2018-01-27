@@ -31,9 +31,9 @@ require_once('../../../config.php');
     if(isset($_GET['type']) && isset($_GET['course']))
     {
         $course_id=$_GET['course'];
-        echo "Course ID : $course_id";
+        //echo "Course ID : $course_id";
         $type=$_GET['type'];
-        echo " Activity Type : $type";
+        //echo " Activity Type : $type";
 
 		/* if user press save */
 		if(isset($_POST['save'])) {
