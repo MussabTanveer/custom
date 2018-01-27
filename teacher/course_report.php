@@ -619,7 +619,7 @@ th{
                                 }
                                 if($flag==0)
                                 {
-                                    echo "<td>x</td>";
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                                 }
                             }
 
@@ -638,7 +638,7 @@ th{
                                 }
                                 if($flag==0)
                                 {
-                                    echo "<td>x</td>";
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                                 }
                             }
 
@@ -658,7 +658,7 @@ th{
                                 if($flag==0)
                                 {
                                     for($j=0; $j<$tot_quesQuiz[$i]; $j++){
-                                        echo "<td>x</td>";
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                                     }
                                 }
                             }
@@ -677,7 +677,7 @@ th{
                             {
                                 foreach ($qnameMidUnique as $quesUnique)
                                 {
-                                    echo "<td>x</td>";
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                                 }
                             }
                             /****** FINAL EXAM ******/
@@ -694,7 +694,7 @@ th{
                             {
                                 foreach ($qnameFinalUnique as $quesUnique)
                                 {
-                                    echo "<td>x</td>";
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                                 }
                             }
                         ?>

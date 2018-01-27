@@ -31,9 +31,9 @@ require_once('../../../config.php');
     if(isset($_GET['type']) && isset($_GET['course']))
     {
         $course_id=$_GET['course'];
-        echo "Course ID : $course_id";
+        //echo "Course ID : $course_id";
         $type=$_GET['type'];
-        echo " Activity Type : $type";
+        //echo " Activity Type : $type";
 
 		/* if user press save */
 		if(isset($_POST['save'])) {
@@ -53,106 +53,69 @@ require_once('../../../config.php');
 			foreach ($_POST['clo'] as $cid)
 			{
 				array_push($closid,$cid);	
-            }
-            $separateattempts=array();
-			foreach ($_POST['separateattempt'] as $sa)
-			{
-				array_push($separateattempts,$sa);	
-            }
+			}
+			$separateattempts = array();
+			for ($i = 0; $i < count($quesnames); $i++) {
+				$separateattempts[$i] = in_array($i, $_POST['separateattempt']) ? 1 : 0;
+			}
 
+			// Insert manual quiz record
             $record = new stdClass();
             $record->name = $quizname;
             $record->description = $quizdesc;
             $quizid = $DB->insert_record('manual_quiz', $record); // get quiz id of newly inserted quiz
 
-            // KHIZAR! Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
+            // Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
 
-            //MUSSAB! Automated Mapping of Quiz, Mid-terms and Finals
-          if($type == "quiz"){
+            // Automated Mapping of Quiz, Mid-terms and Finals
+			if($type == "quiz"){
 
-            	$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
+				$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
 
-            	if($recq){
-            	foreach ($recq as $recordq) {
+				if($recq){
+					foreach ($recq as $recordq) {
+						$quiz_id=$recordq->quiz_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-1,'$quizid','$quiz_id') ";
+					$DB->execute($sql);
+				}
+				else{
+					$msgq="Pls define Quiz in Define Grading Policy tab first";
+				}
+			}
+           	elseif($type == "midterm"){
+	        	$recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
 
-            		$quiz_id=$recordq->quiz_id; 
-            	}
-
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-1,'$quizid','$quiz_id') ";
-
-               $DB->execute($sql);
-           }
-
-           else {
-
-            
-            $msgq="Pls define Quiz in Define Grading Policy tab first";
-              
-
-           }
-
-           }
-
-           elseif($type == "midterm"){
-
-
-           $recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
-
-           if($recm){
-            	foreach ($recm as $recordm) {
-
-            		$mid_id=$recordm->mid_id; 
-            	}
-
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-1,'$quizid','$mid_id') ";
-               $DB->execute($sql);
-           }
-
-        else{
-
-        $msgm="Pls define Mid term in Define Grading Policy tab first";
-
-
-
-        }
-
-
-
+				if($recm){
+					foreach ($recm as $recordm) {
+						$mid_id=$recordm->mid_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-1,'$quizid','$mid_id') ";
+					$DB->execute($sql);
+				}
+		        else{
+        			$msgm="Pls. define Mid term in Define Grading Policy tab first";
+				}
             }
+            elseif($type == "finalexam"){
+				$recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
+				if($recf){
+					foreach ($recf as $recordf) {
+						$final_id=$recordf->final_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-1,'$quizid','$final_id_id') ";
+					$DB->execute($sql);
+				}
+				else{
+					$msgf="Pls. define Final Exam in Define Grading Policy tab first";
+				}
+            }
+           	//  Automated mapping code ends here 
 
-
-             elseif($type == "finalexam"){
-
-
-           $recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
-
-           if($recf){
-            	foreach ($recf as $recordf) {
-
-            		$final_id=$recordf->final_id; 
-
-            	}
-
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-1,'$quizid','$final_id_id') ";
-               $DB->execute($sql);
-           }
-
-           else{
-
-            $msgf="Pls define Final Exam in Define Grading Policy tab first";
-          
-
-           }
-
-            }  
-
-           // MUSSAB! Automated mapping code ends here 
-
-
-
+			// Insert Quiz Questions
             if($quizid){
                 for ($i=0; $i < count($quesnames) ; $i++) {
                     # code...
@@ -161,11 +124,12 @@ require_once('../../../config.php');
                     $record->quesname = $quesnames[$i];
                     $record->maxmark = $maxmarks[$i];
                     $record->cloid = $closid[$i];
-                    $record->separateattempt =$separateattempts[$i];
+                    $record->separateattempt = $separateattempts[$i];
                     
                     $DB->insert_record('manual_quiz_question', $record);
                 }
-            }
+			}
+			// Insert Quiz Questions code ends here 
 
 			$redirect_page1="./report_teacher.php?course=$course_id";
 			redirect($redirect_page1);
@@ -196,11 +160,11 @@ require_once('../../../config.php');
             array_push($peos, $peo); // array of peos
             array_push($levels, $lname); // array of levels
             array_push($lvlno, $lvl); // array of level nos
-        }
-
-		if(isset($msg3)){
-			echo $msg3;
 		}
+		
+		$temp = array();
+		$editor = \editors_get_preferred_editor();
+		$editor->use_editor("id_description",$temp);
 
 		?>
 		<br />
@@ -338,7 +302,7 @@ require_once('../../../config.php');
 					</label>
 				</div>
                 <div class="col-md-9 form-inline felement">
-                    <input type="checkbox" value="" name="separateattempt[]" id="id_sepatmpt">
+                    <input type="checkbox" value="0" name="separateattempt[]" id="id_sepatmpt">
 					<div class="form-control-feedback" id="id_error_sepatmpt">
 					</div>
 				</div>
@@ -353,7 +317,7 @@ require_once('../../../config.php');
 				</div>
 			</div>
 			<br />
-			
+
 			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
             <a class="btn btn-default" type="submit" href="./report_teacher.php?course=<?php $course_id ?>">Cancel</a>
 			<br /><br />
@@ -361,14 +325,14 @@ require_once('../../../config.php');
 		</form>
 		
 		<?php
-		if(isset($_POST['save']) && !isset($msg3)){
-		?>
-		<script>
-			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
-			document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
-			document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
-		</script>
-		<?php
+		if(isset($msgq)){
+			echo $msgq;
+		}
+		elseif(isset($msgm)){
+			echo $msgm;
+		}
+		elseif(isset($msgf)){
+			echo $msgf;
 		}
 		?>
 				
@@ -419,7 +383,7 @@ require_once('../../../config.php');
                 document.getElementById(divName).appendChild(newdiv3);
 
                 var newdiv4 = document.createElement('div');
-                newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><label class="col-form-label d-inline" for="id_sepattempt">Separate Attempt</label></div><div class="col-md-9 form-inline felement"><input type="checkbox" value="" name="separateattempt[]" id="id_sepattempt"><div class="form-control-feedback" id="id_error_sepattempt"></div></div></div>';
+                newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><label class="col-form-label d-inline" for="id_sepattempt">Separate Attempt</label></div><div class="col-md-9 form-inline felement"><input type="checkbox" value="'+i+'" name="separateattempt[]" id="id_sepattempt"><div class="form-control-feedback" id="id_error_sepattempt"></div></div></div>';
                 document.getElementById(divName).appendChild(newdiv4);
                 
 				i++;
@@ -456,34 +420,13 @@ require_once('../../../config.php');
 			
 		</script>
 
-    <?php
-
-if(isset($msgq)){
-
-   	echo $msgq;
-   }
-   elseif(isset($msgm)){
-
-
-   	echo $msgm;
-   }
-
-   elseif(isset($msgf)){
-
-
-   	echo $msgf;
-   }
-
-
+	<?php
 	}
-
-
-
 
 	else
 	{?>
 		<h3 style="color:red;"> Invalid Selection </h3>
-    	<a href="./select_frameworktoCLO.php">Back</a>
+    	<a href="../index.php">Back</a>
     	<?php
     }
 
