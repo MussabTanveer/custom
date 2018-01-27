@@ -162,10 +162,6 @@ require_once('../../../config.php');
             array_push($lvlno, $lvl); // array of level nos
         }
 
-		if(isset($msg3)){
-			echo $msg3;
-		}
-
 		?>
 		<br />
 
