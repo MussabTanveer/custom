@@ -74,10 +74,11 @@
 
         // Find students quiz records
         $seatnosQMulti = array();
-        $qnamesQMulti = array();
+        $closUniqueQMulti = array();
         $closQMulti = array();
         $resultQMulti = array();
-        $tot_quesQuiz = array();
+        $cloQCount = array();
+        //$tot_quesQuiz = array();
 
         for($i=0; $i < count($quizids); $i++){
             $recQuiz=$DB->get_recordset_sql(
@@ -131,8 +132,34 @@
                 //array_push($qnamesQ,$qname);
                 array_push($closQ,$clo);
             }
-            array_push($quiznames,$quizname);
+            //$qnameQuizUnique = array_unique($qnamesQ);
+            //array_push($quiznames,$quizname);
+            $cloQuizUnique = array_unique($closQ);
+            var_dump($closQ);
+
+            array_push($cloQCount,count($cloQuizUnique));
+            array_push($seatnosQMulti,$seatnosQ);
+            array_push($closUniqueQMulti,$cloQuizUnique);
+            array_push($closQMulti,$closQ);
+            array_push($resultQMulti,$resultQ);
         }
+
+        $closidCountActivity = array();
+        for($j=0; $j<count($closid); $j++)
+            $closidCountActivity[$j]=0;
+        var_dump($closidCountActivity);
+        
+        for($i=0; $i<count($quizids); $i++)
+            for($j=0; $j<count($closid); $j++)
+                for($k=0; $k<$cloQCount[$i]; $k++)
+                if(in_array($closid[$j], $closUniqueQMulti[$i][$k])){
+                    echo "if";
+                    $closidCountActivity[$j]++;
+                }
+        
+        //var_dump($closidCountActivity);
+        /var_dump($closid);
+        var_dump($closUniqueQMulti);
 
     }
 
