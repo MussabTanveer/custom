@@ -34,7 +34,6 @@
             $seatno = $records->seatnum ;
             array_push($stdids,$id);
             array_push($seatnos,$seatno);
-
         }
 
         //Get course clo with its level, plo and peo
@@ -73,9 +72,17 @@
             array_push($quizids, $cid); // array of quiz ids
         }
 
+        // Find students quiz records
+        $seatnosQMulti = array();
+        $qnamesQMulti = array();
+        $closQMulti = array();
+        $resultQMulti = array();
+        $tot_quesQuiz = array();
+
         for($i=0; $i < count($quizids); $i++){
             $recQuiz=$DB->get_recordset_sql(
             'SELECT
+            q.name AS quiz_name,
             qa.userid,
             u.idnumber AS std_id,
             u.username AS seat_no,
@@ -100,9 +107,31 @@
             
             array($quizids[$i],1));
 
-            foreach ($recQuiz as $recQ) {
-                
+            $seatnosQ = array();
+            //$qnamesQ = array();
+            $closQ = array();
+            $resultQ = array();
+            $quiznames = array();
+            $quizname = "";
+            foreach($recQuiz as $rq){
+                $quizname = $rq->quiz_name;
+               // echo $name;
+                $un = $rq->username;
+                //$qname = $rq->name;
+                $clo=$rq->shortname;
+                $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
+                if( (($mobtained/$qmax)*100) > 50){
+                    array_push($resultQ,"<font color='green'>P</font>");
+                }
+                else{
+                    array_push($resultQ,"<font color='red'>F</font>");
+                }
+                array_push($seatnosQ,$un);
+                //array_push($qnamesQ,$qname);
+                array_push($closQ,$clo);
             }
+            array_push($quiznames,$quizname);
         }
 
     }
