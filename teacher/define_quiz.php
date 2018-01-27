@@ -457,7 +457,29 @@ require_once('../../../config.php');
 		</script>
 
     <?php
+
+if(isset($msgq)){
+
+   	echo $msgq;
+   }
+   elseif(isset($msgm)){
+
+
+   	echo $msgm;
+   }
+
+   elseif(isset($msgf)){
+
+
+   	echo $msgf;
+   }
+
+
 	}
+
+
+
+
 	else
 	{?>
 		<h3 style="color:red;"> Invalid Selection </h3>

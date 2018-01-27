@@ -309,7 +309,19 @@ else{
 			
 		</script>
 
+
+
+
     <?php
+    if(isset($msga)){
+
+    	echo $msga;
+    }
+   elseif(isset($msgp)){
+
+   	echo $msgp;
+   }
+
 	}
 	else
 	{?>
