@@ -195,12 +195,12 @@ th{
         </tr>
         <tr>
             <th></th>
-            <?php /****** CLOS ******/
-            for($i=0; $i<count($quizids); $i++)
-                for($j=0; $j<count($closid); $j++)
-                    if(in_array($closid[$j], $closUniqueQMulti[$i])){
+            <?php /****** Activity Names ******/
+            for($i=0; $i<count($closid); $i++)
+                for($j=0; $j<count($quizids); $j++)
+                    if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
-                    <th><?php echo $quiznames[$i]; ?></th>
+                    <th><?php echo $quiznames[$j]; ?></th>
                     <?php
                     }
             ?>
