@@ -74,7 +74,7 @@
         }
 
         for($i=0; $i < count($quizids); $i++){
-            $rec=$DB->get_recordset_sql(
+            $recQuiz=$DB->get_recordset_sql(
             'SELECT
             qa.userid,
             u.idnumber AS std_id,
@@ -100,7 +100,7 @@
             
             array($quizids[$i],1));
 
-            foreach ($recordsComp as $recC) {
+            foreach ($recQuiz as $recQ) {
                 
             }
         }
