@@ -45,11 +45,71 @@ require_once('../../../config.php');
             $record = new stdClass();
             $record->name = $apname;
             $record->description = $apdesc;
-            $record->maxmark = $apdesc;
-            $record->cloid = $apname;
+            $record->maxmark = $apmaxmark;
+            $record->cloid = $apclo;
             $assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
 
             // KHIZAR! Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
+
+
+           //MUSSAB! Automated mapping code starts from here
+             if($type == "assign"){
+
+            	$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
+
+            	if($reca){
+            	foreach ($reca as $recorda) {
+
+            		$assign_id=$recorda->assign_id; 
+            	}
+               echo $assign_id;
+            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+               ('$course_id',-2,'$assign_pro_id','$assign_id') ";
+               $DB->execute($sql);
+
+           }
+else{
+
+
+	$msga="Pls define Assignment in Define Grading Policy tab first";
+}
+
+           }
+
+
+           elseif($type == "project"){
+
+           
+            $recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
+            if($recp){
+
+            foreach ($recp as $recordp) {
+
+            		$project_id=$recordp->project_id; 
+            	}
+
+
+             $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+               ('$course_id',-2,'$assign_pro_id','$project_id') ";
+                  $DB->execute($sql);
+              }
+
+              else{
+
+
+              	$msgp="Pls define Project in Define Grading Policy tab first";
+              }
+
+
+         
+
+           }
+                             
+
+                               
+
+
+
 
 
 			$redirect_page1="./report_teacher.php?course=$course_id";

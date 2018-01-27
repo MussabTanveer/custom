@@ -39,9 +39,9 @@
 			for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
 			}
-			//echo $sum;
+			echo $sum;
 			if($sum != 100){
-				$msgP = "<font color = red>Total percentage of all activities should be 100%</font><br />";
+				//$msgP = "<font color = red>Total percentage of all activities should be 100%</font><br />";
 			}
 			else{
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
