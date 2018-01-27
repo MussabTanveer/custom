@@ -62,6 +62,7 @@
             array_push($levels, $lname); // array of levels
             array_push($lvlno, $lvl); // array of level nos
         }
+        //var_dump($closid);
 
         // Get course quiz ids
         $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
@@ -69,9 +70,9 @@
         foreach ($courseQuizId as $qid) {
             $id = $qid->id;
             $lvl = $recC->lvl;
-            array_push($quizids, $cid); // array of quiz ids
+            array_push($quizids, $id); // array of quiz ids
         }
-
+        
         // Find students quiz records
         $seatnosQMulti = array();
         $closUniqueQMulti = array();
@@ -79,7 +80,7 @@
         $resultQMulti = array();
         $cloQCount = array();
         //$tot_quesQuiz = array();
-
+        
         for($i=0; $i < count($quizids); $i++){
             $recQuiz=$DB->get_recordset_sql(
             'SELECT
@@ -117,9 +118,9 @@
             foreach($recQuiz as $rq){
                 $quizname = $rq->quiz_name;
                // echo $name;
-                $un = $rq->username;
+                $un = $rq->seat_no;
                 //$qname = $rq->name;
-                $clo=$rq->shortname;
+                $clo=$rq->competencyid;
                 $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                 $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
                 if( (($mobtained/$qmax)*100) > 50){
@@ -135,7 +136,7 @@
             //$qnameQuizUnique = array_unique($qnamesQ);
             //array_push($quiznames,$quizname);
             $cloQuizUnique = array_unique($closQ);
-            var_dump($closQ);
+            //var_dump($closQ);
 
             array_push($cloQCount,count($cloQuizUnique));
             array_push($seatnosQMulti,$seatnosQ);
@@ -143,23 +144,26 @@
             array_push($closQMulti,$closQ);
             array_push($resultQMulti,$resultQ);
         }
-
+        
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
-        var_dump($closidCountActivity);
+        //var_dump($closidCountActivity);
         
         for($i=0; $i<count($quizids); $i++)
             for($j=0; $j<count($closid); $j++)
-                for($k=0; $k<$cloQCount[$i]; $k++)
-                if(in_array($closid[$j], $closUniqueQMulti[$i][$k])){
-                    echo "if";
+                if(in_array($closid[$j], $closUniqueQMulti[$i])){
+                    //echo "if";
                     $closidCountActivity[$j]++;
                 }
         
-        //var_dump($closidCountActivity);
         var_dump($closid);
+        echo "<br>";
         var_dump($closUniqueQMulti);
+        echo "<br>";
+        var_dump($closidCountActivity);
+        echo "<br>";
+        
 
     }
 
