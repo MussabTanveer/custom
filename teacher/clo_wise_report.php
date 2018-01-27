@@ -72,11 +72,9 @@ th{
             array_push($levels, $lname); // array of levels
             array_push($lvlno, $lvl); // array of level nos
         }
-        //var_dump($closid);
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
-        //var_dump($closidCountActivity);
 
         // Get course quiz ids
         $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
@@ -94,7 +92,6 @@ th{
         $resultQMulti = array();
         $cloQCount = array();
         $quiznames = array();
-        //$tot_quesQuiz = array();
         
         for($i=0; $i < count($quizids); $i++){
             $recQuiz=$DB->get_recordset_sql(
@@ -125,16 +122,13 @@ th{
             array($quizids[$i],1));
 
             $seatnosQ = array();
-            //$qnamesQ = array();
             $closQ = array();
             $resultQ = array();
             
             $quizname = "";
             foreach($recQuiz as $rq){
                 $quizname = $rq->quiz_name;
-                //echo $quizname;
                 $un = $rq->seat_no;
-                //$qname = $rq->name;
                 $clo=$rq->competencyid;
                 $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                 $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
@@ -145,15 +139,10 @@ th{
                     array_push($resultQ,"F");
                 }
                 array_push($seatnosQ,$un);
-                //array_push($qnamesQ,$qname);
                 array_push($closQ,$clo);
             }
-            //$qnameQuizUnique = array_unique($qnamesQ);
-            //echo $quizname;
             array_push($quiznames,$quizname);
-            //var_dump($quiznames);echo "<br>";
             $cloQuizUnique = array_unique($closQ);
-            //var_dump($closQ);
 
             array_push($cloQCount,count($cloQuizUnique));
             array_push($seatnosQMulti,$seatnosQ);
@@ -161,7 +150,6 @@ th{
             array_push($closQMulti,$closQ);
             array_push($resultQMulti,$resultQ);
         }
-        //var_dump($quiznames);echo "<br>";
         
         for($i=0; $i<count($quizids); $i++)
             for($j=0; $j<count($closid); $j++)
