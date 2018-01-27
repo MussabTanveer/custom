@@ -139,10 +139,10 @@ th{
                 $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                 $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
                 if( (($mobtained/$qmax)*100) > 50){
-                    array_push($resultQ,"<font color='green'>P</font>");
+                    array_push($resultQ,"P");
                 }
                 else{
-                    array_push($resultQ,"<font color='red'>F</font>");
+                    array_push($resultQ,"F");
                 }
                 array_push($seatnosQ,$un);
                 //array_push($qnamesQ,$qname);
@@ -161,21 +161,19 @@ th{
             array_push($closQMulti,$closQ);
             array_push($resultQMulti,$resultQ);
         }
-        var_dump($quiznames);echo "<br>";
+        //var_dump($quiznames);echo "<br>";
         
         for($i=0; $i<count($quizids); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
         
-        var_dump($closid);
+        /*var_dump($closid);
         echo "<br>";
         var_dump($closUniqueQMulti);
         echo "<br>";
         var_dump($closidCountActivity);
-        echo "<br>";
-        
-
+        echo "<br>";*/
     }
 
     ?>
@@ -205,6 +203,38 @@ th{
                     }
             ?>
         </tr>
+        <?php
+        foreach ($seatnos as $seatno) {
+        ?>
+        <tr> 
+            <td>  <?php echo "$seatno" ?> </td>
+            <?php
+            /****** QUIZZES RECORDS ******/
+            for($i=0; $i<count($closid); $i++)
+                for($j=0; $j<count($quizids); $j++)
+                    if(in_array($closid[$i], $closUniqueQMulti[$j])){
+                        $flag=0;
+                        for($k=0; $k<count($seatnosQMulti[$j]); $k++){
+                            if($seatno == $seatnosQMulti[$j][$k] && $closid[$i] == $closQMulti[$j][$k])
+                            {
+                                $flag=1;
+                                if($resultQMulti[$j][$k] == 'P')
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                                else
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                                
+                            }
+                        }
+                        if($flag==0)
+                        {
+                            echo "<td>x</td>";
+                        }
+                    }
+            ?>
+        </tr>
+        <?php
+        }
+        ?>
     </table>
 
 
