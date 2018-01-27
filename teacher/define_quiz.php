@@ -68,91 +68,54 @@ require_once('../../../config.php');
             // KHIZAR! Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
 
             //MUSSAB! Automated Mapping of Quiz, Mid-terms and Finals
-          if($type == "quiz"){
+			if($type == "quiz"){
 
-            	$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
+				$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
 
-            	if($recq){
-            	foreach ($recq as $recordq) {
+				if($recq){
+					foreach ($recq as $recordq) {
+						$quiz_id=$recordq->quiz_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-1,'$quizid','$quiz_id') ";
+					$DB->execute($sql);
+				}
+				else{
+					$msgq="Pls define Quiz in Define Grading Policy tab first";
+				}
+			}
+           	elseif($type == "midterm"){
+	        	$recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
 
-            		$quiz_id=$recordq->quiz_id; 
-            	}
-
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-1,'$quizid','$quiz_id') ";
-
-               $DB->execute($sql);
-           }
-
-           else {
-
-            
-            $msgq="Pls define Quiz in Define Grading Policy tab first";
-              
-
-           }
-
-           }
-
-           elseif($type == "midterm"){
-
-
-           $recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
-
-           if($recm){
-            	foreach ($recm as $recordm) {
-
-            		$mid_id=$recordm->mid_id; 
-            	}
-
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-1,'$quizid','$mid_id') ";
-               $DB->execute($sql);
-           }
-
-        else{
-
-        $msgm="Pls define Mid term in Define Grading Policy tab first";
-
-
-
-        }
-
-
-
+				if($recm){
+					foreach ($recm as $recordm) {
+						$mid_id=$recordm->mid_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-1,'$quizid','$mid_id') ";
+					$DB->execute($sql);
+				}
+		        else{
+        			$msgm="Pls define Mid term in Define Grading Policy tab first";
+				}
             }
+            elseif($type == "finalexam"){
+				$recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
+				if($recf){
+					foreach ($recf as $recordf) {
+						$final_id=$recordf->final_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-1,'$quizid','$final_id_id') ";
+					$DB->execute($sql);
+				}
+				else{
+					$msgf="Pls define Final Exam in Define Grading Policy tab first";
+				}
+            }
+           	// MUSSAB! Automated mapping code ends here 
 
-
-             elseif($type == "finalexam"){
-
-
-           $recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
-
-           if($recf){
-            	foreach ($recf as $recordf) {
-
-            		$final_id=$recordf->final_id; 
-
-            	}
-
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-1,'$quizid','$final_id_id') ";
-               $DB->execute($sql);
-           }
-
-           else{
-
-            $msgf="Pls define Final Exam in Define Grading Policy tab first";
-          
-
-           }
-
-            }  
-
-           // MUSSAB! Automated mapping code ends here 
-
-
-
+			// Insert Quiz Questions
             if($quizid){
                 for ($i=0; $i < count($quesnames) ; $i++) {
                     # code...
