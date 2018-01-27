@@ -11,7 +11,17 @@
 	if($SESSION->oberole != "teacher"){
         header('Location: ../index.php');
 	}
-	echo $OUTPUT->header();
+    echo $OUTPUT->header();
+?>
+<style>
+td{
+    text-align:center;
+}
+th{
+    text-align:center;
+}
+</style>
+<?php
 
     if(isset($_GET['course']))
     {
