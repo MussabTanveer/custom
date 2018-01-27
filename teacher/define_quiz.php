@@ -160,7 +160,11 @@ require_once('../../../config.php');
             array_push($peos, $peo); // array of peos
             array_push($levels, $lname); // array of levels
             array_push($lvlno, $lvl); // array of level nos
-        }
+		}
+		
+		$temp = array();
+		$editor = \editors_get_preferred_editor();
+		$editor->use_editor("id_description",$temp);
 
 		?>
 		<br />
