@@ -30,22 +30,11 @@
 			
 			$time = time();
 
-	
-				$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ?', array($id));
-					$rev=0;
-					if($revisions){
-	            		foreach ($revisions as $revision){	
-							$idnumber = $revision->idnumber;
-
-	            		}
-        			}
-		
-
-        			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where idnumber = ? AND competencyframeworkid = ?', array($idnumber , $fw_id));
-					$rev=0;
+        			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ? ', array($id));
+					
 					if($revisions){
 	            		foreach ($revisions as $revision){
-							$rev = $revision->revision;
+							
 							$plo = $revision->parentid;
 							$fwidd= $revision->competencyframeworkid; 
 							$shortname = $revision->shortname;
@@ -53,20 +42,25 @@
 
 	            		}
         			}
-        			$rev++;
+        			
        			
-					$sql="INSERT INTO mdl_competency (revision,shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$rev','$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time', $USER->id)";
+					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time',$USER->id)";
 					$DB->execute($sql);
 
-					
-						$query=$DB->get_records_sql("SELECT MAX(id) as id FROM  mdl_competency");
+					$query=$DB->get_records_sql("SELECT MAX(id) as id FROM  mdl_competency");
 
 							foreach ($query as $q){
 
 								$lastId = $q->id;
-
 							}
 							
+
+					$sql="INSERT INTO mdl_clo_revision (cloid , revision) VALUES ('$id','$lastId')";
+
+						$DB->execute($sql);
+
+
+
 							
 					$sql="INSERT INTO mdl_clo_kpi (cloid , kpi) VALUES ('$lastId','$kpi')";
 
