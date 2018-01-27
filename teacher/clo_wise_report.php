@@ -85,6 +85,15 @@ th{
             array_push($quizids, $id); // array of quiz ids
         }
         
+        // Get course assignment ids
+        $courseAssignId=$DB->get_records_sql("SELECT * FROM `mdl_assign` WHERE course = ? ", array($course_id));
+        $assignids = array();
+        foreach ($courseAssignId as $aid) {
+            $id = $aid->id;
+            array_push($assignids, $id); // array of assign ids
+        }
+        
+        /**** QUIZZES ****/
         // Find students quiz records
         $seatnosQMulti = array();
         $closUniqueQMulti = array();
@@ -150,18 +159,86 @@ th{
             array_push($closQMulti,$closQ);
             array_push($resultQMulti,$resultQ);
         }
+
+        /**** ASSIGNMENTS ****/
+        // Find students assignment records
+        $seatnosAMulti = array();
+        $closUniqueAMulti = array();
+        $closAMulti = array();
+        $resultAMulti = array();
+        $cloACount = array();
+        $assignnames = array();
+        
+        for($i=0; $i < count($assignids); $i++){
+            //Get assign comp
+            $recAssignCLO=$DB->get_records_sql("SELECT DISTINCT c.id AS clo_id, c.shortname AS clo_name
+            
+            FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+    
+            WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
+            
+            ORDER BY cmc.competencyid",
+            
+            array($assignids[$i],$course_id,1));
+            // Get assign records
+            $recAssign=$DB->get_recordset_sql(
+                'SELECT
+                u.username AS seat_no,
+                a.name AS assign_name,
+                a.grade AS maxmark,
+                ag.grade AS marksobtained
+                FROM
+                    mdl_assign a,
+                    mdl_assign_grades ag,
+                    mdl_user u
+                WHERE
+                    a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment
+                ORDER BY ag.userid',
+                
+            array($assignids[$i],-1));
+
+            $seatnosA = array();
+            $closA = array();
+            $resultA = array();
+            
+            $assignname = "";
+            foreach($recAssign as $as){
+                $assignname = $as->assign_name;
+                $un = $as->seat_no;
+                $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                if( (($mobtained/$amax)*100) > 50){
+                    array_push($resultA,"P");
+                }
+                else{
+                    array_push($resultA,"F");
+                }
+                array_push($seatnosA,$un);
+            }
+            foreach($recAssignCLO as $asCLO){
+                $clo = $asCLO->clo_id;
+                array_push($closA,$clo);
+            }
+
+            array_push($assignnames,$assignname);
+            $cloAssignUnique = array_unique($closA);
+
+            array_push($seatnosAMulti,$seatnosA);
+            array_push($closAMulti,$closA);
+            array_push($resultAMulti,$resultA);
+
+            array_push($cloACount,count($cloAssignUnique));
+            array_push($closUniqueAMulti,$cloAssignUnique);
+
+        }
         
         for($i=0; $i<count($quizids); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
         
-        /*var_dump($closid);
-        echo "<br>";
-        var_dump($closUniqueQMulti);
-        echo "<br>";
-        var_dump($closidCountActivity);
-        echo "<br>";*/
+        
+        
     }
 
     ?>
