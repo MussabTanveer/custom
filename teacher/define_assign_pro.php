@@ -49,69 +49,39 @@ require_once('../../../config.php');
             $record->cloid = $apclo;
             $assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
 
-            // KHIZAR! Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
+            // Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
-
-           //MUSSAB! Automated mapping code starts from here
-             if($type == "assign"){
-
+           // Automated mapping code starts from here
+            if($type == "assign"){
             	$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
-
             	if($reca){
-            	foreach ($reca as $recorda) {
-
-            		$assign_id=$recorda->assign_id; 
-            	}
-               echo $assign_id;
-            $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-2,'$assign_pro_id','$assign_id') ";
-               $DB->execute($sql);
-
-           }
-else{
-
-
-	$msga="Pls define Assignment in Define Grading Policy tab first";
-}
-
-           }
-
-
-           elseif($type == "project"){
-
-           
-            $recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
-            if($recp){
-
-            foreach ($recp as $recordp) {
-
-            		$project_id=$recordp->project_id; 
-            	}
-
-
-             $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-               ('$course_id',-2,'$assign_pro_id','$project_id') ";
-                  $DB->execute($sql);
-              }
-
-              else{
-
-
-              	$msgp="Pls define Project in Define Grading Policy tab first";
-              }
-
-
-         
-
-           }
-                             
-
-                               
-
-
-
-
-
+					foreach ($reca as $recorda) {
+						$assign_id=$recorda->assign_id; 
+					}
+					echo $assign_id;
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-2,'$assign_pro_id','$assign_id') ";
+					$DB->execute($sql);
+				}
+				else{
+					$msga="Pls define Assignment in Define Grading Policy tab first";
+				}
+           	}
+           	elseif($type == "project"){
+            	$recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
+				if($recp){
+					foreach ($recp as $recordp) {
+						$project_id=$recordp->project_id; 
+					}
+					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+					('$course_id',-2,'$assign_pro_id','$project_id') ";
+					$DB->execute($sql);
+				}
+				else{
+					$msgp="Pls define Project in Define Grading Policy tab first";
+				}
+		   	}
+			
 			$redirect_page1="./report_teacher.php?course=$course_id";
 			redirect($redirect_page1);
 		}
@@ -142,10 +112,6 @@ else{
             array_push($levels, $lname); // array of levels
             array_push($lvlno, $lvl); // array of level nos
         }
-
-		if(isset($msg3)){
-			echo $msg3;
-		}
 
 		?>
 		<br />
@@ -268,14 +234,11 @@ else{
 		</form>
 		
 		<?php
-		if(isset($_POST['save']) && !isset($msg3)){
-		?>
-		<script>
-			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
-			document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
-			document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
-		</script>
-		<?php
+		if(isset($msga)){
+			echo $msga;
+		}
+		elseif(isset($msgp)){
+			echo $msgp;
 		}
 		?>
 				
@@ -309,19 +272,7 @@ else{
 			
 		</script>
 
-
-
-
     <?php
-    if(isset($msga)){
-
-    	echo $msga;
-    }
-   elseif(isset($msgp)){
-
-   	echo $msgp;
-   }
-
 	}
 	else
 	{?>
