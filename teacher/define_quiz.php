@@ -4,7 +4,7 @@ require_once('../../../config.php');
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Manual Quiz");
-    $PAGE->set_heading("Define Manual Quiz");
+    $PAGE->set_heading("Define Manual Quiz/Midterm/Final Exam");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/define_quiz.php');
     
     require_login();
@@ -174,8 +174,24 @@ require_once('../../../config.php');
 		</p>
 		
 		<form method='post' action="" class="mform" id="cloForm">
-            
-            <h3>Quiz</h3>
+			
+			<?php
+            if($type == "quiz"){
+                ?>
+                <h3>Quiz</h3>
+                <?php
+            }
+            elseif($type == "midterm"){
+                ?>
+                <h3>Midterm</h3>
+                <?php
+			}
+			elseif($type == "finalexam"){
+                ?>
+                <h3>Final Exam</h3>
+                <?php
+            }
+            ?>
 
             <div class="form-group row fitem ">
                 <div class="col-md-3">
