@@ -28,7 +28,7 @@ require_once('../../../config.php');
 
 <?php
     
-    if(isset($_GET['type']) && isset($_GET['course']))
+    if(!empty($_GET['type']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
         //echo "Course ID : $course_id";
