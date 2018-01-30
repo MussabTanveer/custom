@@ -72,11 +72,11 @@ th{
             $assignCount=0;
             $projectCount=0;
             
+            $flagquiz = 0;
             $flagmid = 0;
             $flagfinal = 0;
             $flagproject = 0;
             $flagassign = 0;
-
 
 
             /****** PROJECT ******/
@@ -86,10 +86,9 @@ th{
                 //$pos = array_search('mid term', $gnames);
                 
                 $seatnosPMulti = array();
-                //$qnamesAMulti = array();
                 $closPMulti = array();
                 $resultPMulti = array();
-                //$tot_quesQuiz = array();
+                $maxmarkP = array();
 
                 for($i=0; $i<count($gnames); $i++)
                 {
@@ -123,62 +122,52 @@ th{
                             
                         array($instances[$i],-1));
                     
-                    $seatnosP = array();
-                    //$qnamesQ = array();
-                    $closP = array();
-                    $resultP = array();
-                    
-                    foreach($recProject as $as){
+                        $seatnosP = array();
+                        $closP = array();
+                        $resultP = array();
+                        $amax=0;
                         
-                        $un = $as->seat_no;
-                        //$qname = $as->name;
-                        //$clo=$as->shortname;
-                        $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
-                        $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
-                        if( (($mobtained/$amax)*100) > 50){
-                            array_push($resultP,"<font color='green'>P</font>");
+                        foreach($recProject as $as){
+                            $un = $as->seat_no;
+                            $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                            $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                            /*if( (($mobtained/$amax)*100) > 50){
+                                array_push($resultP,"<font color='green'>P</font>");
+                            }
+                            else{
+                                array_push($resultP,"<font color='red'>F</font>");
+                            }*/
+                            array_push($resultP,$mobtained);
+                            array_push($seatnosP,$un);
                         }
-                        else{
-                            array_push($resultP,"<font color='red'>F</font>");
+                        array_push($maxmarkP,$amax);
+
+                        foreach($recProjectCLO as $asCLO){
+                            $clo = $asCLO->clo_name;
+                            array_push($closP,$clo);
                         }
-
-                        array_push($seatnosP,$un);
-                        //array_push($qnamesQ,$qname);
-                        //array_push($closQ,$clo);
-                    }
-                    foreach($recProjectCLO as $asCLO){
-                        $clo = $asCLO->clo_name;
-                        
-                        array_push($closP,$clo);
-                    }
-
-                    //$qnameQuizUnique = array_unique($qnamesQ);
-                    //array_push($tot_quesQuiz,count($qnameQuizUnique));
             
                         //var_dump($seatnosQ);
                         //echo "<br>";
                         array_push($seatnosPMulti,$seatnosP);
-                        //array_push($qnamesQMulti,$qnameQuizUnique);
                         array_push($closPMulti,$closP);
                         array_push($resultPMulti,$resultP);
                     }
                         
                 }
-                // echo "$quizCount";
             }
 
 
             /****** ASSIGNMENT ******/
             if(in_array("assignment", $gnames)){
-                $flagquiz = 1;
+                $flagassign = 1;
                 
                 //$pos = array_search('mid term', $gnames);
                 
                 $seatnosAMulti = array();
-                //$qnamesAMulti = array();
                 $closAMulti = array();
                 $resultAMulti = array();
-                //$tot_quesQuiz = array();
+                $maxmarkA = array();
 
                 for($i=0; $i<count($gnames); $i++)
                 {
@@ -212,48 +201,39 @@ th{
                             
                         array($instances[$i],-1));
                     
-                    $seatnosA = array();
-                    //$qnamesQ = array();
-                    $closA = array();
-                    $resultA = array();
-                    
-                    foreach($recAssign as $as){
+                        $seatnosA = array();
+                        $closA = array();
+                        $resultA = array();
                         
-                        $un = $as->seat_no;
-                        //$qname = $as->name;
-                        //$clo=$as->shortname;
-                        $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
-                        $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
-                        if( (($mobtained/$amax)*100) > 50){
-                            array_push($resultA,"<font color='green'>P</font>");
-                        }
-                        else{
-                            array_push($resultA,"<font color='red'>F</font>");
-                        }
+                        $amax = 0;
 
-                        array_push($seatnosA,$un);
-                        //array_push($qnamesQ,$qname);
-                        //array_push($closQ,$clo);
-                    }
-                    foreach($recAssignCLO as $asCLO){
-                        $clo = $asCLO->clo_name;
-                        
-                        array_push($closA,$clo);
-                    }
+                        foreach($recAssign as $as){
+                            $un = $as->seat_no;
+                            $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                            $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                            /*if( (($mobtained/$amax)*100) > 50){
+                                array_push($resultA,"<font color='green'>P</font>");
+                            }
+                            else{
+                                array_push($resultA,"<font color='red'>F</font>");
+                            }*/
+                            array_push($resultA,$mobtained);
+                            array_push($seatnosA,$un);
+                        }
+                        array_push($maxmarkA,$amax);
 
-                    //$qnameQuizUnique = array_unique($qnamesQ);
-                    //array_push($tot_quesQuiz,count($qnameQuizUnique));
+                        foreach($recAssignCLO as $asCLO){
+                            $clo = $asCLO->clo_name;
+                            array_push($closA,$clo);
+                        }
             
                         //var_dump($seatnosQ);
                         //echo "<br>";
                         array_push($seatnosAMulti,$seatnosA);
-                        //array_push($qnamesQMulti,$qnameQuizUnique);
                         array_push($closAMulti,$closA);
                         array_push($resultAMulti,$resultA);
                     }
-                        
                 }
-                // echo "$quizCount";
             }
 
             /****** QUIZZES ******/
@@ -320,32 +300,34 @@ th{
                         $clo=$fe->shortname;
                         $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                         $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
-                        if( (($mobtained/$qmax)*100) > 50){
+                        /*if((($mobtained/$qmax)*100) > 50){
                             array_push($resultQ,"<font color='green'>P</font>");
                         }
                         else{
                             array_push($resultQ,"<font color='red'>F</font>");
-                        }
+                        }*/
+                        array_push($resultQ, $mobtained);
 
                         array_push($quiznames,$quizname);
                         // var_dump($quiznames);
                         // echo "<br>";
                         array_push($seatnosQ,$un);
+                        $qname = $qname."(".$qmax.")";
                         array_push($qnamesQ,$qname);
                         array_push($closQ,$clo);
-                            
-                            //echo $quizname;
+                        
+                        //echo $quizname;
                     }
                     $qnameQuizUnique = array_unique($qnamesQ);
                     array_push($tot_quesQuiz,count($qnameQuizUnique));
-            
-                        //var_dump($seatnosQ);
-                        //echo "<br>";
-                        array_push($seatnosQMulti,$seatnosQ);
-                        array_push($qnamesQMulti,$qnameQuizUnique);
-                        array_push($closQMulti,$closQ);
-                        array_push($resultQMulti,$resultQ);
-                        }
+                    
+                    //var_dump($seatnosQ);
+                    //echo "<br>";
+                    array_push($seatnosQMulti,$seatnosQ);
+                    array_push($qnamesQMulti,$qnameQuizUnique);
+                    array_push($closQMulti,$closQ);
+                    array_push($resultQMulti,$resultQ);
+                    }
                         
                 }
                 // echo "$quizCount";
@@ -397,13 +379,16 @@ th{
                         $clo=$fe->shortname;
                         $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                         $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
-                        if( (($mobtained/$qmax)*100) > 50){
+                        /*if((($mobtained/$qmax)*100) > 50){
                             array_push($resultM,"<font color='green'>P</font>");
                         }
                         else{
                             array_push($resultM,"<font color='red'>F</font>");
-                        }
+                        }*/
+                        array_push($resultM, $mobtained);
+
                         array_push($seatnosM,$un);
+                        $qname = $qname."(".$qmax.")";
                         array_push($qnamesM,$qname);
                         array_push($closM,$clo);
                     }
@@ -456,13 +441,16 @@ th{
                         $clo=$fe->shortname;
                         $qmax = $fe->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                         $mobtained = $fe->marksobtained; $mobtained = number_format($mobtained, 2);
-                        if( (($mobtained/$qmax)*100) > 50){
+                        /*if( (($mobtained/$qmax)*100) > 50){
                             array_push($resultF,"<font color='green'>P</font>");
                         }
                         else{
                             array_push($resultF,"<font color='red'>F</font>");
-                        }
+                        }*/
+                        array_push($resultF, $mobtained);
+
                         array_push($seatnosF,$un);
+                        $qname = $qname."(".$qmax.")";
                         array_push($qnamesF,$qname);
                         array_push($closF,$clo);
                     }
@@ -470,6 +458,7 @@ th{
                     $tot_quesFinal = count($qnameFinalUnique);
             }
             ?>
+            <!-- Now display data in formatted way -->
             <table class="generaltable" border="1">
                 <tr>
                     <th>Seat Number</th>
@@ -496,11 +485,17 @@ th{
                     <?php
                     }
                     ?>
-                    <?php /****** MID TERM ******/ ?>
+                    <?php /****** MID TERM ******/
+                    if($flagmid){
+                    ?>
                     <th colspan="<?php echo $tot_quesMid ?>">Mid Term</th>
-                    <?php /****** FINAL EXAM ******/ ?>
+                    <?php } ?>
+
+                    <?php /****** FINAL EXAM ******/ 
+                    if($flagfinal){
+                    ?>
                     <th colspan="<?php echo $tot_quesFinal ?>">Final Exam</th>
-                    
+                    <?php } ?>
                 </tr>
                 <tr>
                     <th></th>
@@ -508,7 +503,7 @@ th{
                     <?php /****** PROJECT ******/
                     for($i=0 ; $i<$projectCount; $i++)
                     {?>
-                        <th></th>
+                        <th><?php echo $maxmarkP[$i] ?></th>
                     <?php
                     }
                     ?>
@@ -516,7 +511,7 @@ th{
                     <?php /****** ASSIGNMENT ******/
                     for($i=0 ; $i<$assignCount; $i++)
                     {?>
-                        <th></th>
+                        <th><?php echo $maxmarkA[$i] ?></th>
                     <?php
                     }
                     ?>
@@ -531,13 +526,17 @@ th{
                     }
                     
                     /****** MID TERM ******/
-                    foreach($qnameMidUnique as $q){
-                        echo "<th>$q</th>";
+                    if($flagmid){
+                        foreach($qnameMidUnique as $q){
+                            echo "<th>$q</th>";
+                        }
                     }
                     
                     /****** FINAL EXAM ******/
-                    foreach($qnameFinalUnique as $q){
-                        echo "<th>$q</th>";
+                    if($flagfinal){
+                        foreach($qnameFinalUnique as $q){
+                            echo "<th>$q</th>";
+                        }
                     }
                     ?>
                 </tr>
@@ -549,7 +548,7 @@ th{
                     for($i=0; $i<$projectCount; $i++)
                     {
                         ?>
-                        <th> 
+                        <th>
                         <?php
                         for($j=0; $j<count($closPMulti[$i]); $j++){
                            echo $closPMulti[$i][$j];
@@ -585,13 +584,17 @@ th{
                     }
 
                     /****** MID TERM ******/
-                    for($i=0; $i < count($qnameMidUnique); $i++){
-                        echo "<th>$closM[$i]</th>";
+                    if($flagmid){
+                        for($i=0; $i < count($qnameMidUnique); $i++){
+                            echo "<th>$closM[$i]</th>";
+                        }
                     }
                     
                     /****** FINAL EXAM ******/
-                    for($i=0; $i < count($qnameFinalUnique); $i++){
-                        echo "<th>$closF[$i]</th>";
+                    if($flagfinal){
+                        for($i=0; $i < count($qnameFinalUnique); $i++){
+                            echo "<th>$closF[$i]</th>";
+                        }
                     }
                     ?>
                 </tr>
@@ -664,37 +667,41 @@ th{
                             }
                             
                             /****** MID TERM ******/
-                            $flag=0;
-                            for($i=0 ; $i<count($seatnosM); $i++)
-                            {
-                                if($seatno == $seatnosM[$i])
+                            if($flagmid){
+                                $flag=0;
+                                for($i=0 ; $i<count($seatnosM); $i++)
                                 {
-                                    $flag=1;
-                                     echo "<td>$resultM[$i]</td>";
+                                    if($seatno == $seatnosM[$i])
+                                    {
+                                        $flag=1;
+                                        echo "<td>$resultM[$i]</td>";
+                                    }
                                 }
-                            }
-                            if($flag==0)
-                            {
-                                foreach ($qnameMidUnique as $quesUnique)
+                                if($flag==0)
                                 {
-                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    foreach ($qnameMidUnique as $quesUnique)
+                                    {
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    }
                                 }
                             }
                             /****** FINAL EXAM ******/
-                            $flag=0;
-                            for($i=0 ; $i<count($seatnosF); $i++)
-                            {
-                                if($seatno == $seatnosF[$i])
+                            if($flagfinal){
+                                $flag=0;
+                                for($i=0 ; $i<count($seatnosF); $i++)
                                 {
-                                    $flag=1;
-                                     echo "<td>$resultF[$i]</td>";
+                                    if($seatno == $seatnosF[$i])
+                                    {
+                                        $flag=1;
+                                        echo "<td>$resultF[$i]</td>";
+                                    }
                                 }
-                            }
-                            if($flag==0)
-                            {
-                                foreach ($qnameFinalUnique as $quesUnique)
+                                if($flag==0)
                                 {
-                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    foreach ($qnameFinalUnique as $quesUnique)
+                                    {
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    }
                                 }
                             }
                         ?>
