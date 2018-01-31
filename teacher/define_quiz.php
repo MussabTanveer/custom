@@ -290,8 +290,8 @@ require_once('../../../config.php');
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-                    <select onChange="dropdownTip(this.value, 0)" name="clo[]" class="select custom-select">
-                        <option value='NULL'>Choose..</option>
+                    <select required onChange="dropdownTip(this.value, 0)" name="clo[]" class="select custom-select">
+                        <option value=''>Choose..</option>
                         <?php
                         foreach ($courseclos as $recC) {
                         $cid =  $recC->cloid;
@@ -310,7 +310,9 @@ require_once('../../../config.php');
 					</div>
 				</div>
 			</div>
-            
+            <?php
+			if($type == "finalexam"){
+			?>
             <div class="form-group row fitem ">
                 <div class="col-md-3">
 					<label class="col-form-label d-inline" for="id_sepatmpt">
@@ -322,7 +324,10 @@ require_once('../../../config.php');
 					<div class="form-control-feedback" id="id_error_sepatmpt">
 					</div>
 				</div>
-            </div>
+			</div>
+			<?php
+			}
+			?>
 
 			</div>
 
