@@ -660,6 +660,7 @@
                 </div>
                 <div class="col-md-9 form-inline felement" data-fieldtype="text">
                     <input type="text"
+                        required
                         class="form-control wbn-datepicker"
                         name="startdate"
                         id="id_startdate"
@@ -688,6 +689,7 @@
                 </div>
                 <div class="col-md-9 form-inline felement" data-fieldtype="text">
                     <input type="text"
+                        required
                         class="form-control wbn-datepicker"
                         name="enddate"
                         id="id_enddate"
