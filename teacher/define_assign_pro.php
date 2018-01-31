@@ -24,6 +24,7 @@ require_once('../../../config.php');
 	}
 </style>
 
+<link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 <?php
@@ -40,48 +41,58 @@ require_once('../../../config.php');
             $apname = trim($_POST["name"]);
             $apdesc = trim($_POST["description"]);
             $apmaxmark = trim($_POST["maxmark"]);
-            $apclo = trim($_POST["clo"]);
+			$apclo = trim($_POST["clo"]);
+			$startdate=strtotime($_POST['startdate']);
+            $enddate=strtotime($_POST['enddate']);
 
-            $record = new stdClass();
-            $record->name = $apname;
-            $record->description = $apdesc;
-            $record->maxmark = $apmaxmark;
-            $record->cloid = $apclo;
-            $assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
+			try {
+				$transaction = $DB->start_delegated_transaction();
+				$record = new stdClass();
+				$record->courseid = $course_id;
+				$record->name = $apname;
+				$record->description = $apdesc;
+				$record->maxmark = $apmaxmark;
+				$record->cloid = $apclo;
+				$record->startdate = $startdate;
+	            $record->enddate = $enddate;
+				$assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
 
-            // Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
+				// Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
-           // Automated mapping code starts from here
-            if($type == "assign"){
-            	$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
-            	if($reca){
-					foreach ($reca as $recorda) {
-						$assign_id=$recorda->assign_id; 
+				// Automated mapping code starts from here
+				if($type == "assign"){
+					$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
+					if($reca){
+						foreach ($reca as $recorda) {
+							$assign_id=$recorda->assign_id; 
+						}
+						echo $assign_id;
+						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+						('$course_id',-2,'$assign_pro_id','$assign_id') ";
+						$DB->execute($sql);
 					}
-					echo $assign_id;
-					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-					('$course_id',-2,'$assign_pro_id','$assign_id') ";
-					$DB->execute($sql);
-				}
-				else{
-					$msga="Pls define Assignment in Define Grading Policy tab first";
-				}
-           	}
-           	elseif($type == "project"){
-            	$recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
-				if($recp){
-					foreach ($recp as $recordp) {
-						$project_id=$recordp->project_id; 
+					else{
+						$msga="Pls define Assignment in Define Grading Policy tab first";
 					}
-					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-					('$course_id',-2,'$assign_pro_id','$project_id') ";
-					$DB->execute($sql);
 				}
-				else{
-					$msgp="Pls define Project in Define Grading Policy tab first";
+				elseif($type == "project"){
+					$recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
+					if($recp){
+						foreach ($recp as $recordp) {
+							$project_id=$recordp->project_id; 
+						}
+						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+						('$course_id',-2,'$assign_pro_id','$project_id') ";
+						$DB->execute($sql);
+					}
+					else{
+						$msgp="Pls define Project in Define Grading Policy tab first";
+					}
 				}
-		   	}
-			
+				$transaction->allow_commit();
+				} catch(Exception $e) {
+					$transaction->rollback($e);
+			}
 			$redirect_page1="./report_teacher.php?course=$course_id";
 			redirect($redirect_page1);
 		}
@@ -96,7 +107,7 @@ require_once('../../../config.php');
         clo.id=clolevel.cloid AND levels.id=clolevel.levelid",
         
         array($course_id));
-            
+        
         $clonames = array(); $closid = array(); $plos = array(); $peos = array(); $levels = array(); $lvlno = array();
         foreach ($courseclos as $recC) {
             $cid = $recC->cloid;
@@ -229,6 +240,50 @@ require_once('../../../config.php');
 				</div>
 			</div>
             
+			<div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label for="id_startdate">
+                        Start Date
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <input type="text"
+						required
+                        class="form-control wbn-datepicker"
+                        name="startdate"
+                        id="id_startdate"
+                        size="27"
+                        maxlength="100" >
+                    <div class="form-control-feedback" id="id_error_idnumber">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label for="id_enddate">
+                        Due Date
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <input type="text"
+						required
+                        class="form-control wbn-datepicker"
+                        name="enddate"
+                        id="id_enddate"
+                        data-start-src="id_startdate"
+                        size="27"
+                        maxlength="100" >
+                    <div class="form-control-feedback" id="id_error_idnumber">
+                    </div>
+                </div>
+            </div>
             <br />
 			
 			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
@@ -274,6 +329,16 @@ require_once('../../../config.php');
 				}
 			}
 			
+		</script>
+
+		<script src="../script/datepicker/wbn-datepicker.min.js"></script>
+		<script type="text/javascript">
+			$(function () {
+			$('.wbn-datepicker').datepicker()
+		
+			var $jsDatepicker = $('#value-specified-js').datepicker()
+			$jsDatepicker.val('2017-05-30')
+			})
 		</script>
 
     <?php
