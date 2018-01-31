@@ -287,7 +287,7 @@ require_once('../../../config.php');
             <br />
 			
 			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
-            <a class="btn btn-default" type="submit" href="./report_teacher.php?course=<?php $course_id ?>">Cancel</a>
+            <a class="btn btn-default" type="submit" href="./report_teacher.php?course=<?php echo $course_id ?>">Cancel</a>
 			<br /><br />
 			<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 		</form>
