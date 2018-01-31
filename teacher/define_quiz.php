@@ -31,7 +31,9 @@ require_once('../../../config.php');
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
-        //echo "Course ID : $course_id";
+		//echo "Course ID : $course_id";
+		$course_id = (int)$course_id; // convert course id from string to int
+		//echo gettype($course_id), "\n";
         $type=$_GET['type'];
         //echo " Activity Type : $type";
 
@@ -43,7 +45,14 @@ require_once('../../../config.php');
 			foreach ($_POST['quesname'] as $qN)
 			{
 				array_push($quesnames,$qN);	
-            }
+			}
+			if($type != "finalexam"){
+				$questexts=array();
+				foreach ($_POST['ques_text'] as $qT)
+				{
+					array_push($questexts,$qT);
+				}
+			}
             $maxmarks=array();
 			foreach ($_POST['maxmark'] as $qMM)
 			{
@@ -54,82 +63,96 @@ require_once('../../../config.php');
 			{
 				array_push($closid,$cid);	
 			}
-			$separateattempts = array();
-			for ($i = 0; $i < count($quesnames); $i++) {
-				$separateattempts[$i] = in_array($i, $_POST['separateattempt']) ? 1 : 0;
+			if($type == "finalexam"){
+				$separateattempts = array();
+				for ($i = 0; $i < count($quesnames); $i++) {
+					$separateattempts[$i] = in_array($i, $_POST['separateattempt']) ? 1 : 0;
+				}
 			}
 
 			// Insert manual quiz record
-            $record = new stdClass();
-            $record->name = $quizname;
-            $record->description = $quizdesc;
-            $quizid = $DB->insert_record('manual_quiz', $record); // get quiz id of newly inserted quiz
+			try {
+				$transaction = $DB->start_delegated_transaction();
+				$record = new stdClass();
+				$record->courseid = $course_id;
+				$record->name = $quizname;
+				$record->description = $quizdesc;
+				$quizid = $DB->insert_record('manual_quiz', $record); // get quiz id of newly inserted quiz
 
-            // Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
+				// Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
 
-            // Automated Mapping of Quiz, Mid-terms and Finals
-			if($type == "quiz"){
+				// Automated Mapping of Quiz, Mid-terms and Finals
+				if($type == "quiz"){
 
-				$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
+					$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
 
-				if($recq){
-					foreach ($recq as $recordq) {
-						$quiz_id=$recordq->quiz_id; 
+					if($recq){
+						foreach ($recq as $recordq) {
+							$quiz_id=$recordq->quiz_id;
+						}
+						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES
+						('$course_id',-1,'$quizid','$quiz_id') ";
+						$DB->execute($sql);
 					}
-					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-					('$course_id',-1,'$quizid','$quiz_id') ";
-					$DB->execute($sql);
+					else{
+						$msgq="Pls define Quiz in Define Grading Policy tab first";
+					}
 				}
-				else{
-					$msgq="Pls define Quiz in Define Grading Policy tab first";
+				elseif($type == "midterm"){
+					$recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
+
+					if($recm){
+						foreach ($recm as $recordm) {
+							$mid_id=$recordm->mid_id; 
+						}
+						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+						('$course_id',-1,'$quizid','$mid_id') ";
+						$DB->execute($sql);
+					}
+					else{
+						$msgm="Pls. define Mid term in Define Grading Policy tab first";
+					}
 				}
+				elseif($type == "finalexam"){
+					$recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
+					if($recf){
+						foreach ($recf as $recordf) {
+							$final_id=$recordf->final_id; 
+						}
+						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+						('$course_id',-1,'$quizid','$final_id') ";
+						$DB->execute($sql);
+					}
+					else{
+						$msgf="Pls. define Final Exam in Define Grading Policy tab first";
+					}
+				}
+				//  Automated mapping code ends here 
+
+				// Insert Quiz Questions
+				if($quizid){
+					for ($i=0; $i < count($quesnames) ; $i++) {
+						# code...
+						$record = new stdClass();
+						$record->mquizid = $quizid;
+						$record->quesname = $quesnames[$i];
+						if($type != "finalexam"){
+							$record->questext = $questexts[$i];
+						}
+						$record->maxmark = $maxmarks[$i];
+						$record->cloid = $closid[$i];
+						if($type == "finalexam"){
+							$record->separateattempt = $separateattempts[$i];
+						}
+						
+						$DB->insert_record('manual_quiz_question', $record);
+					}
+				}
+				// Insert Quiz Questions code ends here
+				$transaction->allow_commit();
+				} catch(Exception $e) {
+					$transaction->rollback($e);
 			}
-           	elseif($type == "midterm"){
-	        	$recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
-
-				if($recm){
-					foreach ($recm as $recordm) {
-						$mid_id=$recordm->mid_id; 
-					}
-					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-					('$course_id',-1,'$quizid','$mid_id') ";
-					$DB->execute($sql);
-				}
-		        else{
-        			$msgm="Pls. define Mid term in Define Grading Policy tab first";
-				}
-            }
-            elseif($type == "finalexam"){
-				$recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
-				if($recf){
-					foreach ($recf as $recordf) {
-						$final_id=$recordf->final_id; 
-					}
-					$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-					('$course_id',-1,'$quizid','$final_id_id') ";
-					$DB->execute($sql);
-				}
-				else{
-					$msgf="Pls. define Final Exam in Define Grading Policy tab first";
-				}
-            }
-           	//  Automated mapping code ends here 
-
-			// Insert Quiz Questions
-            if($quizid){
-                for ($i=0; $i < count($quesnames) ; $i++) {
-                    # code...
-                    $record = new stdClass();
-                    $record->mquizid = $quizid;
-                    $record->quesname = $quesnames[$i];
-                    $record->maxmark = $maxmarks[$i];
-                    $record->cloid = $closid[$i];
-                    $record->separateattempt = $separateattempts[$i];
-                    
-                    $DB->insert_record('manual_quiz_question', $record);
-                }
-			}
-			// Insert Quiz Questions code ends here 
 
 			$redirect_page1="./report_teacher.php?course=$course_id";
 			redirect($redirect_page1);
@@ -165,6 +188,7 @@ require_once('../../../config.php');
 		$temp = array();
 		$editor = \editors_get_preferred_editor();
 		$editor->use_editor("id_description",$temp);
+		//$editor->use_editor("id_ques_text",$temp);
 
 		?>
 		<br />
@@ -258,6 +282,32 @@ require_once('../../../config.php');
                 </div>
             </div>
 
+			<?php
+			if($type != "finalexam"){
+			?>
+			<div class="form-group row fitem">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_ques_text">
+						Text
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
+					<div>
+						<div>
+							<textarea required id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+						</div>
+					</div>
+					<div class="form-control-feedback" id="id_error_ques_text"  style="display: none;">
+					</div>
+				</div>
+			</div>
+			<?php
+			}
+			?>
+
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -310,7 +360,8 @@ require_once('../../../config.php');
 					</div>
 				</div>
 			</div>
-            <?php
+            
+			<?php
 			if($type == "finalexam"){
 			?>
             <div class="form-group row fitem ">
@@ -358,9 +409,10 @@ require_once('../../../config.php');
 		?>
 				
 		<script>
-			// script to add name, desc, kpi, plo and level fields to form
+			// script to add quiz name & desc & ques name, desc, maxmark, clo & separateattempt fields to form
 			var i = 1;
-            var closid = <?php echo json_encode($closid); ?>;
+            var type = <?php echo json_encode($type); ?>;
+			var closid = <?php echo json_encode($closid); ?>;
             var clonames = <?php echo json_encode($clonames); ?>;
 			
 			function addInput(divName){
@@ -368,9 +420,15 @@ require_once('../../../config.php');
 				newh3.innerHTML = 'Question';
 				document.getElementById(divName).appendChild(newh3);
 
-				var newdiv1 = document.createElement('div');
-				newdiv1.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname" size="" required maxlength="50"><div class="form-control-feedback" id="id_error_quesname"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv1);
+				var newdiv = document.createElement('div');
+				newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname" size="" required maxlength="50"><div class="form-control-feedback" id="id_error_quesname"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv);
+
+				if(type != "finalexam"){
+					var newdiv1 = document.createElement('div');
+					newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_ques_text">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text"  style="display: none;"></div></div></div>';
+					document.getElementById(divName).appendChild(newdiv1);
+				}
 
 				var newdiv2 = document.createElement('div');
 				newdiv2.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_maxmark">Max Mark</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="maxmark[]" id="id_maxmark" size="" required step="0.001"><div class="form-control-feedback" id="id_error_maxmark"></div></div></div>';
@@ -403,9 +461,11 @@ require_once('../../../config.php');
                 newdiv3.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_clo">CLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectCLO.innerHTML+' <span id="plo'+i+'"></span> <span id="tax'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
                 document.getElementById(divName).appendChild(newdiv3);
 
-                var newdiv4 = document.createElement('div');
-                newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><label class="col-form-label d-inline" for="id_sepattempt">Separate Attempt</label></div><div class="col-md-9 form-inline felement"><input type="checkbox" value="'+i+'" name="separateattempt[]" id="id_sepattempt"><div class="form-control-feedback" id="id_error_sepattempt"></div></div></div>';
-                document.getElementById(divName).appendChild(newdiv4);
+				if(type == "finalexam"){
+					var newdiv4 = document.createElement('div');
+					newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><label class="col-form-label d-inline" for="id_sepattempt">Separate Attempt</label></div><div class="col-md-9 form-inline felement"><input type="checkbox" value="'+i+'" name="separateattempt[]" id="id_sepattempt"><div class="form-control-feedback" id="id_error_sepattempt"></div></div></div>';
+					document.getElementById(divName).appendChild(newdiv4);
+				}
                 
 				i++;
 			}
