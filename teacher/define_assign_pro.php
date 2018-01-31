@@ -208,8 +208,8 @@ require_once('../../../config.php');
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-                    <select onChange="dropdownTip(this.value, 0)" name="clo" class="select custom-select">
-                        <option value='NULL'>Choose..</option>
+                    <select required onChange="dropdownTip(this.value, 0)" name="clo" class="select custom-select">
+                        <option value=''>Choose..</option>
                         <?php
                         foreach ($courseclos as $recC) {
                         $cid =  $recC->cloid;
