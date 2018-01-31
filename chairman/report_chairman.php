@@ -45,7 +45,7 @@
             &nbsp;&nbsp;&nbsp;<a href="./display_teachers.php" class="cool-link">&#10070; View Teacher's Course CLO Report</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">&#10070; View Student's CLO Progress</a><br><br>
         </div>
-        <a href="./add_mid_and_final.php" class="cool-link">Assign weightage to Midterms & Finals</a><br>
+        <a href="./add_mid_and_final.php" class="cool-link">Assign Weightage</a><br>
         <!--
         <a href="./define_vision_mission.php" class="cool-link">Define Vision &amp; Mission</a><br><br>
 
