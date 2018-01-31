@@ -39,11 +39,11 @@
 			for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
 			}
-			echo $sum;
-			if($sum != 100){
+			//echo $sum;
+			//if($sum != 100){
 				//$msgP = "<font color = red>Total percentage of all activities should be 100%</font><br />";
-			}
-			else{
+			//}
+			//else{
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
 					# code...
 					$activity=trim($_POST["activity"][$i]);
@@ -61,7 +61,7 @@
 					}
 				}
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
-			}
+			//}
 		}
 		elseif(isset($_POST['return'])) {
 			$sum = 0;
@@ -154,7 +154,7 @@
 			//var counter = 1;
 			function addInput(divName){
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="mid term">Mid Term</option><option value="final exam">Final Exam</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
+				newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
 				document.getElementById(divName).appendChild(newdiv);
 				//counter++;
 			}

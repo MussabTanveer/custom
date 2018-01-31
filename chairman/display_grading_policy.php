@@ -14,8 +14,8 @@
     }
     echo $OUTPUT->header();
      
-    if(isset($_GET['course'])){
-        $course_id=$_GET['course'];
+   // if(isset($_GET['course'])){
+        //$course_id=$_GET['course'];
         //echo $course_id;
 
         if(isset($_GET['delete'])){
@@ -56,12 +56,12 @@
         }
         else
             echo "<h5 style='color:red'> <br />Found no Graded Activity of this Course! </h5>";
-    }
-    else{
+    //}
+   // else{
         ?>
         <h2 style="color:red;"> Invalid Selection </h2>
         <a href="../index.php">Back</a>
         <?php
-    }
+   // }
     echo $OUTPUT->footer();
 ?>

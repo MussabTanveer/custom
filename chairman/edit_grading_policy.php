@@ -3,54 +3,18 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Assign Weightage");
-    $PAGE->set_heading("Assign Weightage");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/add_mid_and_final.php');
+    $PAGE->set_title("Edit Weightage");
+    $PAGE->set_heading("Edit Weightage");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_grading_policy.php');
     echo $OUTPUT->header();
 	require_login();
 if($SESSION->oberole != "chairman"){
         header('Location: ../index.php');
 	}
-	/*
-	
-$recm=$DB->get_records_sql('Select * from mdl_grading_policy WHERE name="mid term"
-	');
-
-foreach($recm as $recordm){
-
-//$courseidm=$recordm->courseid;
 
 
-$sqlm="INSERT INTO mdl_grading_policy (percentage) VALUES ('20')";
-$DB->execute($sqlm);
-}
 
-
-$recf=$DB->get_records_sql('Select *  from mdl_grading_policy WHERE name="final exam" ');
-
-
-//$courseidf=$recordf->courseid;
-foreach($recf as $recordf){
-$sqlf="INSERT INTO mdl_grading_policy (percentage) VALUES ('60')";
-$DB->execute($sqlf);
-
-}
-*/
-
-$rec1=$DB->get_records_sql('Select SUM(percentage) as totalpercentage from mdl_grading_policy');
-foreach($rec1 as $record1){
-
-$totalpercentage=$record1->totalpercentage;
-
-}
-
-echo $totalpercentage;
-if($totalpercentage > 100){
-redirect('grading_policy_full.php');
-
-}
-
-if(isset($_POST['save'])){
+if(isset($_POST['update'])){
 
 
 
@@ -58,90 +22,27 @@ if(isset($_POST['save'])){
 $midterm = trim($_POST["midterm"]);
 $final = trim($_POST["final"]);
 
-//echo $midterm;
+$sql_update="UPDATE mdl_grading_policy SET percentage=$midterm WHERE name='mid term'";
 
-$rec=$DB->get_records_sql('Select id from mdl_course WHERE shortname NOT LIKE "CIS"');
+ $DB->execute($sql_update);
+$sql_update1="UPDATE mdl_grading_policy SET percentage=$final WHERE name='final exam'";
+ $DB->execute($sql_update1);
 
-if($rec){
-foreach($rec as $record){
 
-$courseid=$record->id;
-
-$sql1="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$midterm')";
-$DB->execute($sql1);
-
-$sql2="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$final')";
-$DB->execute($sql2);
-}
-
-$msgP = "<font color = green>Weightage successfully assigned!</font><br />";
+$msg="<font color = green>Updated Successfully !</font><br />";
 
 }
 
 
-else{
+if(isset($msg)){
 
 
-	echo "<font color = red>No Courses Found!</font><br />";
+    echo $msg;
 }
-
-
-}
-
-elseif(isset($_POST['return'])){
-
-
-
-
-$midterm = trim($_POST["midterm"]);
-$final = trim($_POST["final"]);
-
-//echo $midterm;
-
-$rec=$DB->get_records_sql('Select id from mdl_course WHERE shortname NOT LIKE "CIS"');
-
-if($rec){
-foreach($rec as $record){
-
-$courseid=$record->id;
-
-$sql1="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$midterm')";
-$DB->execute($sql1);
-
-$sql2="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$final')";
-$DB->execute($sql2);
-}
-
-$msgP = "<font color = green>Weightage successfully assigned!</font><br />";
-
-}
-
-
-else{
-
-
-	echo "<font color = red>No Courses Found!</font><br />";
-}
-redirect('report_chairman.php');
-
-}
-
-
-
-
-
-
-if(isset($msgP)){
-
-
-	echo $msgP;
-}
-
 
 
 
 ?>
-
 
 <form method='post' action="" class="mform" id="cloForm">
      <div class="form-group row fitem ">
@@ -197,15 +98,12 @@ if(isset($msgP)){
 
 
 
-<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
-		<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-		<a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php'" ?>>Cancel</a>
-		</form>
+<input class="btn btn-info" type="submit" name="update" value="Update"/>
+        <a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php'" ?>>Cancel</a>
+        </form>
 
 
-
-
-<?php
+    <?php
 echo $OUTPUT->footer();
 
 ?>

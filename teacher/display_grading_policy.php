@@ -31,7 +31,7 @@
             <?php
         }
 
-        $rec=$DB->get_records_sql('SELECT id, name, percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
+        $rec=$DB->get_records_sql('SELECT id, name, percentage FROM mdl_grading_policy WHERE name != "mid term" AND name != "final exam" AND courseid=? ',array($course_id));
 
         if($rec){
             $serial=0;
@@ -48,7 +48,7 @@
             }
             $table->data[] = array("<b>Total:</b>", "", $sum.'%', "");
             if($serial){
-                if($sum != 100)
+                if($sum != 20)
                     echo "<h5 style='color:red'>Grading Policy is not 100%<h5><a href=grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><br />";
                 echo html_writer::table($table);
             }
