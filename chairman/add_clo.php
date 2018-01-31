@@ -400,7 +400,7 @@ require_once('../../../config.php');
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 					</span>
 					<label class="col-form-label d-inline" for="id_kpi">
-						KPI
+						Passing Percentage
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement" data-fieldtype="number">
@@ -410,10 +410,10 @@ require_once('../../../config.php');
 							id="id_kpi"
 							size=""
 							required
-							placeholder="eg. 0.6"
+							placeholder="eg. 50"
 							maxlength="100"
 							step="0.001"
-							min="0" max="1"> (eg. 0.6)
+							min="0" max="100"> %
 					<div class="form-control-feedback" id="id_error_kpi">
 					
 					</div>
@@ -565,7 +565,7 @@ require_once('../../../config.php');
 				document.getElementById(divName).appendChild(newdiv2);
 
 				var newdiv3 = document.createElement('div');
-				newdiv3.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_kpi">KPI</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 0.6" maxlength="100" step="0.001" min="0" max="1"> (eg. 0.6)<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
+				newdiv3.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_kpi">Passing Percentage</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 50" maxlength="100" step="0.001" min="0" max="100"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv3);
 				
 				//Create select element for PLO selection
