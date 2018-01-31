@@ -336,7 +336,7 @@ th{
 
             /****** MID TERM ******/
             if(in_array("mid term", $gnames)){
-                $flagmid = 1;
+                
                 $pos = array_search('mid term', $gnames);
                 $recMid=$DB->get_recordset_sql(
                     'SELECT
@@ -374,6 +374,7 @@ th{
                     $closM = array();
                     $resultM = array();
                     foreach($recMid as $fe){
+                        $flagmid = 1;
                         $un = $fe->username;
                         $qname = $fe->name;
                         $clo=$fe->shortname;
@@ -398,7 +399,7 @@ th{
                 
             /****** FINAL EXAM ******/
             if(in_array("final exam", $gnames)){
-                $flagfinal = 1;
+                
                 $pos = array_search('final exam', $gnames);
                 $recFinal=$DB->get_recordset_sql(
                     'SELECT 
@@ -436,6 +437,7 @@ th{
                     $closF = array();
                     $resultF = array();
                     foreach($recFinal as $fe){
+                        $flagfinal = 1;
                         $un = $fe->username;
                         $qname = $fe->name;
                         $clo=$fe->shortname;
