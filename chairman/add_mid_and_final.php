@@ -6,11 +6,12 @@
     $PAGE->set_title("Assign Weightage");
     $PAGE->set_heading("Assign Weightage");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/add_mid_and_final.php');
-    echo $OUTPUT->header();
+    
 	require_login();
-if($SESSION->oberole != "chairman"){
+    if($SESSION->oberole != "chairman"){
         header('Location: ../index.php');
-	}
+    }
+    echo $OUTPUT->header();
 	/*
 	
 $recm=$DB->get_records_sql('Select * from mdl_grading_policy WHERE name="mid term"
