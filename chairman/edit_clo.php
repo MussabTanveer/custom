@@ -173,10 +173,10 @@
 						id="id_kpi"
 						size=""
 						required
-						placeholder="eg. 0.6"
+						placeholder="eg. 50"
 						maxlength="100"
 						step="0.001"
-						min="0" max="1"> (eg. 0.6)
+						min="0" max="100"> %
 				<div class="form-control-feedback" id="id_error_kpi">
 				
 				</div>
