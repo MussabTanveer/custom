@@ -163,7 +163,7 @@
 					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 				</span>
 				<label class="col-form-label d-inline" for="id_kpi">
-					KPI
+					Passing Percentage
 				</label>
 			</div>
 			<div class="col-md-9 form-inline felement" data-fieldtype="number">
