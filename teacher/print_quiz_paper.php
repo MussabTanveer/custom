@@ -16,30 +16,36 @@
     }
     echo $OUTPUT->header();
 
-    if(!empty($_GET['course']))
+    if(!empty($_GET['type']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
         // echo "$course_id";
+        $type=$_GET['type'];
+        //echo " Activity Type : $type";
+
         $quizzes= $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ?",array($course_id));
 
         if($quizzes)
         {
-            foreach ($quizzes as $quiz) 
-            {
-                # code...
-                $qname = $quiz->name;
-                $qdesc = $quiz->description;
-                $qid   = $quiz->id;
-            ?>
-            <a <?php echo "href='./print_quiz.php?quiz=$qid&courseid=$course_id'" ?> > Print <?php echo $qname; ?> </a><br>
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Quiz Name');
+            foreach ($quizzes as $records) {
+                $serialno++;
+                $qid = $records->id;
+                $qname = $records->name;
+                
+                $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>");
             
-            <?php
             }
+
+            echo html_writer::table($table);
+            echo "<br />";
 
         }
 
         else
-            echo "<font color = red> No Quiz Found!</font>";
+            echo "<h3>You do not have any manual $type in this course!</h3>";
 
     }
     else
