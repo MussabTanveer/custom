@@ -56,10 +56,34 @@ if(isset($_POST['save'])){
 
 
 
-$midterm = trim($_POST["midterm"]);
-$final = trim($_POST["final"]);
+if(isset($_POST["midterm"])){
 
-//echo $midterm;
+$midterm = trim($_POST["midterm"]);
+
+
+}
+
+if(isset($_POST["final"])){
+
+$final = trim($_POST["final"]);
+}
+
+if(isset($_POST["sessional"])){
+$sessional=trim($_POST["sessional"]);
+}
+//echo $sessional;
+
+
+$sum=$midterm+$final+$sessional;
+
+if($sum < 100){
+
+
+echo "<font color = red>The sum of the below entered Weightages should be 100%!</font><br />";
+
+}
+
+else{
 
 $rec=$DB->get_records_sql('Select id from mdl_course WHERE shortname NOT LIKE "CIS"');
 
@@ -86,18 +110,41 @@ else{
 	echo "<font color = red>No Courses Found!</font><br />";
 }
 
+}
 
 }
 
 elseif(isset($_POST['return'])){
 
 
-
+if(isset($_POST["midterm"])){
 
 $midterm = trim($_POST["midterm"]);
-$final = trim($_POST["final"]);
 
+
+}
+
+if(isset($_POST["final"])){
+
+$final = trim($_POST["final"]);
+}
+
+if(isset($_POST["sessional"])){
+$sessional=trim($_POST["sessional"]);
+}
 //echo $midterm;
+
+$sum=$midterm+$final+$sessional;
+
+if($sum < 100){
+
+
+echo "<font color = red>The sum of the below entered Weightages should be 100%!</font><br />";
+
+}
+
+else{
+
 
 $rec=$DB->get_records_sql('Select id from mdl_course WHERE shortname NOT LIKE "CIS"');
 
@@ -124,6 +171,8 @@ else{
 	echo "<font color = red>No Courses Found!</font><br />";
 }
 redirect('report_chairman.php');
+
+}
 
 }
 
@@ -162,6 +211,7 @@ if(isset($msgP)){
                             size=""
                             required
                             maxlength="100">
+                            %
                     <div class="form-control-feedback" id="id_error_name">
                     </div>
                 </div>
@@ -184,6 +234,7 @@ if(isset($msgP)){
                             size=""
                             required
                             maxlength="100">
+                            %
                     <div class="form-control-feedback" id="id_error_name">
                     </div>
                 </div>
@@ -191,6 +242,30 @@ if(isset($msgP)){
         
 
 
+
+<div class="form-group row fitem ">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label class="col-form-label d-inline" for="id_name">
+                        Sessional Activities
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <input type="text"
+                            class="form-control"
+                            name="sessional"
+                            id="id_name"
+                            size=""
+                            required
+                            maxlength="100">
+                            %
+                            (Note: To be Assigned individually by the teacher)
+                    <div class="form-control-feedback" id="id_error_name">
+                    </div>
+                </div>
+            </div>
 
 
 

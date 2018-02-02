@@ -21,6 +21,9 @@ if(isset($_POST['update'])){
 
 $midterm = trim($_POST["midterm"]);
 $final = trim($_POST["final"]);
+$sessional=trim($_POST["sessional"]);
+
+
 
 $sql_update="UPDATE mdl_grading_policy SET percentage=$midterm WHERE name='mid term'";
 
@@ -62,6 +65,7 @@ if(isset($msg)){
                             size=""
                             required
                             maxlength="100">
+                            %
                     <div class="form-control-feedback" id="id_error_name">
                     </div>
                 </div>
@@ -84,11 +88,37 @@ if(isset($msg)){
                             size=""
                             required
                             maxlength="100">
+                            %
                     <div class="form-control-feedback" id="id_error_name">
                     </div>
                 </div>
             </div>
+
+
+
         
+<div class="form-group row fitem ">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label class="col-form-label d-inline" for="id_name">
+                        Sessional Activities
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <input type="text"
+                            class="form-control"
+                            name="final"
+                            id="id_name"
+                            size=""
+                            required
+                            maxlength="100">
+                            %
+                    <div class="form-control-feedback" id="id_error_name">
+                    </div>
+                </div>
+            </div>
 
 
 

@@ -12,7 +12,7 @@ if($SESSION->oberole != "chairman"){
         header('Location: ../index.php');
 	}
 
-echo "<font color = green>Weightage is already over 100% for Courses<br />Cannot add  more.<br />Either <a href=delete_grading_policy.php?>delete</a> or <a href=edit_grading_policy.php?>edit</a> grading policy.</font>";
+echo "<font color = green>Weightage is already 100% for Courses<br />Cannot add  more.<br />Either <a href=delete_grading_policy.php?>delete</a> or <a href=edit_grading_policy.php?>edit</a> grading policy.</font>";
 
 
 
