@@ -207,7 +207,7 @@ require_once('../../../config.php');
 				$cloid = $records->id;
 				$clocourse = $records->idnumber; $clocourse = substr($clocourse,0,6);
 				$cloname = $records->shortname;
-				$rev = $records->revision;
+				//$rev = $records->revision;
 				array_push($cloids, $cloid); // array of clo ids
 				array_push($clocourses, $clocourse); // array of clo course codes
 				array_push($clonames, $cloname); // array of clo names
