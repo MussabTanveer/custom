@@ -16,12 +16,11 @@
     }
     echo $OUTPUT->header();
 
-    
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
-       // echo "$course_id";
-         $quizzes= $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ?",array($course_id));
+        // echo "$course_id";
+        $quizzes= $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ?",array($course_id));
 
         if($quizzes)
         {
@@ -43,10 +42,13 @@
             echo "<font color = red> No Quiz Found!</font>";
 
     }
+    else
+	{?>
+		<h3 style="color:red;"> Invalid Selection </h3>
+    	<a href="../index.php">Back</a>
+    	<?php
+    }
 
-
+    echo $OUTPUT->footer();
     
-    
-   
-
 ?>
