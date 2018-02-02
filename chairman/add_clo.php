@@ -213,30 +213,50 @@ require_once('../../../config.php');
 				array_push($clonames, $cloname); // array of clo names
 			
             }
-         //   var_dump($clonames);
-          //  echo "<br>";
-           // var_dump($clocourses);
+           // var_dump($clonames);
+            //var_dump($cloids);
+           // echo "<br>";
+           // echo "<br>";
+            //echo "<br>";
+            //var_dump($clocourses);
            // echo "<br>";
             //var_dump($revs); 
 
             //Loop to Filter-out old clos
             for($i=0 ; $i<(sizeof($clonames)*3); $i++)
-            {
+            {	//echo "$i<br>";
+            	if(array_key_exists($i,$clonames))
+            	{	//echo "$i<br>";
 
-            	if(($clonames[$i] == $clonames [$i+1]) && ($clocourses[$i] == $clocourses[$i+1])) 
-            	{
+            		
+            		if(($clonames[$i] == $clonames [$i+1]) && ($clocourses[$i] == $clocourses[$i+1])) 
+            		{
 
-            		unset($clonames[$i]);
-            		unset($clocourses[$i]);
-            		 unset($cloids[$i]);
+		            		unset($clonames[$i]);
+		            		unset($clocourses[$i]);
+		            		 unset($cloids[$i]);
        		
-            	} 
+            		} 
+            }
+
             }
          	
          	//Reindexing the arrays!
              $clonames = array_values($clonames);
-			  $clocourses = array_values($clocourses);
-			   $cloids = array_values($cloids);		 
+             $clocourses = array_values($clocourses); 
+			  $cloids = array_values($cloids);	
+
+			/* var_dump($clonames);
+            echo "<br>";
+            echo "<br>";
+            echo "<br>";
+            var_dump($clocourses);
+            echo "<br>";
+            echo "<br>";
+            echo "<br>";
+            var_dump($cloids);*/
+
+
 		}
 
 		//Get plo with its name and idnumber
@@ -519,7 +539,7 @@ require_once('../../../config.php');
 		var cloids = <?php echo json_encode($cloids); ?>;
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
-		//var revs = <?php echo json_encode($revs)?>;
+		
 
 		$(document).ready(function(){
 			$("#id_idnumber").keyup(function(){
