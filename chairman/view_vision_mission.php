@@ -39,9 +39,60 @@
     $um=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("um"));
     $dv=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dv"));
     $dm=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dm"));
+    $dn=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+    $un=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("un"));
+    
+
     ?>
     <div class="wrapper">
     <?php
+
+     if($un){
+
+        foreach($un as $u){
+            $id = $u->id;
+
+        }
+
+         $un=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+        foreach($un as $u){
+            $desc = $u->description;
+        }
+            ?>
+            <h3>University Name</h3><br />
+            <?php
+            if(!empty($desc))
+                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
+            else
+                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
+        
+    }
+
+
+     if($dn){
+
+        foreach($dn as $u){
+            $id = $u->id;
+
+        }
+
+         $dn=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+        foreach($dn as $u){
+            $desc = $u->description;
+        }
+            ?>
+            <h3>Department Name</h3><br />
+            <?php
+            if(!empty($desc))
+                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
+            else
+                echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8'><p><b>Not available</b></p></div><div class='col-md-2'></div></div><br />";
+        
+    }
+
+
     if($uv){
 
         foreach($uv as $u){
