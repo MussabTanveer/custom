@@ -13,6 +13,8 @@
 	$universityMission = trim($_POST["um"]);
 	$departmentVision = trim($_POST["dv"]);
 	$departmentMission = trim($_POST["dm"]);
+  $departmentName = trim($_POST["departName"]);
+  $UniversityName = trim($_POST["uniName"]);
 
 
 	/*echo "$universityVision <br>";
@@ -24,6 +26,51 @@
 	$universityMission = mysql_real_escape_string($universityMission);
 	$departmentVision = mysql_real_escape_string($departmentVision);
 	$departmentMission = mysql_real_escape_string($departmentMission);
+
+  $departmentName = mysql_real_escape_string($departmentName);
+  $UniversityName =  mysql_real_escape_string($UniversityName);
+
+
+    if($departmentName != "")
+        {
+
+           $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dn'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+
+              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department name','dn','$departmentName','$rev')";
+
+                $DB->execute($sql);
+        }
+
+
+     if($UniversityName != "")
+        {
+
+           $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('un'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+
+              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university name','un','$UniversityName','$rev')";
+
+                $DB->execute($sql);
+        }
+
+  
 
 	if($universityVision != "")
         {

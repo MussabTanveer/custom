@@ -47,11 +47,57 @@
         $universityMission = trim($_POST["um"]);
         $departmentVision = trim($_POST["dv"]);
         $departmentMission = trim($_POST["dm"]);
+        $departmentName = trim($_POST["departName"]);
+        $UniversityName = trim($_POST["uniName"]);
         
         $universityVision = mysql_real_escape_string($universityVision);
         $universityMission = mysql_real_escape_string($universityMission);
         $departmentVision = mysql_real_escape_string($departmentVision);
         $departmentMission = mysql_real_escape_string($departmentMission);
+
+        $departmentName = mysql_real_escape_string($departmentName);
+        $UniversityName =  mysql_real_escape_string($UniversityName);
+
+        
+        if($departmentName != "")
+        {
+
+           $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dn'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+
+              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department name','dn','$departmentName','$rev')";
+
+                $DB->execute($sql);
+        }
+
+
+     if($UniversityName != "")
+        {
+
+           $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('un'));
+
+              $rev=0;
+               if($revisions){
+            foreach ($revisions as $revision){
+                $rev = $revision->revision; 
+            }
+        }
+                $rev++;
+
+
+              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university name','un','$UniversityName','$rev')";
+
+                $DB->execute($sql);
+        }
+
 
 
         if($universityVision != "")
@@ -143,10 +189,54 @@
     $editor->use_editor("id_um",$temp);
     $editor->use_editor("id_dv",$temp);
     $editor->use_editor("id_dm",$temp);
+    $editor->use_editor("uniName",$temp);
+    $editor->use_editor("departName",$temp);
 
     ?>
     <form method="post" action="" class="mform">
         <div class="container">
+
+             <div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                    </span>
+                    <label class="col-form-label d-inline" for="id_uv">
+                        University Name
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="editor">
+                    <div>
+                        <div>
+                            <textarea id="uniName" name="uniName" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+                        </div>
+                    </div>
+                    <div class="form-control-feedback" id="id_error_uniName"  style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+
+             <div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                    </span>
+                    <label class="col-form-label d-inline" for="id_uv">
+                        Department Name
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="editor">
+                    <div>
+                        <div>
+                            <textarea id="departName" name="departName" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+                        </div>
+                    </div>
+                    <div class="form-control-feedback" id="id_error_departName"  style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+
+
             
             <div class="form-group row fitem">
                 <div class="col-md-3">
