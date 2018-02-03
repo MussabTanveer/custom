@@ -16,6 +16,43 @@
 
  if(isset($_GET['assign']))
     {
+
+       $dn=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        $un=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("un"));
+
+         if($un){
+
+        foreach($un as $u){
+            $id = $u->id;
+
+        }
+
+         $un=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+        foreach($un as $u){
+            $uniName = $u->description;
+        }
+                       
+    }
+
+
+     if($dn){
+
+        foreach($dn as $u){
+            $id = $u->id;
+
+        }
+
+         $dn=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+        foreach($dn as $u){
+            $deptName = $u->description;
+        }           
+     }
+
+        $deptName = strip_tags($deptName);
+        $uniName = strip_tags($uniName);
+
         $assignid=$_GET['assign'];
       //  echo "$assignid";
         $courseid = $_GET['courseid'];
@@ -39,22 +76,22 @@
    		 $pdf = new FPDF();
   		  $pdf->AddPage();
   		   $pdf->SetFont('Arial','',10);
-   		 $pdf->Cell(190,10,"NED University of Engineering and Technology",0,2,'C');
+   		 $pdf->Cell(190,10,"$uniName",0,2,'C');
 
-   		 $pdf->Cell(190,10,"Computer & Information Systems Engineering Department",0,2,'C');
+   		 $pdf->Cell(190,10,"$deptName",0,2,'C');
    		 $pdf->SetFont('Arial','BU',10);
 	   	 $pdf->Cell(190,10,"($courseIdNumber) $courseFullName",0,2,'C');
 
-	   	 $pdf->SetFont('Arial','',10);
-	   	 $x=$pdf->GetX();
-	   	 $pdf->Cell(80,10,"Name: _____________________________",0,0);
+	   	// $pdf->SetFont('Arial','',10);
+	   	// $x=$pdf->GetX();
+	   	 //$pdf->Cell(80,10,"Name: _____________________________",0,0);
 	 	
-	   	 $pdf->Cell(110,10,"Marks Obtained: _________",0,2,'R');
+	   	// $pdf->Cell(110,10,"Marks Obtained: _________",0,2,'R');
 
-	   	  $y=$pdf->GetY();
+	   	//  $y=$pdf->GetY();
 	   	  
-	     $pdf->SetXY($x,$y);
-	   	 $pdf->Cell(80,10,"RollNo: _____________________________",0,0);
+	    // $pdf->SetXY($x,$y);
+	   	// $pdf->Cell(80,10,"RollNo: _____________________________",0,0);
 
 	   	 $closArray=array();
    	
@@ -79,14 +116,14 @@
 
            // var_dump($closArray);
 
+           //  $y=$pdf->GetY();
+           //  $x=$pdf->GetX();	   	  
+	   	//	 $pdf->SetXY($x+64,$y);
+           //  $pdf->Cell(50,10,"Max Marks: $totalMarks",0,2);
              $y=$pdf->GetY();
              $x=$pdf->GetX();	   	  
-	   		 $pdf->SetXY($x+64,$y);
-             $pdf->Cell(50,10,"Max Marks: $totalMarks",0,2);
-             $y=$pdf->GetY();
-             $x=$pdf->GetX();	   	  
-	   		 $pdf->SetXY($x+64,$y);
-	   		 $pdf->SetFont('Arial','',13);
+	   		 $pdf->SetXY($x-30,$y);
+	   		 $pdf->SetFont('Arial','B',13);
 
 	   		 $i=0;
 
@@ -95,34 +132,52 @@
             	
                 # code...
                 $aname = $assign->name;
-              	$adesc = $assign->description;
+              	$adesc = $assign->description; $adesc = strip_tags($adesc);
                 $amark = $assign->maxmark;
                 $aid   = $assign->id;
                 $acloid   = $assign->cloid;
                 $astartdate  = $assign->startdate;
                 $aEnddate   = $assign->enddate;
-                
-               
- 				 
- 				 $x=$pdf->GetX();
- 				 $pdf->write(10,"Name: $aname",0);
-                 
+               // echo "$astartdate";
+                 $astartdate = date('d-m-y' ,$astartdate);
+                $aEnddate = date('d-m-y' ,$aEnddate);   
+                 $x=$pdf->GetX();
+         				 $pdf->write(10,"Name: ",0);
+                 $pdf->SetFont('Arial','',13);
+                 $pdf->write(10,"$aname",0);
+                     
                 
                  $y=$pdf->GetY();
-                 $pdf -> SetXY($x,$y+5);
-                 $pdf->write(10,"Description: $adesc",0);
- 				 $y=$pdf->GetY();
- 				 $pdf->SetXY($x,$y);
-                  $pdf->write(10,"Marks: $amark",0);
+                 $pdf -> SetXY($x,$y);
+                $pdf->SetFont('Arial','B',13);
+                 $pdf->write(10,"Description:",0);
+                  $pdf->SetFont('Arial','',13);
+                 $pdf->write(10,"$adesc",0);
+         				 $y=$pdf->GetY();
+         				 $pdf->SetXY($x,$y);
+                 $pdf->SetFont('Arial','B',13);
+                  $pdf->write(10,"Max Marks: ",0);
+                  $pdf->SetFont('Arial','',13);
+                  $pdf->write(10,"$amark",0);
                    $y=$pdf->GetY();
                  $pdf->SetXY($x,$y);
-                  $pdf->write(10,"Competency: $closArray[$i]",0);
+                 $pdf->SetFont('Arial','B',13);
+                  $pdf->write(10,"CLO: ",0);
+                  $pdf->SetFont('Arial','',13);
+                   $pdf->write(10,"$closArray[$i]",0);
                    $y=$pdf->GetY();
                  $pdf->SetXY($x,$y);
-                  $pdf->write(10,"StartDate: $astartdate",0);
+                 $pdf->SetFont('Arial','B',13);
+                  $pdf->write(10,"StartDate: ",0);
+                   $pdf->SetFont('Arial','',13);
+                  $pdf->write(10,"$astartdate ",0);
+
                    $y=$pdf->GetY();
                  $pdf->SetXY($x,$y);
-                  $pdf->write(10,"EndDate: $aEnddate",0);
+                   $pdf->SetFont('Arial','B',13);
+                  $pdf->write(10,"EndDate: ",0);
+                   $pdf->SetFont('Arial','',13);
+                  $pdf->write(10,"$aEnddate ",0);
  				 $i++;                   
             }
              $pdf->Output();
