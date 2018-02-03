@@ -592,7 +592,6 @@ require_once('../../../config.php');
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
 		
-
 		$(document).ready(function(){
 			$("#id_idnumber").keyup(function(){
 				var n = $('#id_idnumber').val().toUpperCase();
@@ -618,8 +617,8 @@ require_once('../../../config.php');
 		<script>
 			// script to add name, desc, kpi, plo and level fields to form
 			var i = 1;
-			var levelid = <?php echo json_encode($levelid); ?>;
-			var lshortnames = <?php echo json_encode($lvlshortname); ?>;
+			//var levelid = <?php echo json_encode($levelid); ?>;
+			//var lshortnames = <?php echo json_encode($lvlshortname); ?>;
 			var ploId = <?php echo json_encode($ploIdArray); ?>;
 			var ploIdNumber = <?php echo json_encode($ploIdnumberArray); ?>;
 			var domId = <?php echo json_encode($domid); ?>;
@@ -788,7 +787,7 @@ require_once('../../../config.php');
 				else{
 					for(var i=0; i<levelid.length ; i++){
 						if(levelid[i] == value){
-							document.getElementById(dname).innerHTML = dnames[i];
+							//document.getElementById(dname).innerHTML = dnames[i];
 							document.getElementById(lname).innerHTML = "("+lnames[i]+")";
 							break;
 						}

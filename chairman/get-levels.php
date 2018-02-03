@@ -18,7 +18,7 @@
         if(count($res) > 0) {
             echo "<option value=''>Choose..</option>";
             foreach ($res as $row) {
-            echo "<option value='".$row->id."'>".$row->level."</option>";
+            echo "<option value='".$row->id."'>".substr($row->level,1)."</option>";
             }
         }
     }
