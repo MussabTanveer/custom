@@ -201,8 +201,6 @@
 	
 	<?php
 		if(isset($_GET['edit'])){
-		?>
-		<?php
 		$id=$_GET['edit'];
 		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber FROM mdl_competency WHERE id=?',array($id));
 		$recKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_kpi WHERE cloid=?',array($id));
@@ -219,15 +217,11 @@
 				$kpi=$rKPI->kpi;
 			}
 		}
-		//echo $description;
-		//echo $kpi;
 		
 		?>
 	<script>
-	    //document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
-        document.getElementById("id_description").value = "<?php echo json_encode($description); ?>";
-        //document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
-		document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
+	    document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
+        document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
     </script>
 	
 	<?php
