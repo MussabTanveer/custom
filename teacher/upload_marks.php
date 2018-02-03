@@ -19,6 +19,8 @@
     use Box\Spout\Reader\ReaderFactory;
     use Box\Spout\Common\Type;
     
+    if(!empty($_GET['quizid']))
+    {
     ?>
 
     <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
@@ -30,43 +32,52 @@
         
     </form>
 
-    <?php 
+    <?php
 
-$qid=$_GET['quizid'];        
+        $qid=$_GET['quizid'];        
 
-// check file name is not empty
-if (!empty($_FILES['quizmarks']['name'])) {
-      
-    // Get File extension eg. 'xlsx' to check file is excel sheet
-    $pathinfo = pathinfo($_FILES["quizmarks"]["name"]);
-     
-    // check file has extension xlsx, xls and also check 
-    // file is not empty
-   if (($pathinfo['extension'] == 'xlsx' || $pathinfo['extension'] == 'xls') 
-           && $_FILES['quizmarks']['size'] > 0 ) {
-         
-        // Temporary file name
-        $inputFileName = $_FILES['quizmarks']['tmp_name']; 
-    
-        // Read excel file by using ReadFactory object.
-        $reader = ReaderFactory::create(Type::XLSX);
- 
-        // Open file
-        $tempfile=$reader->open($inputFileName);
-        $count = 1;
-        $abc=1;
+        // check file name is not empty
+        if (!empty($_FILES['quizmarks']['name'])) {
             
-        //Number of sheet in excel file
-       foreach ($reader->getSheetIterator() as $sheet) {
-             if($abc>=1){
+            // Get File extension eg. 'xlsx' to check file is excel sheet
+            $pathinfo = pathinfo($_FILES["quizmarks"]["name"]);
             
-            // Number of Rows in Excel sheet
-            foreach ($sheet->getRowIterator() as $row) {
+            // check file has extension xlsx, xls and also check 
+            // file is not empty
+            if (($pathinfo['extension'] == 'xlsx' || $pathinfo['extension'] == 'xls') 
+            && $_FILES['quizmarks']['size'] > 0 ) {
+            
+                // Temporary file name
+                $inputFileName = $_FILES['quizmarks']['tmp_name']; 
+            
+                // Read excel file by using ReadFactory object.
+                $reader = ReaderFactory::create(Type::XLSX);
+        
+                // Open file
+                $tempfile=$reader->open($inputFileName);
+                $count = 1;
+                $abc=1;
+                    
+                //Number of sheet in excel file
+                foreach ($reader->getSheetIterator() as $sheet) {
+                    if($abc>=1){
+                    
+                    // Number of Rows in Excel sheet
+                    foreach ($sheet->getRowIterator() as $row) {
                         if($count==1){
                             $c1=count($row);
                             for($x=1;$x<$c1;$x++){
-                            $prefix = "pre";
-                            ${$prefix.strtolower($x)}=$row[$x];
+                            //$prefix = "pre";
+                            //${$prefix.strtolower($x)}=$row[$x];
+                            $quesids=$row[$x];
+                            $rec1=$DB->get_records_sql('SELECT id  FROM mdl_manual_quiz_question WHERE quesname = ?', array($quesids));
+                            if($rec1){
+
+                                $a="question";
+                                foreach ($rec1 as $record1){
+                                ${$a.strtolower($x)}=$record1->id;}
+                                
+                            }
                             // echo ${$prefix.strtolower($x)};
                             // $a=$row[1];
                             // $b=$row[2];
@@ -74,53 +85,66 @@ if (!empty($_FILES['quizmarks']['name'])) {
                             // $d=$row[4];
                             }
                         }
- 
-                // It reads data after header. In the my excel sheet, 
-                // header is in the first row. 
-                if ($count > 1) { 
-                    
-                    //$arri = array_map('strval', $arr);
+    
+                        // It reads data after header. In the my excel sheet, 
+                        // header is in the first row. 
+                        if ($count > 1) {
+                        
+                        //$arri = array_map('strval', $arr);
+                        
+                        // Data of excel sheet
+                        $c1=count($row);
+                        $sn=$row[0];
+                        $rec=$DB->get_records_sql('SELECT id  FROM mdl_user WHERE username = ?', array($sn));
+                        if ($rec){
+                            foreach($rec as $records){
+                                $uid=$records->id;
+                            }
+                        }
+                        else{
+                            $uid="A";
+                        }
+
+                        for($x=1;$x<$c1;$x++){                    
                 
-                    
-                    // Data of excel sheet
-                    $c1=count($row);
-                    $sn=$row[0];
-                    for($x=1;$x<$c1;$x++){
-                    $pfix="sn";
-                    ${$pfix.strtolower($x)}=$row[$x];
-                    //echo ${$pfix.strtolower($x)};
+                            $pfix="sn";
+                            ${$pfix.strtolower($x)}=$row[$x];
+                        
+                            //echo ${$pfix.strtolower($x)};
 
-                    // $sn1=$row[1];
-                    // $sn2=$row[2];
-                    // $sn3=$row[3];
-                    // $sn4=$row[4];
+                            // $sn1=$row[1];
+                            // $sn2=$row[2];
+                            // $sn3=$row[3];
+                            // $sn4=$row[4];
 
-                        if (${$pfix.strtolower($x)} <>"A" ){
-                            $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$sn','${$prefix.strtolower($x)}','${$pfix.strtolower($x)}')";
-                            $DB->execute($sql1);
-                             }
+                            if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" ){
+                                $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
+                                $DB->execute($sql1);
+                            }
+                        }
                     }
-                }
-               $count++;
-            }}
-            $abc++;
+                    $count++;
+                }}
+                $abc++;
+            }
+            if($sql1){
+                echo "<h3>File has been Uploaded!</h3>";
+            }
+            //Close excel file
+            $reader->close();
+        } else {
+            echo "Please Select Valid Excel File";
         }
-
-        echo "<h3>File has been Uploaded!</h3>";
-        //Close excel file
-        $reader->close();
- 
     } else {
- 
-        echo "Please Select Valid Excel File";
+        echo "Please Select Excel File";
     }
- 
-} else {
- 
-    echo "Please Select Excel File";
-     
-}
-echo $OUTPUT->footer();
+    }
+    else
+    {?>
+        <h3 style="color:red;"> Invalid Selection </h3>
+        <a href="../index.php">Back</a>
+        <?php
+    }
+    echo $OUTPUT->footer();
 ?>
  
-
