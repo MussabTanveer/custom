@@ -260,7 +260,7 @@ require_once('../../../config.php');
 		}
 
 		//Get plo with its name and idnumber
-		$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "plo%" ', array($frameworkid));
+		$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "plo%" ORDER BY id', array($frameworkid));
 		
 		if($plos){
 			$ploNameArray=array(); $ploIdArray=array(); $ploIdnumberArray=array();
@@ -271,6 +271,18 @@ require_once('../../../config.php');
 				array_push($ploIdnumberArray,$idnumber);
 				array_push($ploNameArray,$name);
 				array_push($ploIdArray,$id);
+			}
+		}
+
+		//Get domains
+        $recDomains=$DB->get_records_sql("SELECT * FROM mdl_taxonomy_domain");
+		if($recDomains){
+			$domid = array(); $domname = array();
+			foreach ($recDomains as $recD) {
+				$did = $recD->id;
+				$dn = $recD->name;
+				array_push($domid, $did); // array of dom ids
+				array_push($domname, $dn); // array of dom names
 			}
 		}
 		
