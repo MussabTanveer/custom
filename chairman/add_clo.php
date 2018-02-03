@@ -486,22 +486,40 @@ require_once('../../../config.php');
 					<span class="pull-xs-right text-nowrap">
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 					</span>
-					<label class="col-form-label d-inline" for="id_level">
-						Level
+					<label class="col-form-label d-inline" for="id_domain">
+						Taxonomy Domain
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-					<select required onChange="dropdownLevel(this.value, 0)" name="levels[]" class="select custom-select">
+					<select id="id_domain" required onChange="dropdownDomain(this.value, 0)" name="doamins[]" class="select custom-select">
 						<option value=''>Choose..</option>
 						<?php
-						foreach ($recLevels as $recL) {
-							$lid = $recL->id;
-							$lvl = $recL->level;
+						foreach ($recDomains as $recD) {
+							$did = $recD->id;
+							$dn = $recD->name;
 							?>
-							<option value="<?php echo $lid; ?>"><?php echo $lvl; ?></option>
+							<option value="<?php echo $did; ?>"><?php echo $dn; ?></option>
 						<?php
 						}
 						?>
+					</select>
+					<div class="form-control-feedback" id="id_error_level">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_level">
+						Taxonomy Level
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select id="id_level" required onChange="dropdownLevel(this.value, 0)" name="levels[]" class="select custom-select">
+						<option value=''>Choose..</option>
 					</select>
 					<span id="dname0"></span>
 					<span id="lname0"></span>
@@ -544,6 +562,28 @@ require_once('../../../config.php');
 		<?php
 		}
 		?>
+
+		<script>
+		    $(document).ready(function() {
+				$("#id_domain").change(function() {
+					var domain_id = $(this).val();
+					if(domain_id != "") {
+						$.ajax({
+							url:"get-levels.php",
+							data:{d_id:domain_id},
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$("#id_level").html(resp);
+							}
+						});
+					}
+					else {
+						$("#id_level").html("<option value=''>Choose..</option>");
+					}
+				});
+			});
+		</script>
 		
 		<script>
 		// script to create dynamic list of clos on course code input
@@ -582,6 +622,8 @@ require_once('../../../config.php');
 			var lshortnames = <?php echo json_encode($lvlshortname); ?>;
 			var ploId = <?php echo json_encode($ploIdArray); ?>;
 			var ploIdNumber = <?php echo json_encode($ploIdnumberArray); ?>;
+			var domId = <?php echo json_encode($domid); ?>;
+			var domName = <?php echo json_encode($domname); ?>;
 			
 			function addInput(divName){
 				var newdiv = document.createElement('div');
@@ -626,9 +668,36 @@ require_once('../../../config.php');
 				var newdiv4 = document.createElement('div');
 				newdiv4.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_plo">Map to PLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectPLO.innerHTML+' <span id="plosidnumber'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv4);
+
+				//Create select element for Domain selection
+				var selectDom = document.createElement("select");
+				selectDom.id = "id_domain"+i;
+				selectDom.className = "select custom-select";
+				selectDom.name = "doamins[]";
+				selectDom.setAttribute("required", "required");
+
+				//Create and append the options
+				var option = document.createElement("option");
+				option.value = "";
+				option.text = "Choose..";
+				selectDom.appendChild(option);
+				for (var l = 0; l < domId.length; l++) {
+					var option = document.createElement("option");
+					option.value = domId[l];
+					option.text = domName[l];
+					selectDom.appendChild(option);
+				}
+
+				var newdivforselectDom = document.createElement('div');
+				newdivforselectDom.appendChild(selectDom);
+
+				var newdivDom = document.createElement('div');
+				newdivDom.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_domain">Taxonomy Domain</label></div><div class="col-md-9 form-inline felement">'+newdivforselectDom.innerHTML+' <div class="form-control-feedback" id="id_error_domain"></div></div></div>';
+				document.getElementById(divName).appendChild(newdivDom);
 				
 				//Create select element for Level selection
 				var selectLevel = document.createElement("select");
+				selectLevel.id = "id_level"+i;
 				selectLevel.className = "select custom-select";
 				selectLevel.name = "levels[]";
 				jsFuncVal = "dropdownLevel(this.value, "+i+")";
@@ -640,20 +709,40 @@ require_once('../../../config.php');
 				option.value = "";
 				option.text = "Choose..";
 				selectLevel.appendChild(option);
-				for (var l = 0; l < lshortnames.length; l++) {
+				/*for (var l = 0; l < lshortnames.length; l++) {
 					var option = document.createElement("option");
 					option.value = levelid[l];
 					option.text = lshortnames[l];
 					selectLevel.appendChild(option);
-				}
+				}*/
 
 				var newdivforselectLevel = document.createElement('div');
 				newdivforselectLevel.appendChild(selectLevel);
 				
 				var newdiv5 = document.createElement('div');
-				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
+				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Taxonomy Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv5);
-				
+
+				var domainId = "#id_domain"+i;
+				var levelId = "#id_level"+i;
+				$(domainId).change(function() {
+					var domain_id = $(this).val();
+					if(domain_id != "") {
+						$.ajax({
+							url:"get-levels.php",
+							data:{d_id:domain_id},
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$(levelId).html(resp);
+							}
+						});
+					}
+					else {
+						$(levelId).html("<option value=''>Choose..</option>");
+					}
+				});
+
 				i++;
 			}
 		</script>
