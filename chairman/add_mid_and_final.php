@@ -12,276 +12,163 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-	/*
-	
-$recm=$DB->get_records_sql('Select * from mdl_grading_policy WHERE name="mid term"
-	');
-
-foreach($recm as $recordm){
-
-//$courseidm=$recordm->courseid;
-
-
-$sqlm="INSERT INTO mdl_grading_policy (percentage) VALUES ('20')";
-$DB->execute($sqlm);
-}
-
-
-$recf=$DB->get_records_sql('Select *  from mdl_grading_policy WHERE name="final exam" ');
-
-
-//$courseidf=$recordf->courseid;
-foreach($recf as $recordf){
-$sqlf="INSERT INTO mdl_grading_policy (percentage) VALUES ('60')";
-$DB->execute($sqlf);
-
-}
-*/
-
-$rec1=$DB->get_records_sql('Select SUM(percentage) as totalpercentage from mdl_grading_policy');
-foreach($rec1 as $record1){
-
-$totalpercentage=$record1->totalpercentage;
-
-}
-
-echo $totalpercentage;
-if($totalpercentage > 100){
-redirect('grading_policy_full.php');
-
-}
-
-if(isset($_POST['save'])){
-
-
-
-
-if(isset($_POST["midterm"])){
-
-$midterm = trim($_POST["midterm"]);
-
-
-}
-
-if(isset($_POST["final"])){
-
-$final = trim($_POST["final"]);
-}
-
-if(isset($_POST["sessional"])){
-$sessional=trim($_POST["sessional"]);
-}
-//echo $sessional;
-
-
-$sum=$midterm+$final+$sessional;
-
-if($sum < 100){
-
-
-echo "<font color = red>The sum of the below entered Weightages should be 100%!</font><br />";
-
-}
-
-else{
-
-$rec=$DB->get_records_sql('Select id from mdl_course WHERE shortname NOT LIKE "CIS"');
-
-if($rec){
-foreach($rec as $record){
-
-$courseid=$record->id;
-
-$sql1="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$midterm')";
-$DB->execute($sql1);
-
-$sql2="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$final')";
-$DB->execute($sql2);
-}
-
-$msgP = "<font color = green>Weightage successfully assigned!</font><br />";
-
-}
-
-
-else{
-
-
-	echo "<font color = red>No Courses Found!</font><br />";
-}
-
-}
-
-}
-
-elseif(isset($_POST['return'])){
-
-
-if(isset($_POST["midterm"])){
-
-$midterm = trim($_POST["midterm"]);
-
-
-}
-
-if(isset($_POST["final"])){
-
-$final = trim($_POST["final"]);
-}
-
-if(isset($_POST["sessional"])){
-$sessional=trim($_POST["sessional"]);
-}
-//echo $midterm;
-
-$sum=$midterm+$final+$sessional;
-
-if($sum < 100){
-
-
-echo "<font color = red>The sum of the below entered Weightages should be 100%!</font><br />";
-
-}
-
-else{
-
-
-$rec=$DB->get_records_sql('Select id from mdl_course WHERE shortname NOT LIKE "CIS"');
-
-if($rec){
-foreach($rec as $record){
-
-$courseid=$record->id;
-
-$sql1="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$midterm')";
-$DB->execute($sql1);
-
-$sql2="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$final')";
-$DB->execute($sql2);
-}
-
-$msgP = "<font color = green>Weightage successfully assigned!</font><br />";
-
-}
-
-
-else{
-
-
-	echo "<font color = red>No Courses Found!</font><br />";
-}
-redirect('report_chairman.php');
-
-}
-
-}
-
-
-
-
-
-
-if(isset($msgP)){
-
-
-	echo $msgP;
-}
-
-
-
-
 ?>
 
+<style>
+	input[type='number'] {
+		-moz-appearance:textfield;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+</style>
 
-<form method='post' action="" class="mform" id="cloForm">
-     <div class="form-group row fitem ">
-                <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
-                    <label class="col-form-label d-inline" for="id_name">
-                        Midterm
-                    </label>
-                </div>
-                <div class="col-md-9 form-inline felement" data-fieldtype="text">
-                    <input type="text"
-                            class="form-control"
-                            name="midterm"
-                            id="id_name"
-                            size=""
-                            required
-                            maxlength="100">
-                            %
-                    <div class="form-control-feedback" id="id_error_name">
-                    </div>
+<?php
+    if(isset($_POST['save'])){
+        $midterm = trim($_POST["midterm"]);
+        $final = trim($_POST["final"]);
+        $sessional=trim($_POST["sessional"]);
+        $sum=$midterm+$final+$sessional;
+        if($sum < 100 || $sum > 100){
+            $error_msg = "<font color = red>The sum of the below entered weightage should be 100%!</font><br />";
+        }
+        else{
+            $revisions=$DB->get_records_sql('SELECT DISTINCT revision FROM `mdl_grading_policy_chairman` ORDER BY revision');
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
+            }
+            $rev++;
+
+            $record1 = new stdClass();
+            $record1->name = "activities";
+            $record1->percentage = $sessional;
+            $record1->revision = $rev;
+            $record2 = new stdClass();
+            $record2->name = "mid term";
+            $record2->percentage = $midterm;
+            $record2->revision = $rev;
+            $record3 = new stdClass();
+            $record3->name = "final exam";
+            $record3->percentage = $final;
+            $record3->revision = $rev;
+
+            $records = array($record1, $record2, $record3);
+            $DB->insert_records('grading_policy_chairman', $records);
+
+            redirect('./report_chairman.php');
+        }
+    }
+    
+    /*elseif(isset($_POST['return'])){
+
+    redirect('report_chairman.php');
+
+    }*/
+
+    if(isset($error_msg)){
+        echo $error_msg;
+    }
+
+    ?>
+
+    <form method='post' action="" class="mform" id="cloForm">
+        <div class="form-group row fitem ">
+            <div class="col-md-3">
+                <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                </span>
+                <label class="col-form-label d-inline" for="id_act">
+                    Quiz, Assignment, Project, Other
+                </label>
+            </div>
+            <div class="col-md-9 form-inline felement" data-fieldtype="number">
+                <input type="number"
+                        class="form-control"
+                        name="sessional"
+                        id="id_act"
+                        size=""
+                        required
+                        maxlength="100"
+                        step="0.001"
+                        min="0" max="100">
+                        %
+                        (Note: To be assigned individually by the teacher)
+                <div class="form-control-feedback" id="id_error_name">
                 </div>
             </div>
-
-<div class="form-group row fitem ">
-                <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
-                    <label class="col-form-label d-inline" for="id_name">
-                        Final
-                    </label>
-                </div>
-                <div class="col-md-9 form-inline felement" data-fieldtype="text">
-                    <input type="text"
-                            class="form-control"
-                            name="final"
-                            id="id_name"
-                            size=""
-                            required
-                            maxlength="100">
-                            %
-                    <div class="form-control-feedback" id="id_error_name">
-                    </div>
-                </div>
-            </div>
+        </div>
         
-
-
-
-<div class="form-group row fitem ">
-                <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
-                    <label class="col-form-label d-inline" for="id_name">
-                        Sessional Activities
-                    </label>
-                </div>
-                <div class="col-md-9 form-inline felement" data-fieldtype="text">
-                    <input type="text"
-                            class="form-control"
-                            name="sessional"
-                            id="id_name"
-                            size=""
-                            required
-                            maxlength="100">
-                            %
-                            (Note: To be Assigned individually by the teacher)
-                    <div class="form-control-feedback" id="id_error_name">
-                    </div>
+        <div class="form-group row fitem ">
+            <div class="col-md-3">
+                <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                </span>
+                <label class="col-form-label d-inline" for="id_mt">
+                    Midterm
+                </label>
+            </div>
+            <div class="col-md-9 form-inline felement" data-fieldtype="number">
+                <input type="number"
+                        class="form-control"
+                        name="midterm"
+                        id="id_mt"
+                        size=""
+                        required
+                        maxlength="100"
+                        step="0.001"
+                        min="0" max="100">
+                        %
+                <div class="form-control-feedback" id="id_error_name">
                 </div>
             </div>
+        </div>
 
-
-
-
-
-
-
-<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
-		<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-		<a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php'" ?>>Cancel</a>
-		</form>
-
-
-
+        <div class="form-group row fitem ">
+            <div class="col-md-3">
+                <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                </span>
+                <label class="col-form-label d-inline" for="id_fe">
+                    Final Exam
+                </label>
+            </div>
+            <div class="col-md-9 form-inline felement" data-fieldtype="number">
+                <input type="number"
+                        class="form-control"
+                        name="final"
+                        id="id_fe"
+                        size=""
+                        required
+                        maxlength="100"
+                        step="0.001"
+                        min="0" max="100">
+                        %
+                <div class="form-control-feedback" id="id_error_name">
+                </div>
+            </div>
+        </div>
+        
+        <!--<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
+        <input class="btn btn-info" type="submit" name="return" value="Save and return"/>-->
+        <input class="btn btn-info" type="submit" name="save" value="Save"/>
+        <a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php'" ?>>Cancel</a>
+    </form>
+    <?php
+		if(isset($_POST['save']) && isset($error_msg)){
+		?>
+		<script>
+			document.getElementById("id_act").value = <?php echo json_encode($sessional); ?>;
+			document.getElementById("id_mt").value = <?php echo json_encode($midterm); ?>;
+			document.getElementById("id_fe").value = <?php echo json_encode($final); ?>;
+		</script>
+		<?php
+		}
+    ?>
 
 <?php
 echo $OUTPUT->footer();
-
 ?>
