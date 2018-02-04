@@ -23,13 +23,7 @@
             &nbsp;&nbsp;&nbsp;<a href="./define_vision_mission.php" class="cool-link">&#10070; Define Vision &amp; Mission</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./view_vision_mission.php" class="cool-link">&#10070; View Vision &amp; Mission</a><br><br>
         </div>
-
-        <a href="javascript:void(0)" onclick="toggle_visibility('vl');" class="cool-link">Verb List</a><br><br>
-        <div id="vl" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a href="./upload_verb_list.php" class="cool-link">&#10070; Upload Verb List</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="../view_verb_list.php" class="cool-link">&#10070; View Verb List</a><br><br>
-        </div>
-
+        
         <a href="javascript:void(0)" onclick="toggle_visibility('obef');" class="cool-link">OBE Framework</a><br><br>
         <div id="obef" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="./add_framework.php" class="cool-link">&#10070; Create OBE Framework</a><br>
@@ -46,10 +40,16 @@
             &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">&#10070; View Student's CLO Progress</a><br><br>
         </div>
 
+        <a href="javascript:void(0)" onclick="toggle_visibility('vl');" class="cool-link">Verb List</a><br><br>
+        <div id="vl" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./upload_verb_list.php" class="cool-link">&#10070; Upload Verb List</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../view_verb_list.php" class="cool-link">&#10070; View Verb List</a><br><br>
+        </div>
+        
         <a href="javascript:void(0)" onclick="toggle_visibility('wt');" class="cool-link">Weightage</a><br><br>
         <div id="wt" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="./assign_weightage.php" class="cool-link">&#10070; Assign Weightage</a><br>
-            &nbsp;&nbsp;&nbsp;<a href="./viewy_weightage.php" class="cool-link">&#10070; View Weightage</a><br><br>
+            &nbsp;&nbsp;&nbsp;<a href="./view_weightage.php" class="cool-link">&#10070; View Weightage</a><br><br>
         </div>
         <!--
         <a href="./define_vision_mission.php" class="cool-link">Define Vision &amp; Mission</a><br><br>
