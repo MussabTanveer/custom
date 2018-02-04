@@ -58,7 +58,7 @@ require_once('../../../config.php');
 	            if($type=="assign"){
 	            	$record->module=-4;
 	            }
-	            else{
+	            elseif($type=="project"){
 
 	            	$record->module=-5;
 	            }
