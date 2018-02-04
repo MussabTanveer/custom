@@ -19,7 +19,7 @@
     use Box\Spout\Reader\ReaderFactory;
     use Box\Spout\Common\Type;
     
-    if(!empty($_GET['quizid']))
+    if(!empty($_GET['id']) && !empty($_GET['course']))
     {
     ?>
 
@@ -33,7 +33,7 @@
     </form>
 
     <?php
-        $qid=$_GET['quizid'];        
+        $qid=$_GET['id'];        
         // check file name is not empty
         if (!empty($_FILES['quizmarks']['name'])) {
             

@@ -5,8 +5,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Quiz Report");
-    $PAGE->set_heading("Quizzes");
+    $PAGE->set_title("Choose Activity");
+    $PAGE->set_heading("Choose Activity");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_quiz.php');
     
     require_login();
@@ -25,8 +25,21 @@
 		//echo gettype($course_id), "\n";
         $type=$_GET['type'];
         //echo " Activity Type : $type";
+
+        if($type=="quiz"){
+            echo "<h3>Quiz</h3><br>";
+            $mod=-1;
+        }
+        elseif($type=="midterm"){
+            echo "<h3>Midterm</h3><br>";
+            $mod=-2;
+        }
+        elseif($type=="finalexam"){
+            echo "<h3>Final Exam</h3><br>";
+            $mod=-3;
+        }
         
-        $rec=$DB->get_records_sql('SELECT * FROM mdl_manual_quiz WHERE courseid = ?', array($course_id));
+        $rec=$DB->get_records_sql('SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?', array($course_id,$mod));
         
         if($rec){
             $serialno = 0;
@@ -37,7 +50,7 @@
                 $id = $records->id;
                 $qname = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./upload_marks.php?quizid=$id'>$qname</a>");
+                $table->data[] = array($serialno,"<a href='./upload_marks.php?id=$id&course=$course_id'>$qname</a>");
             }
             
             echo html_writer::table($table);
