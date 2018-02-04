@@ -19,7 +19,7 @@
     {
         $course_id=$_GET['course'];
         //echo "$course_id";
-         $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ?",array($course_id));
+         $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ? AND module = ?",array($course_id,-4));
 
         if($assigns)
         {

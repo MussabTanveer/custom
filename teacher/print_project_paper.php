@@ -4,9 +4,9 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Print Assignment");
-    $PAGE->set_heading("Print Assignment");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_assign_paper.php');
+    $PAGE->set_title("Print Project");
+    $PAGE->set_heading("Print Project");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_project_paper.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
@@ -19,7 +19,7 @@
     {
         $course_id=$_GET['course'];
         //echo "$course_id";
-         $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ?",array($course_id));
+         $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ? AND module = ?",array($course_id,-5));
 
         if($assigns)
         {
@@ -38,7 +38,7 @@
         }
 
         else
-            echo "<font color = red> No Assignment Found!</font>";
+            echo "<font color = red> No Project Found!</font>";
 
     }
 
