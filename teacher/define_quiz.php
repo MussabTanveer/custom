@@ -89,7 +89,7 @@ require_once('../../../config.php');
 
 				}
 
-				else{
+				elseif($type=="finalexam"){
 
                     $record->module=-3;
 
