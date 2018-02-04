@@ -77,12 +77,30 @@ require_once('../../../config.php');
 				$record->courseid = $course_id;
 				$record->name = $quizname;
 				$record->description = $quizdesc;
+				if($type=="quiz"){
+
+                      $record->module=-1;
+
+				}
+
+				elseif($type=="midterm"){
+
+                    $record->module=-2;
+
+				}
+
+				else{
+
+                    $record->module=-3;
+
+				}
 				$quizid = $DB->insert_record('manual_quiz', $record); // get quiz id of newly inserted quiz
 
 				// Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
 
 				// Automated Mapping of Quiz, Mid-terms and Finals
 				if($type == "quiz"){
+				
 
 					$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
 

@@ -55,12 +55,22 @@ require_once('../../../config.php');
 				$record->cloid = $apclo;
 				$record->startdate = $startdate;
 	            $record->enddate = $enddate;
+	            if($type=="assign"){
+	            	$record->module=-4;
+	            }
+	            else{
+
+	            	$record->module=-5;
+	            }
+
 				$assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
 
 				// Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
 				// Automated mapping code starts from here
 				if($type == "assign"){
+                  
+
 					$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
 					if($reca){
 						foreach ($reca as $recorda) {
@@ -76,6 +86,9 @@ require_once('../../../config.php');
 					}
 				}
 				elseif($type == "project"){
+
+				
+
 					$recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
 					if($recp){
 						foreach ($recp as $recordp) {
