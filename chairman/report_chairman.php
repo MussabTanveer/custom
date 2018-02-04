@@ -45,7 +45,12 @@
             &nbsp;&nbsp;&nbsp;<a href="./display_teachers.php" class="cool-link">&#10070; View Teacher's Course CLO Report</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">&#10070; View Student's CLO Progress</a><br><br>
         </div>
-        <a href="./add_mid_and_final.php" class="cool-link">Assign Weightage</a><br>
+
+        <a href="javascript:void(0)" onclick="toggle_visibility('wt');" class="cool-link">Weightage</a><br><br>
+        <div id="wt" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./assign_weightage.php" class="cool-link">&#10070; Assign Weightage</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./viewy_weightage.php" class="cool-link">&#10070; View Weightage</a><br><br>
+        </div>
         <!--
         <a href="./define_vision_mission.php" class="cool-link">Define Vision &amp; Mission</a><br><br>
 

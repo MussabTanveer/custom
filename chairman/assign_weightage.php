@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Assign Weightage");
     $PAGE->set_heading("Assign Weightage");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/add_mid_and_final.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/assign_weightage.php');
     
 	require_login();
     if($SESSION->oberole != "chairman"){
