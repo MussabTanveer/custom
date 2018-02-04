@@ -65,8 +65,17 @@ if (!empty($_FILES['quizmarks']['name'])) {
                         if($count==1){
                             $c1=count($row);
                             for($x=1;$x<$c1;$x++){
-                            $prefix = "pre";
-                            ${$prefix.strtolower($x)}=$row[$x];
+                            //$prefix = "pre";
+                            //${$prefix.strtolower($x)}=$row[$x];
+                            $quesids=$row[$x];
+                            $rec1=$DB->get_records_sql('SELECT id  FROM mdl_manual_quiz_question WHERE quesname = ?', array($quesids));
+                            if($rec1){
+
+                                $a="question";
+                                foreach ($rec1 as $record1){
+                                ${$a.strtolower($x)}=$record1->id;}
+                                
+                            }
                             // echo ${$prefix.strtolower($x)};
                             // $a=$row[1];
                             // $b=$row[2];
@@ -77,36 +86,51 @@ if (!empty($_FILES['quizmarks']['name'])) {
  
                 // It reads data after header. In the my excel sheet, 
                 // header is in the first row. 
-                if ($count > 1) { 
+                 if ($count > 1) { 
                     
-                    //$arri = array_map('strval', $arr);
+            //         //$arri = array_map('strval', $arr);
                 
                     
-                    // Data of excel sheet
-                    $c1=count($row);
-                    $sn=$row[0];
-                    for($x=1;$x<$c1;$x++){
-                    $pfix="sn";
-                    ${$pfix.strtolower($x)}=$row[$x];
-                    //echo ${$pfix.strtolower($x)};
+            //         // Data of excel sheet
+                     $c1=count($row);
+                     $sn=$row[0];
+            $rec=$DB->get_records_sql('SELECT id  FROM mdl_user WHERE username = ?', array($sn));
+                     if ($rec){
+                         foreach($rec as $records){
+                        
+                         $uid=$records->id;
+                        }
+                     }
+                     else{
+                         $uid="A";
+                     }
+               
 
-                    // $sn1=$row[1];
-                    // $sn2=$row[2];
-                    // $sn3=$row[3];
-                    // $sn4=$row[4];
+                     for($x=1;$x<$c1;$x++){
+                
+        
+                     $pfix="sn";
+                     ${$pfix.strtolower($x)}=$row[$x];
+                   
+                     //echo ${$pfix.strtolower($x)};
 
-                        if (${$pfix.strtolower($x)} <>"A" ){
-                            $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$sn','${$prefix.strtolower($x)}','${$pfix.strtolower($x)}')";
-                            $DB->execute($sql1);
-                             }
-                    }
-                }
-               $count++;
+                  // $sn1=$row[1];
+                     // $sn2=$row[2];
+                     // $sn3=$row[3];
+                     // $sn4=$row[4];
+
+                         if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" ){
+                             $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
+                             $DB->execute($sql1);
+                              }
+                     }
+                 }
+                $count++;
             }}
             $abc++;
         }
-
-        echo "<h3>File has been Uploaded!</h3>";
+if($sql1){
+         echo "<h3>File has been Uploaded!</h3>";}
         //Close excel file
         $reader->close();
  
