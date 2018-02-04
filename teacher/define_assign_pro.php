@@ -68,7 +68,7 @@ require_once('../../../config.php');
 						}
 						echo $assign_id;
 						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-						('$course_id',-2,'$assign_pro_id','$assign_id') ";
+						('$course_id',-4,'$assign_pro_id','$assign_id') ";
 						$DB->execute($sql);
 					}
 					else{
@@ -82,7 +82,7 @@ require_once('../../../config.php');
 							$project_id=$recordp->project_id; 
 						}
 						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-						('$course_id',-2,'$assign_pro_id','$project_id') ";
+						('$course_id',-5,'$assign_pro_id','$project_id') ";
 						$DB->execute($sql);
 					}
 					else{
