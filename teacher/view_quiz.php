@@ -44,13 +44,13 @@
         if($rec){
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Quiz Name');
+            $table->head = array('S. No.', 'Activity Name');
             foreach ($rec as $records) {
                 $serialno++;
                 $id = $records->id;
-                $qname = $records->name;
+                $name = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./upload_marks.php?id=$id&course=$course_id'>$qname</a>");
+                $table->data[] = array($serialno,"<a href='./upload_marks.php?id=$id&course=$course_id'>$name</a>");
             }
             
             echo html_writer::table($table);
