@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Empty Grading Sheet");
     $PAGE->set_heading("Print Empty Grading Sheet");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_quiz_2.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_grading_sheet_quiz.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
