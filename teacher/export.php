@@ -4,6 +4,10 @@
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/export.php');
     use Box\Spout\Writer\WriterFactory;
     use Box\Spout\Common\Type;
+    require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
     
     if(!empty($_GET['id']) && !empty($_GET['course']))
     {
@@ -61,7 +65,7 @@
         //$writer->openToBrowser($fileName); // stream data directly to the browser
         $writer->addRow($arr);
         foreach($seatnos as $seat)       
-        $writer->addRow([$seat]); // add a row at a time
+            $writer->addRow([$seat]); // add a row at a time
         //$writer->addRows($multipleRows); // add multiple rows at a time
         //  $writer->setTempFolder('E:/');
         $writer->close();  
