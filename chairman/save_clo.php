@@ -13,7 +13,8 @@
     global $CFG;
     $x= $CFG->dbpass;
 
-	
+	$coursecode = trim($_POST["idnumber"]);
+     $coursecode=strtoupper($coursecode);
 	if($_FILES['myfile']['size'] > 0)
     {
 

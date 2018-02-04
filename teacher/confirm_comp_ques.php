@@ -51,7 +51,7 @@
 	echo "<font color='green'>CLOs successfully mapped with the activity!</font>";
 	echo "<br>";
 ?>
-<a href="./display_courses-2.php">Back</a>
+<a href="./teacher_courses.php">Back</a>
 
 <?php 	
 	echo $OUTPUT->footer();

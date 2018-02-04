@@ -40,7 +40,7 @@
                 <div id="manual_quiz" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Define Quiz</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_quiz_paper.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Quiz Paper</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz_2.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_assign');" class="cool-link">&#10022; Assignment</a><br>
@@ -53,7 +53,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_pro');" class="cool-link">&#10022; Project</a><br>
                 <div id="manual_pro" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Define Project</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Project Details</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_project_paper.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Project Details</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
                 </div>

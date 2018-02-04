@@ -231,7 +231,7 @@
                                     AND competencyid =? ",
                                     array($courseid,$id));
                         if ($check == NULL)
-                        {   echo "$id<br>";
+                        {   //echo "$id<br>";
                             $flag=true;
                         
                             $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";

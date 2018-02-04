@@ -14,8 +14,47 @@
         header('Location: ../index.php');
     }
 
- if(isset($_GET['quiz']))
+    if(isset($_GET['quiz']))
     {
+
+
+        $dn=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        $un=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("un"));
+
+         if($un){
+
+        foreach($un as $u){
+            $id = $u->id;
+
+        }
+
+         $un=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+        foreach($un as $u){
+            $uniName = $u->description;
+        }
+                       
+    }
+
+
+     if($dn){
+
+        foreach($dn as $u){
+            $id = $u->id;
+
+        }
+
+         $dn=$DB->get_records_sql('SELECT description FROM  `mdl_vision_mission` WHERE id = ?', array($id));
+
+        foreach($dn as $u){
+            $deptName = $u->description;
+        }           
+     }
+
+      $deptName = strip_tags($deptName);
+        $uniName = strip_tags($uniName);
+
+
         $quizid=$_GET['quiz'];
         //echo "$quizid";
         $courseid = $_GET['courseid'];
@@ -39,9 +78,9 @@
    		 $pdf = new FPDF();
   		  $pdf->AddPage();
   		   $pdf->SetFont('Arial','',10);
-   		 $pdf->Cell(190,10,"NED University of Engineering and Technology",0,2,'C');
+   		 $pdf->Cell(190,10,"$uniName",0,2,'C');
 
-   		 $pdf->Cell(190,10,"Computer & Information Systems Engineering Department",0,2,'C');
+   		 $pdf->Cell(190,10,"$deptName",0,2,'C');
    		 $pdf->SetFont('Arial','BU',10);
 	   	 $pdf->Cell(190,10,"($courseIdNumber) $courseFullName",0,2,'C');
 

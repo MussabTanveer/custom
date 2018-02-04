@@ -26,7 +26,8 @@
         $type=$_GET['type'];
         //echo " Activity Type : $type";
         
-        $rec=$DB->get_records_sql('SELECT q.id, q.name FROM mdl_manual_quiz AS q WHERE q.courseid = ?', array($course_id));
+        $rec=$DB->get_records_sql('SELECT * FROM mdl_manual_quiz WHERE courseid = ?', array($course_id));
+        
         if($rec){
             $serialno = 0;
             $table = new html_table();
@@ -38,9 +39,7 @@
                 
                 $table->data[] = array($serialno,"<a href='./upload_marks.php?quizid=$id'>$qname</a>");
             }
-        // if($serialno == 1){
-                //redirect("./report_teacher.php?course=$id");
-        // }
+            
             echo html_writer::table($table);
             echo "<br />";
         }

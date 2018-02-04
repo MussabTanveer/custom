@@ -207,40 +207,60 @@ require_once('../../../config.php');
 				$cloid = $records->id;
 				$clocourse = $records->idnumber; $clocourse = substr($clocourse,0,6);
 				$cloname = $records->shortname;
-				$rev = $records->revision;
+				//$rev = $records->revision;
 				array_push($cloids, $cloid); // array of clo ids
 				array_push($clocourses, $clocourse); // array of clo course codes
 				array_push($clonames, $cloname); // array of clo names
 			
             }
-         //   var_dump($clonames);
-          //  echo "<br>";
-           // var_dump($clocourses);
+           // var_dump($clonames);
+            //var_dump($cloids);
+           // echo "<br>";
+           // echo "<br>";
+            //echo "<br>";
+            //var_dump($clocourses);
            // echo "<br>";
             //var_dump($revs); 
 
             //Loop to Filter-out old clos
             for($i=0 ; $i<(sizeof($clonames)*3); $i++)
-            {
+            {	//echo "$i<br>";
+            	if(array_key_exists($i,$clonames))
+            	{	//echo "$i<br>";
 
-            	if(($clonames[$i] == $clonames [$i+1]) && ($clocourses[$i] == $clocourses[$i+1])) 
-            	{
+            		
+            		if(($clonames[$i] == $clonames [$i+1]) && ($clocourses[$i] == $clocourses[$i+1])) 
+            		{
 
-            		unset($clonames[$i]);
-            		unset($clocourses[$i]);
-            		 unset($cloids[$i]);
+		            		unset($clonames[$i]);
+		            		unset($clocourses[$i]);
+		            		 unset($cloids[$i]);
        		
-            	} 
+            		} 
+            }
+
             }
          	
          	//Reindexing the arrays!
              $clonames = array_values($clonames);
-			  $clocourses = array_values($clocourses);
-			   $cloids = array_values($cloids);		 
+             $clocourses = array_values($clocourses); 
+			  $cloids = array_values($cloids);	
+
+			/* var_dump($clonames);
+            echo "<br>";
+            echo "<br>";
+            echo "<br>";
+            var_dump($clocourses);
+            echo "<br>";
+            echo "<br>";
+            echo "<br>";
+            var_dump($cloids);*/
+
+
 		}
 
 		//Get plo with its name and idnumber
-		$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "plo%" ', array($frameworkid));
+		$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "plo%" ORDER BY id', array($frameworkid));
 		
 		if($plos){
 			$ploNameArray=array(); $ploIdArray=array(); $ploIdnumberArray=array();
@@ -251,6 +271,18 @@ require_once('../../../config.php');
 				array_push($ploIdnumberArray,$idnumber);
 				array_push($ploNameArray,$name);
 				array_push($ploIdArray,$id);
+			}
+		}
+
+		//Get domains
+        $recDomains=$DB->get_records_sql("SELECT * FROM mdl_taxonomy_domain");
+		if($recDomains){
+			$domid = array(); $domname = array();
+			foreach ($recDomains as $recD) {
+				$did = $recD->id;
+				$dn = $recD->name;
+				array_push($domid, $did); // array of dom ids
+				array_push($domname, $dn); // array of dom names
 			}
 		}
 		
@@ -454,22 +486,40 @@ require_once('../../../config.php');
 					<span class="pull-xs-right text-nowrap">
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 					</span>
-					<label class="col-form-label d-inline" for="id_level">
-						Level
+					<label class="col-form-label d-inline" for="id_domain">
+						Taxonomy Domain
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-					<select required onChange="dropdownLevel(this.value, 0)" name="levels[]" class="select custom-select">
+					<select id="id_domain" required onChange="dropdownDomain(this.value, 0)" name="doamins[]" class="select custom-select">
 						<option value=''>Choose..</option>
 						<?php
-						foreach ($recLevels as $recL) {
-							$lid = $recL->id;
-							$lvl = $recL->level;
+						foreach ($recDomains as $recD) {
+							$did = $recD->id;
+							$dn = $recD->name;
 							?>
-							<option value="<?php echo $lid; ?>"><?php echo $lvl; ?></option>
+							<option value="<?php echo $did; ?>"><?php echo $dn; ?></option>
 						<?php
 						}
 						?>
+					</select>
+					<div class="form-control-feedback" id="id_error_level">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_level">
+						Taxonomy Level
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select id="id_level" required onChange="dropdownLevel(this.value, 0)" name="levels[]" class="select custom-select">
+						<option value=''>Choose..</option>
 					</select>
 					<span id="dname0"></span>
 					<span id="lname0"></span>
@@ -512,6 +562,28 @@ require_once('../../../config.php');
 		<?php
 		}
 		?>
+
+		<script>
+		    $(document).ready(function() {
+				$("#id_domain").change(function() {
+					var domain_id = $(this).val();
+					if(domain_id != "") {
+						$.ajax({
+							url:"get-levels.php",
+							data:{d_id:domain_id},
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$("#id_level").html(resp);
+							}
+						});
+					}
+					else {
+						$("#id_level").html("<option value=''>Choose..</option>");
+					}
+				});
+			});
+		</script>
 		
 		<script>
 		// script to create dynamic list of clos on course code input
@@ -519,8 +591,7 @@ require_once('../../../config.php');
 		var cloids = <?php echo json_encode($cloids); ?>;
 		var clonames = <?php echo json_encode($clonames); ?>;
 		var clocourses = <?php echo json_encode($clocourses); ?>;
-		//var revs = <?php echo json_encode($revs)?>;
-
+		
 		$(document).ready(function(){
 			$("#id_idnumber").keyup(function(){
 				var n = $('#id_idnumber').val().toUpperCase();
@@ -546,10 +617,12 @@ require_once('../../../config.php');
 		<script>
 			// script to add name, desc, kpi, plo and level fields to form
 			var i = 1;
-			var levelid = <?php echo json_encode($levelid); ?>;
-			var lshortnames = <?php echo json_encode($lvlshortname); ?>;
+			//var levelid = <?php echo json_encode($levelid); ?>;
+			//var lshortnames = <?php echo json_encode($lvlshortname); ?>;
 			var ploId = <?php echo json_encode($ploIdArray); ?>;
 			var ploIdNumber = <?php echo json_encode($ploIdnumberArray); ?>;
+			var domId = <?php echo json_encode($domid); ?>;
+			var domName = <?php echo json_encode($domname); ?>;
 			
 			function addInput(divName){
 				var newdiv = document.createElement('div');
@@ -594,9 +667,36 @@ require_once('../../../config.php');
 				var newdiv4 = document.createElement('div');
 				newdiv4.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_plo">Map to PLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectPLO.innerHTML+' <span id="plosidnumber'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv4);
+
+				//Create select element for Domain selection
+				var selectDom = document.createElement("select");
+				selectDom.id = "id_domain"+i;
+				selectDom.className = "select custom-select";
+				selectDom.name = "doamins[]";
+				selectDom.setAttribute("required", "required");
+
+				//Create and append the options
+				var option = document.createElement("option");
+				option.value = "";
+				option.text = "Choose..";
+				selectDom.appendChild(option);
+				for (var l = 0; l < domId.length; l++) {
+					var option = document.createElement("option");
+					option.value = domId[l];
+					option.text = domName[l];
+					selectDom.appendChild(option);
+				}
+
+				var newdivforselectDom = document.createElement('div');
+				newdivforselectDom.appendChild(selectDom);
+
+				var newdivDom = document.createElement('div');
+				newdivDom.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_domain">Taxonomy Domain</label></div><div class="col-md-9 form-inline felement">'+newdivforselectDom.innerHTML+' <div class="form-control-feedback" id="id_error_domain"></div></div></div>';
+				document.getElementById(divName).appendChild(newdivDom);
 				
 				//Create select element for Level selection
 				var selectLevel = document.createElement("select");
+				selectLevel.id = "id_level"+i;
 				selectLevel.className = "select custom-select";
 				selectLevel.name = "levels[]";
 				jsFuncVal = "dropdownLevel(this.value, "+i+")";
@@ -608,20 +708,40 @@ require_once('../../../config.php');
 				option.value = "";
 				option.text = "Choose..";
 				selectLevel.appendChild(option);
-				for (var l = 0; l < lshortnames.length; l++) {
+				/*for (var l = 0; l < lshortnames.length; l++) {
 					var option = document.createElement("option");
 					option.value = levelid[l];
 					option.text = lshortnames[l];
 					selectLevel.appendChild(option);
-				}
+				}*/
 
 				var newdivforselectLevel = document.createElement('div');
 				newdivforselectLevel.appendChild(selectLevel);
 				
 				var newdiv5 = document.createElement('div');
-				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
+				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Taxonomy Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv5);
-				
+
+				var domainId = "#id_domain"+i;
+				var levelId = "#id_level"+i;
+				$(domainId).change(function() {
+					var domain_id = $(this).val();
+					if(domain_id != "") {
+						$.ajax({
+							url:"get-levels.php",
+							data:{d_id:domain_id},
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$(levelId).html(resp);
+							}
+						});
+					}
+					else {
+						$(levelId).html("<option value=''>Choose..</option>");
+					}
+				});
+
 				i++;
 			}
 		</script>
@@ -667,7 +787,7 @@ require_once('../../../config.php');
 				else{
 					for(var i=0; i<levelid.length ; i++){
 						if(levelid[i] == value){
-							document.getElementById(dname).innerHTML = dnames[i];
+							//document.getElementById(dname).innerHTML = dnames[i];
 							document.getElementById(lname).innerHTML = "("+lnames[i]+")";
 							break;
 						}

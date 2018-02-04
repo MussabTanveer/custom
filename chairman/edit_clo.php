@@ -9,8 +9,21 @@
 
     echo $OUTPUT->header();
 	require_login();
-    	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
+	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
+?>
+
+<style>
+	input[type='number'] {
+		-moz-appearance:textfield;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+</style>
+
+<?php
 	if(isset($_GET['edit']) && isset($_GET['fwid']))
 	{
 		$id=$_GET['edit'];
@@ -173,10 +186,10 @@
 						id="id_kpi"
 						size=""
 						required
-						placeholder="eg. 0.6"
+						placeholder="eg. 50"
 						maxlength="100"
 						step="0.001"
-						min="0" max="1"> (eg. 0.6)
+						min="0" max="100"> %
 				<div class="form-control-feedback" id="id_error_kpi">
 				
 				</div>
@@ -188,8 +201,6 @@
 	
 	<?php
 		if(isset($_GET['edit'])){
-		?>
-		<?php
 		$id=$_GET['edit'];
 		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber FROM mdl_competency WHERE id=?',array($id));
 		$recKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_kpi WHERE cloid=?',array($id));
@@ -209,10 +220,8 @@
 		
 		?>
 	<script>
-	    //document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
-        document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
-        //document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
-		document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
+	    document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
+        document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
     </script>
 	
 	<?php
