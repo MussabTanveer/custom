@@ -46,7 +46,7 @@
                 $id = $records->id;
                 $name = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./upload_marks.php?id=$id&course=$course_id'>$name</a>");
+                $table->data[] = array($serialno,"<a href='./upload_marks_assignment.php?id=$id&course=$course_id'>$name</a>");
             }
             
             echo html_writer::table($table);
