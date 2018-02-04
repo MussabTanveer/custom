@@ -33,9 +33,7 @@
     </form>
 
     <?php
-
         $qid=$_GET['quizid'];        
-
         // check file name is not empty
         if (!empty($_FILES['quizmarks']['name'])) {
             
@@ -72,7 +70,6 @@
                             $quesids=$row[$x];
                             $rec1=$DB->get_records_sql('SELECT id  FROM mdl_manual_quiz_question WHERE quesname = ?', array($quesids));
                             if($rec1){
-
                                 $a="question";
                                 foreach ($rec1 as $record1){
                                 ${$a.strtolower($x)}=$record1->id;}
@@ -104,19 +101,16 @@
                         else{
                             $uid="A";
                         }
-
                         for($x=1;$x<$c1;$x++){                    
                 
                             $pfix="sn";
                             ${$pfix.strtolower($x)}=$row[$x];
                         
                             //echo ${$pfix.strtolower($x)};
-
                             // $sn1=$row[1];
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-
                             if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" ){
                                 $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
                                 $DB->execute($sql1);
@@ -147,4 +141,3 @@
     }
     echo $OUTPUT->footer();
 ?>
- 
