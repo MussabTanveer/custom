@@ -5,9 +5,9 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Quiz Report");
-    $PAGE->set_heading("Quizzes");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_quiz.php');
+    $PAGE->set_title("Empty Grading Sheet");
+    $PAGE->set_heading("Print Empty Grading Sheet");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_quiz_2.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
@@ -25,19 +25,32 @@
 		//echo gettype($course_id), "\n";
         $type=$_GET['type'];
         //echo " Activity Type : $type";
+
+        if($type=="quiz"){
+            echo "<h3>Choose Quiz</h3><br>";
+            $mod=-1;
+        }
+        elseif($type=="midterm"){
+            echo "<h3>Choose Midterm</h3><br>";
+            $mod=-2;
+        }
+        elseif($type=="finalexam"){
+            echo "<h3>Choose Final Exam</h3><br>";
+            $mod=-3;
+        }
         
-        $rec=$DB->get_records_sql('SELECT * FROM mdl_manual_quiz WHERE courseid = ?', array($course_id));
+        $rec=$DB->get_records_sql('SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?', array($course_id,$mod));
         
         if($rec){
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Quiz Name');
+            $table->head = array('S. No.', 'Activity Name');
             foreach ($rec as $records) {
                 $serialno++;
                 $id = $records->id;
-                $qname = $records->name;
+                $name = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./print_grading_sheet.php?quiz=$id&course=$course_id'>$qname</a>");
+                $table->data[] = array($serialno,"<a href='./export.php?id=$id&course=$course_id'>$name</a>");
             }
             
             echo html_writer::table($table);
