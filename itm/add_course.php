@@ -188,6 +188,37 @@
                 
                 $records = array($record1, $record2, $record3);
                 $DB->insert_records('enrol', $records);
+
+                /* map weightage with course automatically */
+                $names = array(); $percents = array();
+                $records=$DB->get_records_sql('SELECT * FROM `mdl_grading_policy_chairman` ORDER BY revision DESC LIMIT 3');
+                if($records){
+                    foreach ($records as $rec){
+                        $name = $rec->name;
+                        $percent = $rec->percentage;
+                        array_push($names, $name);
+                        array_push($percents, $percent);
+                    }
+                }
+
+                $m_pos = array_search("mid term",$names);
+                $a_pos = array_search("activities",$names);
+                $f_pos = array_search("final exam",$names);
+
+                /*if($a_pos >= 0){
+                    echo "<h4>Quiz, Assignment, Project, Other: $percents[$a_pos]%</h4><br>";
+                }*/
+                if($m_pos >= 0){
+                    //echo "<h4>Midterm: $percents[$m_pos]%</h4><br>";
+                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$percents[$m_pos]')";
+                    $DB->execute($sql);
+                    
+                }
+                if($f_pos >= 0){
+                    //echo "<h4>Final Exam: $percents[$f_pos]%</h4><br>";
+                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$percents[$f_pos]')";
+                    $DB->execute($sql);
+                }
                 
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
                 WHERE id = ? ',
@@ -257,10 +288,11 @@
                     $msg5="<p><b>Add another below.</b></p>";
                     goto end;
                 }
-            // if ($flag == false)
-                //{
-                //    echo " <font color='green'>CLOs are already mapped with the course </font>";
-            // }
+                
+                // if ($flag == false)
+                    //{
+                    //    echo " <font color='green'>CLOs are already mapped with the course </font>";
+                // }
             end:
             }
         }
@@ -419,6 +451,37 @@
                 $records = array($record1, $record2, $record3);
                 $DB->insert_records('enrol', $records);
 
+                /* map weightage with course automatically */
+                $names = array(); $percents = array();
+                $records=$DB->get_records_sql('SELECT * FROM `mdl_grading_policy_chairman` ORDER BY revision DESC LIMIT 3');
+                if($records){
+                    foreach ($records as $rec){
+                        $name = $rec->name;
+                        $percent = $rec->percentage;
+                        array_push($names, $name);
+                        array_push($percents, $percent);
+                    }
+                }
+
+                $m_pos = array_search("mid term",$names);
+                $a_pos = array_search("activities",$names);
+                $f_pos = array_search("final exam",$names);
+
+                /*if($a_pos >= 0){
+                    echo "<h4>Quiz, Assignment, Project, Other: $percents[$a_pos]%</h4><br>";
+                }*/
+                if($m_pos >= 0){
+                    //echo "<h4>Midterm: $percents[$m_pos]%</h4><br>";
+                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$percents[$m_pos]')";
+                    $DB->execute($sql);
+                    
+                }
+                if($f_pos >= 0){
+                    //echo "<h4>Final Exam: $percents[$f_pos]%</h4><br>";
+                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$percents[$f_pos]')";
+                    $DB->execute($sql);
+                }
+
                 $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
                     WHERE id = ? ',
                      array($courseid));
@@ -441,22 +504,18 @@
                         //echo "$idnumber";
 
 
-                         $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
-                                WHERE idnumber = ? 
-                                AND competencyframeworkid =? ",
-                                array($idnumber,$fw_id));
+                        $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                            WHERE idnumber = ? 
+                            AND competencyframeworkid =? ",
+                            array($idnumber,$fw_id));
 
 
-                 foreach ($competenciesRev as $competencyRev) {
-                   // echo "Working";
-                        $id =  $competencyRev->id;
-                        $idnumber =  $competencyRev->idnumber;
-                        //echo "$idnumber";
-                    }
-
-
-
-
+                        foreach ($competenciesRev as $competencyRev) {
+                        // echo "Working";
+                            $id =  $competencyRev->id;
+                            $idnumber =  $competencyRev->idnumber;
+                            //echo "$idnumber";
+                        }
 
                         $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
                                     WHERE courseid = ?
@@ -494,7 +553,7 @@
                 //{
                 //    echo " <font color='green'>CLOs are already mapped with the course </font>";
                 // }
-        
+
             end2:
             }
         }
