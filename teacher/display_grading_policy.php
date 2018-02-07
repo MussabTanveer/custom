@@ -31,7 +31,7 @@
             <?php
         }
 
-        $rec=$DB->get_records_sql('SELECT id, name, percentage FROM mdl_grading_policy WHERE name != "mid term" AND name != "final exam" AND courseid=? ',array($course_id));
+        $rec=$DB->get_records_sql('SELECT id, name, percentage FROM mdl_grading_policy WHERE courseid=? ',array($course_id));
 
         if($rec){
             $serial=0;
@@ -44,7 +44,13 @@
                 $name=$records->name;
                 $percentage=$records->percentage;
                 $sum+=$percentage;
-                $table->data[] = array($serial,strtoupper($name), $percentage.'%', "<a href='edit_grading_policy.php?course=$course_id&edit=$id' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='display_grading_policy.php?course=$course_id&delete=$id' onClick=\"return confirm('Delete grading policy of $name?')\" title='Delete'><img src='../img/icons/delete.png' /></a>");
+                if($name == "mid term" | $name == "final exam"){
+                    $table->data[] = array($serial,strtoupper($name), $percentage.'%', "Predefined");
+                }
+                else{
+                    $table->data[] = array($serial,strtoupper($name), $percentage.'%', "<a href='edit_grading_policy.php?course=$course_id&edit=$id' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='display_grading_policy.php?course=$course_id&delete=$id' onClick=\"return confirm('Delete grading policy of $name?')\" title='Delete'><img src='../img/icons/delete.png' /></a>");
+                }
+                
             }
             $table->data[] = array("<b>Total:</b>", "", $sum.'%', "");
             if($serial){
