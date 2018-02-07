@@ -40,10 +40,10 @@
 				$sum+=trim($_POST["percentage"][$i]);
 			}
 			//echo $sum;
-			//if($sum != 100){
-				//$msgP = "<font color = red>Total percentage of all activities should be 100%</font><br />";
-			//}
-			//else{
+			if($sum > 100){
+				$msgP = "<font color = red>Total percentage of all evaluation methods should be 100%</font><br />";
+			}
+			else{
 				for ($i=0; $i < count($_POST["activity"]); $i++) {
 					# code...
 					$activity=trim($_POST["activity"][$i]);
@@ -61,7 +61,7 @@
 					}
 				}
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
-			//}
+			}
 		}
 		elseif(isset($_POST['return'])) {
 			$sum = 0;
@@ -74,7 +74,7 @@
 				$sum+=trim($_POST["percentage"][$i]);
 			}
 			//echo $sum;
-			if($sum != 100){
+			if($sum > 100){
 				$msgP = "<font color = red>Total percentage of all evaluation methods should be 100%</font><br />";
 			}
 			else{
@@ -106,6 +106,38 @@
 		foreach($gps as $gp){
 			$sum = $gp->sum;
 		}
+
+		$rec=$DB->get_records_sql('SELECT id, name, percentage FROM mdl_grading_policy WHERE courseid=? ',array($course_id));
+		
+		if($rec){
+            $serial=0;
+            $sum=0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Activity', 'Percentage');
+            foreach ($rec as $records) {
+                $serial++;
+                $id=$records->id;
+                $name=$records->name;
+                $percentage=$records->percentage;
+                $sum+=$percentage;
+                if($name == "mid term" | $name == "final exam"){
+                    $table->data[] = array($serial,strtoupper($name), $percentage.'%', "Predefined");
+                }
+                else{
+                    $table->data[] = array($serial,strtoupper($name), $percentage.'%', "<a href='edit_grading_policy.php?course=$course_id&edit=$id' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='display_grading_policy.php?course=$course_id&delete=$id' onClick=\"return confirm('Delete grading policy of $name?')\" title='Delete'><img src='../img/icons/delete.png' /></a>");
+                }
+            }
+            $table->data[] = array("<b>Total:</b>", "", $sum.'%', "");
+            if($serial){
+                if($sum != 100){
+					echo "<h5>Grading Policy is not 100%<h5><br />";
+					echo html_writer::table($table);
+					echo "<h5>Remaining ".(100-$sum)."% <h5><br />";
+				}
+                
+            }
+        }
+
 		if($sum < 100){
 		?>
 		<h3>Select an Activity to choose Grading Policy for:</h3>
