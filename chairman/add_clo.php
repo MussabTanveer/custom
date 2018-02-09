@@ -306,6 +306,11 @@ require_once('../../../config.php');
 			echo $msg3;
 		}
 
+		$temp = array();
+		$editor = \editors_get_preferred_editor();
+		$editor->use_editor("id_bn",$temp);
+		$editor->use_editor("id_coursecontent",$temp);
+
 		//echo "<div class='row'><div class='col-md-6'><a href='view_clos.php?fwid=$frameworkid'><h3>View Already Present CLOs</h3></a></div><div id='list' class='col-md-6'></div></div>";
 		//echo "<div class='row'><div class='col-md-6'></div><div id='list' class='col-md-6'></div></div>";
 		?>
@@ -360,7 +365,7 @@ require_once('../../../config.php');
 				</div>
 			</div>
 
-			<div class="form-group row fitem">
+			<!--<div class="form-group row fitem">
 				<div class="col-md-3">
 					<label class="col-form-label d-inline" for="file">
 						Upload Course Profile
@@ -368,6 +373,92 @@ require_once('../../../config.php');
 				</div>
 				<div class="col-md-9 form-inline felement">
 					<input type="file" name="myfile" id="file" class="form-control">
+				</div>
+			</div>-->
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						
+					</span>
+					<label class="col-form-label d-inline" for="id_tch">
+						Theory Credit Hours
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select id="id_tch" name="tch" class="select custom-select">
+						<option value=''>Choose..</option>
+						<option value='0'>0</option>
+						<option value='1'>1</option>
+						<option value='2'>2</option>
+						<option value='3'>3</option>
+					</select>
+					<div class="form-control-feedback" id="id_error_plo">
+					</div>
+				</div>
+			</div>
+
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						
+					</span>
+					<label class="col-form-label d-inline" for="id_pch">
+						Practical Credit Hours
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select id="id_pch" name="pch" class="select custom-select">
+						<option value=''>Choose..</option>
+						<option value='0'>0</option>
+						<option value='1'>1</option>
+						<option value='2'>2</option>
+						<option value='3'>3</option>
+						<option value='4'>4</option>
+						<option value='5'>5</option>
+						<option value='6'>6</option>
+					</select>
+					<div class="form-control-feedback" id="id_error_plo">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+					</span>
+					<label class="col-form-label d-inline" for="id_coursecontent">
+						Course Content
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
+					<div>
+						<div>
+							<textarea id="id_coursecontent" name="coursecontent" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+						</div>
+					</div>
+					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+					</span>
+					<label class="col-form-label d-inline" for="id_bn">
+						Books(Title,Author,Publisher)
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
+					<div>
+						<div>
+							<textarea id="id_bn" name="bookname" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+						</div>
+					</div>
+					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
+					</div>
 				</div>
 			</div>
 			
@@ -411,7 +502,7 @@ require_once('../../../config.php');
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
 					</span>
-					<label class="col-form-label d-inline" for="id_description">
+					<label class="col-form-label d-inline" for="	">
 						Description
 					</label>
 				</div>
@@ -463,14 +554,14 @@ require_once('../../../config.php');
 				</div>
 				<div class="col-md-9 form-inline felement">
 					<select  onChange="dropdownPlo(this.value, 0)" name="plos[]" class="select custom-select">
-						<option value='NULL'>Choose..</option>
+						<option value=''>Choose..</option>
 						<?php
 						foreach ($plos as $plo) {
 							$id =  $plo->id;
 							$name = $plo->shortname;
 							$idnumber = $plo->idnumber;
 						?>
-						<option value='<?php echo $id; ?>'><?php echo $idnumber; ?></option>
+						<option value='<?php echo $id; ?>' title="<?php echo $name; ?>"><?php echo $idnumber; ?></option>
 						<?php
 						}
 						?>
@@ -621,6 +712,7 @@ require_once('../../../config.php');
 			//var lshortnames = <?php echo json_encode($lvlshortname); ?>;
 			var ploId = <?php echo json_encode($ploIdArray); ?>;
 			var ploIdNumber = <?php echo json_encode($ploIdnumberArray); ?>;
+			var plonames = <?php echo json_encode($ploNameArray); ?>;
 			var domId = <?php echo json_encode($domid); ?>;
 			var domName = <?php echo json_encode($domname); ?>;
 			
@@ -658,6 +750,7 @@ require_once('../../../config.php');
 					var option = document.createElement("option");
 					option.value = ploId[l];
 					option.text = ploIdNumber[l];
+					option.title = plonames[l];
 					selectPLO.appendChild(option);
 				}
 
