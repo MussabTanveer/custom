@@ -277,7 +277,7 @@ require_once('../../../config.php');
 			</div>
 
 			<div id="dynamicInput">
-            <h3>Question</h3>
+            <h3>Map Question to CLO</h3>
             <div class="form-group row fitem ">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
@@ -299,14 +299,11 @@ require_once('../../../config.php');
                     </div>
                 </div>
             </div>
-
-			<?php
-			if($type != "finalexam"){
-			?>
+			
 			<div class="form-group row fitem">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
-						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+						
 					</span>
 					<label class="col-form-label d-inline" for="id_ques_text">
 						Text
@@ -315,16 +312,13 @@ require_once('../../../config.php');
 				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
 					<div>
 						<div>
-							<textarea required id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+							<textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
 						</div>
 					</div>
 					<div class="form-control-feedback" id="id_error_ques_text"  style="display: none;">
 					</div>
 				</div>
 			</div>
-			<?php
-			}
-			?>
 
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
@@ -435,18 +429,16 @@ require_once('../../../config.php');
 			
 			function addInput(divName){
                 var newh3 = document.createElement('h3');
-				newh3.innerHTML = 'Question';
+				newh3.innerHTML = 'Map Question to CLO';
 				document.getElementById(divName).appendChild(newh3);
 
 				var newdiv = document.createElement('div');
 				newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname" size="" required maxlength="50"><div class="form-control-feedback" id="id_error_quesname"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv);
 
-				if(type != "finalexam"){
-					var newdiv1 = document.createElement('div');
-					newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_ques_text">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text"  style="display: none;"></div></div></div>';
-					document.getElementById(divName).appendChild(newdiv1);
-				}
+				var newdiv1 = document.createElement('div');
+				newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_ques_text'+i+'">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text" style="display: none;"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv1);
 
 				var newdiv2 = document.createElement('div');
 				newdiv2.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_maxmark">Max Mark</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="maxmark[]" id="id_maxmark" size="" required step="0.001"><div class="form-control-feedback" id="id_error_maxmark"></div></div></div>';
