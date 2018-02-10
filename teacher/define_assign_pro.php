@@ -31,7 +31,9 @@ require_once('../../../config.php');
     
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
-        $course_id=$_GET['course'];
+		$course_id=$_GET['course'];
+		$coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "Course ID : $course_id";
         $type=$_GET['type'];
         //echo "$type";
@@ -359,7 +361,7 @@ require_once('../../../config.php');
 	else
 	{?>
 		<h3 style="color:red;"> Invalid Selection </h3>
-    	<a href="../index.php">Back</a>
+    	<a href="./teacher_courses.php">Back</a>
     	<?php
     }
 

@@ -1,6 +1,3 @@
-
-
-
 <?php 
    require_once('../../../config.php');
     $context = context_system::instance();
@@ -20,6 +17,8 @@
     {
         $course_id=$_GET['course'];
         // echo "$course_id";
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die($OUTPUT->header().'<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         $type=$_GET['type'];
         //echo " Activity Type : $type";
         
@@ -51,7 +50,7 @@
     else
 	{?>
 		<h3 style="color:red;"> Invalid Selection </h3>
-    	<a href="../index.php">Back</a>
+    	<a href="./teacher_courses.php">Back</a>
     	<?php
     }
 

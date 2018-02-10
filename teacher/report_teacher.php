@@ -15,9 +15,12 @@
     }
     echo $OUTPUT->header();
 
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
+        
     ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 

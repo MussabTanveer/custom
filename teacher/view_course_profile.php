@@ -69,10 +69,13 @@ public function selectBlob($id) {
 
 }
 
- if(isset($_GET['course']))
+ if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
-		 $recs=$DB->get_records_sql('SELECT idnumber FROM mdl_course 
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die($OUTPUT->header().'<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
+        
+		$recs=$DB->get_records_sql('SELECT idnumber FROM mdl_course 
 	 	WHERE id = ?', array($course_id));
 
 		 foreach ($recs as $rec)
@@ -100,7 +103,15 @@ public function selectBlob($id) {
             echo $OUTPUT->footer();
         }
 		
-	}
+    }
+    else{
+        echo $OUTPUT->header();
+        ?>
+            <h2 style="color:red;"> Invalid Selection </h2>
+            <a href="./teacher_courses.php">Back</a>
+        <?php
+        echo $OUTPUT->footer();
+    }
 
 //displaying pdf
 $blobObj = new Blob($x);

@@ -25,11 +25,13 @@
         else
             $course_id=$_POST['courseid'];*/
 
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
-            //echo "Course ID : $course_id";
+        //echo "Course ID : $course_id";
 
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
@@ -124,18 +126,16 @@
             </script>
 
             <?php
-            echo $OUTPUT->footer();
         }
         else{
             echo "<h3>No activity found!</h3>";
-            echo $OUTPUT->footer();
         }
-
     }
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
         <a href="./teacher_courses.php">Back</a>
     <?php
-        echo $OUTPUT->footer();
-    }?>
+    }
+    echo $OUTPUT->footer();
+    ?>

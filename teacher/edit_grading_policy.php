@@ -24,10 +24,12 @@
 </style>
 <?php
 	
-	if(isset($_GET['edit']))
+	if(!empty($_GET['edit']))
 	{
         $id=$_GET['edit'];
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
 
         $rec=$DB->get_records_sql('SELECT name, percentage FROM mdl_grading_policy WHERE id=?',array($id));
         foreach ($rec as $records){
@@ -84,7 +86,7 @@
 	else
     {?>
         <h3 style="color:red;"> Invalid Selection </h3>
-        <a href="../index.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     	<?php
     }
     echo $OUTPUT->footer();

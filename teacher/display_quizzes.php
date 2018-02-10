@@ -25,9 +25,11 @@
         else
             $course_id=$_POST['courseid'];*/
 
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "Course ID : $course_id";
     
         // Dispaly all quizzes

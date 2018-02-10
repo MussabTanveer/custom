@@ -24,9 +24,11 @@ th{
 
 <?php
 
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
         // Get Grading Items
         $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));

@@ -14,11 +14,12 @@
     }
     echo $OUTPUT->header();
      
-    if(isset($_GET['course'])){
+    if(!empty($_GET['course'])){
         $course_id=$_GET['course'];
-        //echo $course_id;
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
 
-        if(isset($_GET['delete'])){
+        if(!empty($_GET['delete'])){
             $id_d=$_GET['delete'];
             $sql_delete="DELETE FROM mdl_grading_policy WHERE id=$id_d";
             $DB->execute($sql_delete);
@@ -50,22 +51,21 @@
                 else{
                     $table->data[] = array($serial,strtoupper($name), $percentage.'%', "<a href='edit_grading_policy.php?course=$course_id&edit=$id' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='display_grading_policy.php?course=$course_id&delete=$id' onClick=\"return confirm('Delete grading policy of $name?')\" title='Delete'><img src='../img/icons/delete.png' /></a>");
                 }
-                
             }
             $table->data[] = array("<b>Total:</b>", "", $sum.'%', "");
             if($serial){
                 if($sum != 20)
-                    echo "<h5 style='color:red'>Grading Policy is not 100%<h5><a href=grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><br />";
+                    echo "<h4 style='color:red'>Grading Policy is not 100%</h4><a href=grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><br />";
                 echo html_writer::table($table);
             }
         }
         else
-            echo "<h5 style='color:red'> <br />Found no Graded Activity of this Course! </h5>";
+            echo "<h4 style='color:red'> <br />Found no Graded Activity of this Course! </h4>";
     }
     else{
         ?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="../index.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
         <?php
     }
     echo $OUTPUT->footer();

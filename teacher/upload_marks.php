@@ -21,6 +21,9 @@
     
     if(!empty($_GET['id']) && !empty($_GET['course']))
     {
+        $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
     ?>
 
     <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
@@ -136,7 +139,7 @@
     else
     {?>
         <h3 style="color:red;"> Invalid Selection </h3>
-        <a href="../index.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
         <?php
     }
     echo $OUTPUT->footer();

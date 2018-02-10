@@ -13,9 +13,11 @@
     }
     echo $OUTPUT->header();
     
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "Course ID : $course_id";
 
         // Get Grading Items
@@ -114,7 +116,7 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="../index.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php
     }
     echo $OUTPUT->footer();

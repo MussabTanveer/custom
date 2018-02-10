@@ -1,4 +1,3 @@
-
 <?php 
    require_once('../../../config.php');
     $context = context_system::instance();
@@ -13,13 +12,14 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-
     
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "$course_id";
-         $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ? AND module = ?",array($course_id,-5));
+        $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ? AND module = ?",array($course_id,-5));
 
         if($assigns)
         {
@@ -34,17 +34,16 @@
             
             <?php
             }
-
         }
-
         else
-            echo "<font color = red> No Project Found!</font>";
-
+            echo "<h3><font color = red> No Project Found!</font></h3>";
+    }
+    else
+	{?>
+		<h3 style="color:red;"> Invalid Selection </h3>
+    	<a href="./teacher_courses.php">Back</a>
+    	<?php
     }
 
-
-    
-    
-   
-
+    echo $OUTPUT->footer();
 ?>

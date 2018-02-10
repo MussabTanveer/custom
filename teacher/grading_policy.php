@@ -25,9 +25,11 @@
 </style>
 <?php
 
-	if(isset($_GET['course'])){
+	if(!empty($_GET['course'])){
 		$course_id=$_GET['course'];
-		//echo $course_id;
+		$coursecontext = context_course::instance($course_id);
+		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
+		
 		if(isset($_POST['save'])){
 			$sum = 0;
 			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
@@ -200,7 +202,7 @@
 	else{
 		?>
 		<h3 style="color:red;"> Invalid Selection </h3>
-    	<a href="../index.php">Back</a>
+    	<a href="./teacher_courses.php">Back</a>
     	<?php
 	}
 

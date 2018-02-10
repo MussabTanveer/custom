@@ -23,9 +23,11 @@ th{
 </style>
 <?php
 
-    if(isset($_GET['course']))
+    if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
         // Get all students of course
         $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
@@ -233,8 +235,7 @@ th{
                 if(in_array($closid[$j], $closUniqueAMulti[$i]))
                     $closidCountActivity[$j]++;
         
-    }
-
+    
     ?>
 
     <table class="generaltable" border="1">
@@ -324,6 +325,13 @@ th{
 
 
 <?php
+    }
+    else
+    {?>
+        <h2 style="color:red;"> Invalid Selection </h2>
+        <a href="./teacher_courses.php">Back</a>
+    <?php
+    }
     echo $OUTPUT->footer();
 
 ?>

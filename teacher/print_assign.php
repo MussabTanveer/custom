@@ -14,7 +14,7 @@
         header('Location: ../index.php');
     }
 
- if(isset($_GET['assign']))
+    if(!empty($_GET['assign']) && !empty($_GET['courseid']))
     {
 
        $dn=$DB->get_records_sql('SELECT id FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
@@ -55,14 +55,16 @@
 
         $assignid=$_GET['assign'];
       //  echo "$assignid";
-        $courseid = $_GET['courseid'];
-       // echo "$courseid";
+        $course_id = $_GET['courseid'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die($OUTPUT->header().'<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
+       // echo "$course_id";
        
         //query to get Assignment details!
          $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE id = ?",array($assignid));
 
          	//query to get course relative stuff!
-          $courses= $DB->get_records_sql("SELECT * FROM mdl_course WHERE id = ?",array($courseid));
+          $courses= $DB->get_records_sql("SELECT * FROM mdl_course WHERE id = ?",array($course_id));
 
 
 
@@ -183,4 +185,12 @@
              $pdf->Output();
 
         }
+    }
+    else{
+        echo $OUTPUT->header();
+        ?>
+            <h2 style="color:red;"> Invalid Selection </h2>
+            <a href="./teacher_courses.php">Back</a>
+        <?php
+        echo $OUTPUT->footer();
     }

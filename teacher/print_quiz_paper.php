@@ -1,6 +1,3 @@
-
-
-
 <?php 
    require_once('../../../config.php');
     $context = context_system::instance();
@@ -19,6 +16,8 @@
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         // echo "$course_id";
         $type=$_GET['type'];
         //echo " Activity Type : $type";
@@ -36,22 +35,17 @@
                 $qname = $records->name;
                 
                 $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>");
-            
             }
-
             echo html_writer::table($table);
             echo "<br />";
-
         }
-
         else
             echo "<h3>You do not have any manual $type in this course!</h3>";
-
     }
     else
 	{?>
 		<h3 style="color:red;"> Invalid Selection </h3>
-    	<a href="../index.php">Back</a>
+    	<a href="./teacher_courses.php">Back</a>
     	<?php
     }
 
