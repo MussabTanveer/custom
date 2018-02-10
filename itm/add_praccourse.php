@@ -5,8 +5,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Add Courses");
-    $PAGE->set_heading("Add Courses");
+    $PAGE->set_title("Add Pracitcal Courses");
+    $PAGE->set_heading("Add Pracitcal Courses");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/itm/add_course.php');
     
     require_login();
@@ -44,8 +44,11 @@
             $fw_id=$_POST['fid'];
             $fw_shortname=$_POST['fname'];
             $time = time();
-            
-            if(empty($fullname) || empty($shortname) || empty($idnumber))
+            $id_prac=$_POST['pc']; //the primary key of the present course from drop down
+
+        // echo $id_prac;
+
+            if(empty($fullname) || empty($shortname) || empty($idnumber) || empty($id_prac))
             {
                 if(empty($fullname))
                 {
@@ -59,6 +62,11 @@
                 {
                     $msg3="<font color='red'>-Please select course code</font>";
                 }
+                if(empty($id_prac))
+                {
+                    $msg4="<font color='red'>-Please select course</font>";
+                }
+
             }/*
             elseif(substr($idnumber,0,4) != 'PEO-')
             {
@@ -68,6 +76,7 @@
                 /*$sql="INSERT INTO mdl_course (category, fullname, shortname, idnumber, summary, summaryformat, newsitems, startdate, enddate, timecreated, timemodified, enablecompletion)
                 VALUES (1, '$fullname', '$shortname', '$idnumber', '$summary', 1, 5, '$startdate', '$enddate', '$time', '$time', 1)";
                 $DB->execute($sql);*/
+
                 
                 $record = new stdClass();
                 $record->category = 1;
@@ -84,6 +93,20 @@
                 $record->enablecompletion = 1;
                 
                 $courseid = $DB->insert_record('course', $record);
+
+
+               
+                 $rec_prac=new stdClass();
+
+                 $rec_prac->course=$id_prac; //courseid from dropdown inserted into course column of mdl_course_practical table 
+                 $rec_prac->practical=$courseid; // courseid of the newly created course inserted into the 
+                 //pracitcal column of mdl_course_practical
+
+                $DB->insert_record('course_practical', $rec_prac);
+
+
+
+
 
                 $record1 = new stdClass();
                 $record1->courseid = $courseid;
@@ -566,6 +589,23 @@
         }
         $ccs = array_unique($ccs); // remove duplicate course codes
 
+        $time=time();
+
+          
+
+
+           $present_courses=$DB->get_records_sql('SELECT fullname,id
+    
+    FROM mdl_course
+
+
+    WHERE enddate > ? ', array($time));
+
+
+
+
+
+
         if(isset($msg4)){
             echo $msg4;
             echo $msg5;
@@ -585,11 +625,48 @@
                     <?php echo $fw_shortname; ?>
                 </div>
             </div>
+            
 
-          
+           <div class="form-group row fitem ">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label class="col-form-label d-inline" for="id_plo">
+                        Select Course
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement">
+                    <select   name="pc" class="select custom-select">
+                        <option value=''>Choose..</option>
+                        <?php
+                        foreach ($present_courses as $pc) {
+                            $id =  $pc->id;
+                            $fullname = $pc->fullname;
+                        ?>
+                        <option value='<?php echo $id; ?>' ><?php echo $fullname; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    
+                    <div class="form-control-feedback" id="id_error_idnumber">
+
+                  <?php
+                    if(isset($msg4)){
+                        echo $msg4;
+                    }
+                    ?>
 
 
-            <div class="form-group row fitem">
+
+                    </div>
+                </div>
+            </div>
+             
+
+
+        <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
                         <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
