@@ -15,7 +15,8 @@
 
 	$coursecode = trim($_POST["idnumber"]);
      $coursecode=strtoupper($coursecode);
-	if($_FILES['myfile']['size'] > 0)
+	
+    /*if($_FILES['myfile']['size'] > 0)
     {
 
     	$revisions=$DB->get_records_sql('SELECT revision FROM `mdl_course_profile` where coursecode = ?', array($coursecode));
@@ -43,7 +44,24 @@
 		}
 		else
             echo "Incorrect File Type. Only PDFs are allowed";
-    }
+    }*/
+
+    
+                $tchs=$_POST["tch"];
+                $pchs=$_POST["pch"];
+                $coursecontent = $_POST["coursecontent"];
+                $bookname = $_POST["bookname"];
+
+                $record = new stdClass();
+                $record->coursecode = $coursecode;
+                $record->theorycredithours = $tchs;
+                $record->practicalcredithours = $pchs;
+                $record->coursecontent= $coursecontent;
+                $record->book=$bookname;
+
+                $id = $DB->insert_record('course_info', $record);
+
+
 
     $coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
     $frameworkid = $_POST["frameworkid"];

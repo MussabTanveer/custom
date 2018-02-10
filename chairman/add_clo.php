@@ -135,7 +135,30 @@ require_once('../../../config.php');
 				down:
 			}
 
-			if($_FILES['myfile']['size'] > 0){
+
+				$tchs=$_POST["tch"];
+				$pchs=$_POST["pch"];
+				$coursecontent = $_POST["coursecontent"];
+				$bookname = $_POST["bookname"];
+
+				$record = new stdClass();
+				$record->coursecode = $coursecode;
+				$record->theorycredithours = $tchs;
+				$record->practicalcredithours = $pchs;
+				$record->coursecontent= $coursecontent;
+				$record->book=$bookname;
+
+				$id = $DB->insert_record('course_info', $record);
+				
+
+				//$sql1="INSERT INTO mdl_course_info (coursecode,theorycredithours,practicalcredithours,coursecontent,book) VALUES($coursecode,$tchs,$pchs,$coursecontent,$bookname)";
+					//$DB->execute($sql1);
+
+
+
+
+
+			/*if($_FILES['myfile']['size'] > 0){
 				$revisions=$DB->get_records_sql('SELECT revision FROM `mdl_course_profile` where coursecode = ?', array($coursecode));
 				$rev=0;
 				if($revisions){
@@ -156,7 +179,7 @@ require_once('../../../config.php');
 			    }
 			    else
 			        echo "<font color=red>Incorrect File Type. Only PDFs are allowed</font>";
-			}
+			}*/
 
 			$redirect_page1='../index.php';
 			redirect($redirect_page1);

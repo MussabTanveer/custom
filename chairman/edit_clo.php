@@ -56,6 +56,18 @@
 	            		}
         			}
         			
+        			$levels=$DB->get_records_sql('SELECT * FROM `mdl_taxonomy_clo_level` where cloid = ? ', array($id));
+					
+					if($levels){
+	            		foreach ($levels as $level){
+							
+							$levelid = $level->levelid;
+							
+
+	            		}
+        			}
+
+
        			
 					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time',$USER->id)";
 					$DB->execute($sql);
@@ -67,6 +79,11 @@
 								$lastId = $q->id;
 							}
 							
+					$sql="INSERT INTO mdl_taxonomy_clo_level (frameworkid, cloid , levelid) VALUES ('$fwidd','$lastId','$levelid')";
+
+						$DB->execute($sql);
+
+
 
 					$sql="INSERT INTO mdl_clo_revision (cloid , revision) VALUES ('$id','$lastId')";
 
