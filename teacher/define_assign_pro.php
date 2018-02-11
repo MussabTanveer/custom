@@ -28,6 +28,65 @@ require_once('../../../config.php');
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 <?php
+
+	 global $CFG;
+    $x= $CFG->dbpass;
+
+	class Blob{
+  
+    const DB_HOST = 'localhost';
+    const DB_NAME = 'bitnami_moodle';
+    const DB_USER = 'bn_moodle';
+    protected $DB_PASSWORD='';
+ 
+    /**
+     * Open the database connection
+     */
+    public function __construct($x) {
+      //echo "$x";
+      $DB_PASSWORD=$x;
+        // open database connection
+        $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8", self::DB_HOST, self::DB_NAME);
+ 
+        try {
+            $this->pdo = new PDO($conStr, self::DB_USER, $DB_PASSWORD);
+            //for prior PHP 5.3.6
+            //$conn->exec("set names utf8");
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+ 
+ /**
+     * insert blob into the files table
+     * @param string $filePath
+     * @param string $mime mimetype
+     * @return bool
+     */
+    public function insertBlob($assignid,$filePath, $mime) {
+        $blob = fopen($filePath, 'rb');
+ 		echo "$assignid";
+        $sql = "UPDATE mdl_manual_assign_pro SET mime =$mime , data =$blob 
+         WHERE id = $assignid";
+        $stmt = $this->pdo->prepare($sql);
+ 
+       // $stmt->bindParam(':mime', $mime);
+       // $stmt->bindParam(':data', $blob, PDO::PARAM_LOB);
+ 
+        return $stmt->execute();
+    }
+
+    /**
+     * close the database connection
+     */
+    public function __destruct() {
+        // close the database connection
+        $this->pdo = null;
+    }
+}
+
+
+
     
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
@@ -66,6 +125,26 @@ require_once('../../../config.php');
 	            }
 
 				$assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
+
+					
+			 $file = $_FILES['assignQues']['name'];
+		    $file_loc = $_FILES['assignQues']['tmp_name'];
+		    $file_size = $_FILES['assignQues']['size'];
+		    $file_type = $_FILES['assignQues']['type'];
+
+		   // var_dump($_FILES['assignQues']);
+		    //Upload PDF
+			if ($file_type == "application/pdf")
+			   { 
+			      $blobObj = new Blob($x);
+			       $blobObj->insertBlob($assign_pro_id,$file_loc,"application/pdf");
+			        echo "<font color = green> File has been Uploaded successfully! </font>";
+			    }
+			    else
+			      echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+
+
+
 
 				// Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
@@ -146,7 +225,7 @@ require_once('../../../config.php');
 		?>
 		<br />
 		
-		<form method='post' action="" class="mform" id="cloForm">
+		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data">
             
             <?php
             if($type == "assign"){
@@ -202,6 +281,19 @@ require_once('../../../config.php');
 				</div>
 			</div>
 			
+
+			<div class="col-md-3">
+					<label class="col-form-label d-inline" for="quizQues">
+						Upload Paper
+						</label>
+			</div>
+		 <div class="btn btn-default btn-file">
+
+				<input  type="file" name="assignQues" id="assignQues" placeholder="Only PDFs are allowed">
+		</div>
+
+
+
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">

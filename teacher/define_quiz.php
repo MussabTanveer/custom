@@ -27,6 +27,63 @@ require_once('../../../config.php');
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 <?php
+  global $CFG;
+    $x= $CFG->dbpass;
+
+	class Blob{
+  
+    const DB_HOST = 'localhost';
+    const DB_NAME = 'bitnami_moodle';
+    const DB_USER = 'bn_moodle';
+    protected $DB_PASSWORD='';
+ 
+    /**
+     * Open the database connection
+     */
+    public function __construct($x) {
+      //echo "$x";
+      $DB_PASSWORD=$x;
+        // open database connection
+        $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8", self::DB_HOST, self::DB_NAME);
+ 
+        try {
+            $this->pdo = new PDO($conStr, self::DB_USER, $DB_PASSWORD);
+            //for prior PHP 5.3.6
+            //$conn->exec("set names utf8");
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+ 
+ /**
+     * insert blob into the files table
+     * @param string $filePath
+     * @param string $mime mimetype
+     * @return bool
+     */
+    public function insertBlob($quizid,$filePath, $mime) {
+        $blob = fopen($filePath, 'rb');
+ 		//echo "$quizid";
+        $sql = "UPDATE mdl_manual_quiz SET mime =$mime , data =$blob 
+         WHERE id = $quizid";
+        $stmt = $this->pdo->prepare($sql);
+ 
+       // $stmt->bindParam(':mime', $mime);
+       // $stmt->bindParam(':data', $blob, PDO::PARAM_LOB);
+ 
+        return $stmt->execute();
+    }
+
+    /**
+     * close the database connection
+     */
+    public function __destruct() {
+        // close the database connection
+        $this->pdo = null;
+    }
+}
+
+
     
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
@@ -72,6 +129,14 @@ require_once('../../../config.php');
 				}
 			}
 
+
+		    $file = $_FILES['quizQues']['name'];
+		    $file_loc = $_FILES['quizQues']['tmp_name'];
+		    $file_size = $_FILES['quizQues']['size'];
+		    $file_type = $_FILES['quizQues']['type'];
+
+		 //  var_dump($_FILES['quizQues']);
+
 			// Insert manual quiz record
 			try {
 				$transaction = $DB->start_delegated_transaction();
@@ -97,6 +162,19 @@ require_once('../../../config.php');
 
 				}
 				$quizid = $DB->insert_record('manual_quiz', $record); // get quiz id of newly inserted quiz
+
+				//Upload PDF
+				if ($file_type == "application/pdf")
+			       { 
+			           $blobObj = new Blob($x);
+			              $blobObj->insertBlob($quizid,$file_loc,"application/pdf");
+			              echo "<font color = green> File has been Uploaded successfully! </font>";
+			        }
+			        else
+			            echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+
+
+
 
 				// Insert this quiz id in mdl_grading_mapping table according to type (quiz, mid term, final exam) which is in $type variable above
 
@@ -175,7 +253,7 @@ require_once('../../../config.php');
 			}
 
 			$redirect_page1="./report_teacher.php?course=$course_id";
-			redirect($redirect_page1);
+			//redirect($redirect_page1);
 		}
 
 		//Get course clo with its level, plo and peo
@@ -217,7 +295,7 @@ require_once('../../../config.php');
 		
 		</p>
 		
-		<form method='post' action="" class="mform" id="cloForm">
+		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data">
 			
 			<?php
             if($type == "quiz"){
@@ -277,6 +355,18 @@ require_once('../../../config.php');
 					</div>
 				</div>
 			</div>
+			
+
+			<div class="col-md-3">
+					<label class="col-form-label d-inline" for="quizQues">
+						Upload Quiz Paper
+						</label>
+			</div>
+		 <div class="btn btn-default btn-file">
+
+				<input  type="file" name="quizQues" id="quizQues" placeholder="Only PDFs are allowed">
+		</div>
+
 
 			<div id="dynamicInput">
             <h3>Map Question to CLO</h3>
