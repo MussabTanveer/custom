@@ -83,10 +83,7 @@ require_once('../../../config.php');
         $this->pdo = null;
     }
 }
-
-
-
-    
+  
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
 		$course_id=$_GET['course'];
