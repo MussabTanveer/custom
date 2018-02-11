@@ -57,21 +57,20 @@ require_once('../../../config.php');
         }
     }
  
- /**
-     * insert blob into the files table
-     * @param string $filePath
-     * @param string $mime mimetype
-     * @return bool
-     */
-    public function insertBlob($assignid,$filePath, $mime) {
+  function updateBlob($id, $filePath, $mime) {
+ 
         $blob = fopen($filePath, 'rb');
- 		echo "$assignid";
-        $sql = "UPDATE mdl_manual_assign_pro SET mime =$mime , data =$blob 
-         WHERE id = $assignid";
+ 		//echo "$id";
+        $sql = "UPDATE mdl_manual_assign_pro
+                SET mime = :mime,
+                    data = :data
+                WHERE id = :id";
+ 
         $stmt = $this->pdo->prepare($sql);
  
-       // $stmt->bindParam(':mime', $mime);
-       // $stmt->bindParam(':data', $blob, PDO::PARAM_LOB);
+        $stmt->bindParam(':mime', $mime);
+        $stmt->bindParam(':data', $blob, PDO::PARAM_LOB);
+        $stmt->bindParam(':id', $id);
  
         return $stmt->execute();
     }
@@ -132,20 +131,6 @@ require_once('../../../config.php');
 		    $file_size = $_FILES['assignQues']['size'];
 		    $file_type = $_FILES['assignQues']['type'];
 
-		   // var_dump($_FILES['assignQues']);
-		    //Upload PDF
-			if ($file_type == "application/pdf")
-			   { 
-			      $blobObj = new Blob($x);
-			       $blobObj->insertBlob($assign_pro_id,$file_loc,"application/pdf");
-			        echo "<font color = green> File has been Uploaded successfully! </font>";
-			    }
-			    else
-			      echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
-
-
-
-
 				// Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
 				// Automated mapping code starts from here
@@ -188,6 +173,17 @@ require_once('../../../config.php');
 					$transaction->rollback($e);
 			}
 			$redirect_page1="./report_teacher.php?course=$course_id";
+
+
+		    //Upload PDF
+			if ($file_type == "application/pdf")
+			   { 
+			      $blobObj = new Blob($x);
+			       $blobObj->updateBlob($assign_pro_id,$file_loc,"application/pdf");
+			        echo "<font color = green> File has been Uploaded successfully! </font>";
+			    }
+			    else
+			      echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
 			redirect($redirect_page1);
 		}
 
