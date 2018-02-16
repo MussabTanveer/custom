@@ -122,7 +122,7 @@
             $fname2 = $records->fullname;
             $sname2 = $records->shortname;
             $idnum2= $records->idnumber;
-            $table->data[] = array($serialno, "<a href='../../../course/view.php?id=$id2'>$fname2</a>", "<a href='../../../course/view.php?id=$id2'>$sname2</a>", "<a href='../../../course/view.php?id=$id2'>$idnum2</a>");
+            $table->data[] = array($serialno, "<a href='../noneditingteacher/report_teacher_practical.php?course=$id1'>$fname1</a>", "<a href='./report_teacher.php?course=$id1'>$sname1</a>", "<a href='./report_teacher.php?course=$id1'>$idnum1</a>");
         }
         echo html_writer::table($table);
         echo "<br />";
