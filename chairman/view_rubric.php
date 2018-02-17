@@ -11,7 +11,21 @@
 	require_login();
 	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
+    ?>
 
+    <style>
+        th {
+            color: navy;
+        }
+        td {
+            color: maroon;
+        }
+        th, td {
+            font-size: 16px;
+        }
+    </style>
+    
+    <?php
     if(!empty($_GET['rubric']))
     {
         $rubric_id=$_GET['rubric'];
@@ -38,19 +52,25 @@
             ?>
             
             <br />
-            <table class="generaltable">
+            <table style="border: medium solid #000;" border="3" width="100%" cellpadding="5px">
+                <!--<tr>
+                    <th>Criteria</th>
+                    <th>Scales</th>
+                </tr>-->
                 <?php
                 for($i=0; $i<count($criteriaDesc); $i++){
-                    $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
                 ?>
                 <tr>
                     <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                     <?php
+                    $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
+                    $s = 1;
                     foreach ($scaleInfo as $sInfo) {
                         //$id = $sInfo->id;
                         $description = $sInfo->description;
                         $score = $sInfo->score;
-                        echo "<td>$description<br>Score: $score</td>";
+                        echo "<td><b>Scale: $s</b><br>$description<br>Score: $score</td>";
+                        $s++;
                     }
                     ?>
                 </tr>
@@ -58,7 +78,6 @@
                 }
                 ?>
             </table>
-            
             <?php
         }
     }
