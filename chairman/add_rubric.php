@@ -27,58 +27,127 @@
 
     // Save and Cont
     if(isset($_POST['save'])){
-        $rname=trim($_POST['rubricname']);
-        $rdescription=trim($_POST['rubricdesc']);
-        
-        $criterionDesc=array();
-        $scaleDesc=array();
-        $scaleScore=array();
-        $i = 1;
-        foreach ($_POST['criteriondesc'] as $cd)
-        {
-            array_push($criterionDesc,$cd);
-            foreach ($_POST['scaledesc'.$i] as $sd)
+        try {
+            $transaction = $DB->start_delegated_transaction();
+            // Rubric Info
+            $rname=trim($_POST['rubricname']);
+            $rdescription=trim($_POST['rubricdesc']);
+            // Insert Rubric Info
+            $record = new stdClass();
+            $record->name = $rname;
+            $record->description = $rdescription;
+            $rubricid = $DB->insert_record('rubric', $record);
+            //var_dump($rname); echo "<br>";
+            //var_dump($rdescription); echo "<br>";
+
+            // Criterion + Scales Info
+            //$criterionDesc=array();
+            $scaleDesc=array();
+            $scaleScore=array();
+            $i = 1;
+            foreach ($_POST['criteriondesc'] as $cd)
             {
-                array_push($scaleDesc,$sd);	
+                // Insert Criterion Info
+                $record = new stdClass();
+                $record->rubric = $rubricid;
+                $record->description = $cd;
+                $criterionid = $DB->insert_record('rubric_criterion', $record);
+                //var_dump($cd); echo "<br>";
+                //array_push($criterionDesc,$cd);
+                foreach ($_POST['scaledesc'.$i] as $sd)
+                {
+                    array_push($scaleDesc,$sd);	
+                }
+                foreach ($_POST['scalescore'.$i] as $ss)
+                {
+                    array_push($scaleScore,$ss);	
+                }
+
+                // Insert Scales Info
+                for ($j=0; $j < count($scaleScore); $j++) { 
+                    $record = new stdClass();
+                    $record->rubric = $rubricid;
+                    $record->criterion = $criterionid;
+                    $record->description = $scaleDesc[$j];
+                    $record->score = $scaleScore[$j];
+                    $DB->insert_record('rubric_scale', $record);
+                }
+                //var_dump($scaleDesc); echo "<br>";
+                //var_dump($scaleScore); echo "<br>";
+                unset($scaleDesc); unset($scaleScore); // remove arrays
+                $scaleDesc=array(); $scaleScore=array(); // reinitialize arrays
+                $i++;
             }
-            foreach ($_POST['scalescore'.$i] as $ss)
-            {
-                array_push($scaleScore,$ss);	
-            }
-            $i++;
+
+            $transaction->allow_commit();
+            $msg = "<font color='green'>Rubric successfully defined!</font>";
+        } catch(Exception $e) {
+            $transaction->rollback($e);
+            $msg = "<font color='red'>Rubric failed to save!</font>";
         }
-        var_dump($rname); echo "<br>";
-        var_dump($rdescription); echo "<br>";
-        var_dump($criterionDesc); echo "<br>";
-        var_dump($scaleDesc); echo "<br>";
-        var_dump($scaleScore); echo "<br>";
-        $msg = "<font color='green'>Rubric successfully defined!</font>";
     }
     // Save and Return
     elseif(isset($_POST['return'])){
-        $rname=trim($_POST['rubricname']);
-        $rdescription=trim($_POST['rubricdesc']);
-        
-        $criterionDesc=array();
-        $scaleDesc=array();
-        $scaleScore=array();
-        $i = 1;
-        foreach ($_POST['criteriondesc'] as $cd)
-        {
-            array_push($criterionDesc,$cd);
-            foreach ($_POST['scaledesc'.$i] as $sd)
-            {
-                array_push($scaleDesc,$sd);	
-            }
-            foreach ($_POST['scalescore'.$i] as $ss)
-            {
-                array_push($scaleScore,$ss);	
-            }
-            $i++;
-        }
+        try {
+            $transaction = $DB->start_delegated_transaction();
+            // Rubric Info
+            $rname=trim($_POST['rubricname']);
+            $rdescription=trim($_POST['rubricdesc']);
+            // Insert Rubric Info
+            $record = new stdClass();
+            $record->name = $rname;
+            $record->description = $rdescription;
+            $rubricid = $DB->insert_record('rubric', $record);
+            //var_dump($rname); echo "<br>";
+            //var_dump($rdescription); echo "<br>";
 
-        $redirect_page1='./report_chairman.php';
-        redirect($redirect_page1); 
+            // Criterion + Scales Info
+            //$criterionDesc=array();
+            $scaleDesc=array();
+            $scaleScore=array();
+            $i = 1;
+            foreach ($_POST['criteriondesc'] as $cd)
+            {
+                // Insert Criterion Info
+                $record = new stdClass();
+                $record->rubric = $rubricid;
+                $record->description = $cd;
+                $criterionid = $DB->insert_record('rubric_criterion', $record);
+                //var_dump($cd); echo "<br>";
+                //array_push($criterionDesc,$cd);
+                foreach ($_POST['scaledesc'.$i] as $sd)
+                {
+                    array_push($scaleDesc,$sd);	
+                }
+                foreach ($_POST['scalescore'.$i] as $ss)
+                {
+                    array_push($scaleScore,$ss);	
+                }
+
+                // Insert Scales Info
+                for ($j=0; $j < count($scaleScore); $j++) { 
+                    $record = new stdClass();
+                    $record->rubric = $rubricid;
+                    $record->criterion = $criterionid;
+                    $record->description = $scaleDesc[$j];
+                    $record->score = $scaleScore[$j];
+                    $DB->insert_record('rubric_scale', $record);
+                }
+                //var_dump($scaleDesc); echo "<br>";
+                //var_dump($scaleScore); echo "<br>";
+                unset($scaleDesc); unset($scaleScore); // remove arrays
+                $scaleDesc=array(); $scaleScore=array(); // reinitialize arrays
+                $i++;
+            }
+
+            $transaction->allow_commit();
+            $msg = "<font color='green'>Rubric successfully defined!</font>";
+            $redirect_page1='./report_chairman.php';
+            redirect($redirect_page1);
+        } catch(Exception $e) {
+            $transaction->rollback($e);
+            $msg = "<font color='red'>Rubric failed to save!</font>";
+        }
     }
     
     if(isset($msg)){
