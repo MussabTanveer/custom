@@ -43,7 +43,7 @@ elseif(!empty($rec)){
         //$table->head = array('S. No.','Assessment');
     $assessmentarray = array();
        foreach ($rec as $record) {
-
+//echo "outerloop";
            // $serialno++;
              $id=$record->id;
              $assessment = $record->assessment;
@@ -52,32 +52,33 @@ elseif(!empty($rec)){
 
             <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
        <div>
-       <a href="javascript:void(0)" onclick="toggle_visibility('as');" class="cool-link"><?php echo $assessment ?></a><br><br>
-         </div>
+       <a href="javascript:void(0)" onclick="toggle_visibility('as')" class="cool-link"><?php echo $assessment;   ?></a><br><br>
+         
+         
+             &nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print empty Grading Sheet </a><br>
 
-
-           
-
-           <?php foreach ($assessmentarray as $as){ 
-                 
-                 //echo $as;
-             ?>
-       
-       <div id="as" style="display: none">
-
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print empty Grading Sheet </a><br>
-            
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./enter_assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter assessment marks</a><br>
+          &nbsp;&nbsp;&nbsp;<a <?php echo "href='./enter_assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter assessment marks</a><br>
             
             &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_result.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; View Result</a><br><br>
-           
+
+       
+
+         
+
+         
+
         </div>
+
+
+           
+
+          
 
       <?php
 
         }
 
-    }
+    
       ?>
 
 
