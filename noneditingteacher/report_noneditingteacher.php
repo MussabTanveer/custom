@@ -8,7 +8,7 @@
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/report_noneditingteacher.php');
     
     require_login();
-    if($SESSION->oberole != "noneditingteacher"){
+    if($SESSION->oberole != "teacher"){
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
