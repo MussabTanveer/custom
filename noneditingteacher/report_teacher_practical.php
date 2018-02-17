@@ -19,7 +19,7 @@
     //echo $course_id; 
 
 
-    $rec=$DB->get_records_sql('SELECT assessment FROM mdl_practical_assessment WHERE courseid = ?',array($course_id));
+    $rec=$DB->get_records_sql('SELECT id,assessment FROM mdl_practical_assessment WHERE courseid = ?',array($course_id));
 
     ?>
  <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
@@ -33,7 +33,7 @@
  if(empty($rec)){
 
 
-    echo "<h4>You have yet to add an Assessment!</h4>";
+    echo "<h4>You have yet to add an Assessment, Click above to add one!</h4>";
  }
 elseif(!empty($rec)){
 
@@ -41,30 +41,49 @@ elseif(!empty($rec)){
         // $serialno = 0;
         //$table = new html_table();
         //$table->head = array('S. No.','Assessment');
+    $assessmentarray = array();
        foreach ($rec as $record) {
-
+//echo "outerloop";
            // $serialno++;
+             $id=$record->id;
+             $assessment = $record->assessment;
+             array_push($assessmentarray, $assessment);?>
             
-            $assessment = $record->assessment;
-            //echo "hello";
-?>
 
-         <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
-    <div>
-     <a href="javascript:void(0)" onclick="toggle_visibility('as');" class="cool-link"><?php echo $assessment ?></a><br><br>
-        <div id="as" style="display: none">
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id'" ?>  class="cool-link">&#10070; Print empty Grading Sheet </a><br>
+            <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
+       <div>
+       <a href="javascript:void(0)" onclick="toggle_visibility('as')" class="cool-link"><?php echo $assessment;   ?></a><br><br>
+         
+         
+             &nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print empty Grading Sheet </a><br>
+
+          &nbsp;&nbsp;&nbsp;<a <?php echo "href='./enter_assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter assessment marks</a><br>
             
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./upload_result.php?course=$course_id'" ?>  class="cool-link">&#10070; Upload Result</a><br>
-            
-            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view result.php?course=$course_id'" ?>  class="cool-link">&#10070; View Result</a><br><br>
-           
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_result.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; View Result</a><br><br>
+
+       
+
+         
+
+         
+
         </div>
 
 
+           
+
+          
+
+      <?php
+
+        }
+
+    
+      ?>
+
 
 <?php
-       }
+       
 
 
    }

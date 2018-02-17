@@ -70,11 +70,22 @@
     {
         array_push($plosIdArray,$ploId);	
     }
+    $domsIdArray=array();
+    foreach ($_POST['domains'] as $domId)
+    {
+        array_push($domsIdArray,$domId);	
+    }
     $levelsIdArray=array();
     foreach ($_POST['levels'] as $levelId)
     {
         array_push($levelsIdArray,$levelId);	
     }
+    $rubricsIdArray=array();
+    foreach ($_POST['rubrics'] as $rId)
+    {
+        array_push($rubricsIdArray,$rId);	
+    }
+    $j=0;
 	for ($i=0; $i <count($_POST["shortname"]) ; $i++) {
 		# code...
         $cloid = 0;
@@ -83,6 +94,7 @@
         $description=trim($_POST["description"][$i]);
         $kpi=$_POST["kpi"][$i];
         $plo=$plosIdArray[$i];
+        $domain=$domsIdArray[$i];
         $level=$levelsIdArray[$i];
         $time = time();
         
@@ -125,6 +137,11 @@
             $DB->execute($sql);
             $sql="INSERT INTO mdl_clo_kpi (cloid, kpi) VALUES($cloid, $kpi)";
             $DB->execute($sql);
+            if($domain == 2 || $domain == 3){
+                $sql="INSERT INTO mdl_clo_rubric (cloid, rubric) VALUES($cloid, $rubricsIdArray[$j])";
+                $DB->execute($sql);
+                $j++;
+            }
         }
         
 		down:

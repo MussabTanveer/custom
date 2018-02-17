@@ -76,11 +76,24 @@ require_once('../../../config.php');
 			{
 				array_push($plosIdArray,$ploId);	
 			}
+			$domsIdArray=array();
+			foreach ($_POST['domains'] as $domId)
+			{
+				array_push($domsIdArray,$domId);	
+			}
+			//var_dump($domsIdArray);
 			$levelsIdArray=array();
 			foreach ($_POST['levels'] as $levelId)
 			{
 				array_push($levelsIdArray,$levelId);	
 			}
+			$rubricsIdArray=array();
+			foreach ($_POST['rubrics'] as $rId)
+			{
+				array_push($rubricsIdArray,$rId);	
+			}
+			//var_dump($rubricsIdArray);
+			$j=0;
 			for ($i=0; $i < count($_POST["shortname"]) ; $i++) {
 				# code...
 				$cloid = 0;
@@ -89,9 +102,10 @@ require_once('../../../config.php');
 				$description=trim($_POST["description"][$i]);
 				$kpi=$_POST["kpi"][$i];
 				$plo=$plosIdArray[$i];
+				$domain=$domsIdArray[$i];
 				$level=$levelsIdArray[$i];
 				$time = time();
-
+				
 				if($shortname == "")
 				{
 					goto down;
@@ -131,31 +145,33 @@ require_once('../../../config.php');
 					$DB->execute($sql);
 					$sql="INSERT INTO mdl_clo_kpi (cloid, kpi) VALUES($cloid, $kpi)";
 					$DB->execute($sql);
+					if($domain == 2 || $domain == 3){
+						$sql="INSERT INTO mdl_clo_rubric (cloid, rubric) VALUES($cloid, $rubricsIdArray[$j])";
+						$DB->execute($sql);
+						$j++;
+					}
 				}
 				down:
 			}
 
+			
+			$tchs=$_POST["tch"];
+			$pchs=$_POST["pch"];
+			$coursecontent = $_POST["coursecontent"];
+			$bookname = $_POST["bookname"];
 
-				$tchs=$_POST["tch"];
-				$pchs=$_POST["pch"];
-				$coursecontent = $_POST["coursecontent"];
-				$bookname = $_POST["bookname"];
+			$record = new stdClass();
+			$record->coursecode = $coursecode;
+			$record->theorycredithours = $tchs;
+			$record->practicalcredithours = $pchs;
+			$record->coursecontent= $coursecontent;
+			$record->book=$bookname;
 
-				$record = new stdClass();
-				$record->coursecode = $coursecode;
-				$record->theorycredithours = $tchs;
-				$record->practicalcredithours = $pchs;
-				$record->coursecontent= $coursecontent;
-				$record->book=$bookname;
+			$id = $DB->insert_record('course_info', $record);
+			
 
-				$id = $DB->insert_record('course_info', $record);
-				
-
-				//$sql1="INSERT INTO mdl_course_info (coursecode,theorycredithours,practicalcredithours,coursecontent,book) VALUES($coursecode,$tchs,$pchs,$coursecontent,$bookname)";
-					//$DB->execute($sql1);
-
-
-
+			//$sql1="INSERT INTO mdl_course_info (coursecode,theorycredithours,practicalcredithours,coursecontent,book) VALUES($coursecode,$tchs,$pchs,$coursecontent,$bookname)";
+			//$DB->execute($sql1);
 
 
 			/*if($_FILES['myfile']['size'] > 0){
@@ -182,7 +198,7 @@ require_once('../../../config.php');
 			}*/
 
 			$redirect_page1='../index.php';
-			redirect($redirect_page1);
+			//redirect($redirect_page1);
 		}
 
 		/* delete code */
@@ -605,7 +621,7 @@ require_once('../../../config.php');
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-					<select id="id_domain" required onChange="dropdownDomain(this.value, 0)" name="doamins[]" class="select custom-select">
+					<select id="id_domain" required onChange="dropdownDomain(this.value, 0)" name="domains[]" class="select custom-select">
 						<option value=''>Choose..</option>
 						<?php
 						foreach ($recDomains as $recD) {
@@ -641,8 +657,10 @@ require_once('../../../config.php');
 					</div>
 				</div>
 			</div>
+
+			<div id="rubric_dd"></div>
 			
-			</div>
+			</div> <!-- dynamic input fields end -->
 
 			<div class="row">
 				<div class="col-md-3"></div>
@@ -694,6 +712,19 @@ require_once('../../../config.php');
 					}
 					else {
 						$("#id_level").html("<option value=''>Choose..</option>");
+					}
+					if(domain_id == 2 ||domain_id == 3) {
+						$.ajax({
+							url:"get-rubrics.php",
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$("#rubric_dd").html(resp);
+							}
+						});
+					}
+					else {
+						$("#rubric_dd").html("");
 					}
 				});
 			});
@@ -788,7 +819,7 @@ require_once('../../../config.php');
 				var selectDom = document.createElement("select");
 				selectDom.id = "id_domain"+i;
 				selectDom.className = "select custom-select";
-				selectDom.name = "doamins[]";
+				selectDom.name = "domains[]";
 				selectDom.setAttribute("required", "required");
 
 				//Create and append the options
@@ -837,9 +868,14 @@ require_once('../../../config.php');
 				var newdiv5 = document.createElement('div');
 				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Taxonomy Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv5);
+				
+				var newdiv6 = document.createElement('div');
+				newdiv6.innerHTML = '<div id="rubric_dd'+i+'"></div>';
+				document.getElementById(divName).appendChild(newdiv6);
 
 				var domainId = "#id_domain"+i;
 				var levelId = "#id_level"+i;
+				var rubricId = "#rubric_dd"+i;
 				$(domainId).change(function() {
 					var domain_id = $(this).val();
 					if(domain_id != "") {
@@ -856,8 +892,21 @@ require_once('../../../config.php');
 					else {
 						$(levelId).html("<option value=''>Choose..</option>");
 					}
+					if(domain_id == 2 ||domain_id == 3) {
+						$.ajax({
+							url:"get-rubrics.php",
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$(rubricId).html(resp);
+							}
+						});
+					}
+					else {
+						$(rubricId).html("");
+					}
 				});
-
+				
 				i++;
 			}
 		</script>

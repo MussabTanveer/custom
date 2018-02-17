@@ -1,3 +1,6 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -11,7 +14,21 @@
 	require_login();
 	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
+    ?>
 
+    <style>
+        th {
+            color: navy;
+        }
+        td {
+            color: maroon;
+        }
+        th, td {
+            font-size: 16px;
+        }
+    </style>
+    
+    <?php
     if(!empty($_GET['rubric']))
     {
         $rubric_id=$_GET['rubric'];
@@ -38,20 +55,27 @@
             ?>
             
             <br />
-            <table class="generaltable">
+            <table id="myTable" style="border: medium solid #000;" border="3" width="100%" cellpadding="10px">
                 <?php
+                $maxScales=0;
                 for($i=0; $i<count($criteriaDesc); $i++){
-                    $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
                 ?>
                 <tr>
                     <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                     <?php
+                    $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
+                    //$s = 1;
+                    $temp=0;
                     foreach ($scaleInfo as $sInfo) {
                         //$id = $sInfo->id;
                         $description = $sInfo->description;
                         $score = $sInfo->score;
                         echo "<td>$description<br>Score: $score</td>";
+                        //$s++;
+                        $temp++;
                     }
+                    if($temp>$maxScales)
+                        $maxScales=$temp;
                     ?>
                 </tr>
                 <?php
@@ -59,6 +83,36 @@
                 ?>
             </table>
             
+            <br><br>
+            <button id="myButton" class="btn btn-primary">Export to Excel</button>
+            
+            <script>
+                // create table header row
+                var max = <?php echo json_encode($maxScales); ?>;
+                var table = document.getElementById("myTable");
+                var row = table.insertRow(0);
+                var headerCell = document.createElement("th");
+                headerCell.innerHTML = "Criteria";
+                row.appendChild(headerCell);
+                for (var i = 0; i < max; i++) {
+                    var headerCell = document.createElement("th");
+                    headerCell.innerHTML = "Scale " + (i+1);
+                    row.appendChild(headerCell);
+                }
+            </script>
+
+            <!-- Export html Table to xls -->
+            <script type="text/javascript" >
+                $(document).ready(function(e){
+                    $("#myButton").click(function(e){ 
+                        $("#myTable").table2excel({
+                            name: "file name",
+                            filename: "rubric",
+                            fileext: ".xls"
+                        });
+                    });
+                });
+            </script>
             <?php
         }
     }
