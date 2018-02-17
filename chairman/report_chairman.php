@@ -30,6 +30,7 @@
             &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoPEO.php" class="cool-link">&#10070; Define PEOs</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoPLO.php" class="cool-link">&#10070; Define PLOs</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./add_rubric.php" class="cool-link">&#10070; Define Rubrics</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./select_rubric.php" class="cool-link">&#10070; View Rubrics</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoCLO.php" class="cool-link">&#10070; Define CLOs</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework.php" class="cool-link">&#10070; View OBE Framework Mapping</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework-4.php" class="cool-link">&#10070; View Bloom's Taxonomy Mapping</a><br><br>
