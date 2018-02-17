@@ -1,3 +1,4 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -35,23 +36,51 @@
     echo "<h4>You have yet to add an Assessment!</h4>";
  }
 elseif(!empty($rec)){
-         $serialno = 0;
-        $table = new html_table();
-        $table->head = array('S. No.','Assessment');
+
+    echo "<h4>View Already Made Assessments:</h4>";
+        // $serialno = 0;
+        //$table = new html_table();
+        //$table->head = array('S. No.','Assessment');
        foreach ($rec as $record) {
 
-            $serialno++;
+           // $serialno++;
+            
             $assessment = $record->assessment;
+            //echo "hello";
+?>
 
-         $table->data[] = array($serialno, "<a href='./assessment_display.php?course=$course_id'>$assessment </a>");
+         <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
+    <div>
+     <a href="javascript:void(0)" onclick="toggle_visibility('as');" class="cool-link"><?php echo $assessment ?></a><br><br>
+        <div id="as" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id'" ?>  class="cool-link">&#10070; Print empty Grading Sheet </a><br>
+            
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./upload_result.php?course=$course_id'" ?>  class="cool-link">&#10070; Upload Result</a><br>
+            
+            &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view result.php?course=$course_id'" ?>  class="cool-link">&#10070; View Result</a><br><br>
+           
+        </div>
+
+
+
+<?php
        }
 
-      // $table->data[] = array($serialno, "<a href='./assessment_display.php?course=$course_id'>$assessment </a>");
 
-echo html_writer::table($table);
-}    
- 
+   }
+
 ?>
+       <script type="text/javascript">
+        function toggle_visibility(id) {
+        var e = document.getElementById(id);
+        if(e.style.display == 'block')
+            e.style.display = 'none';
+        else
+            e.style.display = 'block';
+        }
+    </script>
+
+
 
 
 
