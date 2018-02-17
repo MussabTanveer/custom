@@ -52,7 +52,7 @@
       redirect($redirect_page5); // itm
     }
     elseif($rec3){
-      $SESSION->oberole = "noneditingteacher";
+      $SESSION->oberole = "teacher";
       redirect($redirect_page6); // nonediting teacher
     }
     else{
