@@ -24,7 +24,7 @@
  <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
     <div>
-        <h3>Click the links down below as per need </h3><br>
+        <h3>Add New Assessment</h3><br>
         <a <?php echo "href='./add_assessment.php?course=$course_id'" ?> class="cool-link">Add New Assessment</a><br><br> </div>
     
 <?php
@@ -42,10 +42,11 @@ elseif(!empty($rec)){
 
             $serialno++;
             $assessment = $record->assessment;
-        
+
+         $table->data[] = array($serialno, "<a href='./assessment_display.php?course=$course_id'>$assessment </a>");
        }
 
-       $table->data[] = array($serialno, "<a href='./assessment_display.php?course=$course_id'>$assessment </a>");
+      // $table->data[] = array($serialno, "<a href='./assessment_display.php?course=$course_id'>$assessment </a>");
 
 echo html_writer::table($table);
 }    
