@@ -27,6 +27,7 @@ $chunkSize=0;
  
  <?php  
  $quizId= $_GET['quiz'];
+ $courseId = $_GET['courseid'];
  //echo "$quizId";
  $quesnames=array(); 
     
@@ -71,7 +72,7 @@ $chunkSize=0;
         AND ra.contextid = cxt.id
         AND cxt.contextlevel = 50
         AND cxt.instanceid = c.id
-        AND c.id = 27
+        AND c.id = $courseId
         AND (roleid=5)");
         
       ///  while($result=mysql_fetch_array($query))
@@ -116,12 +117,12 @@ $chunkSize=0;
 <script> 
 //var x=document.getElementById("mytable").innerHTML;
 
-
 function GetCellValues() {
     var data=[];
     var c = <?php echo json_encode($chunkSize); ?>;
     var s = <?php echo json_encode($stdids); ?>;
     var q = <?php echo json_encode($qids); ?>;
+    var quizid = <?php echo json_encode($quizId); ?>;
     //alert(s);
     var table = document.getElementById('mytable');
     
@@ -133,7 +134,7 @@ function GetCellValues() {
         //alert(data);
         //data = [];
     }
-      window.location.href = "insertQuiz.php?w1=" + data + "&chunkSize=" + c + "&sid=" + s + "&qid=" + q;
+      window.location.href = "insertQuiz.php?w1=" + data + "&chunkSize=" + c + "&sid=" + s + "&qid=" + q + "&quizid=" + quizid;
 }
 
 //alert("hello");

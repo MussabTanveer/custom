@@ -37,6 +37,9 @@ $qids = explode(",",$qids);
 echo "<br>";
 //var_dump($mrkobt);
 
+$quizID = $_GET['quizid'];
+//echo "$quizID";
+
 $i=$chunkSize ;
 $qidx=0;
  for ($j=0 ; $j<sizeof($stdids); $j++){
@@ -68,10 +71,10 @@ $qidx=0;
 	// echo "$mrkobt[$i]<br>";
 	 if ($mrkobt[$i] > 0)
 	 
-			$sql="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES ('23','$stdids[$j]','$qids[$qidx]','$mrkobt[$i]')";
+			$sql="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES ('$quizID','$stdids[$j]','$qids[$qidx]','$mrkobt[$i]')";
 	   
 	else
-		$sql="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES ('23','$stdids[$j]','$qids[$qidx]','0')";
+		$sql="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES ('$quizID','$stdids[$j]','$qids[$qidx]','0')";
 
 		$DB->execute($sql);
 	 
