@@ -90,7 +90,7 @@ $chunkSize=0;
                     //var_dump($stdids);
                     foreach ($quesnames as $qname){
                 ?>
-                    <td contenteditable='true'>  </td >
+                    <td contenteditable='true'></td >
             
             <?php 
             }  ?> </tr> <?php
