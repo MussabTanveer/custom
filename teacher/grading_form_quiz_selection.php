@@ -34,7 +34,7 @@
                 $qid = $records->id;
                 $qname = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./grading_form.php?quiz=$qid&courseid=$course_id'>Print $qname</a>");
+                $table->data[] = array($serialno,"<a href='./grading_form.php?quiz=$qid&courseid=$course_id'>$qname</a>");
             }
             echo html_writer::table($table);
             echo "<br />";
