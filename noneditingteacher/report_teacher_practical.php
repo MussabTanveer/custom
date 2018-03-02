@@ -43,8 +43,8 @@
 
             <h4><a href="javascript:void(0)" onclick="toggle_visibility('as<?php echo $a ?>')" class="cool-link"><?php echo $assessment; ?></a></h4><br>
             <div id="as<?php echo $a ?>" style="display: none">
-                &nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print Empty Grading Sheet </a><br>
-                &nbsp;&nbsp;&nbsp;<a <?php echo "href='./enter_assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter Assessment Marks</a><br>
+                <!--&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print Empty Grading Sheet </a><br>-->
+                &nbsp;&nbsp;&nbsp;<a <?php echo "href='./assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter Assessment Marks</a><br>
                 &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_result.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; View Result</a><br>
             </div>
             <hr />
