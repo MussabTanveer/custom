@@ -46,7 +46,7 @@ $chunkSize=0;
         array_push ($qids,$id);
          }
     } 
-   // var_dump($quesnames);
+   //var_dump($quesnames);
      //var_dump($qids);
 
     
@@ -119,7 +119,7 @@ $chunkSize=0;
 
 function GetCellValues() {
     var data=[];
-    var c = <?php echo json_encode($chunkSize); ?>;
+    var chunkSize = <?php echo json_encode($chunkSize); ?>;
     var s = <?php echo json_encode($stdids); ?>;
     var q = <?php echo json_encode($qids); ?>;
     var quizid = <?php echo json_encode($quizId); ?>;
@@ -134,7 +134,7 @@ function GetCellValues() {
         //alert(data);
         //data = [];
     }
-      window.location.href = "insertQuiz.php?w1=" + data + "&chunkSize=" + c + "&sid=" + s + "&qid=" + q + "&quizid=" + quizid;
+      window.location.href = "insertQuiz.php?w1=" + data + "&chunkSize=" + chunkSize + "&sid=" + s + "&qid=" + q + "&quizid=" + quizid;
 }
 
 //alert("hello");

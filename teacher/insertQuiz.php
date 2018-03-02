@@ -18,7 +18,7 @@ require_once('../../../config.php');
 $mrkobt = $_GET['w1'];
 $mrkobt = explode(",",$mrkobt);
 //var_dump ($mrkobt);
-echo "<br>";
+//echo "<br>";
 
 $chunkSize = $_GET['chunkSize'];
 //echo "$chunkSize<br>";
@@ -28,19 +28,22 @@ $stdids = $_GET['sid'];
 //echo "Stud IDS <br>$stdids <br>";
 $stdids = explode(",",$stdids);
 //var_dump ($stdids);
-echo "<br>";
+//echo "<br>";
 
 
 $qids = $_GET['qid'];
 $qids = explode(",",$qids);
 //var_dump ($qids);
-echo "<br>";
+//echo "<br>";
 //var_dump($mrkobt);
 
 $quizID = $_GET['quizid'];
 //echo "$quizID";
 
 $i=$chunkSize ;
+$i++;
+
+//echo "Chunk = "
 $qidx=0;
  for ($j=0 ; $j<sizeof($stdids); $j++){
 	 $flag=0;
@@ -80,7 +83,7 @@ $qidx=0;
 	 
 	  $qidx++;
 	  
-	if($flag == $chunkSize)
+	if($flag == $chunkSize+1)
 	{   $i++; 
 		$qidx =0;
 		break; 
