@@ -13,27 +13,17 @@
     }
     echo $OUTPUT->header();
 
-
-$chunkSize=0;
- $stdids=array();
- $qids = array();   
-?>
-<html>
-<head> 
-
-</head>
- <body >
-
- 
- <?php  
- $quizId= $_GET['quiz'];
- $courseId = $_GET['courseid'];
- //echo "$quizId";
- $quesnames=array(); 
-    
+    $chunkSize=0;
+    $stdids=array();
+    $qids = array();   
+    $quizId= $_GET['quiz'];
+    $courseId = $_GET['courseid'];
+    //echo "$quizId";
+    $quesnames=array(); 
+        
     $ques=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_question  WHERE mquizid=$quizId");
 
-//while($result=mysql_fetch_array($query))
+    //while($result=mysql_fetch_array($query))
 
     if($ques)
     {
@@ -46,8 +36,8 @@ $chunkSize=0;
         array_push ($qids,$id);
          }
     } 
-   //var_dump($quesnames);
-     //var_dump($qids);
+    //var_dump($quesnames);
+    //var_dump($qids);
 
     
     ?>
@@ -75,7 +65,7 @@ $chunkSize=0;
         AND c.id = $courseId
         AND (roleid=5)");
         
-      ///  while($result=mysql_fetch_array($query))
+      //  while($result=mysql_fetch_array($query))
       if($users)
         {
             foreach ($users as $user ) {
@@ -98,7 +88,7 @@ $chunkSize=0;
           }
 
         }
-       // var_dump ($stdids);
+        // var_dump ($stdids);
 
         ?>
         
@@ -106,12 +96,9 @@ $chunkSize=0;
 </table>
 <br></br>
 <button onclick=GetCellValues() class="btn btn-primary" align="center"/> Submit
-
-</body>
-</html>
 <?php
   echo $OUTPUT->footer();
-  ?>
+?>
 
 
 <script> 
