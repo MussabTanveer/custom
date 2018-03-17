@@ -5,7 +5,7 @@ require_once('../../../config.php');
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Online Grading Form");
     $PAGE->set_heading("Online Grading Form");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_form_quiz_selection.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/insertQuiz.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){

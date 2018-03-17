@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Select Midterm");
     $PAGE->set_heading("Select Midterm");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_grading_sheet_midterm.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_form_midterm_selection.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
