@@ -53,6 +53,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_assign_paper.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Print Assignment Details</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_assignment?type=assign&course=$course_id'" ?> class="cool-link">&#10146; View Results</a><br>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_pro');" class="cool-link">&#10022; Project</a><br>
                 <div id="manual_pro" style="display: none">
