@@ -1,10 +1,10 @@
 <?php 
-   require_once('../../../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Print Quiz Form");
-    $PAGE->set_heading("Print Quiz Form");
+    $PAGE->set_title("Select Quiz");
+    $PAGE->set_heading("Select Quiz");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_form_quiz_selection.php');
     
     require_login();

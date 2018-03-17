@@ -1,10 +1,10 @@
 <?php 
-   require_once('../../../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Print Final Exam Evaluation Form");
-    $PAGE->set_heading("Print Final Exam Evaluation Form");
+    $PAGE->set_title("Select Final Exam");
+    $PAGE->set_heading("Select Final Exam");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_form_final_selection.php');
     
     require_login();

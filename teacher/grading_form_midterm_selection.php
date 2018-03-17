@@ -1,11 +1,10 @@
-
 <?php 
-   require_once('../../../config.php');
+    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Print Midterm Evaluation Form");
-    $PAGE->set_heading("Print Midterm Evaluation Form");
+    $PAGE->set_title("Select Midterm");
+    $PAGE->set_heading("Select Midterm");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_grading_sheet_midterm.php');
     
     require_login();
