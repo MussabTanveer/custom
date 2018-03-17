@@ -59,7 +59,7 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
     <form method="post" action="insert_result.php">
         <table border='10' cellpadding='8' id ="mytable">
         <tr>
-        <th> Roll No </th>
+        <th> Seat No. </th>
         <?php
         foreach ($quesnames as $qname){
             ?><th> <?php echo $qname ; ?> </th>
