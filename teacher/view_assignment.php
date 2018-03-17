@@ -36,7 +36,7 @@ if($rec1){
 }
 
 
-echo "<h3>Showing Results for </h3>".$name."(".$clo.")";
+echo "<h3>".$name."(".$clo.")"."</h3>";
 }
 $rec=$DB->get_recordset_sql(
         'SELECT us.username,us.id,maa.obtmark, ma.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id= ? ',array($assign_id));
@@ -61,6 +61,14 @@ $table->data[] = array($serialno,$userid,$obtmark);
 
 
 echo html_writer::table($table);
+}
+
+  else{
+            echo "<h3>No students have attempted Assignment yet!</h3>";
+        }
+
+
+
 }
 
 
