@@ -5,9 +5,9 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Select Assignment");
-    $PAGE->set_heading("Select Assignment");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/select_assignment.php');
+    $PAGE->set_title("Select Project");
+    $PAGE->set_heading("Select Project");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/select_project.php');
 
 
    
@@ -26,13 +26,13 @@ $course_id=$_GET['course'];
 
 
 
-        $rec=$DB->get_records_sql('SELECT * FROM  `mdl_manual_assign_pro` WHERE courseid = ? AND module= ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id,'-4'));
+        $rec=$DB->get_records_sql('SELECT * FROM  `mdl_manual_assign_pro` WHERE courseid = ? AND module= ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id,'-5'));
 
 if($rec){
             ?>
 
 
-            <form method='post' action='view_assignment.php' id="form_check">
+            <form method='post' action='view_project.php' id="form_check">
 
                 <?php
               $serialno = 0;
@@ -48,7 +48,7 @@ if($rec){
                 $name = $records->name;
                 $description = $records->description;
 
-$table->data[] = array($serialno, $name, $description, '<input type="radio" value="'.$id.'" name="assignid" >');
+$table->data[] = array($serialno, $name, $description, '<input type="radio" value="'.$id.'" name="projectid" >');
 
 }
 
@@ -66,7 +66,7 @@ echo html_writer::table($table);
             $('#form_check').on('submit', function (e) {
                 if ($("input[type=radio]:checked").length === 0) {
                     e.preventDefault();
-                    $("#msg").html("<font color='red'>Select any one assignment!</font>");
+                    $("#msg").html("<font color='red'>Select any one project!</font>");
                     return false;
                 }
             });
@@ -77,7 +77,7 @@ echo html_writer::table($table);
 
 
  else{
-            echo "<h3>No Assignments found!</h3>";
+            echo "<h3>No Projects found!</h3>";
             echo $OUTPUT->footer();
         }
 

@@ -3,9 +3,9 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Assignment Results");
-    $PAGE->set_heading("Assignment Results");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/display_quiz_grid.php');
+    $PAGE->set_title("Projects Results");
+    $PAGE->set_heading("Projects Results");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_project.php');
 
        header('Content-Type: text/plain');
    
@@ -16,15 +16,15 @@
     }
     echo $OUTPUT->header();
 
-if(isset($_POST['assignid']))
+if(isset($_POST['projectid']))
     {
-$assign_id=$_POST['assignid'];
+$project_id=$_POST['projectid'];
 //echo $assign_id;
 
 
 //$id=$_POST['id'];
 //echo $id;
-$rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($assign_id));
+$rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($project_id));
 
 if($rec1){
 
@@ -49,7 +49,7 @@ else{
 	echo "No record present!";
 }
 $rec=$DB->get_recordset_sql(
-        'SELECT us.username,us.id,maa.obtmark, ma.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid  AND ma.id= ? AND ma.module=? ',array($assign_id,'-4'));
+        'SELECT us.username,us.id,maa.obtmark, ma.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid AND ma.id= ? AND ma.module=? ',array($project_id,'-5'));
 
 if($rec){
 
@@ -74,7 +74,7 @@ echo html_writer::table($table);
 }
 
   else{
-            echo "<h3>No students have attempted Assignment yet!</h3>";
+            echo "<h3>No students have submitted project yet!</h3>";
         }
 
 
