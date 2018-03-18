@@ -117,6 +117,7 @@
                             array_push($criteriaId, $id);
                             array_push($criteriaDesc, $description);
                         }
+                        $criteriaMaxScore = array();
                         ?>
                         
                         <br />
@@ -124,27 +125,30 @@
                             <?php
                             $maxScales=0;
                             for($i=0; $i<count($criteriaDesc); $i++){
+                                $maxScore = 0;
                             ?>
                             <tr>
                                 <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                                 <?php
                                 $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
-                                //$s = 1;
                                 $temp=0;
                                 foreach ($scaleInfo as $sInfo) {
                                     //$id = $sInfo->id;
                                     $description = $sInfo->description;
                                     $score = $sInfo->score;
                                     echo "<td>$description<br>Score: $score</td>";
-                                    //$s++;
+                                    if($score>$maxScore)
+                                        $maxScore = $score;
                                     $temp++;
                                 }
+                                array_push($criteriaMaxScore, $maxScore);
                                 if($temp>$maxScales)
                                     $maxScales=$temp;
                                 ?>
                             </tr>
                             <?php
                             }
+                            //print_r($criteriaMaxScore);
                             ?>
                         </table>
                         <br><br>
@@ -229,10 +233,11 @@
                             <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
                         </td>
                         <?php
-                        foreach ($cnames as $cname){
+                        for($i=0; $i<count($cids); $i++){
+                        //foreach ($cnames as $cname){
                         ?>
                             <td style="background-color: #ECEEEF;">
-                                <input type="number" name="marks[]" step="0.001" min="0" max="<?php //echo $maxmarks[$i]; ?>" required />
+                                <input type="number" name="marks[]" step="0.001" min="0" max="<?php echo $criteriaMaxScore[$i]; ?>" required />
                             </td >
                     <?php
                         }  ?>
