@@ -16,9 +16,9 @@
     }
     echo $OUTPUT->header();
 
-if(isset($_POST['assignid']))
+if(isset($_GET['assignid']))
     {
-$assign_id=$_POST['assignid'];
+$assign_id=$_GET['assignid'];
 //echo $assign_id;
 
 

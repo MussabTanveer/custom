@@ -32,12 +32,12 @@ if($rec){
             ?>
 
 
-            <form method='post' action='view_assignment.php' id="form_check">
+           
 
                 <?php
               $serialno = 0;
             $table = new html_table();
-     $table->head = array('S. No.', 'Name', 'Description', 'Select');
+     $table->head = array('S. No.', 'Name');
 
 
 
@@ -48,14 +48,14 @@ if($rec){
                 $name = $records->name;
                 $description = $records->description;
 
-$table->data[] = array($serialno, $name, $description, '<input type="radio" value="'.$id.'" name="assignid" >');
+$table->data[] = array($serialno,"<a href='./view_assignment.php?assignid=$id&courseid=$course_id'>$name</a>");
 
 }
 
 echo html_writer::table($table);
 ?>
 
-<input type="submit" value="NEXT" name="submit" class="btn btn-primary">
+
             </form>
             <br />
             <p id="msg"></p>

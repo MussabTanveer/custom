@@ -37,7 +37,7 @@ if($rec){
                 <?php
               $serialno = 0;
             $table = new html_table();
-     $table->head = array('S. No.', 'Name', 'Description', 'Select');
+     $table->head = array('S. No.', 'Name');
 
 
 
@@ -48,14 +48,14 @@ if($rec){
                 $name = $records->name;
                 $description = $records->description;
 
-$table->data[] = array($serialno, $name, $description, '<input type="radio" value="'.$id.'" name="projectid" >');
+$table->data[] = array($serialno,"<a href='./view_project.php?projectid=$id&courseid=$course_id'>$name</a>" );
 
 }
 
 echo html_writer::table($table);
 ?>
 
-<input type="submit" value="NEXT" name="submit" class="btn btn-primary">
+
             </form>
             <br />
             <p id="msg"></p>
