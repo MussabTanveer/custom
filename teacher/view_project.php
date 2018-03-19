@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -56,7 +58,8 @@ if($rec){
  
               $serialno = 0;
             $table = new html_table();
-     $table->head = array('S. No.', 'Student ID', 'Marks Obtained');
+            $table->id = "mytable";
+     $table->head = array('S. No.', 'Seat No.', 'Marks Obtained');
 
 
 
@@ -71,6 +74,21 @@ $table->data[] = array($serialno,$userid,$obtmark);
 
 
 echo html_writer::table($table);
+?>
+<button id="myButton" class="btn btn-success">Export to Excel</button>
+<!-- Export html Table to xls -->
+<script type="text/javascript" >
+    $(document).ready(function(e){
+        $("#myButton").click(function(e){ 
+            $("#mytable").table2excel({
+                name: "file name",
+                filename: "project_result",
+                fileext: ".xls"
+            });
+        });
+    });
+</script>
+<?php
 }
 
   else{

@@ -1,4 +1,6 @@
-<?php 
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+<?php
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
@@ -94,7 +96,7 @@
     ?>
     <table border='10' cellpadding='15' id ="mytable">
     <tr>
-    <th> Roll No </th>
+    <th> Seat No. </th>
     <?php
     $marksIndex=0;
     foreach ($quesnames as $qname){
@@ -150,11 +152,23 @@
         
     
 </table>
-
+<br />
+<button id="myButton" class="btn btn-success">Export to Excel</button>
+<!-- Export html Table to xls -->
+<script type="text/javascript" >
+    $(document).ready(function(e){
+        $("#myButton").click(function(e){ 
+            $("#mytable").table2excel({
+                name: "file name",
+                filename: "quiz_result",
+                fileext: ".xls"
+            });
+        });
+    });
+</script>
 
 <?php
 
 down:
 
-
-      echo $OUTPUT->footer();
+    echo $OUTPUT->footer();
