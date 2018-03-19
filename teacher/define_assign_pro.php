@@ -397,6 +397,7 @@ require_once('../../../config.php');
 			<br /><br />
 			<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 		</form>
+		<br /><br /><br /><br />
 		
 		<?php
 		if(isset($msga)){
