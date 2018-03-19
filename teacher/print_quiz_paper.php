@@ -28,13 +28,17 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Quiz Name');
+            $table->head = array('S. No.', 'Quiz Name','Print Quiz Paper');
             foreach ($quizzes as $records) {
                 $serialno++;
                 $qid = $records->id;
                 $qname = $records->name;
+                $mime = $records->mime;
+                if ($mime)
                 
-                $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>");
+                 $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname uploaded paper</a>");
+             else
+                 $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-');
             }
             echo html_writer::table($table);
             echo "<br />";

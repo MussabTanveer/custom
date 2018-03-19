@@ -31,13 +31,17 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Midterm Name');
+            $table->head = array('S. No.', 'Midterm Name','Print Mid Paper');
             foreach ($midterms as $records) {
                 $serialno++;
                 $qid = $records->id;
                 $qname = $records->name;
+                $mime = $records->mime;
+                if ($mime)
                 
-                $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>");
+                    $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname</a>");
+                else
+                    $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-');
             
             }
 
