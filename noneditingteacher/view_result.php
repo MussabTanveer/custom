@@ -1,4 +1,6 @@
-<?php 
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
+<?php
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
@@ -218,6 +220,20 @@
         }
         ?>
     </table>
+    <br />
+    <button id="myButton" class="btn btn-success">Export to Excel</button>
+    <!-- Export html Table to xls -->
+    <script type="text/javascript" >
+        $(document).ready(function(e){
+            $("#myButton").click(function(e){ 
+                $("#mytable").table2excel({
+                    name: "file name",
+                    filename: "assessment_result",
+                    fileext: ".xls"
+                });
+            });
+        });
+    </script>
 <?php
     }
     else{
