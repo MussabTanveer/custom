@@ -44,7 +44,7 @@
             $fname = $records->fullname;
             $sname = $records->shortname;
             $idnum = $records->idnumber;
-            $table->data[] = array($serialno, "<a href='./report_teacher.php?course=$id'>$fname</a>", "<a href='./report_teacher.php?course=$id'>$sname</a>", "<a href='./report_teacher.php?course=$id'>$idnum</a>");
+            $table->data[] = array($serialno, "<a href='./report_teacher.php?course=$id&coursecode=$idnum'>$fname</a>", "<a href='./report_teacher.php?course=$id&coursecode=$idnum'>$sname</a>", "<a href='./report_teacher.php?course=$id&coursecode=$idnum'>$idnum</a>");
         }
        // if($serialno == 1){
             //redirect("./report_teacher.php?course=$id");

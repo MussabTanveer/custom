@@ -18,6 +18,7 @@
     if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $coursecode=$_GET['coursecode'];
         $coursecontext = context_course::instance($course_id);
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
@@ -28,6 +29,9 @@
         <h3>Click the links down below as per need </h3><br>
 
         <a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>
+
+        <a <?php echo "href='./view_course_profileform.php?course=$course_id&coursecode=$coursecode'" ?> class="cool-link">View Course Profile form</a><br><br>
+
 
         <a href="javascript:void(0)" onclick="toggle_visibility('gp');" class="cool-link">Grading Policy</a><br><br>
         <div id="gp" style="display: none">
