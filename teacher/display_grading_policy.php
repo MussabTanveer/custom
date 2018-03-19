@@ -54,7 +54,7 @@
             }
             $table->data[] = array("<b>Total:</b>", "", $sum.'%', "");
             if($serial){
-                if($sum != 20)
+                if($sum < 100)
                     echo "<h4 style='color:red'>Grading Policy is not 100%</h4><a href=grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><br />";
                 echo html_writer::table($table);
             }

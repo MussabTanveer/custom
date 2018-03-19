@@ -191,6 +191,8 @@ require_once('../../../config.php');
 			$redirect_page1="./report_teacher.php?course=$course_id";
 
 			//Upload PDF
+			if ($file_size>0 )
+			{
 				
 			if ($file_type == "application/pdf")
 			       { 
@@ -200,6 +202,7 @@ require_once('../../../config.php');
 			        }
 			        else
 			            echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+			    }
 
 
 
