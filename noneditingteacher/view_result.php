@@ -1,20 +1,17 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/table2excel/jquery.table2excel.min.js"></script>
-<?php
+<?php 
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Assessment Marks");
-    $PAGE->set_heading("Assessment Marks");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/noneditingteacher/assessment_marks.php');
+    $PAGE->set_title("Assessment Result");
+    $PAGE->set_heading("Assessment Result");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/noneditingteacher/view_result.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-
     ?>
     <style>
         th {
@@ -25,19 +22,6 @@
         }
         th, td {
             font-size: 16px;
-        }
-        input[type='number'] {
-            -moz-appearance:textfield;
-            max-width: 75px;
-            border: none;
-        }
-        input[type='number']:focus {
-            outline: none;
-            border: none;
-        }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
         }
     </style>
     <?php
@@ -50,8 +34,9 @@
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         $aid=$_GET['assessmentid'];
 
-        // Associated CLOs with Course and their Mapping
+        $stdids=array();
 
+        // Find attached rubric
         $rec=$DB->get_recordset_sql('SELECT
             clo.id AS cloid,
             clo.shortname,
@@ -117,7 +102,6 @@
                             array_push($criteriaId, $id);
                             array_push($criteriaDesc, $description);
                         }
-                        $criteriaMaxScore = array();
                         ?>
                         
                         <br />
@@ -125,34 +109,30 @@
                             <?php
                             $maxScales=0;
                             for($i=0; $i<count($criteriaDesc); $i++){
-                                $maxScore = 0;
                             ?>
                             <tr>
                                 <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                                 <?php
                                 $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
+                                //$s = 1;
                                 $temp=0;
                                 foreach ($scaleInfo as $sInfo) {
                                     //$id = $sInfo->id;
                                     $description = $sInfo->description;
                                     $score = $sInfo->score;
                                     echo "<td>$description<br>Score: $score</td>";
-                                    if($score>$maxScore)
-                                        $maxScore = $score;
+                                    //$s++;
                                     $temp++;
                                 }
-                                array_push($criteriaMaxScore, $maxScore);
                                 if($temp>$maxScales)
                                     $maxScales=$temp;
                                 ?>
                             </tr>
                             <?php
                             }
-                            //print_r($criteriaMaxScore);
                             ?>
                         </table>
                         <br><br>
-                        <button id="myButton" class="btn btn-success">Export to Excel</button><br><br>
                         <script>
                             // create table header row
                             var max = <?php echo json_encode($maxScales); ?>;
@@ -167,128 +147,78 @@
                                 row.appendChild(headerCell);
                             }
                         </script>
-
-                        <!-- Export html Table to xls -->
-                        <script type="text/javascript" >
-                            $(document).ready(function(e){
-                                $("#myButton").click(function(e){ 
-                                    $("#myTable").table2excel({
-                                        name: "file name",
-                                        filename: "rubric",
-                                        fileext: ".xls"
-                                    });
-                                });
-                            });
-                        </script>
-
                         <?php
-                        // FORM TO ENTER MARKS
-                        $cnames=array();
-                        $cids=array();
-                        $stdids=array();
-                        if($criterionInfo)
-                        {
-                            $i=0;
-                            foreach ($criterionInfo as $c) {
-                                $id = $c->id;
-                                $i++;
-                                $cname='Criterion '.$i;
-                                array_push ($cnames,$cname);
-                                array_push ($cids,$id);
-                            }
-                        }
-                        echo "<br>";
-                        echo "<h3><u>Enter Marks</u></h3>";
-                        ?>
-            <form method="post" action="insert_result.php">
-                <table border='10' cellpadding='10' id ="mytable">
-                <tr>
-                    <th> Seat No. </th>
-                    <?php
-                    $ccount=0;
-                    foreach ($cnames as $cname){
-                        $ccount++;
-                        ?><th> <?php echo $cname ; ?> </th>
-                        <?php
-                    }
-                    ?>
-                </tr>
-                <?php
-                
-                $users=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
-                FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
-                WHERE ra.userid = u.id
-                AND ra.contextid = cxt.id
-                AND cxt.contextlevel = 50
-                AND cxt.instanceid = c.id
-                AND c.id = $course_id
-                AND (roleid=5)");
-                
-                if($users)
-                {
-                    foreach ($users as $user ) {
-                    ?>
-                    <tr>
-                        <td>
-                            <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
-                        </td>
-                        <?php
-                        for($i=0; $i<count($cids); $i++){
-                        //foreach ($cnames as $cname){
-                        ?>
-                            <td style="background-color: #ECEEEF;">
-                                <input type="number" name="marks[]" step="0.001" min="0" max="<?php echo $criteriaMaxScore[$i]; ?>" required />
-                            </td >
-                    <?php
-                        }  ?>
-                    </tr> <?php
                     }
                 }
-            ?>
-            </table>
-            <input type="hidden" value='<?php echo $ccount; ?>' name="ccount">
-            <input type="hidden" value='<?php echo $aid; ?>' name="aid">
+            }
+        }
+        
+        //$ques=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_question  WHERE maid=$aid");
+
+        $obtMarksq=$DB->get_records_sql("SELECT * FROM mdl_assessment_attempt  WHERE aid=$aid");
+
+        //$ques=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_question  WHERE aid=$aid");
+
+        $obtMarks=array();
+        //$cloids=array();
+
+        if($obtMarksq)
+        {
+            foreach ($obtMarksq as $omark) {
+                $userid = $omark->userid;
+                $obtmark=$omark->obtmark;
+                array_push($obtMarks,$obtmark);
+            }
+        }
+        else
+        {
+        echo "<font color=red>Assessment has not been graded yet!</font>";
+            goto down;
+        }
+        
+        ?>
+        <table border='10' cellpadding='15' id ="mytable">
+        <tr>
+        <th> Seat No. </th>
+        <?php
+        for($i=0; $i<count($criteriaId); $i++){
+            ?><th> <?php echo "Criterion ".($i+1);?> </th>
             <?php
-            foreach($cids as $cid)
-            {
-            echo '<input type="hidden" name="cid[]" value="'. $cid. '">';
-            }
-            foreach($stdids as $sid)
-            {
-            echo '<input type="hidden" name="studid[]" value="'. $sid. '">';
-            }
+        }
+        ?>
+        </tr>
+        <?php
+        
+        $users=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
+            FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
+            WHERE ra.userid = u.id
+            AND ra.contextid = cxt.id
+            AND cxt.contextlevel = 50
+            AND cxt.instanceid = c.id
+            AND c.id = $course_id
+            AND (roleid=5)");
+        
+        $obtmarksIndex=0;
+        if($users)
+        {
+            foreach ($users as $user ) {
             ?>
-            <br />
-            <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
-        </form>
-        <br />
-        <button id="myButton2" class="btn btn-success">Export to Excel</button>
-        <!-- Export html Table to xls -->
-        <script type="text/javascript" >
-            $(document).ready(function(e){
-                $("#myButton2").click(function(e){ 
-                    $("#mytable").table2excel({
-                        name: "file name",
-                        filename: "assessment_grading",
-                        fileext: ".xls"
-                    });
-                });
-            });
-        </script>
-                        <?php
-                    }
-                }
-                else{
-                    echo "<font color=red>No Rubric attached to CLO!</font><br>";
-                }
-            }
-            else{
-                echo "<font color=red>No CLO belonging to Psychomotor/Affective Taxonomy Domain found!</font><br>";
+            <tr>
+                <td> <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?> </td>
+                
+                <?php
+                foreach ($criteriaId as $cid){
+                ?>
+                    <td ><?php echo $obtMarks[$obtmarksIndex]; 
+                    $obtmarksIndex++; ?></td >
+            
+                <?php
+                }  ?> </tr> <?php
             }
         }
-        else{
-            echo "<font color=red>No CLO has been mapped to this course!</font><br>";
-        }
+        ?>
+    </table>
+<?php
     }
     else{
         ?>
@@ -296,5 +226,6 @@
         <a href="../teacher/teacher_courses.php">Back</a>
     <?php
     }
+down:
     echo $OUTPUT->footer();
-?>
+    
