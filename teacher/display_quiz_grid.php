@@ -16,9 +16,12 @@
     }
     echo $OUTPUT->header();
 
-    if(isset($_POST['submit']) && isset( $_POST['quizid']))
+    if(!empty($_GET['course']) && !empty($_GET['quizid']))
     {
-        $quiz_id=$_POST['quizid'];
+        $course_id=$_GET['course'];
+        $coursecontext = context_course::instance($course_id);
+        is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
+        $quiz_id=$_GET['quizid'];
         //echo "Quiz ID : $quiz_id";
         
         // Display Quiz Info
@@ -124,6 +127,7 @@
                         $data_temp[] = $records;
                         $count++;
                     }
+                    if($data_temp){
                     foreach($data_temp as $data){ //  // now print very last student record
                         ?>
                         <tr>
@@ -164,6 +168,7 @@
                         ?>
                         </tr>
                         <?php
+                    }
                     }
                     ?>
                 </table>
@@ -270,7 +275,7 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="./display_courses.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php 
         echo $OUTPUT->footer();
     }?>

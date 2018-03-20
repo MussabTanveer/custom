@@ -37,35 +37,21 @@
         $rec=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         if($rec){
             ?>
-            <form method='post' action='display_quiz_grid.php' id="form_check">
             <?php
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Select');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($rec as $records) {
                 $serialno++;
                 $id = $records->id;
                 $courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->intro;
-                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="quizid">');
+                $table->data[] = array($serialno, "<a href='./display_quiz_grid.php?course=$course_id&quizid=$id'>$name</a>", "<a href='./display_quiz_grid.php?course=$course_id&quizid=$id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
-            <input type="submit" value="NEXT" name="submit" class="btn btn-primary">
-            </form>
             <br />
-            <p id="msg"></p>
-
-            <script>
-            $('#form_check').on('submit', function (e) {
-                if ($("input[type=radio]:checked").length === 0) {
-                    e.preventDefault();
-                    $("#msg").html("<font color='red'>Select any one quiz!</font>");
-                    return false;
-                }
-            });
-            </script>
 
             <?php
             echo $OUTPUT->footer();
