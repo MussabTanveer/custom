@@ -105,18 +105,18 @@ if (!empty($_FILES['assignmarks']['name'])) {
             $abc++;
         }
 if($sql1){
-         echo "<h3>File has been Uploaded!</h3>";}
+         echo "<h3 style='color:green;'>Result has been uploaded!</h3>";}
         //Close excel file
         $reader->close();
  
     } else {
  
-        echo "Please Select Valid Excel File";
+        echo "<font color=red>Please Select Valid Excel File</font>";
     }
  
 } else {
  
-    echo "Please Select Excel File";
+    echo "<font color=red>Please Select Excel File</font>";
      
 }
 }
