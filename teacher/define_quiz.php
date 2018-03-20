@@ -319,6 +319,7 @@ require_once('../../../config.php');
 					<div class="btn btn-default btn-file">
 						<input  type="file" name="quizQues" id="quizQues" placeholder="Only PDFs are allowed">
 					</div>
+					(Only PDFs are allowed)
 				</div>
 			</div>
 
