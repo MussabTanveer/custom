@@ -307,19 +307,20 @@ require_once('../../../config.php');
 					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
 					</div>
 				</div>
-			</div>
-			
+			</div>			
 
-			<div class="col-md-3">
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
 					<label class="col-form-label d-inline" for="quizQues">
 						Upload Quiz Paper
-						</label>
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<div class="btn btn-default btn-file">
+						<input  type="file" name="quizQues" id="quizQues" placeholder="Only PDFs are allowed">
+					</div>
+				</div>
 			</div>
-		 <div class="btn btn-default btn-file">
-
-				<input  type="file" name="quizQues" id="quizQues" placeholder="Only PDFs are allowed">
-		</div>
-
 
 			<div id="dynamicInput">
             <h3>Map Question to CLO</h3>

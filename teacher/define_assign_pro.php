@@ -280,18 +280,21 @@ require_once('../../../config.php');
 				</div>
 			</div>
 			
-
-			<div class="col-md-3">
-					<label class="col-form-label d-inline" for="quizQues">
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="assignQues">
 						Upload Paper
-						</label>
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<div class="btn btn-default btn-file">
+						<input required type="file" name="assignQues" id="assignQues" placeholder="Only PDFs are allowed">
+					</div>
+				</div>
 			</div>
-		 <div class="btn btn-default btn-file">
-
-				<input  type="file" name="assignQues" id="assignQues" placeholder="Only PDFs are allowed">
-		</div>
-
-
 
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
