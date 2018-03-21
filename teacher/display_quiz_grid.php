@@ -25,9 +25,9 @@
         //echo "Quiz ID : $quiz_id";
         
         // Display Quiz Info
-        echo "<h3>Question Grid</h3>";
-       //$rec1=$DB->get_recordset_sql('SELECT DISTINCT us.idnumber FROM mdl_user us, mdl_quiz_attempts qa 
-       // WHERE us.id=qa.userid');
+        //echo "<h3>Quiz Question Grid</h3>";
+        //$rec1=$DB->get_recordset_sql('SELECT DISTINCT us.idnumber FROM mdl_user us, mdl_quiz_attempts qa 
+        // WHERE us.id=qa.userid');
         $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($quiz_id));
         $tot_ques = count($quiz_ques);
         $rec=$DB->get_recordset_sql(
@@ -65,7 +65,7 @@
             ?>
             <table class="generaltable">
                 <tr class="table-head">
-                    <th> Student ID </th>
+                    <th> Seat No. </th>
                     <th> Question # </th>
                     <th> Question </th>
                     <th> CLO </th>
