@@ -32,16 +32,15 @@
 		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "Course ID : $course_id";
     
-        // Dispaly all quizzes
+        // Dispaly all Online Quizzes/Midterm
         //$rec=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND timeopen != ?', array($course_id, 0));
-        $rec=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
-        if($rec){
-            ?>
-            <?php
+        $recOQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
+        if($recOQ){
+            echo "<h3>Online Quizzes/Midterm</h3>";
             $serialno = 0;
             $table = new html_table();
             $table->head = array('S. No.', 'Name', 'Intro');
-            foreach ($rec as $records) {
+            foreach ($recOQ as $records) {
                 $serialno++;
                 $id = $records->id;
                 $courseid = $records->course;
@@ -52,20 +51,35 @@
             echo html_writer::table($table);
             ?>
             <br />
-
             <?php
-            echo $OUTPUT->footer();
         }
-        else{
-            echo "<h3>No quizzes found!</h3>";
-            echo $OUTPUT->footer();
+        // Dispaly all Online Assignments
+        $recOA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
+        if($recOA){
+            echo "<h3>Online Assignments</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recOA as $records) {
+                $serialno++;
+                $id = $records->id;
+                $courseid = $records->course;
+                $name = $records->name;
+                $intro = $records->intro;
+                $table->data[] = array($serialno, "<a href='./display_assign_grid.php?course=$course_id&assignid=$id'>$name</a>", "<a href='./display_assign_grid.php?course=$course_id&assignid=$id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
         }
-
     }
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
         <a href="./teacher_courses.php">Back</a>
     <?php
-        echo $OUTPUT->footer();
-    }?>
+        
+    }
+    echo $OUTPUT->footer();
+    ?>

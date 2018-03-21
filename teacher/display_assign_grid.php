@@ -75,7 +75,7 @@
                     $seat = $records->seat_no;
                     //$uname = $records->std_name;
                     $max = $records->maxmark;
-                    $obt = $records->marksobtained;
+                    $obt = $records->marksobtained; $obt = number_format($obt, 2);
                     //$result = ($obt/$max)*100;
                     ?>
                     <tr>
