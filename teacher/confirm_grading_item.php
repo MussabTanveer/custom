@@ -61,8 +61,15 @@
 			else
 				$mod = 1;
 			$aid = substr($aid,1);
-			$sql="INSERT INTO mdl_grading_mapping (courseid, module, instance, gradingitem) VALUES($course_id, $mod, $aid, $gitemarray[$i])";
-			$DB->execute($sql);
+
+			
+
+			$check=$DB->get_records_sql('SELECT * FROM `mdl_grading_mapping` WHERE courseid = ? AND module = ? AND instance = ? AND gradingitem = ?', array($course_id,$mod,$aid,$gitemarray[$i]));
+			if(!$check)	
+			{
+				$sql="INSERT INTO mdl_grading_mapping (courseid, module, instance, gradingitem) VALUES($course_id, $mod, $aid, $gitemarray[$i])";
+				$DB->execute($sql);
+			}
 		}
 		$i++;
 	}
