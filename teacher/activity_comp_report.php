@@ -83,7 +83,7 @@
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> S. No. </th>
-                        <th> Student ID </th>
+                        <th> Seat No. </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
@@ -279,7 +279,7 @@
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> S. No. </th>
-                        <th> Student ID </th>
+                        <th> Seat No. </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
