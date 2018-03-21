@@ -30,7 +30,7 @@
 
         <!--<a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>--> <!--For PDF Course Profile View-->
 
-        <a <?php echo "href='./view_course_profileform.php?course=$course_id&coursecode=$coursecode'" ?> class="cool-link">View Course Profile</a><br><br>
+        <a <?php echo "href='./view_course_profileform.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>
 
 
         <a href="javascript:void(0)" onclick="toggle_visibility('gp');" class="cool-link">Grading Policy</a><br><br>
