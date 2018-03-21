@@ -36,7 +36,7 @@
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
-        $statusQuery=$DB->get_records_sql('SELECT DISTINCT instance, module FROM `mdl_consolidated_report` WHERE course = ?', array($course_id));
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ?', array($course_id));
 
         $statusArray = array();
         $modArray = array();
