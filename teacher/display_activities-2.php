@@ -43,7 +43,7 @@
             foreach ($recOQ as $records) {
                 $serialno++;
                 $id = $records->id;
-                $courseid = $records->course;
+                //$courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->intro;
                 $table->data[] = array($serialno, "<a href='./display_quiz_grid.php?course=$course_id&quizid=$id'>$name</a>", "<a href='./display_quiz_grid.php?course=$course_id&quizid=$id'>$intro</a>");
@@ -63,10 +63,108 @@
             foreach ($recOA as $records) {
                 $serialno++;
                 $id = $records->id;
-                $courseid = $records->course;
+                //$courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->intro;
                 $table->data[] = array($serialno, "<a href='./display_assign_grid.php?course=$course_id&assignid=$id'>$name</a>", "<a href='./display_assign_grid.php?course=$course_id&assignid=$id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        // Dispaly all Manual Quizzes
+        $recMQ = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)",array($course_id,-1));
+        if($recMQ){
+            echo "<h3>Manual Quizzes</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recMQ as $records) {
+                $serialno++;
+                $id = $records->id;
+                //$courseid = $records->course;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        // Dispaly all Manual Assignments
+        $recMA=$DB->get_records_sql('SELECT * FROM  `mdl_manual_assign_pro` WHERE courseid = ? AND module= ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id,'-4'));
+        if($recMA){
+            echo "<h3>Manual Assignments</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recMA as $records) {
+                $serialno++;
+                $id = $records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./view_assignment.php?assignid=$id&courseid=$course_id'>$name</a>", "<a href='./view_assignment.php?assignid=$id&courseid=$course_id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        // Dispaly all Manual Projects
+        $recMP=$DB->get_records_sql('SELECT * FROM  `mdl_manual_assign_pro` WHERE courseid = ? AND module= ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id,'-5'));
+        if($recMP){
+            echo "<h3>Manual Projects</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recMP as $records) {
+                $serialno++;
+                $id = $records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./view_project.php?projectid=$id&courseid=$course_id'>$name</a>", "<a href='./view_project.php?projectid=$id&courseid=$course_id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        // Dispaly all Manual Midterm
+        $recMM = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?",array($course_id,-2));
+        if($recMM){
+            echo "<h3>Manual Midterm</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recMM as $records) {
+                $serialno++;
+                $id = $records->id;
+                //$courseid = $records->course;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        // Dispaly all Manual Final
+        $recMF = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?",array($course_id,-3));
+        if($recMF){
+            echo "<h3>Manual Final Exam</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recMF as $records) {
+                $serialno++;
+                $id = $records->id;
+                //$courseid = $records->course;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
