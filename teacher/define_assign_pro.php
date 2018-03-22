@@ -223,6 +223,29 @@ require_once('../../../config.php');
 
 		?>
 		<br />
+
+		<?php
+		$flag=0;
+		if($type == "assign"){
+			$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
+			if($reca){
+				$flag=1;
+			}
+			else{
+				$msga="<h4 style='color:red;'>Please define Assignment Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
+			}
+		}
+		elseif($type == "project"){
+			$recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
+			if($recp){
+				$flag=1;
+			}
+			else{
+				$msgp="<h4 style='color:red;'>Please define Project Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
+			}
+		}
+		if($flag){
+		?>
 		
 		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data">
             
@@ -404,6 +427,7 @@ require_once('../../../config.php');
 		<br /><br /><br /><br />
 		
 		<?php
+		}
 		if(isset($msga)){
 			echo $msga;
 		}

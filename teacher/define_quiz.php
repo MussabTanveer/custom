@@ -244,10 +244,39 @@ require_once('../../../config.php');
 		?>
 		<br />
 
-		<p id="msg">
+		<p id="msg"></p>
 		
-		</p>
-		
+		<?php
+		$flag=0;
+		if($type == "quiz"){
+			$recq=$DB->get_records_sql('SELECT id as quiz_id FROM mdl_grading_policy WHERE name="quiz" AND courseid=?',array($course_id));
+			if($recq){
+				$flag=1;
+			}
+			else{
+				$msgq="<h4 style='color:red;'>Please define Quiz Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
+			}
+		}
+		elseif($type == "midterm"){
+			$recm=$DB->get_records_sql('SELECT id as mid_id FROM mdl_grading_policy WHERE name="mid term" AND courseid=?',array($course_id));
+			if($recm){
+				$flag=1;
+			}
+			else{
+				$msgm="<h4 style='color:red;'>Please define Midterm Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
+			}
+		}
+		elseif($type == "finalexam"){
+			$recf=$DB->get_records_sql('SELECT id as final_id FROM mdl_grading_policy WHERE name="final exam" AND courseid=?',array($course_id));
+			if($recf){
+				$flag=1;
+			}
+			else{
+				$msgf="<h4 style='color:red;'>Please define Final Exam Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
+			}
+		}
+		if($flag){
+		?>
 		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data">
 			
 			<?php
@@ -456,6 +485,7 @@ require_once('../../../config.php');
 		</form>
 		
 		<?php
+		}
 		if(isset($msgq)){
 			echo $msgq;
 		}
