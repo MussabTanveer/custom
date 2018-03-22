@@ -55,8 +55,8 @@
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.cloid,
                
-                   qa.obtmark AS marksobtained,
-                   qu.maxmark AS maxmark
+                   SUM(qa.obtmark) AS marksobtained,
+                   SUM(qu.maxmark) AS maxmark
                 FROM
                     mdl_manual_quiz q,
                     
