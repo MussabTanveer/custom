@@ -78,24 +78,42 @@ th{
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
 
-        // Get course quiz ids
+        // Get course online quiz ids
         $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
         $quizids = array();
         foreach ($courseQuizId as $qid) {
             $id = $qid->id;
-            $lvl = $recC->lvl;
+            //$lvl = $recC->lvl;
             array_push($quizids, $id); // array of quiz ids
         }
         
-        // Get course assignment ids
+        // Get course online assignment ids
         $courseAssignId=$DB->get_records_sql("SELECT * FROM `mdl_assign` WHERE course = ? ", array($course_id));
         $assignids = array();
         foreach ($courseAssignId as $aid) {
             $id = $aid->id;
             array_push($assignids, $id); // array of assign ids
         }
+
+        // Get attempted course manual quiz/midterm/final ids
+        $courseMQuizId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)", array($course_id));
+        $mquizids = array();
+        foreach ($courseMQuizId as $qid) {
+            $id = $qid->id;
+            array_push($mquizids, $id); // array of quiz/mt/final ids
+        }
+        //print_r($mquizids);
+
+        // Get attempted course manual assignment/project ids
+        $courseMAssignId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)", array($course_id));
+        $massignids = array();
+        foreach ($courseMAssignId as $qid) {
+            $id = $qid->id;
+            array_push($massignids, $id); // array of assign/pro ids
+        }
+        //print_r($massignids);
         
-        /**** QUIZZES ****/
+        /**** ONLINE+MANUAL QUIZZES ****/
         // Find students quiz records
         $seatnosQMulti = array();
         $closUniqueQMulti = array();
@@ -104,6 +122,7 @@ th{
         $cloQCount = array();
         $quiznames = array();
         
+        // ONLINE QUIZ
         for($i=0; $i < count($quizids); $i++){
             $recQuiz=$DB->get_recordset_sql(
             'SELECT
@@ -162,7 +181,64 @@ th{
             array_push($resultQMulti,$resultQ);
         }
 
-        /**** ASSIGNMENTS ****/
+        // MANUAL QUIZ
+        for($i=0; $i < count($mquizids); $i++){
+            $recMQuiz=$DB->get_recordset_sql(
+            'SELECT
+            q.name AS quiz_name,
+            qa.userid,
+            u.username AS seat_no,
+            CONCAT(u.firstname, " ", u.lastname) AS std_name,
+            qu.cloid,
+            SUM(qu.maxmark) AS maxmark,
+            SUM(qa.obtmark) AS marksobtained
+            FROM
+                mdl_manual_quiz q,
+                mdl_manual_quiz_question qu,
+                mdl_manual_quiz_attempt qa,
+                mdl_user u
+            WHERE
+                q.id=? AND q.id=qu.mquizid AND q.id=qa.quizid AND qa.userid=u.id AND qu.id=qa.questionid
+            GROUP BY qa.userid, qu.cloid
+            ORDER BY qa.userid, qu.cloid',
+            
+            array($mquizids[$i]));
+
+            $seatnosQ = array();
+            $closQ = array();
+            $resultQ = array();
+            
+            $quizname = "";
+            foreach($recMQuiz as $rq){
+                $quizname = $rq->quiz_name;
+                $un = $rq->seat_no;
+                $clo=$rq->cloid;
+                $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
+                if( (($mobtained/$qmax)*100) > 50){
+                    array_push($resultQ,"P");
+                }
+                else{
+                    array_push($resultQ,"F");
+                }
+                array_push($seatnosQ,$un);
+                array_push($closQ,$clo);
+            }
+            array_push($quiznames,$quizname);
+            $cloQuizUnique = array_unique($closQ);
+
+            array_push($cloQCount,count($cloQuizUnique));
+            array_push($seatnosQMulti,$seatnosQ);
+            array_push($closUniqueQMulti,$cloQuizUnique);
+            array_push($closQMulti,$closQ);
+            array_push($resultQMulti,$resultQ);
+        }
+        /*
+        echo "<br><br>"; print_r($quiznames); echo "<br><br>"; print_r($cloQCount);
+        echo "<br><br>"; print_r($seatnosQMulti); echo "<br><br>"; print_r($closUniqueQMulti);
+        echo "<br><br>"; print_r($closQMulti); echo "<br><br>"; print_r($resultQMulti);*/
+
+        /**** ONLINE+MANUAL ASSIGNMENTS ****/
         // Find students assignment records
         $seatnosAMulti = array();
         $closUniqueAMulti = array();
@@ -171,6 +247,7 @@ th{
         $cloACount = array();
         $assignnames = array();
         
+        // ONLINE ASSIGNMENTS
         for($i=0; $i < count($assignids); $i++){
             // Get assign records
             $recAssign=$DB->get_recordset_sql(
@@ -222,20 +299,70 @@ th{
 
             array_push($cloACount,count($cloAssignUnique));
             array_push($closUniqueAMulti,$cloAssignUnique);
+        }
 
+        // MANUAL ASSIGNMENTS
+        for($i=0; $i < count($massignids); $i++){
+            // Get assign records
+            $recMAssign=$DB->get_recordset_sql(
+                'SELECT
+                u.username AS seat_no,
+                a.name AS assign_name,
+                a.maxmark AS maxmark,
+                att.obtmark AS marksobtained,
+                a.cloid AS clo_id
+                FROM
+                    mdl_manual_assign_pro a,
+                    mdl_user u,
+                    mdl_manual_assign_pro_attempt att
+                WHERE
+                    a.id=? AND att.userid=u.id AND a.id=att.assignproid
+                ORDER BY att.userid',
+                
+            array($massignids[$i]));
+
+            $seatnosA = array();
+            $closA = array();
+            $resultA = array();
+            
+            $assignname = "";
+            foreach($recMAssign as $as){
+                $assignname = $as->assign_name;
+                $un = $as->seat_no;
+                $clo = $as->clo_id;
+                $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                if( (($mobtained/$amax)*100) > 50){
+                    array_push($resultA,"P");
+                }
+                else{
+                    array_push($resultA,"F");
+                }
+                array_push($seatnosA,$un);
+                array_push($closA,$clo);
+            }
+
+            array_push($assignnames,$assignname);
+            $cloAssignUnique = array_unique($closA);
+
+            array_push($seatnosAMulti,$seatnosA);
+            array_push($closAMulti,$closA);
+            array_push($resultAMulti,$resultA);
+
+            array_push($cloACount,count($cloAssignUnique));
+            array_push($closUniqueAMulti,$cloAssignUnique);
         }
         
-        for($i=0; $i<count($quizids); $i++)
+        for($i=0; $i<(count($quizids)+count($mquizids)); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
         
-        for($i=0; $i<count($assignids); $i++)
+        for($i=0; $i<(count($assignids)+count($massignids)); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueAMulti[$i]))
                     $closidCountActivity[$j]++;
         
-    
     ?>
 
     <table class="generaltable" border="1">
@@ -256,18 +383,18 @@ th{
             <?php /****** Activity Names ******/
             for($i=0; $i<count($closid); $i++){
                 $attemptno = 1;
-                for($j=0; $j<count($quizids); $j++)
+                for($j=0; $j<(count($quizids)+count($mquizids)); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
                     <th><?php echo $quiznames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
                     <?php
                     }
-                for($j=0; $j<count($assignids); $j++)
+                for($j=0; $j<(count($assignids)+count($massignids)); $j++)
                     if(in_array($closid[$i], $closUniqueAMulti[$j])){
                     ?>
                     <th><?php echo $assignnames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
                     <?php
-                }
+                    }
             }
             ?>
         </tr>
@@ -275,11 +402,11 @@ th{
         foreach ($seatnos as $seatno) {
         ?>
         <tr> 
-            <td>  <?php echo "$seatno" ?> </td>
+            <td> <?php echo "$seatno" ?> </td>
             <?php
             /****** QUIZZES/ASSIGNMENTS RECORDS ******/
             for($i=0; $i<count($closid); $i++){
-                for($j=0; $j<count($quizids); $j++)
+                for($j=0; $j<(count($quizids)+count($mquizids)); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                         $flag=0;
                         for($k=0; $k<count($seatnosQMulti[$j]); $k++){
@@ -297,7 +424,7 @@ th{
                             echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                         }
                     }
-                for($j=0; $j<count($assignids); $j++)
+                for($j=0; $j<(count($assignids)+count($massignids)); $j++)
                     if(in_array($closid[$i], $closUniqueAMulti[$j])){
                         $flag=0;
                         for($k=0; $k<count($seatnosAMulti[$j]); $k++){
@@ -323,7 +450,6 @@ th{
         ?>
     </table>
 
-
 <?php
     }
     else
@@ -333,5 +459,4 @@ th{
     <?php
     }
     echo $OUTPUT->footer();
-
 ?>
