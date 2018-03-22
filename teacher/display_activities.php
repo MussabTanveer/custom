@@ -134,8 +134,7 @@
 
 
 
-
-          $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
+        $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
         $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,"manual"));
 
@@ -232,18 +231,7 @@
         else{
             echo "<h3>No activity found!</h3>";
         }
-
-
-
-
-
-
-
-
-
-
-
-
+        
     }
     else
     {?>

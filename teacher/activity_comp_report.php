@@ -451,7 +451,7 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="./display_courses-3.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php 
         echo $OUTPUT->footer();
     }?>

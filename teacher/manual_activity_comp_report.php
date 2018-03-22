@@ -28,7 +28,7 @@
         if(substr($activity_id,0,1) == 'Q'){
             $quiz_id = substr($activity_id,1);
             $mod = 16;
-            echo "$quiz_id";
+            //echo "$quiz_id";
             //Get ques comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
         
@@ -39,13 +39,6 @@
                 ORDER BY mqu.cloid",
                 
                 array($quiz_id));
-        
-                /* Query for finding quiz ques clos' plo and plos' peos
-                SELECT DISTINCT clo.id, clo.shortname AS CLO, plo.shortname AS PLO, peo.shortname AS PEO
-                FROM mdl_competency clo, mdl_competency plo, mdl_competency peo, mdl_quiz q, mdl_quiz_slots qs, mdl_question qu
-                WHERE q.id=2 AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.competencyid = clo.id AND peo.id=plo.parentid AND plo.id=clo.parentid
-                ORDER BY qu.competencyid
-                */
                 
             $rec=$DB->get_recordset_sql(
                 'SELECT
@@ -469,7 +462,7 @@
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="./display_courses-3.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php 
         echo $OUTPUT->footer();
     }?>
