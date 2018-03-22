@@ -25,7 +25,9 @@
     <h5 style="color: green"> Note: You can only view past course profile, grading policy and reports. Any changes in past course are strictly prohibited. </h5><br>
         <h3> Click the links down below as per need </h3><br>
 
-        <a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>
+        <!--<a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>--> <!--For PDF Course Profile View-->
+
+        <a <?php echo "href='./view_course_profileform.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>
 
         <a <?php echo "href='./display_grading_policy.php?course=$course_id'" ?>  class="cool-link">Display Grading Policy</a><br><br>
         
