@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.min.js"></script>
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -181,7 +183,7 @@ th{
             array_push($resultQMulti,$resultQ);
         }
 
-        // MANUAL QUIZ
+        // MANUAL QUIZ/MIDTERM/FINAL
         for($i=0; $i < count($mquizids); $i++){
             $recMQuiz=$DB->get_recordset_sql(
             'SELECT
@@ -301,7 +303,7 @@ th{
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
 
-        // MANUAL ASSIGNMENTS
+        // MANUAL ASSIGNMENTS/PROJECTS
         for($i=0; $i < count($massignids); $i++){
             // Get assign records
             $recMAssign=$DB->get_recordset_sql(
@@ -449,6 +451,21 @@ th{
         }
         ?>
     </table>
+
+    <!--<button id="myButton" class="btn btn-primary">Export to Excel</button>-->
+
+    <!-- Export html Table to xls -->
+    <script type="text/javascript" >
+        $(document).ready(function(e){
+            $("#myButton").click(function(e){ 
+                $(".generaltable").table2excel({
+                    name: "file name",
+                    filename: "CLO-Report",
+                    fileext: ".xls"
+                });
+            });
+        });
+    </script>
 
 <?php
     }
