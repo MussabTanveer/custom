@@ -18,7 +18,6 @@
     if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
-        $coursecode=$_GET['coursecode'];
         $coursecontext = context_course::instance($course_id);
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
