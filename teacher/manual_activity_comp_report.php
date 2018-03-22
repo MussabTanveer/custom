@@ -28,15 +28,15 @@
         if(substr($activity_id,0,1) == 'Q'){
             $quiz_id = substr($activity_id,1);
             $mod = 16;
-
+            echo "$quiz_id";
             //Get ques comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
         
-                FROM mdl_competency c, mdl_quiz q, mdl_quiz_slots qs, mdl_question qu
+                FROM mdl_competency c, mdl_manual_quiz q, mdl_manual_quiz_question mqu, mdl_manual_quiz_attempt qa
         
-                WHERE q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.competencyid = c.id
+                WHERE q.id=? AND mqu.cloid = c.id AND q.id=mqu.mquizid AND mqu.mquizid=qa.quizid AND q.id=qa.quizid
                 
-                ORDER BY qu.competencyid",
+                ORDER BY mqu.cloid",
                 
                 array($quiz_id));
         
@@ -53,25 +53,25 @@
                 u.idnumber AS std_id,
                 u.username AS seat_no,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
-                qu.competencyid,
-                SUM(qua.maxmark) AS maxmark,
-                SUM(qua.maxmark*qas.fraction) AS marksobtained
+                qu.cloid,
+               
+                   qa.obtmark AS marksobtained,
+                   qu.maxmark AS maxmark
                 FROM
-                    mdl_quiz q,
-                    mdl_quiz_slots qs,
-                    mdl_question qu,
-                    mdl_question_categories qc,
-                    mdl_quiz_attempts qa,
-                    mdl_question_attempts qua,
-                    mdl_question_attempt_steps qas,
+                    mdl_manual_quiz q,
+                    
+                    mdl_manual_quiz_question qu,
+                   
+                    mdl_manual_quiz_attempt qa,
+                   
                     mdl_user u
                 WHERE
-                    q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                    AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-                GROUP BY qa.userid, qu.competencyid
-                ORDER BY qa.userid, qu.competencyid',
+                    q.id=? AND q.id=qa.quizid AND qa.userid=u.id AND q.id=qu.mquizid AND qa.questionid=qu.id
+                    
+                GROUP BY qa.userid, qu.cloid
+                ORDER BY qa.userid, qu.cloid',
                 
-                array($quiz_id,1));
+                array($quiz_id));
 
 
 
@@ -95,11 +95,15 @@
                             array_push($cloids, $compid); // array of clo ids
                             array_push($label, $comp); // array of clo idnumbers
                             $tot_comp++;
+                            
                         ?>
                         <th> <?php echo $comp; ?> </th>
                         <?php
                         }
-                         
+                        echo "Clos IDs ";
+                        var_dump($cloids);
+                        echo "<br> labels ";
+                            var_dump($label);
                         ?>
                     </tr>
 
@@ -138,7 +142,10 @@
                                 }
                     ?>
                             <td><?php
+                             echo "Obt =$obt max= $max";
+                                echo "<br>";
                                 if( (($obt/$max)*100) > 50){
+                                   
                                     $pass[$i]++;
                                     $i++;
                                     echo "<font color='green'>Pass</font>";
@@ -187,7 +194,10 @@
                             }
                             ?>
                         <td><?php
+                         echo "Obt =$obt max= $max";
+                                echo "<br>";
                             if( (($obt/$max)*100) > 50){
+                               
                                 $pass[$i]++;
                                 $i++;
                                 echo "<font color='green'>Pass</font>";
@@ -227,8 +237,8 @@
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],online)";
-                        $DB->execute($sql);
+                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
+                      //  $DB->execute($sql);
                     }
                 }
                 
@@ -242,7 +252,7 @@
         else if(substr($activity_id,0,1) == 'A'){
             $assign_id = substr($activity_id,1);
             $mod = 1;
-
+            echo "Assignment";
             //Get assign comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
             
@@ -369,8 +379,8 @@
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
-                        $DB->execute($sql);
+                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x])";
+                     //   $DB->execute($sql);
                     }
                 }
             
