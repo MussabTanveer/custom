@@ -36,7 +36,7 @@
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
-        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ?', array($course_id));
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,"online"));
 
         $statusArray = array();
         $modArray = array();
@@ -56,6 +56,7 @@
             <?php
             $serialno = 0;
             $table = new html_table();
+            echo "<h3>Online Activities</h3>";
             $table->head = array('S. No.', 'Name', 'Intro', 'Select', 'Status');
             foreach ($recQ as $records) {
                 $serialno++;
@@ -130,6 +131,119 @@
         else{
             echo "<h3>No activity found!</h3>";
         }
+
+
+
+
+          $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
+        $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,"manual"));
+
+        $mstatusarray = array();
+        $mmodArray = array();
+
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+                
+        if($recQ || $recA){
+            ?>
+            <form method='post' action='manual_activity_comp_report.php' id="form_check">
+            <?php
+            $serialno = 0;
+            $table = new html_table();
+            echo "<h3>Manual Activities</h3>";
+            $table->head = array('S. No.', 'Name', 'Intro', 'Select', 'Status');
+            foreach ($recQ as $records) {
+                $serialno++;
+                $Status='<span style="color: red;">PENDING</span>';
+                $id = $records->id;
+
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+
+                      if($id == $mstatusarray[$i] && $mmodArray[$i] == 16)
+                        {
+                            $Status='<span style="color: #006400;">VIEWED</span>';
+                            break;
+                        }
+
+                }
+                
+                $id = 'Q'.$records->id;
+                $courseid = $records->courseid;
+                $name = $records->name;
+                $intro = $records->description;
+                
+                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+            }
+            foreach ($recA as $records) {
+                $serialno++;
+                $Status='<span style="color: red;">PENDING</span>';
+                $id = $records->id;
+
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+
+                      if($id == $mstatusarray[$i] && $mmodArray[$i] == 1)
+                        {
+                            $Status='<span style="color: #006400;">VIEWED</span>';
+                            break;
+                        }
+
+                }
+                $id = 'A'.$records->id;
+                $courseid = $records->courseid;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+            }
+            
+            echo html_writer::table($table);
+            ?>
+            <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
+            <input type="submit" value="NEXT" name="submit" class="btn btn-primary">
+            </form>
+            <br />
+            <p id="msg"></p>
+            <br />
+            <form method='post' action='consolidated_report_selection.php'>
+                <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
+                <input type="submit" value="View Consolidated Report" name="view_consolidated" class="btn btn-secondary">
+            </form>
+
+            <script>
+            $('#form_check').on('submit', function (e) {
+                if ($("input[type=radio]:checked").length === 0) {
+                    e.preventDefault();
+                    $("#msg").html("<font color='red'>Select any one activity!</font>");
+                    return false;
+                }
+            });
+            </script>
+
+            <?php
+        }
+        else{
+            echo "<h3>No activity found!</h3>";
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
     else
     {?>
