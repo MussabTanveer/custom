@@ -97,7 +97,7 @@ th{
                 for($i=0; $i<count($gnames); $i++)
                 {
                     if ($gnames[$i]=="project")
-                    { 
+                    {
                         $projectCount++;
 
                         //Get assign comp
@@ -172,11 +172,12 @@ th{
                 $closAMulti = array();
                 $resultAMulti = array();
                 $maxmarkA = array();
+                $namesA = array();
 
                 for($i=0; $i<count($gnames); $i++)
                 {
                     if ($gnames[$i]=="assignment")
-                    { 
+                    {
                         $assignCount++;
 
                         //Get assign comp
@@ -193,6 +194,7 @@ th{
                         $recAssign=$DB->get_recordset_sql(
                             'SELECT
                             u.username AS seat_no,
+                            a.name AS assign_name,
                             a.grade AS maxmark,
                             ag.grade AS marksobtained
                             FROM
@@ -210,8 +212,10 @@ th{
                         $resultA = array();
                         
                         $amax = 0;
+                        $assignname = "";
 
                         foreach($recAssign as $as){
+                            $assignname = $as->assign_name;
                             $un = $as->seat_no;
                             $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
                             $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
@@ -224,6 +228,7 @@ th{
                             array_push($resultA,$mobtained);
                             array_push($seatnosA,$un);
                         }
+                        array_push($namesA,$assignname);
                         array_push($maxmarkA,$amax);
 
                         foreach($recAssignCLO as $asCLO){
@@ -251,6 +256,7 @@ th{
                 $closQMulti = array();
                 $resultQMulti = array();
                 $tot_quesQuiz = array();
+                $namesQ = array();
 
                 for($i=0; $i<count($gnames); $i++)
                 {
@@ -294,8 +300,8 @@ th{
                     $qnamesQ = array();
                     $closQ = array();
                     $resultQ = array();
-                    $quiznames = array();
-                    
+                    //$quiznames = array();
+                    $quizname = "";
                     foreach($recQuiz as $fe){
                         $quizname = $fe->quizname;
                         // echo $name;
@@ -312,7 +318,7 @@ th{
                         }*/
                         array_push($resultQ, $mobtained);
 
-                        array_push($quiznames,$quizname);
+                        //array_push($quiznames,$quizname);
                         // var_dump($quiznames);
                         // echo "<br>";
                         array_push($seatnosQ,$un);
@@ -322,6 +328,7 @@ th{
                         
                         //echo $quizname;
                     }
+                    array_push($namesQ,$quizname);
                     $qnameQuizUnique = array_unique($qnamesQ);
                     array_push($tot_quesQuiz,count($qnameQuizUnique));
                     
@@ -344,6 +351,7 @@ th{
                 $pos = array_search('mid term', $gnames);
                 $recMid=$DB->get_recordset_sql(
                     'SELECT
+                        q.name as midname,
                         qa.userid,
                         us.idnumber,
                         us.username,
@@ -377,7 +385,10 @@ th{
                     $qnamesM = array();
                     $closM = array();
                     $resultM = array();
+                    $midname = "";
+
                     foreach($recMid as $fe){
+                        $midname = $fe->midname;
                         $flagmid = 1;
                         $un = $fe->username;
                         $qname = $fe->name;
@@ -480,21 +491,21 @@ th{
                     <?php /****** ASSIGNMENT ******/
                     for($i=0 ; $i<$assignCount; $i++)
                     {?>
-                        <th>Assignment</th>
+                        <th><?php echo $namesA[$i] ?></th>
                     <?php
                     }
                     ?>
                     <?php /****** QUIZZES ******/
                     for($i=0 ; $i<$quizCount; $i++)
                     {?>
-                        <th colspan="<?php echo $tot_quesQuiz[$i] ?>">Quiz</th>
+                        <th colspan="<?php echo $tot_quesQuiz[$i] ?>"><?php echo $namesQ[$i] ?></th>
                     <?php
                     }
                     ?>
                     <?php /****** MID TERM ******/
                     if($flagmid){
                     ?>
-                    <th colspan="<?php echo $tot_quesMid ?>">Mid Term</th>
+                    <th colspan="<?php echo $tot_quesMid ?>"><?php echo $midname ?></th>
                     <?php } ?>
 
                     <?php /****** FINAL EXAM ******/ 
