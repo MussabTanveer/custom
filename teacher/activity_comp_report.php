@@ -223,7 +223,7 @@
                 }
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? cr.form = ?', array($courseid, $mod, $a_id,'online'));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
@@ -330,11 +330,11 @@
                             <td><?php
                                 if($result > 50){
                                     $pass[$i]++;
-                                    $i++;
+                                   // $i++;
                                     echo "<font color='green'>Pass</font>";
                                 }
                                 else{
-                                    $i++;
+                                   // $i++;
                                     echo "<font color='red'>Fail</font>";
                                 }
                                 ?>
@@ -365,7 +365,7 @@
 
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.form = ?', array($courseid, $mod, $a_id,'online'));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){

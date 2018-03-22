@@ -100,10 +100,10 @@
                         <th> <?php echo $comp; ?> </th>
                         <?php
                         }
-                        echo "Clos IDs ";
-                        var_dump($cloids);
-                        echo "<br> labels ";
-                            var_dump($label);
+                      //  echo "Clos IDs ";
+                      //  var_dump($cloids);
+                     //   echo "<br> labels ";
+                          //  var_dump($label);
                         ?>
                     </tr>
 
@@ -142,8 +142,8 @@
                                 }
                     ?>
                             <td><?php
-                             echo "Obt =$obt max= $max";
-                                echo "<br>";
+                           //  echo "Obt =$obt max= $max";
+                             //   echo "<br>";
                                 if( (($obt/$max)*100) > 50){
                                    
                                     $pass[$i]++;
@@ -194,8 +194,8 @@
                             }
                             ?>
                         <td><?php
-                         echo "Obt =$obt max= $max";
-                                echo "<br>";
+                       // echo "Obt =$obt max= $max";
+                           //     echo "<br>";
                             if( (($obt/$max)*100) > 50){
                                
                                 $pass[$i]++;
@@ -233,12 +233,12 @@
                 }
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.form = ?', array($courseid, $mod, $a_id,'manual'));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
-                      //  $DB->execute($sql);
+                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'manual')";
+                        $DB->execute($sql);
                     }
                 }
                 
@@ -252,17 +252,17 @@
         else if(substr($activity_id,0,1) == 'A'){
             $assign_id = substr($activity_id,1);
             $mod = 1;
-            echo "Assignment";
+           // echo "Assignment";
             //Get assign comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
             
-                    FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+                    FROM mdl_competency c, mdl_manual_assign_pro a
             
-                    WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
+                    WHERE a.id=? AND a.cloid=c.id
                     
-                    ORDER BY cmc.competencyid",
+                    ORDER BY a.cloid",
                     
-                    array($assign_id,$courseid,$mod));
+                    array($assign_id));
                     
             $rec=$DB->get_recordset_sql(
                 'SELECT
@@ -270,17 +270,17 @@
                 u.idnumber AS std_id,
                 u.username AS seat_no,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
-                a.grade AS maxmark,
-                ag.grade AS marksobtained
+                a.maxmark AS maxmark,
+                ag.obtmark AS marksobtained
                 FROM
-                    mdl_assign a,
-                    mdl_assign_grades ag,
+                    mdl_manual_assign_pro a,
+                    mdl_manual_assign_pro_attempt ag,
                     mdl_user u
                 WHERE
-                    a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment
+                    a.id=? AND ag.userid=u.id  AND a.id=ag.assignproid
                 ORDER BY ag.userid',
                 
-            array($assign_id,-1));
+            array($assign_id));
 
             if($rec){
                 $serialno = 0;
@@ -312,10 +312,11 @@
                     <?php
                     $i=0; $tot_stdnt = 0; // total students count
                     $pass = array(); $fail = array();
+                     
                     for($x = 0; $x < $tot_comp; $x++) { // initialize array
                         $pass[$x] = 0;
                     }
-
+                    //var_dump($pass);
                     foreach ($rec as $records){
                         $serialno++;
                         $tot_stdnt++;
@@ -338,13 +339,18 @@
                             for($k=0;$k<$tot_comp;$k++){
                             ?>
                             <td><?php
+                             // echo "Obt =$obt max= $max";
+                               // echo "<br>";
+                                //  echo "$pass[$i] at i = $i<br>";
                                 if($result > 50){
+                                  
                                     $pass[$i]++;
-                                    $i++;
+
+                                    //$i++;
                                     echo "<font color='green'>Pass</font>";
                                 }
                                 else{
-                                    $i++;
+                                    //$i++;
                                     echo "<font color='red'>Fail</font>";
                                 }
                                 ?>
@@ -375,12 +381,14 @@
 
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
-                
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.form = ?', array($courseid, $mod, $a_id,'manual'));
+               //  echo "Inside";
                 if($rec == NULL){
+                   //  echo "Inside";
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x])";
-                     //   $DB->execute($sql);
+
+                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'manual')";
+                       $DB->execute($sql);
                     }
                 }
             
