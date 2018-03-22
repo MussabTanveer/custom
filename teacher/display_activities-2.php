@@ -132,7 +132,7 @@
             <?php
         }
         // Dispaly all Manual Midterm
-        $recMM = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?",array($course_id,-2));
+        $recMM = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)",array($course_id,-2));
         if($recMM){
             echo "<h3>Manual Midterm</h3>";
             $serialno = 0;
@@ -152,7 +152,7 @@
             <?php
         }
         // Dispaly all Manual Final
-        $recMF = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?",array($course_id,-3));
+        $recMF = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)",array($course_id,-3));
         if($recMF){
             echo "<h3>Manual Final Exam</h3>";
             $serialno = 0;
