@@ -16,15 +16,15 @@
     }
     echo $OUTPUT->header();
 
-if(isset($_GET['course']) && isset($_GET['coursecode']) ){
+if(isset($_GET['course'])  ){
 
 
  $course_id=$_GET['course'];
     //echo $course_id;
-$coursecode=$_GET['coursecode'];
+//$coursecode=$_GET['coursecode'];
 //echo $coursecode;
 
-$rec=$DB->get_recordset_sql('SELECT coursecode,theorycredithours,practicalcredithours,coursecontent,book FROM mdl_course_info WHERE coursecode = ? ',array($coursecode));
+$rec=$DB->get_recordset_sql('SELECT ci.coursecode,ci.theorycredithours,ci.practicalcredithours,ci.coursecontent,ci.book FROM mdl_course_info ci, mdl_course c WHERE c.id= ?',array($course_id));
 
 if($rec){
 
