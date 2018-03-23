@@ -111,10 +111,7 @@
             <br />
             <p id="msg"></p>
             <br />
-            <form method='post' action='consolidated_report_selection.php'>
-                <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
-                <input type="submit" value="View Consolidated Report" name="view_consolidated" class="btn btn-secondary">
-            </form>
+            
 
             <script>
             $('#form_check').on('submit', function (e) {
