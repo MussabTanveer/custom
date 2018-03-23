@@ -48,7 +48,7 @@ $sql_delete="DELETE from mdl_practical_assessment where id=$id_d";
             $assessment = $record->assessment;
             array_push($assessmentarray, $assessment);?>
 
-            <h4><a href="javascript:void(0)" onclick="toggle_visibility('as<?php echo $a ?>')" class="cool-link"><?php echo "$assessment   <a href='report_teacher_practical.php?delete=$id' onClick=\"return confirm('Delete Assessment?')\" title='Delete'><img src='../img/icons/delete.png' /></a>    " ?></a></h4><br>
+            <h4><a href="javascript:void(0)" onclick="toggle_visibility('as<?php echo $a ?>')" class="cool-link"><?php echo "$assessment</a> &nbsp; &nbsp; <a href='report_teacher_practical.php?delete=$id&course=$course_id' onClick=\"return confirm('Delete Assessment?')\" title='Delete'> <img src='../img/icons/delete.png' /></a>"?></h4><br>
             <div id="as<?php echo $a ?>" style="display: none">
                 <!--&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print Empty Grading Sheet </a><br>-->
                 &nbsp;&nbsp;&nbsp;<a <?php echo "href='./assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter Assessment Marks</a><br>
