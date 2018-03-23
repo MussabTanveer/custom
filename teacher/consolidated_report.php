@@ -30,11 +30,20 @@
         
 
         $rec=$DB->get_recordset_sql(
-            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass,cr.fail, c.idnumber
+            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass,cr.fail, c.idnumber, cr.form
             FROM mdl_consolidated_report cr, mdl_competency c
             WHERE cr.cloid=c.id AND cr.course=? AND cr.instance IN (".implode(',',$activities).")
             ORDER BY cr.cloid",
             array($courseid));
+
+
+         /* $mrec=$DB->get_recordset_sql(
+            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass,cr.fail, c.idnumber
+            FROM mdl_consolidated_report cr, mdl_competency c
+            WHERE cr.cloid=c.id AND cr.course=? AND cr.instance IN (".implode(',',$activities).")
+            ORDER BY cr.cloid",
+            array($courseid));*/
+        
         
         $cloids = array();
         $label = array();
@@ -48,7 +57,8 @@
             $f = $records->fail;
             $m = $records->module;
             $in = $records->instance;
-            if($m == 16){
+            $form = $records->form;
+            if($m == 16 && $form == "online"){
                 $recName=$DB->get_records_sql(
                     'SELECT name
                     FROM mdl_quiz
@@ -59,10 +69,34 @@
                     array_push($names,$name);
                 }
             }
-            else if($m == 1){
+            else if($m == 1 && $form == "online"){
                 $recName=$DB->get_records_sql(
                     'SELECT name
                     FROM mdl_assign
+                    WHERE id = ?',
+                    array($in));
+                foreach($recName as $rName){
+                    $name = $rName->name;
+                    array_push($names,$name);
+                }
+            }
+
+            else if($m == 16 && $form == "manual"){
+                $recName=$DB->get_records_sql(
+                    'SELECT name
+                    FROM mdl_manual_quiz
+                    WHERE id = ?',
+                    array($in));
+                foreach($recName as $rName){
+                    $name = $rName->name;
+                    array_push($names,$name);
+                }
+            }
+
+             else if($m == 1 && $form == "manual"){
+                $recName=$DB->get_records_sql(
+                    'SELECT name
+                    FROM mdl_manual_assign_pro
                     WHERE id = ?',
                     array($in));
                 foreach($recName as $rName){

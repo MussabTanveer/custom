@@ -22,7 +22,15 @@
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
-        $statusQuery=$DB->get_records_sql('SELECT id, instance ,module FROM  `mdl_consolidated_report` WHERE course = ? ', array($course_id));
+        $statusQuery=$DB->get_records_sql('SELECT id, instance ,module FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'online'));
+
+        
+         $mrecQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
+        $mrecA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
+        
+        $mstatusQuery=$DB->get_records_sql('SELECT id, instance ,module FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'manual'));
+
+
 
         $statusArray = array();
         $modArray = array();
@@ -35,8 +43,22 @@
             array_push($statusArray, $sta);
             array_push($modArray, $mod);
         }
+
+
+
+        foreach ($mstatusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($statusArray, $sta);
+            array_push($modArray, $mod);
+        }
+
+
+
                 
-        if($recQ || $recA){
+        if($recQ || $recA || $mrecA || $mrecQ ){
             ?>
             <form method='post' action='consolidated_report.php' id="form_check">
             <?php
@@ -85,6 +107,58 @@
                 }
                 
             }
+
+
+              foreach ($mrecQ as $records) {
+                $serialno++;
+                $Status='<span style="color: red;">PENDING</span>';
+                $id = $records->id;
+
+                for ($i=0; $i< sizeof($statusArray); $i++ )
+                {
+
+                      if($id == $statusArray[$i] && $modArray[$i] == 16)
+                        {
+                            $Status='<span style="color: #006400;">VIEWED</span>';
+                            $id = 'Q'.$records->id;
+                            $courseid = $records->courseid;
+                            $name = $records->name;
+                            $intro = $records->description;
+                            
+                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                            break;
+                        }
+                }
+            }   
+
+
+
+         foreach ($mrecA as $records) {
+                $serialno++;
+                $Status='<span style="color: red;">PENDING</span>';
+                $id = $records->id;
+
+                for ($i=0; $i< sizeof($statusArray); $i++ )
+                {
+
+                      if($id == $statusArray[$i] && $modArray[$i] == 1)
+                        {
+                            $Status='<span style="color: #006400;">VIEWED</span>';
+                            $id = 'A'.$records->id;
+                            $courseid = $records->courseid;
+                            $name = $records->name;
+                            $intro = $records->description;
+                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                            break;
+                        }
+                }
+                
+            }
+
+
+
+
+
 			
             echo html_writer::table($table);
             ?>
