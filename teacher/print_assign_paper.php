@@ -23,18 +23,31 @@
         $assigns= $DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE courseid = ? AND module = ?",array($course_id,-4));
 
         if($assigns)
-        {
+        { 
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Assignment Details','Print Assignment Paper');
+
             foreach ($assigns as $assign) 
             {
                 # code...
+                $serialno++;
                 $aname = $assign->name;
                 $adesc = $assign->description;
                 $aid   = $assign->id;
+                 $mime = $assign->mime;
+                if ($mime)
+                 $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","<a href='./print_uploaded_paper2.php?assign=$aid&courseid=$course_id'>Print $aname uploaded paper</a>");
+             else
+                $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","-");
+
             ?>
-            <a <?php echo "href='./print_assign.php?assign=$aid&courseid=$course_id'" ?> > Print <?php echo $aname; ?> </a><br>
+            
             
             <?php
             }
+            echo html_writer::table($table);
+            echo "<br />";
         }
         else
             echo "<font color = red> No Assignment Found!</font>";

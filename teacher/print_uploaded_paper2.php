@@ -3,9 +3,9 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Print Quiz paper");
-    $PAGE->set_heading("Print Quiz paper");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_uploaded_paper.php');
+    $PAGE->set_title("Print Assignment paper");
+    $PAGE->set_heading("Print Assignment paper");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/print_uploaded_paper2.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
@@ -52,7 +52,7 @@ public function selectBlob($id) {
  
         $sql = "SELECT mime,
                         data
-                   FROM mdl_manual_quiz
+                   FROM mdl_manual_assign_pro
                   WHERE id = :id;";
  
         $stmt = $this->pdo->prepare($sql);
@@ -75,13 +75,13 @@ public function selectBlob($id) {
 
 }
 
-if(!empty($_GET['quiz']))
+if(!empty($_GET['assign']))
     {
-        $quizid=$_GET['quiz'];
+        $assignid=$_GET['assign'];
        
        //displaying pdf
         $blobObj = new Blob($x,$dbh,$dbn,$dbu);
-        $a = $blobObj->selectBlob($quizid);
+        $a = $blobObj->selectBlob($assignid);
         header("Content-Type:" . $a['mime']);
         echo $a['data'];
     }
