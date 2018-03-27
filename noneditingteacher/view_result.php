@@ -95,7 +95,7 @@
                         echo "<h3>$name</h3>";
                         echo "<h4>$description</h4>";
 
-                        $criterionInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_criterion WHERE rubric = ?', array($rubric_id));
+                        $criterionInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_criterion WHERE rubric = ? ORDER BY id', array($rubric_id));
                         $criteriaId = array();
                         $criteriaDesc = array();
                         foreach ($criterionInfo as $cInfo) {
@@ -115,7 +115,7 @@
                             <tr>
                                 <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                                 <?php
-                                $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
+                                $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ? ORDER BY criterion, id', array($rubric_id, $criteriaId[$i]));
                                 $temp=0;
                                 foreach ($scaleInfo as $sInfo) {
                                     //$id = $sInfo->id;
@@ -153,15 +153,16 @@
             }
         }
         
-        $obtMarksA=$DB->get_records_sql("SELECT * FROM mdl_assessment_attempt  WHERE aid=$aid");
-        
-        $obtMarks=array();
+        $obtMarksA=$DB->get_records_sql("SELECT att.id, u.username, att.cid, att.obtmark FROM mdl_assessment_attempt att, mdl_user u WHERE aid=? AND att.userid=u.id ORDER BY att.userid, att.cid ", array($aid));
+        $userNames = array();
+        $obtMarks = array();
 
         if($obtMarksA)
         {
             foreach ($obtMarksA as $omark) {
-                $userid = $omark->userid;
+                $username = $omark->username;
                 $obtmark=$omark->obtmark;
+                array_push($userNames,$username);
                 array_push($obtMarks,$obtmark);
             }
         }
@@ -184,33 +185,21 @@
         ?>
         </tr>
         <?php
-        
-        $users=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
-            FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
-            WHERE ra.userid = u.id
-            AND ra.contextid = cxt.id
-            AND cxt.contextlevel = 50
-            AND cxt.instanceid = c.id
-            AND c.id = $course_id
-            AND (roleid=5)");
-        
-        $obtmarksIndex=0;
-        if($users)
-        {
-            foreach ($users as $user ) {
-            ?>
-            <tr>
-                <td> <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?> </td>
-                
-                <?php
-                foreach ($criteriaId as $cid){
-                ?>
-                    <td ><?php echo $obtMarks[$obtmarksIndex]; 
-                    $obtmarksIndex++; ?></td >
-            
-                <?php
-                }  ?> </tr> <?php
-            }
+        $i = 0;
+        foreach ($userNames as $un) {
+            if($i == count($obtMarks)) // obt marks array exhausted
+                break;
+        ?>
+        <tr>
+            <td>
+                <?php echo $userNames[$i]; // display username once every record ?>
+            </td><?php
+            foreach ($criteriaId as $cid){?>
+            <td ><?php echo $obtMarks[$i]; $i++;?></td>
+            <?php
+            }?>
+        </tr>
+        <?php
         }
         ?>
     </table>
@@ -238,4 +227,3 @@
     }
 down:
     echo $OUTPUT->footer();
-    
