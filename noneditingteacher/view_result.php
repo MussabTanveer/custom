@@ -116,14 +116,12 @@
                                 <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                                 <?php
                                 $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
-                                //$s = 1;
                                 $temp=0;
                                 foreach ($scaleInfo as $sInfo) {
                                     //$id = $sInfo->id;
                                     $description = $sInfo->description;
                                     $score = $sInfo->score;
                                     echo "<td>$description<br>Score: $score</td>";
-                                    //$s++;
                                     $temp++;
                                 }
                                 if($temp>$maxScales)
@@ -155,18 +153,13 @@
             }
         }
         
-        //$ques=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_question  WHERE maid=$aid");
-
-        $obtMarksq=$DB->get_records_sql("SELECT * FROM mdl_assessment_attempt  WHERE aid=$aid");
-
-        //$ques=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_question  WHERE aid=$aid");
-
+        $obtMarksA=$DB->get_records_sql("SELECT * FROM mdl_assessment_attempt  WHERE aid=$aid");
+        
         $obtMarks=array();
-        //$cloids=array();
 
-        if($obtMarksq)
+        if($obtMarksA)
         {
-            foreach ($obtMarksq as $omark) {
+            foreach ($obtMarksA as $omark) {
                 $userid = $omark->userid;
                 $obtmark=$omark->obtmark;
                 array_push($obtMarks,$obtmark);
