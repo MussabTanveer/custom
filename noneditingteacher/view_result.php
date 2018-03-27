@@ -179,6 +179,7 @@
         }
         
         ?>
+        <h3><u>Result</u></h3>
         <table border='10' cellpadding='15' id ="mytable">
         <tr>
         <th> Seat No. </th>
