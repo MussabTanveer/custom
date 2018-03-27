@@ -15,83 +15,64 @@
     }
     echo $OUTPUT->header();
 
-
-    $stdids=array();
+    if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
+    {
+    $course_id=$_GET['courseid'];
+    $course_id = (int)$course_id; // convert course id from string to int
+    $coursecontext = context_course::instance($course_id);
+    is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
     $qids = array();   
     $quizId= $_GET['quiz'];
-    $courseId = $_GET['courseid'];
     //echo "$quizId";
     $quesnames=array(); 
     $quesmarks=array(); 
         
-    $ques=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_question  WHERE mquizid=$quizId");
+    $ques=$DB->get_records_sql("SELECT qq.id, qq.quesname, qq.maxmark, qq.cloid, c.shortname FROM mdl_manual_quiz_question qq, mdl_competency c WHERE mquizid=$quizId AND qq.cloid=c.id ORDER BY id");
 
-    $obtMarksq=$DB->get_records_sql("SELECT * FROM mdl_manual_quiz_attempt  WHERE quizid=$quizId");
-
-    //while($result=mysql_fetch_array($query))
+    $obtMarksq=$DB->get_records_sql("SELECT qat.id, qat.obtmark, u.username FROM mdl_manual_quiz_attempt qat, mdl_user u WHERE quizid=$quizId AND qat.userid=u.id ORDER BY qat.userid, qat.questionid ");
 
     $obtMarks=array();
-    $cloids=array();
+    $userNames = array();
+    //$cloids=array();
+    $cloShortNames=array();
 
     if($obtMarksq)
     {
         foreach ($obtMarksq as $omark) {
-            # code...
-            $userid = $omark->userid;
-            //$id = $omark->id;
-            $obtmark=$omark->obtmark;
-           
-
-        array_push ($obtMarks,$obtmark);
-        
-       // array_push ($qids,$id);
-      // array_push ($quesmarks,$maxmark);
-         }
+            $username = $omark->username;
+            $obtmark = $omark->obtmark;
+            array_push($userNames,$username);
+            array_push ($obtMarks,$obtmark);
+        }
     }
     else
     {
-    echo "<font color=red>the selected quiz has not been graded yet</font>";
+    echo "<font color=red>The selected activity has not been graded yet!</font>";
         goto down;
     }
 
-  
     //var_dump($obtMarks);
     if($ques)
     {
         foreach ($ques as $q) {
-            # code...
             $qname = $q->quesname;
             $id = $q->id;
             $maxmark=$q->maxmark; 
-            $cloid=$q->cloid;
+            //$cloid=$q->cloid;
+            $shortname=$q->shortname;
 
-       
-        array_push ($cloids,$cloid);
-        array_push ($quesnames,$qname);
-        array_push ($qids,$id);
-        array_push ($quesmarks,$maxmark);
-         }
-    } 
+            array_push ($cloShortNames,$shortname);
+            //array_push ($cloids,$cloid);
+            array_push ($quesnames,$qname);
+            array_push ($qids,$id);
+            array_push ($quesmarks,$maxmark);
+        }
+    }
     //var_dump($quesnames);
     //var_dump($qids);
-   // var_dump($quesmarks);
-  //var_dump($cloids);
-  $cloShortNames=array();
-
- 
-
-    foreach ($cloids as $cloid) {
-
-         $clos= $DB->get_records_sql("SELECT * FROM mdl_competency WHERE id = ?",array($cloid));
-         foreach ($clos as $clo) 
-             
-           $shortname=$clo->shortname;
-       
-        array_push ($cloShortNames,$shortname);
-       
-         }
-  //  var_dump($cloShortNames);
-
+    //var_dump($quesmarks);
+    //var_dump($cloids);
+    //$cloShortNames=array();
     
     ?>
     <table border='10' cellpadding='15' id ="mytable">
@@ -100,7 +81,6 @@
     <?php
     $marksIndex=0;
     foreach ($quesnames as $qname){
-        
         ?><th> <?php echo $qname ." [$quesmarks[$marksIndex]]"; echo "<br>"; echo $cloShortNames[$marksIndex] ; 
         $marksIndex++ ?> </th>
         <?php
@@ -108,67 +88,47 @@
     ?>
     </tr>
     <?php
-    //echo "$chunkSize";
-    
-    
-      $users=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
-        FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
-        WHERE ra.userid = u.id
-        AND ra.contextid = cxt.id
-        AND cxt.contextlevel = 50
-        AND cxt.instanceid = c.id
-        AND c.id = $courseId
-        AND (roleid=5)");
-        
-      //  while($result=mysql_fetch_array($query))
-       $obtmarksIndex=0;
-      if($users)
-        {
-            foreach ($users as $user ) {
-                # code...
-            
-            ?>
-            
-            <tr>
-                <td> <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?> </td>
-                
-                <?php
-                    //var_dump($stdids);
-               
-                    foreach ($quesnames as $qname){
-                ?>
-                    <td ><?php echo $obtMarks[$obtmarksIndex]; 
-                    $obtmarksIndex++; ?></td >
-            
-            <?php 
-            }  ?> </tr> <?php
-         
-          }
-
-        }
-        // var_dump ($stdids);
-
+    $i = 0;
+    foreach ($userNames as $un) {
+        if($i == count($obtMarks)) // obt marks array exhausted
+            break;
         ?>
-        
+        <tr>
+            <td>
+                <?php echo $userNames[$i]; // display username once every record ?>
+            </td><?php
+            foreach ($qids as $qid){?>
+            <td ><?php echo $obtMarks[$i]; $i++;?></td>
+            <?php
+            }?>
+        </tr>
+        <?php
+    }
+    ?>
     
-</table>
-<br />
-<button id="myButton" class="btn btn-success">Export to Excel</button>
-<!-- Export html Table to xls -->
-<script type="text/javascript" >
-    $(document).ready(function(e){
-        $("#myButton").click(function(e){ 
-            $("#mytable").table2excel({
-                name: "file name",
-                filename: "quiz_result",
-                fileext: ".xls"
+    </table>
+    <br />
+    <button id="myButton" class="btn btn-success">Export to Excel</button>
+    <!-- Export html Table to xls -->
+    <script type="text/javascript" >
+        $(document).ready(function(e){
+            $("#myButton").click(function(e){ 
+                $("#mytable").table2excel({
+                    name: "file name",
+                    filename: "quiz_result",
+                    fileext: ".xls"
+                });
             });
         });
-    });
-</script>
+    </script>
 
 <?php
-
+    }
+    else{
+        ?>
+        <h2 style="color:red;"> Invalid Selection </h2>
+        <a href="../teacher/teacher_courses.php">Back</a>
+    <?php
+    }
 down:
-
     echo $OUTPUT->footer();
