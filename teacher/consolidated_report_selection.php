@@ -22,26 +22,28 @@
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
-        $statusQuery=$DB->get_records_sql('SELECT id, instance ,module FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'online'));
+        $statusQuery=$DB->get_records_sql('SELECT id, instance ,module,form FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'online'));
 
         
          $mrecQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
         $mrecA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
         
-        $mstatusQuery=$DB->get_records_sql('SELECT id, instance ,module FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'manual'));
+        $mstatusQuery=$DB->get_records_sql('SELECT id, instance ,module,form FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'manual'));
 
 
 
         $statusArray = array();
         $modArray = array();
+        $formArray = array();
 
         foreach ($statusQuery as $state) {
            
             $sta = $state->instance;
             $mod = $state ->module;
-           
+            $form = $state ->form;
             array_push($statusArray, $sta);
             array_push($modArray, $mod);
+            array_push($formArray, $form);
         }
 
 
@@ -50,9 +52,11 @@
            
             $sta = $state->instance;
             $mod = $state ->module;
-           
+            $form = $state ->form;
+
             array_push($statusArray, $sta);
             array_push($modArray, $mod);
+            array_push($formArray, $form);
         }
 
 
@@ -73,7 +77,7 @@
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
-                      if($id == $statusArray[$i] && $modArray[$i] == 16)
+                      if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i]== "online")
                         {
                             $Status='<span style="color: #006400;">VIEWED</span>';
                             $id = 'Q'.$records->id;
@@ -94,7 +98,7 @@
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
-                      if($id == $statusArray[$i] && $modArray[$i] == 1)
+                      if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "online")
                         {
                             $Status='<span style="color: #006400;">VIEWED</span>';
                             $id = 'A'.$records->id;
@@ -117,7 +121,7 @@
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
-                      if($id == $statusArray[$i] && $modArray[$i] == 16)
+                      if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i] == "manual")
                         {
                             $Status='<span style="color: #006400;">VIEWED</span>';
                             $id = 'Q'.$records->id;
@@ -141,7 +145,7 @@
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
-                      if($id == $statusArray[$i] && $modArray[$i] == 1)
+                      if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "manual")
                         {
                             $Status='<span style="color: #006400;">VIEWED</span>';
                             $id = 'A'.$records->id;
