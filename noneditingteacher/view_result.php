@@ -183,6 +183,7 @@
             <?php
         }
         ?>
+        <th> Total </th>
         </tr>
         <?php
         $i = 0;
@@ -194,10 +195,12 @@
             <td>
                 <?php echo $userNames[$i]; // display username once every record ?>
             </td><?php
+            $sum = 0;
             foreach ($criteriaId as $cid){?>
-            <td ><?php echo $obtMarks[$i]; $i++;?></td>
+            <td ><?php echo $obtMarks[$i]; $sum+=$obtMarks[$i]; $i++; ?></td>
             <?php
             }?>
+            <td ><?php echo $sum; ?></td>
         </tr>
         <?php
         }
