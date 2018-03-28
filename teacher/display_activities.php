@@ -149,7 +149,7 @@
                 
         if($recQ || $recA){
             ?>
-            <form method='post' action='manual_activity_comp_report.php' id="form_check">
+            <form method='post' action='manual_activity_comp_report.php' id="form_check2">
             <?php
             $serialno = 0;
             $table = new html_table();
@@ -206,7 +206,7 @@
             <input type="submit" value="NEXT" name="submit" class="btn btn-primary">
             </form>
             <br />
-            <p id="msg"></p>
+            <p id="msg2"></p>
             <br />
             <form method='post' action='consolidated_report_selection.php'>
                 <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
@@ -214,10 +214,10 @@
             </form>
 
             <script>
-            $('#form_check').on('submit', function (e) {
+            $('#form_check2').on('submit', function (e) {
                 if ($("input[type=radio]:checked").length === 0) {
                     e.preventDefault();
-                    $("#msg").html("<font color='red'>Select any one activity!</font>");
+                    $("#msg2").html("<font color='red'>Select any one activity!</font>");
                     return false;
                 }
             });
