@@ -52,29 +52,20 @@ th{
 
         //Get course clo with its level, plo and peo
 		$courseclos=$DB->get_records_sql(
-        "SELECT clo.id AS cloid, clo.shortname AS cloname, plo.shortname AS ploname, peo.shortname AS peoname, levels.name AS lname, levels.level AS lvl
+        "SELECT clo.id AS cloid, clo.shortname AS cloname
     
-        FROM mdl_competency_coursecomp cc, mdl_competency clo, mdl_competency plo, mdl_competency peo, mdl_taxonomy_levels levels, mdl_taxonomy_clo_level clolevel
+        FROM mdl_competency_coursecomp cc, mdl_competency clo
 
-        WHERE cc.courseid = ? AND cc.competencyid=clo.id  AND peo.id=plo.parentid AND plo.id=clo.parentid AND 
-        clo.id=clolevel.cloid AND levels.id=clolevel.levelid",
+        WHERE cc.courseid = ? AND cc.competencyid=clo.id",
         
         array($course_id));
             
-        $clonames = array(); $closid = array(); $plos = array(); $peos = array(); $levels = array(); $lvlno = array();
+        $clonames = array(); $closid = array();
         foreach ($courseclos as $recC) {
             $cid = $recC->cloid;
             $clo = $recC->cloname;
-            $plo = $recC->ploname;
-            $peo = $recC->peoname;
-            $lname = $recC->lname;
-            $lvl = $recC->lvl;
             array_push($closid, $cid); // array of clo ids
             array_push($clonames, $clo); // array of clo names
-            array_push($plos, $plo); // array of plos
-            array_push($peos, $peo); // array of peos
-            array_push($levels, $lname); // array of levels
-            array_push($lvlno, $lvl); // array of level nos
         }
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
@@ -85,7 +76,6 @@ th{
         $quizids = array();
         foreach ($courseQuizId as $qid) {
             $id = $qid->id;
-            //$lvl = $recC->lvl;
             array_push($quizids, $id); // array of quiz ids
         }
         
