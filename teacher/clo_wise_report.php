@@ -50,22 +50,24 @@ th{
             array_push($seatnos,$seatno);
         }
 
-        //Get course clo with its level, plo and peo
+        //Get course clo with its passing percentage
 		$courseclos=$DB->get_records_sql(
-        "SELECT clo.id AS cloid, clo.shortname AS cloname
+        "SELECT clo.id AS cloid, clo.shortname AS cloname, clokpi.kpi AS passpercent
     
-        FROM mdl_competency_coursecomp cc, mdl_competency clo
+        FROM mdl_competency_coursecomp cc, mdl_competency clo, mdl_clo_kpi clokpi
 
-        WHERE cc.courseid = ? AND cc.competencyid=clo.id",
+        WHERE cc.courseid = ? AND cc.competencyid=clo.id AND clo.id=clokpi.cloid",
         
         array($course_id));
             
-        $clonames = array(); $closid = array();
+        $clonames = array(); $closid = array(); $clospasspercent = array();
         foreach ($courseclos as $recC) {
             $cid = $recC->cloid;
             $clo = $recC->cloname;
+            $pp = $recC->passpercent;
             array_push($closid, $cid); // array of clo ids
             array_push($clonames, $clo); // array of clo names
+            array_push($clospasspercent, $pp); // array of clo pass percent
         }
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
@@ -154,12 +156,13 @@ th{
                 $clo=$rq->competencyid;
                 $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                 $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
-                if( (($mobtained/$qmax)*100) > 50){
+                /*if( (($mobtained/$qmax)*100) > 50){
                     array_push($resultQ,"P");
                 }
                 else{
                     array_push($resultQ,"F");
-                }
+                }*/
+                array_push($resultQ,(($mobtained/$qmax)*100));
                 array_push($seatnosQ,$un);
                 array_push($closQ,$clo);
             }
@@ -207,12 +210,13 @@ th{
                 $clo=$rq->cloid;
                 $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                 $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
-                if( (($mobtained/$qmax)*100) > 50){
+                /*if( (($mobtained/$qmax)*100) > 50){
                     array_push($resultQ,"P");
                 }
                 else{
                     array_push($resultQ,"F");
-                }
+                }*/
+                array_push($resultQ,(($mobtained/$qmax)*100));
                 array_push($seatnosQ,$un);
                 array_push($closQ,$clo);
             }
@@ -272,12 +276,13 @@ th{
                 $clo = $as->clo_id;
                 $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
                 $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
-                if( (($mobtained/$amax)*100) > 50){
+                /*if( (($mobtained/$amax)*100) > 50){
                     array_push($resultA,"P");
                 }
                 else{
                     array_push($resultA,"F");
-                }
+                }*/
+                array_push($resultA,(($mobtained/$amax)*100));
                 array_push($seatnosA,$un);
                 array_push($closA,$clo);
             }
@@ -324,12 +329,13 @@ th{
                 $clo = $as->clo_id;
                 $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
                 $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
-                if( (($mobtained/$amax)*100) > 50){
+                /*if( (($mobtained/$amax)*100) > 50){
                     array_push($resultA,"P");
                 }
                 else{
                     array_push($resultA,"F");
-                }
+                }*/
+                array_push($resultA,(($mobtained/$amax)*100));
                 array_push($seatnosA,$un);
                 array_push($closA,$clo);
             }
@@ -364,7 +370,7 @@ th{
             for($i=0; $i<count($closid); $i++) {
                 if($closidCountActivity[$i]>0){
                 ?>
-                <th colspan="<?php echo $closidCountActivity[$i]; ?>"><?php echo $clonames[$i]; ?></th>
+                <th colspan="<?php echo $closidCountActivity[$i]; ?>"><?php echo $clonames[$i]."<br>Passing Percentage: ".$clospasspercent[$i]."%"; ?></th>
                 <?php
                 }
             }
@@ -405,7 +411,8 @@ th{
                             if($seatno == $seatnosQMulti[$j][$k] && $closid[$i] == $closQMulti[$j][$k])
                             {
                                 $flag=1;
-                                if($resultQMulti[$j][$k] == 'P')
+                                //if($resultQMulti[$j][$k] == 'P')
+                                if($resultQMulti[$j][$k] >= $clospasspercent[$i])
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
                                 else
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
@@ -423,7 +430,8 @@ th{
                             if($seatno == $seatnosAMulti[$j][$k] && $closid[$i] == $closAMulti[$j][$k])
                             {
                                 $flag=1;
-                                if($resultAMulti[$j][$k] == 'P')
+                                //if($resultAMulti[$j][$k] == 'P')
+                                if($resultAMulti[$j][$k] >= $clospasspercent[$i])
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
                                 else
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
