@@ -85,7 +85,7 @@
                             $name = $records->name;
                             $intro = $records->intro;
                             
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="oq'.$id.'" class="chkbox">',$Status);
                             break;
                         }
                 }
@@ -105,7 +105,7 @@
                             $courseid = $records->course;
                             $name = $records->name;
                             $intro = $records->intro;
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="oa'.$id.'" class="chkbox">',$Status);
                             break;
                         }
                 }
@@ -129,7 +129,7 @@
                             $name = $records->name;
                             $intro = $records->description;
                             
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="mq'.$id.'" class="chkbox">',$Status);
                             break;
                         }
                 }
@@ -152,7 +152,7 @@
                             $courseid = $records->courseid;
                             $name = $records->name;
                             $intro = $records->description;
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="'.$id.'" class="chkbox">',$Status);
+                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="ma'.$id.'" class="chkbox">',$Status);
                             break;
                         }
                 }
