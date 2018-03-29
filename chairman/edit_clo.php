@@ -221,6 +221,8 @@
 		$id=$_GET['edit'];
 		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber FROM mdl_competency WHERE id=?',array($id));
 		$recKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_kpi WHERE cloid=?',array($id));
+		$description = "";
+		$kpi = "";
 		if($rec){
 			foreach ($rec as $records){
 				$shortname=$records->shortname;
