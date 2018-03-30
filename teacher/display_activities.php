@@ -126,7 +126,7 @@
             <?php
         }
         else{
-            echo "<h3>No activity found!</h3>";
+            echo "<h3>No Online activity found!</h3>";
         }
 
 
@@ -226,7 +226,7 @@
             <?php
         }
         else{
-            echo "<h3>No activity found!</h3>";
+            echo "<h3>No Manual activity found!</h3>";
         }
         
     }

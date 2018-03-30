@@ -66,6 +66,7 @@
                 
                 array($quiz_id));
 
+              $kpisArray = array();
 
 
             if($rec){
@@ -101,6 +102,30 @@
                     </tr>
 
                     <?php
+                  
+                foreach ($cloids as $id) {
+            
+            
+                    $kpis=$DB->get_records_sql("SELECT kpi FROM mdl_clo_kpi
+                    WHERE cloid = ? ORDER BY cloid",array($id));
+
+                    if($kpis)
+                    {
+
+                        foreach($kpis as $kp)
+                        {
+                            $kpi = $kp->kpi;
+                            array_push($kpisArray, $kpi);
+                        }
+                     }
+                
+                  }
+                /*  var_dump($kpisArray);echo "<br>";
+                  var_dump($cloids);echo "<br>";
+                  var_dump($label);*/
+
+                  $kpiIndex=0;
+
                     $count = 0; $first = 0; $i = 0;
                     $tot_stdnt = 0; // total students count
                     $pass = array(); $fail = array();
@@ -110,6 +135,7 @@
                     }
 
                     foreach ($rec as $records){
+                        $kpiIndex=0;
                         if($count === $tot_comp){ // 1 student record collected
                             $tot_stdnt++;
                             //echo $count;
@@ -135,9 +161,15 @@
                                 }
                     ?>
                             <td><?php
-                           //  echo "Obt =$obt max= $max";
-                             //   echo "<br>";
-                                if( (($obt/$max)*100) > 50){
+                          //   echo "Obt =$obt max= $max";
+                            //    echo "<br>";
+                              //  echo "$kpisArray[$kpiIndex]";
+                                $kpiToPass = $kpisArray[$kpiIndex];
+                                $kpiIndex++;
+                               // echo "$kpiToPass<br>";
+
+
+                                if( (($obt/$max)*100) >= $kpiToPass){
                                    
                                     $pass[$i]++;
                                     $i++;
@@ -163,6 +195,7 @@
                         $data_temp[] = $records;
                         $count++;
                     }
+                    $kpiIndex=0;
                     ?>
 
                     <tr>
@@ -187,9 +220,12 @@
                             }
                             ?>
                         <td><?php
-                       // echo "Obt =$obt max= $max";
-                           //     echo "<br>";
-                            if( (($obt/$max)*100) > 50){
+                      //  echo "Obt =$obt max= $max";
+                         //       echo "<br>";
+                                $kpiToPass = $kpisArray[$kpiIndex];
+                                $kpiIndex++;
+                             //   echo "$kpiToPass<br>";
+                            if( (($obt/$max)*100) >= $kpiToPass){
                                
                                 $pass[$i]++;
                                 $i++;
@@ -275,6 +311,9 @@
                 
             array($assign_id));
 
+              $kpisArray = array();
+
+
             if($rec){
                 $serialno = 0;
             ?>
@@ -303,8 +342,31 @@
                     </tr>
 
                     <?php
+
+                 foreach ($cloids as $id) {
+            
+            
+                    $kpis=$DB->get_records_sql("SELECT kpi FROM mdl_clo_kpi
+                    WHERE cloid = ? ORDER BY cloid",array($id));
+
+                    if($kpis)
+                    {
+
+                        foreach($kpis as $kp)
+                        {
+                            $kpi = $kp->kpi;
+                            array_push($kpisArray, $kpi);
+                        }
+                     }
+                
+                  }
+                  /*var_dump($kpisArray);echo "<br>";
+                  var_dump($cloids);echo "<br>";
+                  var_dump($label);*/
+
                     $i=0; $tot_stdnt = 0; // total students count
                     $pass = array(); $fail = array();
+                    $kpiIndex = 0;
                      
                     for($x = 0; $x < $tot_comp; $x++) { // initialize array
                         $pass[$x] = 0;
@@ -335,7 +397,11 @@
                              // echo "Obt =$obt max= $max";
                                // echo "<br>";
                                 //  echo "$pass[$i] at i = $i<br>";
-                                if($result > 50){
+                           // echo "<br>";
+                            $kpiToPass = $kpisArray[$kpiIndex];
+                              //  $kpiIndex++;
+                              //  echo "$kpiToPass<br>";
+                                if($result >= $kpiToPass){
                                   
                                     $pass[$i]++;
 
