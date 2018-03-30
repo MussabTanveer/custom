@@ -396,7 +396,7 @@
                             for($k=0;$k<$tot_comp;$k++){
                             ?>
                             <td><?php
-                            // echo "Obt =$obt max= $max";
+                        // echo "Obt =$obt max= $max";
                               //  echo "<br>";
                                 //  echo "$pass[$i] at i = $i<br>";
                            // echo "<br>";
