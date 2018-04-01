@@ -1,5 +1,6 @@
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 <script src="../script/table2excel/jquery.table2excel.min.js"></script>
+<script src="../script/formcache/formcache.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -200,7 +201,7 @@
                         echo "<br>";
                         echo "<h3><u>Enter Marks</u></h3>";
                         ?>
-            <form method="post" action="insert_result.php">
+            <form method="post" action="insert_result.php" id="myForm">
                 <table border='10' cellpadding='10' id ="mytable">
                 <tr>
                     <th> Seat No. </th>
@@ -263,8 +264,9 @@
         </form>
         <br />
         <button id="myButton2" class="btn btn-success">Export to Excel</button>
-        <!-- Export html Table to xls -->
+        
         <script type="text/javascript" >
+            //<!-- Export html Table to xls -->
             $(document).ready(function(e){
                 $("#myButton2").click(function(e){ 
                     $("#mytable").table2excel({
@@ -274,6 +276,14 @@
                     });
                 });
             });
+            //<!-- Cache form data -->
+            var value = <?php echo json_encode($aid); ?>; // assessment id is the form key
+            //alert(value);
+            $("#myForm").formcache({key:value});
+            //$("#myForm").formcache();
+            //$("#myForm").formcache("clear");
+            //$("#myForm").formcache('removeCaches');
+            //$("#myForm").formcache.clear();
         </script>
                         <?php
                     }
