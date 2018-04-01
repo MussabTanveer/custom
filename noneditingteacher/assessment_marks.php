@@ -277,7 +277,7 @@
                 });
             });
             //<!-- Cache form data -->
-            var value = <?php echo json_encode($aid); ?>; // assessment id is the form key
+            var value = 'assess' + <?php echo json_encode($aid); ?>; // assessment id is the form key
             //alert(value);
             $("#myForm").formcache({key:value});
             //$("#myForm").formcache();
