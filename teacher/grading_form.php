@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/formcache/formcache.min.js"></script>
 <?php 
    require_once('../../../config.php');
     $context = context_system::instance();
@@ -56,7 +58,7 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
     }
     
     ?>
-    <form method="post" action="insert_result.php">
+    <form method="post" action="insert_result.php" id="myForm">
         <table border='10' cellpadding='8' id ="mytable">
         <tr>
         <th> Seat No. </th>
@@ -118,6 +120,13 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
         <br />
         <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
     </form>
+
+    <script>
+        //<!-- Cache form data -->
+        var value = 'quiz' + <?php echo json_encode($quizId); ?>; // quiz id is the form key
+        //alert(value);
+        $("#myForm").formcache({key:value});
+    </script>
     
     <?php
     }
