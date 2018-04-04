@@ -1,5 +1,9 @@
 <script src="../script/jquery/jquery-3.2.1.js"></script>
-
+<script>
+if(performance.navigation.type == 2){
+   location.reload(true);
+}
+</script>
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
