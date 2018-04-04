@@ -56,12 +56,12 @@ if(performance.navigation.type == 2){
                 
         if($recQ || $recA){
             ?>
-            <form method='post' action='activity_comp_report.php' id="form_check">
+            <!--<form method='post' action='activity_comp_report.php' id="form_check">-->
             <?php
             $serialno = 0;
             $table = new html_table();
             echo "<h3>Online Activities</h3>";
-            $table->head = array('S. No.', 'Name', 'Intro', 'Select', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
             foreach ($recQ as $records) {
                 $serialno++;
                 $Status='<span style="color: red;">PENDING</span>';
@@ -83,7 +83,7 @@ if(performance.navigation.type == 2){
                 $name = $records->name;
                 $intro = $records->intro;
                 
-                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+                $table->data[] = array($serialno, "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>", $Status);
             }
             foreach ($recA as $records) {
                 $serialno++;
@@ -104,14 +104,14 @@ if(performance.navigation.type == 2){
                 $courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->intro;
-                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+                $table->data[] = array($serialno, "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>", $Status);
             }
 			
             echo html_writer::table($table);
             ?>
-            <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
+            <!--<input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
 			<input type="submit" value="NEXT" name="submit" class="btn btn-primary">
-            </form>
+            </form>-->
             <br />
             <p id="msg"></p>
             <br />
@@ -153,12 +153,12 @@ if(performance.navigation.type == 2){
                 
         if($recQ || $recA){
             ?>
-            <form method='post' action='manual_activity_comp_report.php' id="form_check2">
+            <!--<form method='post' action='manual_activity_comp_report.php' id="form_check2">-->
             <?php
             $serialno = 0;
             $table = new html_table();
             echo "<h3>Manual Activities</h3>";
-            $table->head = array('S. No.', 'Name', 'Intro', 'Select', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
             foreach ($recQ as $records) {
                 $serialno++;
                 $Status='<span style="color: red;">PENDING</span>';
@@ -180,7 +180,7 @@ if(performance.navigation.type == 2){
                 $name = $records->name;
                 $intro = $records->description;
                 
-                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>", $Status);
             }
             foreach ($recA as $records) {
                 $serialno++;
@@ -201,14 +201,14 @@ if(performance.navigation.type == 2){
                 $courseid = $records->courseid;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, $name, $intro, '<input type="radio" value="'.$id.'" name="activityid">',$Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>", $Status);
             }
             
             echo html_writer::table($table);
             ?>
-            <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
+            <!--<input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
             <input type="submit" value="NEXT" name="submit" class="btn btn-primary">
-            </form>
+            </form>-->
             <br />
             <p id="msg2"></p>
             <br />

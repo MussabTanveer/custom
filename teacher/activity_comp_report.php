@@ -19,10 +19,14 @@
     }
     echo $OUTPUT->header();
 
-    if(isset($_POST['submit']) && isset( $_POST['activityid']) && isset($_POST['courseid']))
+    /*if(isset($_POST['submit']) && isset( $_POST['activityid']) && isset($_POST['courseid']))
     {
         $activity_id=$_POST['activityid'];
-        $courseid=$_POST['courseid'];
+        $courseid=$_POST['courseid'];*/
+    if(!empty($_GET['course']) && !empty($_GET['activityid']))
+    {
+        $activity_id=$_GET['activityid'];
+        $courseid=$_GET['course'];
 
         /******************** QUIZ ***************************/
         if(substr($activity_id,0,1) == 'Q'){
@@ -363,8 +367,8 @@
                      }
                 
                   }
-                  var_dump($kpisArray);echo "<br>";
-                  /*var_dump($cloids);echo "<br>";
+                  /*var_dump($kpisArray);echo "<br>";
+                  var_dump($cloids);echo "<br>";
                   var_dump($label);*/
 
                     $i=0; $tot_stdnt = 0; // total students count
