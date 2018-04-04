@@ -15,10 +15,12 @@
     }
     echo $OUTPUT->header();
 
-    if(isset($_POST['view_consolidated']) && isset( $_POST['courseid']))
+    /*if(isset($_POST['view_consolidated']) && isset( $_POST['courseid']))
     {	
-        $course_id=$_POST['courseid'];
-        
+        $course_id=$_POST['courseid'];*/
+    if(!empty($_GET['course']))
+    {
+        $course_id=$_GET['course'];
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
