@@ -25,11 +25,10 @@
         $statusQuery=$DB->get_records_sql('SELECT id, instance ,module,form FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'online'));
 
         
-         $mrecQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
+        $mrecQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
         $mrecA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
         
         $mstatusQuery=$DB->get_records_sql('SELECT id, instance ,module,form FROM  `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,'manual'));
-
 
 
         $statusArray = array();
@@ -47,7 +46,6 @@
         }
 
 
-
         foreach ($mstatusQuery as $state) {
            
             $sta = $state->instance;
@@ -59,9 +57,7 @@
             array_push($formArray, $form);
         }
 
-
-
-                
+    
         if($recQ || $recA || $mrecA || $mrecQ ){
             ?>
             <form method='post' action='consolidated_report.php' id="form_check">
@@ -69,99 +65,96 @@
             $serialno = 0;
             $table = new html_table();
             $table->head = array('S. No.', 'Name', 'Intro', "<input type=\"checkbox\" id=\"select_all\" onChange=\"selectAll(this,'chkbox')\"> Select All",'Status');
+            
             foreach ($recQ as $records) {
-                $serialno++;
-                $Status='<span style="color: red;">PENDING</span>';
-                $id = $records->id;
-
-                for ($i=0; $i< sizeof($statusArray); $i++ )
-                {
-
-                      if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i]== "online")
-                        {
-                            $Status='<span style="color: #006400;">VIEWED</span>';
-                            $id = 'Q'.$records->id;
-                            $courseid = $records->course;
-                            $name = $records->name;
-                            $intro = $records->intro;
-                            
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="oq'.$id.'" class="chkbox">',$Status);
-                            break;
-                        }
-                }
-            }
-            foreach ($recA as $records) {
-                $serialno++;
-                $Status='<span style="color: red;">PENDING</span>';
-                $id = $records->id;
-
-                for ($i=0; $i< sizeof($statusArray); $i++ )
-                {
-
-                      if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "online")
-                        {
-                            $Status='<span style="color: #006400;">VIEWED</span>';
-                            $id = 'A'.$records->id;
-                            $courseid = $records->course;
-                            $name = $records->name;
-                            $intro = $records->intro;
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="oa'.$id.'" class="chkbox">',$Status);
-                            break;
-                        }
-                }
                 
-            }
-
-
-              foreach ($mrecQ as $records) {
-                $serialno++;
                 $Status='<span style="color: red;">PENDING</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
-                      if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i] == "manual")
-                        {
-                            $Status='<span style="color: #006400;">VIEWED</span>';
-                            $id = 'Q'.$records->id;
-                            $courseid = $records->courseid;
-                            $name = $records->name;
-                            $intro = $records->description;
-                            
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="mq'.$id.'" class="chkbox">',$Status);
-                            break;
-                        }
+                    if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i]== "online")
+                    {
+                        $serialno++;
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        $id = 'Q'.$records->id;
+                        $courseid = $records->course;
+                        $name = $records->name;
+                        $intro = $records->intro;
+                        
+                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="oq'.$id.'" class="chkbox">',$Status);
+                        break;
+                    }
+                }
+            }
+
+            foreach ($recA as $records) {
+                
+                $Status='<span style="color: red;">PENDING</span>';
+                $id = $records->id;
+
+                for ($i=0; $i< sizeof($statusArray); $i++ )
+                {
+                    if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "online")
+                    {
+                        $serialno++;
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        $id = 'A'.$records->id;
+                        $courseid = $records->course;
+                        $name = $records->name;
+                        $intro = $records->intro;
+                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="oa'.$id.'" class="chkbox">',$Status);
+                        break;
+                    }
+                }
+            }
+
+
+            foreach ($mrecQ as $records) {
+                
+                $Status='<span style="color: red;">PENDING</span>';
+                $id = $records->id;
+
+                for ($i=0; $i< sizeof($statusArray); $i++ )
+                {
+                    if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i] == "manual")
+                    {
+                        $serialno++;
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        $id = 'Q'.$records->id;
+                        $courseid = $records->courseid;
+                        $name = $records->name;
+                        $intro = $records->description;
+                        
+                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="mq'.$id.'" class="chkbox">',$Status);
+                        break;
+                    }
                 }
             }   
 
 
 
          foreach ($mrecA as $records) {
-                $serialno++;
+                
                 $Status='<span style="color: red;">PENDING</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
-
-                      if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "manual")
-                        {
-                            $Status='<span style="color: #006400;">VIEWED</span>';
-                            $id = 'A'.$records->id;
-                            $courseid = $records->courseid;
-                            $name = $records->name;
-                            $intro = $records->description;
-                            $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="ma'.$id.'" class="chkbox">',$Status);
-                            break;
-                        }
-                }
-                
+                    if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "manual")
+                    {
+                        $serialno++;
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        $id = 'A'.$records->id;
+                        $courseid = $records->courseid;
+                        $name = $records->name;
+                        $intro = $records->description;
+                        $table->data[] = array($serialno, $name, $intro, '<input type="checkbox" value="'.$id.'" name="activityid[]" id="ma'.$id.'" class="chkbox">',$Status);
+                        break;
+                    }
+                }                
             }
-
-
-
-
 
 			
             echo html_writer::table($table);
