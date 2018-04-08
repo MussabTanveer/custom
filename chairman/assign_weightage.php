@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -75,7 +77,7 @@
 
     ?>
 
-    <form method='post' action="" class="mform" id="cloForm">
+    <form method='post' action="" class="mform" id="wtForm">
         <div class="form-group row fitem ">
             <div class="col-md-3">
                 <span class="pull-xs-right text-nowrap">
@@ -86,16 +88,17 @@
                 </label>
             </div>
             <div class="col-md-9 form-inline felement" data-fieldtype="number">
-                <input type="number"
+            <span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+            <input type="number"
                         class="form-control"
                         name="sessional"
                         id="id_act"
                         size=""
                         required
-                        maxlength="100"
+                        maxlength="7"
                         step="0.001"
                         min="0" max="100">
-                        %
+                        
                         (Note: To be assigned individually by the teacher)
                 <div class="form-control-feedback" id="id_error_name">
                 </div>
@@ -112,16 +115,17 @@
                 </label>
             </div>
             <div class="col-md-9 form-inline felement" data-fieldtype="number">
-                <input type="number"
+            <span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+            <input type="number"
                         class="form-control"
                         name="midterm"
                         id="id_mt"
                         size=""
                         required
-                        maxlength="100"
+                        maxlength="7"
                         step="0.001"
                         min="0" max="100">
-                        %
+                        
                 <div class="form-control-feedback" id="id_error_name">
                 </div>
             </div>
@@ -137,16 +141,17 @@
                 </label>
             </div>
             <div class="col-md-9 form-inline felement" data-fieldtype="number">
+            <span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
                 <input type="number"
                         class="form-control"
                         name="final"
                         id="id_fe"
                         size=""
                         required
-                        maxlength="100"
+                        maxlength="7"
                         step="0.001"
                         min="0" max="100">
-                        %
+                        
                 <div class="form-control-feedback" id="id_error_name">
                 </div>
             </div>
@@ -157,6 +162,79 @@
         <input class="btn btn-info" type="submit" name="save" value="Save"/>
         <a class="btn btn-default" type="submit" <?php echo "href='./report_chairman.php'" ?>>Cancel</a>
     </form>
+
+    <script>
+		//form validation
+		$(document).ready(function () {
+			$('#wtForm').validate({ // initialize the plugin
+				rules: {
+					"sessional": {
+                        number: true,
+                        required: true,
+                        step: 0.001,
+                        range: [0, 100],
+                        min: 0,
+                        max: 100,
+                        minlength: 1,
+                        maxlength: 7
+                    },
+                    "midterm": {
+                        number: true,
+                        required: true,
+                        step: 0.001,
+                        range: [0, 100],
+                        min: 0,
+                        max: 100,
+                        minlength: 1,
+                        maxlength: 7
+                    },
+                    "final": {
+                        number: true,
+                        required: true,
+                        step: 0.001,
+                        range: [0, 100],
+                        min: 0,
+                        max: 100,
+                        minlength: 1,
+                        maxlength: 7
+                    }
+				},
+				messages: {
+					"sessional": {
+                        number: "Only numeric values are allowed.",
+                        required: "Please enter percentage.",
+                        step: "Please enter nearest percentage value.",
+                        range: "Please enter percentage between 0 and 100%.",
+                        min: "Please enter percentage greater than or equal to 0%.",
+                        max: "Please enter percentage less than or equal to 100%.",
+                        minlength: "Please enter more than 1 numbers.",
+                        maxlength: "Please enter no more than 6 numbers (including decimal part)."
+                    },
+                    "midterm": {
+                        number: "Only numeric values are allowed.",
+                        required: "Please enter percentage.",
+                        step: "Please enter nearest percentage value.",
+                        range: "Please enter percentage between 0 and 100%.",
+                        min: "Please enter percentage greater than or equal to 0%.",
+                        max: "Please enter percentage less than or equal to 100%.",
+                        minlength: "Please enter more than 1 numbers.",
+                        maxlength: "Please enter no more than 6 numbers (including decimal part)."
+                    },
+                    "final": {
+                        number: "Only numeric values are allowed.",
+                        required: "Please enter percentage.",
+                        step: "Please enter nearest percentage value.",
+                        range: "Please enter percentage between 0 and 100%.",
+                        min: "Please enter percentage greater than or equal to 0%.",
+                        max: "Please enter percentage less than or equal to 100%.",
+                        minlength: "Please enter more than 1 numbers.",
+                        maxlength: "Please enter no more than 6 numbers (including decimal part)."
+                    }
+				}
+			});
+		});
+	</script>
+
     <?php
 		if(isset($_POST['save']) && isset($error_msg)){
 		?>
