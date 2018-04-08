@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/jquery/jquery-2.1.3.js"></script>
 <?php
     require_once('../../../config.php');
     //require_once($CFG->dirroot.'/lib/form/editor.php');
@@ -16,8 +18,6 @@
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
     
     ?>
-    <script src="../script/jquery/jquery-3.2.1.js"></script>
-    <script src="../script/jquery/jquery-2.1.3.js"></script>
 
     <script type="text/javascript" >
 
@@ -64,38 +64,36 @@
 
            $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dn'));
 
-              $rev=0;
-               if($revisions){
-            foreach ($revisions as $revision){
-                $rev = $revision->revision; 
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
             }
-        }
-                $rev++;
+            $rev++;
 
+            $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department name','dn','$departmentName','$rev')";
 
-              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department name','dn','$departmentName','$rev')";
-
-                $DB->execute($sql);
+            $DB->execute($sql);
         }
 
 
-     if($UniversityName != "")
+        if($UniversityName != "")
         {
 
            $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('un'));
 
-              $rev=0;
-               if($revisions){
-            foreach ($revisions as $revision){
-                $rev = $revision->revision; 
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
             }
-        }
-                $rev++;
+            $rev++;
 
+            $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university name','un','$UniversityName','$rev')";
 
-              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university name','un','$UniversityName','$rev')";
-
-                $DB->execute($sql);
+            $DB->execute($sql);
         }
 
 
@@ -105,18 +103,17 @@
 
            $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('uv'));
 
-              $rev=0;
-               if($revisions){
-            foreach ($revisions as $revision){
-                $rev = $revision->revision; 
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
             }
-        }
-                $rev++;
+            $rev++;
 
+            $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university vision','uv','$universityVision','$rev')";
 
-              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university vision','uv','$universityVision','$rev')";
-
-                $DB->execute($sql);
+            $DB->execute($sql);
         }
 
 
@@ -125,16 +122,16 @@
 
          $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('um'));
 
-              $rev=0;
-               if($revisions){
-            foreach ($revisions as $revision){
-                $rev = $revision->revision; 
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
             }
-        }
-                $rev++;
+            $rev++;
 
-        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university mission','um','$universityMission','$rev')";
-        $DB->execute($sql);
+            $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university mission','um','$universityMission','$rev')";
+            $DB->execute($sql);
 
         }
 
@@ -142,37 +139,36 @@
         if($departmentVision != "")
         {
 
-        $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dv'));
+            $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dv'));
 
-              $rev=0;
-               if($revisions){
-            foreach ($revisions as $revision){
-                $rev = $revision->revision; 
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
             }
+            $rev++;
+
+
+            $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department vision','dv','$departmentVision','$rev')";
+            $DB->execute($sql);
         }
-                $rev++;
 
 
-        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department vision','dv','$departmentVision','$rev')";
-        $DB->execute($sql);
-         }
-
-
-         if($departmentMission != "")
+        if($departmentMission != "")
         {
           $revisions=$DB->get_records_sql('SELECT revision FROM `mdl_vision_mission` where idnumber = ?', array('dm'));
 
-              $rev=0;
-               if($revisions){
-            foreach ($revisions as $revision){
-                $rev = $revision->revision; 
+            $rev=0;
+            if($revisions){
+                foreach ($revisions as $revision){
+                    $rev = $revision->revision; 
+                }
             }
-        }
-                $rev++;
+            $rev++;
 
-        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department mission','dm','$departmentMission','$rev')";
-            
-        $DB->execute($sql);
+            $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department mission','dm','$departmentMission','$rev')";
+            $DB->execute($sql);
 
         }
 
@@ -193,10 +189,10 @@
     $editor->use_editor("departName",$temp);
 
     ?>
-    <form method="post" action="" class="mform">
+    <form method="post" action="" class="mform" id="vismisForm">
         <div class="container">
 
-             <div class="form-group row fitem">
+            <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
                     </span>
@@ -216,7 +212,7 @@
             </div>
 
 
-             <div class="form-group row fitem">
+            <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
                     </span>
@@ -234,8 +230,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             
             <div class="form-group row fitem">
@@ -314,10 +308,12 @@
                 </div>
             </div>
         </div>
+        
         <button class="btn btn-info" type="submit"  name="save" /> Save and continue </button>
         <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
 		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
     </form>
+
     <?php
     echo $OUTPUT->footer();
 ?>
