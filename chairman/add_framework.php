@@ -177,7 +177,7 @@
 						id="id_idnumber"
 						size=""
 						required
-						maxlength="100" type="text" >
+						maxlength="20" type="text" >
 				<div class="form-control-feedback" id="id_error_idnumber">
 				<?php
 				if(isset($msg2)){
@@ -204,7 +204,7 @@
 						id="id_shortname"
 						size=""
 						required
-						maxlength="100" type="text" >
+						maxlength="30" type="text" >
 				<div class="form-control-feedback" id="id_error_shortname">
 				<?php
 				if(isset($msg1)){
