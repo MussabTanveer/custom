@@ -1,4 +1,7 @@
 <script src="../script/sweet-alert/sweetalert.min.js"></script>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -200,7 +203,7 @@
 		?>
 		<br />
 		<h3>Add New PEO</h3>
-		<form method='post' action="" class="mform">
+		<form method='post' action="" class="mform" id="peoForm">
 			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
@@ -232,7 +235,7 @@
 							title="eg. PEO-3"
 							placeholder="eg. PEO-3"
 							required
-							maxlength="100" type="text" > (eg. PEO-3)
+							maxlength="20" type="text" > (eg. PEO-3)
 					<div class="form-control-feedback" id="id_error_idnumber">
 					<?php
 					if(isset($msg2)){
@@ -259,7 +262,7 @@
 							id="id_shortname"
 							size=""
 							required
-							maxlength="100" type="text" >
+							maxlength="30" type="text" >
 					<div class="form-control-feedback" id="id_error_shortname">
 					<?php
 					if(isset($msg1)){
@@ -309,7 +312,37 @@
 		?>
 		<br />
 		<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
-						
+		
+		<script>
+			//form validation
+			$(document).ready(function () {
+				$('#peoForm').validate({ // initialize the plugin
+					rules: {
+						"idnumber": {
+							required: true,
+							minlength: 1,
+							maxlength: 20,
+							pattern: /^[p/P][e/E][o/O]-[0-9]{1,}$/
+						},
+						"shortname": {
+							required: true,
+							minlength: 1,
+							maxlength: 30
+						}
+					},
+					messages: {
+						"idnumber": {
+							required: "Please enter ID number.",
+							pattern: "Please enter correct format."
+						},
+						"shortname": {
+							required: "Please enter Name."
+						}
+					}
+				});
+			});
+		</script>
+		
 		<?php 
 			echo $OUTPUT->footer();
 	}
