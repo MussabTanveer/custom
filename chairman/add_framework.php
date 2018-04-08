@@ -1,4 +1,6 @@
 <script src="../script/sweet-alert/sweetalert.min.js"></script>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -158,7 +160,7 @@
 	?>
 	<br />
 	<h3>Add New Framework</h3>
-	<form method='post' action="" class="mform">
+	<form method='post' action="" class="mform" id="fwForm">
 	<div class="form-group row fitem">
 			<div class="col-md-3">
 				<span class="pull-xs-right text-nowrap">
@@ -231,12 +233,10 @@
 				</div>
 			</div>
 		</div>
-
 		
 		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
         <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
 		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
-
 
 	</form>
 	<?php
@@ -252,7 +252,35 @@
 		?>
 	<br />
 	<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
-					
+	
+	<script>
+		//form validation
+		$(document).ready(function () {
+			$('#fwForm').validate({ // initialize the plugin
+				rules: {
+					"idnumber": {
+						required: true,
+						minlength: 1,
+						maxlength: 20
+					},
+					"shortname": {
+						required: true,
+						minlength: 1,
+						maxlength: 30
+					}
+				},
+				messages: {
+					"idnumber": {
+						required: "Please enter ID number."
+					},
+					"shortname": {
+						required: "Please enter Name."
+					}
+				}
+			});
+		});
+	</script>
+	
 	<?php 
         echo $OUTPUT->footer();
     ?>
