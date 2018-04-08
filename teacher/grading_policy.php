@@ -232,6 +232,9 @@
 						}
 					},
 					messages: {
+						"activity[]": {
+							required: "Please select activity."
+						},
 						"percentage[]": {
 							number: "Only numeric values are allowed.",
 							required: "Please enter percentage.",
