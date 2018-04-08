@@ -50,7 +50,8 @@
 			$framework_shortname=$_POST['framework_shortname'];
 			$peo=$_POST['peo'];
 			$time = time();
-			if(empty($shortname) || empty($idnumber))
+			//echo "peo = $peo";
+			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10' || is_null($peo) || $peo === NULL)
 			{
 				if(empty($shortname))
 				{
@@ -60,6 +61,19 @@
 				{
 					$msg2="<font color='red'>-Please enter ID number</font>";
 				}
+				if(empty($peo) || is_null($peo))
+				{
+					$msg4="<font color='red'>-Please select PEO</font>";
+				}
+				if(strlen($shortname)> '30')
+				{
+					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+				}
+				if(strlen($idnumber)>'10' )
+				{
+					$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
+				}
+
 			}
 			elseif(substr($idnumber,0,4) != 'PLO-')
 			{
@@ -86,9 +100,11 @@
 			$framework_shortname=$_POST['framework_shortname'];
 			$peo=$_POST['peo'];
 			$time = time();
-			
-			if(empty($shortname) || empty($idnumber))
+
+			//echo "peo = $peo";
+			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10' || empty($peo) || is_null($peo))
 			{
+				//echo " IN IF";
 				if(empty($shortname))
 				{
 					$msg1="<font color='red'>-Please enter PLO name</font>";
@@ -96,6 +112,19 @@
 				if(empty($idnumber))
 				{
 					$msg2="<font color='red'>-Please enter ID number</font>";
+				}
+				if(empty($peo) || is_null($peo))
+				{
+					$msg4="<font color='red'>-Please select PEO</font>";
+				}
+
+				if(strlen($shortname)> '30')
+				{
+					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+				}
+				if(strlen($idnumber)>'10' )
+				{
+					$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
 				}
 			}
 			elseif(substr($idnumber,0,4) != 'PLO-')
@@ -117,10 +146,11 @@
 					$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}
 
+			 $redirect_page1='../index.php';
+              redirect($redirect_page1); 
 			}
 
-             $redirect_page1='../index.php';
-              redirect($redirect_page1); 
+            
 		}
 
 		/* delete code */
@@ -267,6 +297,7 @@
 					if(isset($msg1)){
 						echo $msg1;
 					}
+					
 					?>
 					</div>
 				</div>
@@ -317,8 +348,11 @@
 					<span id="peosidnumber"></span>
 					<div class="form-control-feedback" id="id_error_shortname">
 					<?php
-					if(isset($msg1)){
+					/*if(isset($msg1)){
 						echo $msg1;
+					}*/
+					if(isset($msg4)){
+						echo $msg4;
 					}
 					?>
 					</div>

@@ -46,7 +46,7 @@
 			$fw_shortname=$_POST['fname'];
 			$time = time();
 			
-			if(empty($shortname) || empty($idnumber))
+			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10')
 			{
 				if(empty($shortname))
 				{
@@ -56,6 +56,17 @@
 				{
 					$msg2="<font color='red'>-Please enter ID number</font>";
 				}
+
+			if(strlen($shortname)> '30')
+			{
+				$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+			}
+			if(strlen($idnumber)>'10' )
+			{
+				$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
+			}
+
+
 			}
 			elseif(substr($idnumber,0,4) != 'PEO-')
 			{
@@ -74,9 +85,10 @@
 					$DB->execute($sql);
 					$msg3 = "<font color='green'><b>PEO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
 				}
-			}
-            $redirect_page1='../index.php';
+				$redirect_page1='../index.php';
 			redirect($redirect_page1); 
+			}
+            
 		}
 
         elseif(isset($_POST['save'])){
@@ -87,7 +99,7 @@
 			$fw_shortname=$_POST['fname'];
 			$time = time();
 			
-			if(empty($shortname) || empty($idnumber))
+			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10')
 			{
 				if(empty($shortname))
 				{
@@ -97,6 +109,18 @@
 				{
 					$msg2="<font color='red'>-Please enter ID number</font>";
 				}
+
+				if(strlen($shortname)> '30')
+				{
+					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+				}
+				if(strlen($idnumber)>'10' )
+				{
+					$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
+				}
+
+
+
 			}
 			elseif(substr($idnumber,0,4) != 'PEO-')
 			{
