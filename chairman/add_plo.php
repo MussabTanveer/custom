@@ -1,4 +1,7 @@
 <script src="../script/sweet-alert/sweetalert.min.js"></script>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -232,7 +235,7 @@
 		?>
 		<br />
 		<h3>Add New PLO</h3>
-		<form method='post' action="" class="mform">
+		<form method='post' action="" class="mform" id="ploForm">
 			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
@@ -264,7 +267,7 @@
 							title="eg. PLO-12"
 							required
 							placeholder="eg. PLO-12"
-							maxlength="100" type="text" > (eg. PLO-12)
+							maxlength="20" type="text" > (eg. PLO-12)
 					<div class="form-control-feedback" id="id_error_idnumber">
 					<?php
 					if(isset($msg2)){
@@ -291,7 +294,7 @@
 							id="id_shortname"
 							size=""
 							required
-							maxlength="100" type="text" >
+							maxlength="30" type="text" >
 					<div class="form-control-feedback" id="id_error_shortname">
 					<?php
 					if(isset($msg1)){
@@ -332,8 +335,8 @@
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-					<select onChange="dropdownTip(this.value)" name="peo" class="select custom-select">
-						<option value='NULL'>Choose..</option>
+					<select onChange="dropdownTip(this.value)" name="peo" class="select custom-select" required>
+						<option value=''>Choose..</option>
 						<?php
 						foreach ($peos as $peo) {
 						$id =  $peo->id;
@@ -386,7 +389,7 @@
 			var peoId = <?php echo json_encode($peoIdArray); ?>;
 			function dropdownTip(value){
 				//var peosidnumber = "peosidnumber";
-				if(value == 'NULL'){
+				if(value == ''){
 					document.getElementById("peosidnumber").innerHTML = "";
 				}
 				else{
@@ -398,6 +401,42 @@
 					}
 				}
 			}
+		</script>
+
+		<script>
+			//form validation
+			$(document).ready(function () {
+				$('#ploForm').validate({ // initialize the plugin
+					rules: {
+						"idnumber": {
+							required: true,
+							minlength: 1,
+							maxlength: 20,
+							pattern: /^[p/P][l/L][o/O]-[0-9]{1,}$/
+						},
+						"shortname": {
+							required: true,
+							minlength: 1,
+							maxlength: 30
+						},
+						"peo": {
+							required: true
+						}
+					},
+					messages: {
+						"idnumber": {
+							required: "Please enter ID number.",
+							pattern: "Please enter correct format."
+						},
+						"shortname": {
+							required: "Please enter Name."
+						},
+						"peo": {
+							required: "Please select PEO."
+						}
+					}
+				});
+			});
 		</script>
 
 		<?php 
