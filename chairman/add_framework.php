@@ -19,8 +19,9 @@
 		$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
 		$time = time();
 		
-		if(empty($shortname) || empty($idnumber))
+		if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'20' )
 		{
+			//echo "IN IF";
 			if(empty($shortname))
 			{
 				$msg1="<font color='red'>-Please enter framework name</font>";
@@ -29,7 +30,16 @@
 			{
 				$msg2="<font color='red'>-Please enter ID number</font>";
 			}
+			if(strlen($shortname)> '30')
+			{
+				$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+			}
+			if(strlen($idnumber)>'20' )
+			{
+				$msg2="<font color='red'>-Length of the ID Number should be less than 20</font>";
+			}
 		}
+		
 		else{
 			//echo $shortname;
 			//echo $description;
@@ -52,7 +62,7 @@
 		$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
 		$time = time();
 		
-		if(empty($shortname) || empty($idnumber))
+		if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'20' )
 		{
 			if(empty($shortname))
 			{
@@ -61,6 +71,14 @@
 			if(empty($idnumber))
 			{
 				$msg2="<font color='red'>-Please enter ID number</font>";
+			}
+			if(strlen($shortname)> '30')
+			{
+				$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+			}
+			if(strlen($idnumber)>'20' )
+			{
+				$msg2="<font color='red'>-Length of the ID Number should be less than 20</font>";
 			}
 		}
 		else{
@@ -76,9 +94,10 @@
 				$DB->execute($sql);
 				$msg3 = "<font color='green'><b>OBE Framework successfully added!</b></font><br />";
 			}
-		}
 		$redirect_page1='../index.php';
 		redirect($redirect_page1);
+		}
+		
 	}
 	
 	//delete code starts from here

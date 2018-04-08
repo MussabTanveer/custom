@@ -12,7 +12,6 @@
         header('Location: ../index.php');
 	}
 	echo $OUTPUT->header();
-
 	$competencyarray=array();
  
 	if(isset($_POST['ok']))
