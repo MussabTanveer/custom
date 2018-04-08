@@ -1,3 +1,6 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -15,15 +18,18 @@
     ?>
 
     <form id="uploadVerb" method="POST" enctype="multipart/form-data" class="mform">
-
-         <div class="btn btn-default btn-file">
-            
-            <input  type="file" name="verbList" id="verbList" placeholder="Only PDFs are allowed">
+        <div class="btn btn-default btn-file">
+            <input  type="file" name="verbList" id="verbList" accept="application/pdf" placeholder="Only PDFs are allowed" required>
         </div>
-            <input class="btn btn-info" type="submit" name="Upload" value="Upload">
-        
-
+        <input class="btn btn-info" type="submit" name="Upload" value="Upload">
     </form>
+
+    <script>
+		//form validation
+		$(document).ready(function () {
+			$('#uploadVerb').validate();
+		});
+	</script>
 
     <?php
     global $CFG;
