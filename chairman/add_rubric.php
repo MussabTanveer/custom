@@ -178,7 +178,7 @@
                         id="id_rubricname"
                         size=""
                         required
-                        maxlength="100" type="text" >
+                        maxlength="100" >
                 <div class="form-control-feedback" id="id_error_rubricname">
                 </div>
             </div>
@@ -195,7 +195,7 @@
             <div class="col-md-9 form-inline felement" data-fieldtype="editor">
                 <div>
                     <div>
-                        <textarea id="id_rubricdesc" name="rubricdesc" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+                        <textarea id="id_rubricdesc" name="rubricdesc" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea>
                     </div>
                 </div>
                 <div class="form-control-feedback" id="id_error_rubricdesc"  style="display: none;">
@@ -226,7 +226,7 @@
             <div class="col-md-9 form-inline felement" data-fieldtype="editor">
                 <div>
                     <div>
-                        <textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+                        <textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea>
                     </div>
                 </div>
                 <div class="form-control-feedback" id="id_error_criteriondesc" style="display: none;">
@@ -259,7 +259,7 @@
             <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor">
                 <div>
                     <div>
-                        <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" ></textarea>
+                        <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
                     </div>
                 </div>
                 <div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;">
@@ -281,7 +281,7 @@
                         size=""
                         required
                         placeholder="eg. 1"
-                        maxlength="100"
+                        maxlength="7"
                         step="1"
                         min="0" max="100">
                 <div class="form-control-feedback" id="id_error_scalescore">
@@ -306,7 +306,7 @@
             <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor">
                 <div>
                     <div>
-                        <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" ></textarea>
+                        <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
                     </div>
                 </div>
                 <div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;">
@@ -328,7 +328,7 @@
                         size=""
                         required
                         placeholder="eg. 1"
-                        maxlength="100"
+                        maxlength="7"
                         step="1"
                         min="0" max="100">
                 <div class="form-control-feedback" id="id_error_scalescore">
@@ -369,7 +369,7 @@
             document.getElementById(divName).appendChild(newdiv);
             
             var newdiv1 = document.createElement('div');
-            newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_criteriondesc">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_criteriondesc" style="display: none;"></div></div></div>';
+            newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_criteriondesc">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea></div></div><div class="form-control-feedback" id="id_error_criteriondesc" style="display: none;"></div></div></div>';
             document.getElementById(divName).appendChild(newdiv1);
             
             var scaleDiv = document.createElement('div');
@@ -386,7 +386,7 @@
             scaleDiv.appendChild(newdiv3);
 
             var newdiv4 = document.createElement('div');
-            newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+c+'[]" class="form-control" rows="3" cols="40" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+c+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="100" step="1" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
+            newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+c+'[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+c+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="7" step="1" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
             scaleDiv.appendChild(newdiv4);
 
             var newdiv5 = document.createElement('div');
@@ -394,7 +394,7 @@
             scaleDiv.appendChild(newdiv5);
 
             var newdiv6 = document.createElement('div');
-            newdiv6.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+c+'[]" class="form-control" rows="3" cols="40" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+c+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="100" step="1" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
+            newdiv6.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+c+'[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+c+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="7" step="1" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
             scaleDiv.appendChild(newdiv6);
 
             var newdiv7 = document.createElement('div');
