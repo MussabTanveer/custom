@@ -1,4 +1,5 @@
 <script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -145,30 +146,35 @@
 		<h3>Select an Activity to choose Grading Policy for:</h3>
 		<form method='post' action="" class="mform" id="gpForm">
 		<div id="dynamicInput">
-			<div class="form-group row fitem">
+			<div class="form-group row fitem" id="div0">
 				<div class="col-md-4 form-inline felement">
 					<select
-						id="activity" class="select custom-select" name="activity[]">
+						id="activity0" class="select custom-select" name="activity[]" required>
 						<option value="">Choose</option>
 						<option value="quiz">Quiz</option>
 						<option value="assignment">Assignment</option>
 						<option value="project">Project</option>
 						<!--<option value="mid term">Mid Term</option>-->
-					   <!-- <option value="final exam">Final Exam</option>-->
+					   	<!--<option value="final exam">Final Exam</option>-->
 						<option value="other">Other</option>
 					</select>
 				</div>
 				<div class="col-md-4 form-inline felement" data-fieldtype="number">
+					<span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
 					<input type="number"
 							class="form-control"
 							name="percentage[]"
-							id="id_shortname"
+							id="percent0"
 							size=""
-							maxlength="100"
+							maxlength="10"
 							step="0.001"
-							min="0" max="100"> %
+							min="0" max="100"
+							required>
 				</div>
 				<div class="form-control-feedback" id="id_error_shortname">
+				</div>
+				<div class="col-md-4">
+					<i id="cross0" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer"></i>
 				</div>
 			</div>
 		</div>
@@ -184,14 +190,61 @@
 		</form>
 
 		<script>
-			// script to add activity and percent fields to form
-			//var counter = 1;
+			// script to remove first activity and percent fields from form
+			$(document).ready(function(){
+				$("#cross0").click(function(){
+					$("#div0").remove();
+				});
+			});
+		</script>
+		<script>
+			// script to add more activity and percent fields to form
+			var counter = 1;
 			function addInput(divName){
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem"><div class="col-md-4 form-inline felement"><select id="activity" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="percentage[]" id="id_shortname" size="" maxlength="100" step="0.001" min="0" max="100"> %</div><div class="form-control-feedback" id="id_error_shortname"></div></div>';
+				newdiv.innerHTML = '<div class="form-group row fitem" id="div'+counter+'"><div class="col-md-4 form-inline felement"><select id="activity'+counter+'" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span><input type="number" class="form-control" name="percentage[]" id="percent'+counter+'" size="" maxlength="10" step="0.001" min="0" max="100" required></div><div class="form-control-feedback" id="id_error_shortname"></div><div class="col-md-4"><i id="cross'+counter+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer"></i></div></div>';
 				document.getElementById(divName).appendChild(newdiv);
-				//counter++;
+				var idname = "#cross" + counter;
+				var divname = "#div" + counter;
+				$(idname).click(function(){
+					$(divname).remove();
+				});
+				counter++;
 			}
+		</script>
+		<script>
+			//form validation
+			$(document).ready(function () {
+				$('#gpForm').validate({ // initialize the plugin
+					rules: {
+						"activity[]": {
+							required: true
+						},
+						"percentage[]": {
+							number: true,
+							required: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						}
+					},
+					messages: {
+						"percentage[]": {
+							number: "Only numeric values are allowed.",
+							required: "Please enter percentage.",
+							step: "Please enter nearest percentage value.",
+							range: "Please enter percentage between 0 and 100%.",
+							min: "Please enter percentage greater than or equal to 0%.",
+							max: "Please enter percentage less than or equal to 100%.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						}
+					}
+				});
+			});
 		</script>
 		<?php
 		}
