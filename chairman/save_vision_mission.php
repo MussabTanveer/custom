@@ -21,14 +21,25 @@
 	echo "$universityMission <br>";
 	echo "$departmentVision <br>";
 	echo "$departmentMission <br> ";*/
+  global $CFG;
+    $dbp= $CFG->dbpass;
+    $dbh = $CFG->dbhost;
+    $dbn = $CFG->dbname;
+    $dbu = $CFG->dbuser;
 
-	$universityVision = mysql_real_escape_string($universityVision);
-	$universityMission = mysql_real_escape_string($universityMission);
-	$departmentVision = mysql_real_escape_string($departmentVision);
-	$departmentMission = mysql_real_escape_string($departmentMission);
+    $mysqli = new mysqli($dbh, $dbu, $dbp, $dbn);
+        if (mysqli_connect_errno()) {
+            printf("Connect failed: %s\n", mysqli_connect_error());
+            echo "EXIT";
+            exit();
+          }
 
-  $departmentName = mysql_real_escape_string($departmentName);
-  $UniversityName =  mysql_real_escape_string($UniversityName);
+	      $universityVision=$mysqli->real_escape_string($universityVision);
+        $universityMission = $mysqli->real_escape_string($universityMission);
+        $departmentVision = $mysqli->real_escape_string($departmentVision);
+        $departmentMission = $mysqli->real_escape_string($departmentMission);
+        $departmentName = $mysqli->real_escape_string($departmentName);
+        $UniversityName =  $mysqli->real_escape_string($UniversityName);
 
 
     if($departmentName != "")

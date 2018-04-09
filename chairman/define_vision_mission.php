@@ -37,9 +37,14 @@
         });
     </script>
 
-    <p id=msg> </p>
+    
 
 <?php
+    global $CFG;
+    $dbp= $CFG->dbpass;
+    $dbh = $CFG->dbhost;
+    $dbn = $CFG->dbname;
+    $dbu = $CFG->dbuser;
 
     if(isset($_POST['return']))
     {
@@ -49,14 +54,21 @@
         $departmentMission = trim($_POST["dm"]);
         $departmentName = trim($_POST["departName"]);
         $UniversityName = trim($_POST["uniName"]);
-        
-        $universityVision = mysql_real_escape_string($universityVision);
-        $universityMission = mysql_real_escape_string($universityMission);
-        $departmentVision = mysql_real_escape_string($departmentVision);
-        $departmentMission = mysql_real_escape_string($departmentMission);
 
-        $departmentName = mysql_real_escape_string($departmentName);
-        $UniversityName =  mysql_real_escape_string($UniversityName);
+        $mysqli = new mysqli($dbh, $dbu, $dbp, $dbn);
+        if (mysqli_connect_errno()) {
+            printf("Connect failed: %s\n", mysqli_connect_error());
+            echo "EXIT";
+            exit();
+          }
+        
+
+        $universityVision=$mysqli->real_escape_string($universityVision);
+        $universityMission = $mysqli->real_escape_string($universityMission);
+        $departmentVision = $mysqli->real_escape_string($departmentVision);
+        $departmentMission = $mysqli->real_escape_string($departmentMission);
+        $departmentName = $mysqli->real_escape_string($departmentName);
+        $UniversityName =  $mysqli->real_escape_string($UniversityName);
 
         
         if($departmentName != "")
@@ -313,7 +325,8 @@
         <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
 		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
     </form>
-
+    <p id=msg> </p>
     <?php
+
     echo $OUTPUT->footer();
 ?>
