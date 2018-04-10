@@ -11,25 +11,33 @@
 
     global $CFG;
     $x= $CFG->dbpass;
+    $dbh = $CFG->dbhost;
+    $dbn = $CFG->dbname;
+    $dbu = $CFG->dbuser;
 
 class Blob{
     
-    const DB_HOST = 'localhost';
-    const DB_NAME = 'bitnami_moodle';
-    const DB_USER = 'bn_moodle';
+    protected $DB_HOST = '';
+    protected $DB_NAME = '';
+    protected $DB_USER = '';
     protected $DB_PASSWORD='';
  
     /**
      * Open the database connection
      */
-    public function __construct($x) {
+    public function __construct($x,$dbh,$dbn,$dbu) {
         //echo "$x";
-        $DB_PASSWORD=$x;
+
+     $DB_HOST=$dbh;
+      $DB_NAME = $dbn;
+      $DB_USER = $dbu;
+      $DB_PASSWORD=$x;
+       // $DB_PASSWORD=$x;
         // open database connection
-        $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8", self::DB_HOST, self::DB_NAME);
+        $conStr = sprintf("mysql:host=%s;dbname=%s;charset=utf8",  $DB_HOST, $DB_NAME);
  
         try {
-            $this->pdo = new PDO($conStr, self::DB_USER, $DB_PASSWORD);
+            $this->pdo = new PDO($conStr, $DB_USER, $DB_PASSWORD);
             //for prior PHP 5.3.6
             //$conn->exec("set names utf8");
         } catch (PDOException $e) {
@@ -90,7 +98,7 @@ public function selectBlob($id) {
         }
 		
         //displaying pdf
-        $blobObj = new Blob($x);
+        $blobObj = new Blob($x,$dbh,$dbn,$dbu);
         $a = $blobObj->selectBlob($id);
         header("Content-Type:" . $a['mime']);
         echo $a['data'];
