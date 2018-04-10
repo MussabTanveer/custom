@@ -1,5 +1,8 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <?php
-require_once('../../../config.php');
+	require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
@@ -25,11 +28,10 @@ require_once('../../../config.php');
 </style>
 
 <link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
-<script src="../script/jquery/jquery-3.2.1.js"></script>
 
 <?php
 
-	 global $CFG;
+	global $CFG;
     $x= $CFG->dbpass;
     $dbh = $CFG->dbhost;
     $dbn = $CFG->dbname;
@@ -37,7 +39,7 @@ require_once('../../../config.php');
 
 	class Blob{
   
-   protected $DB_HOST = '';
+   	protected $DB_HOST = '';
     protected $DB_NAME = '';
     protected $DB_USER = '';
     protected $DB_PASSWORD='';
@@ -63,7 +65,7 @@ require_once('../../../config.php');
         }
     }
  
-  function updateBlob($id, $filePath, $mime) {
+  	function updateBlob($id, $filePath, $mime) {
  
         $blob = fopen($filePath, 'rb');
  		//echo "$id";
@@ -129,7 +131,7 @@ require_once('../../../config.php');
 				$assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
 
 					
-			 $file = $_FILES['assignQues']['name'];
+			$file = $_FILES['assignQues']['name'];
 		    $file_loc = $_FILES['assignQues']['tmp_name'];
 		    $file_size = $_FILES['assignQues']['size'];
 		    $file_type = $_FILES['assignQues']['type'];
@@ -247,7 +249,7 @@ require_once('../../../config.php');
 		if($flag){
 		?>
 		
-		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data">
+		<form method='post' action="" class="mform" id="assproForm" enctype="multipart/form-data">
             
             <?php
             if($type == "assign"){
@@ -295,7 +297,7 @@ require_once('../../../config.php');
 				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
 					<div>
 						<div>
-							<textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+							<textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea>
 						</div>
 					</div>
 					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
@@ -314,7 +316,7 @@ require_once('../../../config.php');
 				</div>
 				<div class="col-md-9 form-inline felement">
 					<div class="btn btn-default btn-file">
-						<input required type="file" name="assignQues" id="assignQues" placeholder="Only PDFs are allowed">
+						<input required type="file" name="assignQues" id="assignQues" accept="application/pdf" placeholder="Only PDFs are allowed">
 					</div>
 					(Only PDFs are allowed)
 				</div>
@@ -326,7 +328,7 @@ require_once('../../../config.php');
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 					</span>
 					<label class="col-form-label d-inline" for="id_maxmark">
-						Max Mark
+						Max Marks
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement" data-fieldtype="number">
@@ -334,9 +336,11 @@ require_once('../../../config.php');
 							class="form-control"
 							name="maxmark"
 							id="id_maxmark"
+							maxlength="10"
 							size=""
 							required
-							step="0.001">
+							step="0.001"
+							min="0" max="100">
 					<div class="form-control-feedback" id="id_error_maxmark">
 					</div>
 				</div>
@@ -352,7 +356,7 @@ require_once('../../../config.php');
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-                    <select required onChange="dropdownTip(this.value, 0)" name="clo" class="select custom-select">
+                    <select required onChange="dropdownTip(this.value, 0)" name="clo" class="select custom-select" id="selectclo">
                         <option value=''>Choose..</option>
                         <?php
                         foreach ($courseclos as $recC) {
@@ -389,7 +393,7 @@ require_once('../../../config.php');
                         name="startdate"
                         id="id_startdate"
                         size="27"
-                        maxlength="100" >
+                        maxlength="10" >
                     <div class="form-control-feedback" id="id_error_idnumber">
                     </div>
                 </div>
@@ -412,7 +416,7 @@ require_once('../../../config.php');
                         id="id_enddate"
                         data-start-src="id_startdate"
                         size="27"
-                        maxlength="100" >
+                        maxlength="10" >
                     <div class="form-control-feedback" id="id_error_idnumber">
                     </div>
                 </div>
@@ -474,6 +478,80 @@ require_once('../../../config.php');
 			var $jsDatepicker = $('#value-specified-js').datepicker()
 			$jsDatepicker.val('2017-05-30')
 			})
+		</script>
+
+		<script>
+			//form validation
+			$(document).ready(function () {
+				$('#assproForm').validate({ // initialize the plugin
+					rules: {
+						"name": {
+							required: true,
+							minlength: 1,
+							maxlength: 100
+						},
+						"description": {
+							maxlength: 500
+						},
+						"maxmark": {
+							number: true,
+							required: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						},
+						"clo": {
+							required: true
+						},
+						"startdate": {
+							required: true,
+							minlength: 1,
+							maxlength: 100
+						},
+						"enddate": {
+							required: true,
+							minlength: 1,
+							maxlength: 100
+						}
+					},
+					messages: {
+						"name": {
+							required: "Please enter name.",
+							minlength: "Please enter more than 1 characters.",
+							maxlength: "Please enter no more than 100 characters."
+						},
+						"description": {
+							maxlength: "Please enter no more than 500 characters."
+						},
+						"maxmark": {
+							number: "Only numeric values are allowed.",
+							required: "Please enter max marks.",
+							step: "Please enter nearest max marks value.",
+							range: "Please enter max marks between 0 and 100%.",
+							min: "Please enter max marks greater than or equal to 0.",
+							max: "Please enter max marks less than or equal to 100.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						},
+						"clo": {
+							required: "Please select CLO."
+						},
+						"startdate": {
+							required: "Please enter start date.",
+							minlength: "Please enter more than 1 characters.",
+							maxlength: "Please enter no more than 10 characters."
+						},
+						"enddate": {
+							required: "Please enter end date.",
+							minlength: "Please enter more than 1 characters.",
+							maxlength: "Please enter no more than 10 characters."
+						}
+					}
+				});
+			});
 		</script>
 
     <?php
