@@ -351,121 +351,126 @@ require_once('../../../config.php');
 			</div>
 
 			<div id="dynamicInput">
-            <h3>Map Question to CLO</h3>
-            <div class="form-group row fitem ">
-                <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
-                    <label class="col-form-label d-inline" for="id_quesname">
-                        Name
-                    </label>
-                </div>
-                <div class="col-md-9 form-inline felement" data-fieldtype="text">
-                    <input type="text"
-                            class="form-control"
-                            name="quesname[]"
-                            id="id_quesname"
-                            size=""
-                            required
-                            maxlength="50">
-                    <div class="form-control-feedback" id="id_error_quesname">
-                    </div>
-                </div>
-            </div>
-			
-			<div class="form-group row fitem">
-				<div class="col-md-3">
-					<span class="pull-xs-right text-nowrap">
-						
-					</span>
-					<label class="col-form-label d-inline" for="id_ques_text">
-						Text
-					</label>
-				</div>
-				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
-					<div>
-						<div>
-							<textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+				<div id="div0">
+				<h3>Map Question to CLO</h3>
+				<div class="form-group row fitem ">
+					<div class="col-md-3">
+						<span class="pull-xs-right text-nowrap">
+							<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+						</span>
+						<label class="col-form-label d-inline" for="id_quesname">
+							Name
+						</label>
+					</div>
+					<div class="col-md-5 form-inline felement" data-fieldtype="text">
+						<input type="text"
+								class="form-control"
+								name="quesname[]"
+								id="id_quesname"
+								size=""
+								required
+								maxlength="50">
+						<div class="form-control-feedback" id="id_error_quesname">
 						</div>
 					</div>
-					<div class="form-control-feedback" id="id_error_ques_text"  style="display: none;">
+					<div class="col-md-4">
+						<i id="cross0" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i>
 					</div>
 				</div>
-			</div>
+				
+				<div class="form-group row fitem">
+					<div class="col-md-3">
+						<span class="pull-xs-right text-nowrap">
+							
+						</span>
+						<label class="col-form-label d-inline" for="id_ques_text">
+							Text
+						</label>
+					</div>
+					<div class="col-md-9 form-inline felement" data-fieldtype="editor">
+						<div>
+							<div>
+								<textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+							</div>
+						</div>
+						<div class="form-control-feedback" id="id_error_ques_text"  style="display: none;">
+						</div>
+					</div>
+				</div>
 
-			<div class="form-group row fitem ">
-				<div class="col-md-3">
-					<span class="pull-xs-right text-nowrap">
-						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-					</span>
-					<label class="col-form-label d-inline" for="id_maxmark">
-						Max Mark
-					</label>
-				</div>
-				<div class="col-md-9 form-inline felement" data-fieldtype="number">
-					<input type="number"
-							class="form-control"
-							name="maxmark[]"
-							id="id_maxmark"
-							size=""
-							required
-							step="0.001">
-					<div class="form-control-feedback" id="id_error_maxmark">
+				<div class="form-group row fitem ">
+					<div class="col-md-3">
+						<span class="pull-xs-right text-nowrap">
+							<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+						</span>
+						<label class="col-form-label d-inline" for="id_maxmark">
+							Max Mark
+						</label>
+					</div>
+					<div class="col-md-9 form-inline felement" data-fieldtype="number">
+						<input type="number"
+								class="form-control"
+								name="maxmark[]"
+								id="id_maxmark"
+								size=""
+								required
+								step="0.001">
+						<div class="form-control-feedback" id="id_error_maxmark">
+						</div>
 					</div>
 				</div>
-			</div>
-			
-			<div class="form-group row fitem ">
-				<div class="col-md-3">
-					<span class="pull-xs-right text-nowrap">
-						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-					</span>
-					<label class="col-form-label d-inline" for="id_clo">
-						CLO
-					</label>
-				</div>
-				<div class="col-md-9 form-inline felement">
-                    <select required onChange="dropdownTip(this.value, 0)" name="clo[]" class="select custom-select">
-                        <option value=''>Choose..</option>
-                        <?php
-                        foreach ($courseclos as $recC) {
-                        $cid =  $recC->cloid;
-                        $cname = $recC->cloname;
-                        $plname = $recC->ploname;
-                        $pename = $recC->peoname;
-                        ?>
-                        <option value='<?php echo $cid; ?>'><?php echo $cname; ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-					<span id="plo0"></span>
-                    <span id="tax0"></span>
-					<div class="form-control-feedback" id="id_error_clo">
+				
+				<div class="form-group row fitem ">
+					<div class="col-md-3">
+						<span class="pull-xs-right text-nowrap">
+							<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+						</span>
+						<label class="col-form-label d-inline" for="id_clo">
+							CLO
+						</label>
+					</div>
+					<div class="col-md-9 form-inline felement">
+						<select required onChange="dropdownTip(this.value, 0)" name="clo[]" class="select custom-select">
+							<option value=''>Choose..</option>
+							<?php
+							foreach ($courseclos as $recC) {
+							$cid =  $recC->cloid;
+							$cname = $recC->cloname;
+							$plname = $recC->ploname;
+							$pename = $recC->peoname;
+							?>
+							<option value='<?php echo $cid; ?>'><?php echo $cname; ?></option>
+							<?php
+							}
+							?>
+						</select>
+						<span id="plo0"></span>
+						<span id="tax0"></span>
+						<div class="form-control-feedback" id="id_error_clo">
+						</div>
 					</div>
 				</div>
-			</div>
-            
-			<?php
-			if($type == "finalexam"){
-			?>
-            <div class="form-group row fitem ">
-                <div class="col-md-3">
-					<label class="col-form-label d-inline" for="id_sepatmpt">
-                        Separate Attempt
-					</label>
-				</div>
-                <div class="col-md-9 form-inline felement">
-                    <input type="checkbox" value="0" name="separateattempt[]" id="id_sepatmpt">
-					<div class="form-control-feedback" id="id_error_sepatmpt">
+				
+				<?php
+				if($type == "finalexam"){
+				?>
+				<div class="form-group row fitem ">
+					<div class="col-md-3">
+						<label class="col-form-label d-inline" for="id_sepatmpt">
+							Separate Attempt
+						</label>
+					</div>
+					<div class="col-md-9 form-inline felement">
+						<input type="checkbox" value="0" name="separateattempt[]" id="id_sepatmpt">
+						<div class="form-control-feedback" id="id_error_sepatmpt">
+						</div>
 					</div>
 				</div>
-			</div>
-			<?php
-			}
-			?>
+				<?php
+				}
+				?>
 
+				</div>
 			</div>
 
 			<div class="row">
@@ -494,7 +499,15 @@ require_once('../../../config.php');
 			echo $msgf;
 		}
 		?>
-				
+		
+		<script>
+			// script to remove question fields from form
+			$(document).ready(function(){
+				$("#cross0").click(function(){
+					$("#div0").remove();
+				});
+			});
+		</script>
 		<script>
 			// script to add quiz name & desc & ques name, desc, maxmark, clo & separateattempt fields to form
 			var i = 1;
@@ -503,21 +516,27 @@ require_once('../../../config.php');
             var clonames = <?php echo json_encode($clonames); ?>;
 			
 			function addInput(divName){
-                var newh3 = document.createElement('h3');
+				var divWrap = document.createElement('div');
+				var divid = "div"+i;
+				divWrap.setAttribute("id", divid);
+				divWrap.innerHTML = '<h3>Map Question to CLO</h3>';
+				document.getElementById(divName).appendChild(divWrap);
+
+                /*var newh3 = document.createElement('h3');
 				newh3.innerHTML = 'Map Question to CLO';
-				document.getElementById(divName).appendChild(newh3);
+				document.getElementById(divName).appendChild(newh3);*/
 
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname" size="" required maxlength="50"><div class="form-control-feedback" id="id_error_quesname"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv);
+				newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname">Name</label></div><div class="col-md-5 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname" size="" required maxlength="50"><div class="form-control-feedback" id="id_error_quesname"></div></div><div class="col-md-4"><i id="cross'+i+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+				divWrap.appendChild(newdiv);
 
 				var newdiv1 = document.createElement('div');
 				newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_ques_text'+i+'">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text" style="display: none;"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv1);
+				divWrap.appendChild(newdiv1);
 
 				var newdiv2 = document.createElement('div');
 				newdiv2.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_maxmark">Max Mark</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="maxmark[]" id="id_maxmark" size="" required step="0.001"><div class="form-control-feedback" id="id_error_maxmark"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv2);
+				divWrap.appendChild(newdiv2);
 
 				//Create select element for CLO selection
 				var selectCLO = document.createElement("select");
@@ -543,14 +562,20 @@ require_once('../../../config.php');
 				newdivforselectCLO.appendChild(selectCLO);
 
 				var newdiv3 = document.createElement('div');
-                newdiv3.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_clo">CLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectCLO.innerHTML+' <span id="plo'+i+'"></span> <span id="tax'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
-                document.getElementById(divName).appendChild(newdiv3);
+				newdiv3.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_clo">CLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectCLO.innerHTML+' <span id="plo'+i+'"></span> <span id="tax'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
+				divWrap.appendChild(newdiv3);
 
 				if(type == "finalexam"){
 					var newdiv4 = document.createElement('div');
 					newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><label class="col-form-label d-inline" for="id_sepattempt">Separate Attempt</label></div><div class="col-md-9 form-inline felement"><input type="checkbox" value="'+i+'" name="separateattempt[]" id="id_sepattempt"><div class="form-control-feedback" id="id_error_sepattempt"></div></div></div>';
-					document.getElementById(divName).appendChild(newdiv4);
+					divWrap.appendChild(newdiv4);
 				}
+
+				var idname = "#cross" + i;
+				var divname = "#div" + i;
+				$(idname).click(function(){
+					$(divname).remove();
+				});
                 
 				i++;
 			}
