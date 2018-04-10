@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -20,6 +22,9 @@
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
+	}
+    label.error {
+		color: red;
 	}
 </style>
 <?php
@@ -54,7 +59,7 @@
 	
 	<br />
 	<h3>Edit Grading Policy Item</h3>
-	<form method='post' action="" class="mform">
+	<form method='post' action="" class="mform" id="editgpForm">
 		<div class="form-group row fitem ">
             <div class="col-md-4 form-inline felement">
             <?php
@@ -62,20 +67,53 @@
             ?>
             </div>
             <div class="col-md-4 form-inline felement" data-fieldtype="number">
-                <input type="number" value="<?php echo $percent; ?>"
+                <span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+                <input type="number" value="<?php echo $percent; ?>" required
                         class="form-control"
                         name="percentage"
                         id="id_shortname"
                         size=""
-                        maxlength="100"
+                        maxlength="10"
                         step="0.001"
-                        min="0" max="100"> %
+                        min="0" max="100">
             </div>
             <div class="form-control-feedback" id="id_error_shortname">
             </div>
 		</div>
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
+
+    <script>
+        //form validation
+        $(document).ready(function () {
+            $('#editgpForm').validate({ // initialize the plugin
+                rules: {
+                    "percentage": {
+                        number: true,
+                        required: true,
+                        step: 0.001,
+                        range: [0, 100],
+                        min: 0,
+                        max: 100,
+                        minlength: 1,
+                        maxlength: 7
+                    }
+                },
+                messages: {
+                    "percentage": {
+                        number: "Only numeric values are allowed.",
+                        required: "Please enter percentage.",
+                        step: "Please enter nearest percentage value.",
+                        range: "Please enter percentage between 0 and 100%.",
+                        min: "Please enter percentage greater than or equal to 0%.",
+                        max: "Please enter percentage less than or equal to 100%.",
+                        minlength: "Please enter more than 1 numbers.",
+                        maxlength: "Please enter no more than 6 numbers (including decimal part)."
+                    }
+                }
+            });
+        });
+    </script>
 		
     <?php 
         label:
