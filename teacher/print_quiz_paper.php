@@ -12,7 +12,6 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-
     if(!empty($_GET['type']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
@@ -23,7 +22,6 @@
         //echo " Activity Type : $type";
         
         $quizzes= $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?",array($course_id,-1));
-
         if($quizzes)
         {
             $serialno = 0;
@@ -33,9 +31,12 @@
                 $serialno++;
                 $qid = $records->id;
                 $qname = $records->name;
-                $mime = $records->mime;     
+                $mime = $records->mime;
+                if ($mime)
+                
                  $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname uploaded paper</a>");
-            
+             else
+                 $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-');
             }
             echo html_writer::table($table);
             echo "<br />";
@@ -44,12 +45,11 @@
             echo "<h3>You do not have any manual $type in this course!</h3>";
     }
     else
-	{?>
-		<h3 style="color:red;"> Invalid Selection </h3>
-    	<a href="./teacher_courses.php">Back</a>
-    	<?php
+    {?>
+        <h3 style="color:red;"> Invalid Selection </h3>
+        <a href="./teacher_courses.php">Back</a>
+        <?php
     }
-
     echo $OUTPUT->footer();
     
 ?>
