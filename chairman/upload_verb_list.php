@@ -16,6 +16,11 @@
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
 
     ?>
+<style>
+	label.error {
+		color: red;
+	}
+</style>
 
     <form id="uploadVerb" method="POST" enctype="multipart/form-data" class="mform">
         <div class="btn btn-default btn-file">
