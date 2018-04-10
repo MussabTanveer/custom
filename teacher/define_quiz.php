@@ -1,5 +1,8 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <?php
-require_once('../../../config.php');
+	require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
@@ -24,10 +27,8 @@ require_once('../../../config.php');
 	}
 </style>
 
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-
 <?php
-  global $CFG;
+  	global $CFG;
     $x= $CFG->dbpass;
     $dbh = $CFG->dbhost;
     $dbn = $CFG->dbname;
@@ -82,7 +83,7 @@ require_once('../../../config.php');
 		    $file_size = $_FILES['quizQues']['size'];
 		    $file_type = $_FILES['quizQues']['type'];
 
-		 //  var_dump($_FILES['quizQues']);
+		 	// var_dump($_FILES['quizQues']);
 
 			// Insert manual quiz record
 			try {
@@ -274,7 +275,7 @@ require_once('../../../config.php');
 		}
 		if($flag){
 		?>
-		<form method='post' action="" class="mform" id="cloForm" enctype="multipart/form-data">
+		<form method='post' action="" class="mform" id="quizForm" enctype="multipart/form-data">
 			
 			<?php
             if($type == "quiz"){
@@ -327,7 +328,7 @@ require_once('../../../config.php');
 				<div class="col-md-9 form-inline felement" data-fieldtype="editor">
 					<div>
 						<div>
-							<textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+							<textarea id="id_description" name="description" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="100"></textarea>
 						</div>
 					</div>
 					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
@@ -343,7 +344,7 @@ require_once('../../../config.php');
 				</div>
 				<div class="col-md-9 form-inline felement">
 					<div class="btn btn-default btn-file">
-						<input  type="file" name="quizQues" id="quizQues" placeholder="Only PDFs are allowed">
+						<input  type="file" name="quizQues" id="quizQues" accept="application/pdf" placeholder="Only PDFs are allowed">
 					</div>
 					(Only PDFs are allowed)
 				</div>
@@ -357,7 +358,7 @@ require_once('../../../config.php');
 						<span class="pull-xs-right text-nowrap">
 							<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 						</span>
-						<label class="col-form-label d-inline" for="id_quesname">
+						<label class="col-form-label d-inline" for="id_quesname0">
 							Name
 						</label>
 					</div>
@@ -365,10 +366,10 @@ require_once('../../../config.php');
 						<input type="text"
 								class="form-control"
 								name="quesname[]"
-								id="id_quesname"
+								id="id_quesname0"
 								size=""
 								required
-								maxlength="50">
+								maxlength="100">
 						<div class="form-control-feedback" id="id_error_quesname">
 						</div>
 					</div>
@@ -382,14 +383,14 @@ require_once('../../../config.php');
 						<span class="pull-xs-right text-nowrap">
 							
 						</span>
-						<label class="col-form-label d-inline" for="id_ques_text">
+						<label class="col-form-label d-inline" for="id_ques_text0">
 							Text
 						</label>
 					</div>
 					<div class="col-md-9 form-inline felement" data-fieldtype="editor">
 						<div>
 							<div>
-								<textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea>
+								<textarea id="id_ques_text0" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="800"></textarea>
 							</div>
 						</div>
 						<div class="form-control-feedback" id="id_error_ques_text"  style="display: none;">
@@ -402,18 +403,20 @@ require_once('../../../config.php');
 						<span class="pull-xs-right text-nowrap">
 							<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 						</span>
-						<label class="col-form-label d-inline" for="id_maxmark">
-							Max Mark
+						<label class="col-form-label d-inline" for="id_maxmark0">
+							Max Marks
 						</label>
 					</div>
 					<div class="col-md-9 form-inline felement" data-fieldtype="number">
 						<input type="number"
 								class="form-control"
 								name="maxmark[]"
-								id="id_maxmark"
+								id="id_maxmark0"
+								maxlength="10"
 								size=""
 								required
-								step="0.001">
+								step="0.001"
+								min="0" max="100">
 						<div class="form-control-feedback" id="id_error_maxmark">
 						</div>
 					</div>
@@ -429,7 +432,7 @@ require_once('../../../config.php');
 						</label>
 					</div>
 					<div class="col-md-9 form-inline felement">
-						<select required onChange="dropdownTip(this.value, 0)" name="clo[]" class="select custom-select">
+						<select required onChange="dropdownTip(this.value, 0)" name="clo[]" class="select custom-select" id="clo0">
 							<option value=''>Choose..</option>
 							<?php
 							foreach ($courseclos as $recC) {
@@ -526,19 +529,21 @@ require_once('../../../config.php');
 				document.getElementById(divName).appendChild(newh3);*/
 
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname">Name</label></div><div class="col-md-5 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname" size="" required maxlength="50"><div class="form-control-feedback" id="id_error_quesname"></div></div><div class="col-md-4"><i id="cross'+i+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+				newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname'+i+'">Name</label></div><div class="col-md-5 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname'+i+'" size="" required maxlength="100"><div class="form-control-feedback" id="id_error_quesname"></div></div><div class="col-md-4"><i id="cross'+i+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
 				divWrap.appendChild(newdiv);
 
 				var newdiv1 = document.createElement('div');
-				newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_ques_text'+i+'">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_ques_text" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text" style="display: none;"></div></div></div>';
+				newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_ques_text'+i+'">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_ques_text'+i+'" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="800"></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text" style="display: none;"></div></div></div>';
 				divWrap.appendChild(newdiv1);
 
 				var newdiv2 = document.createElement('div');
-				newdiv2.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_maxmark">Max Mark</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="maxmark[]" id="id_maxmark" size="" required step="0.001"><div class="form-control-feedback" id="id_error_maxmark"></div></div></div>';
+				newdiv2.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_maxmark'+i+'">Max Mark</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="maxmark[]" id="id_maxmark'+i+'" maxlength="10" size="" required step="0.001" min="0" max="100"><div class="form-control-feedback" id="id_error_maxmark"></div></div></div>';
 				divWrap.appendChild(newdiv2);
 
 				//Create select element for CLO selection
 				var selectCLO = document.createElement("select");
+				var selectid="clo"+i;
+				selectCLO.setAttribute("id", selectid);
 				selectCLO.className = "select custom-select";
 				selectCLO.name = "clo[]";
 				jsFuncVal = "dropdownTip(this.value, "+i+")";
@@ -608,6 +613,76 @@ require_once('../../../config.php');
 				}
 			}
 			
+		</script>
+
+		<script>
+			//form validation
+			$(document).ready(function () {
+				$('#quizForm').validate({ // initialize the plugin
+					rules: {
+						"name": {
+							required: true,
+							minlength: 1,
+							maxlength: 100
+						},
+						"description": {
+							maxlength: 100
+						},
+						"quesname[]": {
+							required: true,
+							minlength: 1,
+							maxlength: 100
+						},
+						"ques_text[]": {
+							maxlength: 800
+						},
+						"maxmark[]": {
+							number: true,
+							required: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						},
+						"clo[]": {
+							required: true
+						}
+					},
+					messages: {
+						"name": {
+							required: "Please enter name.",
+							minlength: "Please enter more than 1 characters.",
+							maxlength: "Please enter no more than 100 characters."
+						},
+						"description": {
+							maxlength: "Please enter no more than 100 characters."
+						},
+						"quesname[]": {
+							required: "Please enter name.",
+							minlength: "Please enter more than 1 characters.",
+							maxlength: "Please enter no more than 100 characters."
+						},
+						"ques_text[]": {
+							maxlength: "Please enter no more than 800 characters."
+						},
+						"maxmark[]": {
+							number: "Only numeric values are allowed.",
+							required: "Please enter max marks.",
+							step: "Please enter nearest max marks value.",
+							range: "Please enter max marks between 0 and 100%.",
+							min: "Please enter max marks greater than or equal to 0.",
+							max: "Please enter max marks less than or equal to 100.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						},
+						"clo[]": {
+							required: "Please select CLO."
+						}
+					}
+				});
+			});
 		</script>
 
 	<?php
