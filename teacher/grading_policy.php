@@ -174,7 +174,7 @@
 				<div class="form-control-feedback" id="id_error_shortname">
 				</div>
 				<div class="col-md-4">
-					<i id="cross0" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer"></i>
+					<i id="cross0" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i>
 				</div>
 			</div>
 		</div>
@@ -202,7 +202,7 @@
 			var counter = 1;
 			function addInput(divName){
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="form-group row fitem" id="div'+counter+'"><div class="col-md-4 form-inline felement"><select id="activity'+counter+'" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span><input type="number" class="form-control" name="percentage[]" id="percent'+counter+'" size="" maxlength="10" step="0.001" min="0" max="100" required></div><div class="form-control-feedback" id="id_error_shortname"></div><div class="col-md-4"><i id="cross'+counter+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer"></i></div></div>';
+				newdiv.innerHTML = '<div class="form-group row fitem" id="div'+counter+'"><div class="col-md-4 form-inline felement"><select id="activity'+counter+'" class="select custom-select" name="activity[]"><option value="">Choose</option><option value="quiz">Quiz</option><option value="assignment">Assignment</option><option value="project">Project</option><option value="other">Other</option></select></div><div class="col-md-4 form-inline felement" data-fieldtype="number"><span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span><input type="number" class="form-control" name="percentage[]" id="percent'+counter+'" size="" maxlength="10" step="0.001" min="0" max="100" required></div><div class="form-control-feedback" id="id_error_shortname"></div><div class="col-md-4"><i id="cross'+counter+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
 				document.getElementById(divName).appendChild(newdiv);
 				var idname = "#cross" + counter;
 				var divname = "#div" + counter;
