@@ -53,13 +53,12 @@ require_once('../../../config.php');
 			{
 				array_push($quesnames,$qN);	
 			}
-			if($type != "finalexam"){
-				$questexts=array();
-				foreach ($_POST['ques_text'] as $qT)
-				{
-					array_push($questexts,$qT);
-				}
+			$questexts=array();
+			foreach ($_POST['ques_text'] as $qT)
+			{
+				array_push($questexts,$qT);
 			}
+			
             $maxmarks=array();
 			foreach ($_POST['maxmark'] as $qMM)
 			{
