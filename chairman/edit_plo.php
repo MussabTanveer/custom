@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -9,8 +11,15 @@
     
     echo $OUTPUT->header();
 	require_login();	
-		$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
-    $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
+	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
+	$rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
+?>
+<style>
+	label.error {
+		color: red;
+	}
+</style>
+<?php
 	if(isset($_GET['edit']) && isset($_GET['fwid']))
 	{
 		$id=$_GET['edit'];
@@ -56,14 +65,41 @@
 			echo $msg3;
 			goto label;
 		}
-			
-			
+		
 	?>
 	
 	<br />
 	<h3>Edit PLO</h3>
-	<form method='post' action="" class="mform">
-		
+	<form method='post' action="" class="mform" id="ploForm">
+		<div class="form-group row fitem">
+			<div class="col-md-3">
+				<span class="pull-xs-right text-nowrap">
+					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+				</span>
+				<label class="col-form-label d-inline" for="id_idnumber">
+				ID number
+				</label>
+			</div>
+			<div class="col-md-9 form-inline felement" data-fieldtype="text">
+				<input type="text"
+						class="form-control "
+						name="idnumber"
+						id="id_idnumber"
+						size=""
+						pattern="[p/P][l/L][o/O]-[0-9]{1,}"
+						title="eg. PLO-1"
+						required
+						maxlength="20" type="text" >
+				<div class="form-control-feedback" id="id_error_idnumber">
+				<?php
+				if(isset($msg2)){
+					echo $msg2;
+				}
+				?>
+				</div>
+			</div>
+		</div>
+
 		<div class="form-group row fitem ">
 			<div class="col-md-3">
 				<span class="pull-xs-right text-nowrap">
@@ -80,7 +116,7 @@
 						id="id_shortname"
 						size=""
 						required
-						maxlength="100" type="text" >
+						maxlength="30" type="text" >
 				<div class="form-control-feedback" id="id_error_shortname">
 				<?php
 				if(isset($msg1)){
@@ -109,38 +145,39 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="form-group row fitem">
-			<div class="col-md-3">
-				<span class="pull-xs-right text-nowrap">
-					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-				</span>
-				<label class="col-form-label d-inline" for="id_idnumber">
-				ID number
-				</label>
-			</div>
-			<div class="col-md-9 form-inline felement" data-fieldtype="text">
-				<input type="text"
-						class="form-control "
-						name="idnumber"
-						id="id_idnumber"
-						size=""
-						pattern="[p/P][l/L][o/O]-[0-9]{1,}"
-						title="eg. PLO-1"
-						required
-						maxlength="100" type="text" >
-				<div class="form-control-feedback" id="id_error_idnumber">
-				<?php
-				if(isset($msg2)){
-					echo $msg2;
-				}
-				?>
-				</div>
-			</div>
-		</div>
 		
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
+
+	<script>
+		//form validation
+		$(document).ready(function () {
+			$('#ploForm').validate({ // initialize the plugin
+				rules: {
+					"idnumber": {
+						required: true,
+						minlength: 1,
+						maxlength: 20,
+						pattern: /^[p/P][l/L][o/O]-[0-9]{1,}$/
+					},
+					"shortname": {
+						required: true,
+						minlength: 1,
+						maxlength: 30
+					}
+				},
+				messages: {
+					"idnumber": {
+						required: "Please enter ID number.",
+						pattern: "Please enter correct format."
+					},
+					"shortname": {
+						required: "Please enter Name."
+					}
+				}
+			});
+		});
+	</script>
 	
 	<?php
 		if(isset($_GET['edit'])){
