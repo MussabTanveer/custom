@@ -23,6 +23,9 @@
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 	}
+	label.error {
+		color: red;
+	}
 </style>
 <?php
 

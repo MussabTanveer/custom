@@ -25,6 +25,9 @@
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 	}
+	label.error {
+		color: red;
+	}
 </style>
 
 <link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
