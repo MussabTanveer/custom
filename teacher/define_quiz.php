@@ -170,9 +170,7 @@ require_once('../../../config.php');
 						$record = new stdClass();
 						$record->mquizid = $quizid;
 						$record->quesname = $quesnames[$i];
-						if($type != "finalexam"){
-							$record->questext = $questexts[$i];
-						}
+						$record->questext = $questexts[$i];
 						$record->maxmark = $maxmarks[$i];
 						$record->cloid = $closid[$i];
 						if($type == "finalexam"){
