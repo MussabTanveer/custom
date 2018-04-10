@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <?php
 	require_once('../../../config.php');
     $context = context_system::instance();
@@ -12,7 +14,15 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-    
+?>
+
+<style>
+label.error {
+    color: red;
+}
+</style>
+
+<?php    
     if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
@@ -31,7 +41,7 @@
             $i = 0;
             $activityids = array();
             ?>
-            <form action="confirm_grading_item.php" method="post">
+            <form action="confirm_grading_item.php" method="post" id="mapForm">
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> Activities </th>
@@ -49,7 +59,7 @@
                     <tr>
                         <td><?php echo $qname;?> </td>
                         <td>
-                            <select required name="gitem[]" class="select custom-select">
+                            <select required name="gitem[]" class="select custom-select" id="item<?php echo $i ?>">
                                 <option value=''>Choose..</option>
                                 <?php
                                 foreach ($rec as $recItem) {
@@ -76,7 +86,7 @@
                         <tr>
                             <td><?php echo $aname;?> </td>
                             <td>
-                                <select required name="gitem[]" class="select custom-select">
+                                <select required name="gitem[]" class="select custom-select" id="item<?php echo $i ?>">
                                     <option value=''>Choose..</option>
                                     <?php
                                     foreach ($rec as $recItem) {
@@ -103,6 +113,24 @@
                 <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
                 <input type="submit" value="NEXT" name="submit" class="btn btn-primary">
 	    	</form>
+
+            <script>
+                //form validation
+                $(document).ready(function () {
+                    $('#mapForm').validate({ // initialize the plugin
+                        rules: {
+                            "gitem[]": {
+                                required: true
+                            }
+                        },
+                        messages: {
+                            "clo": {
+                                required: "&nbsp;Please select Grading Item."
+                            }
+                        }
+                    });
+                });
+            </script>
 
             <?php
             }
