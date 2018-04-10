@@ -135,9 +135,10 @@ require_once('../../../config.php');
 					
 					//$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
 					//$DB->execute($sql);
+					echo "<font color =green>CLO has been defined sucessfully</font>";
 				}
 				else
-				{//echo $idnumber . "already exists<br>";
+				{ echo $idnumber . "already exists<br>";
 				
 				}
 				if($cloid){
@@ -198,7 +199,7 @@ require_once('../../../config.php');
 			}*/
 
 			$redirect_page1='../index.php';
-			//redirect($redirect_page1);
+			redirect($redirect_page1);
 		}
 
 		/* delete code */
@@ -355,7 +356,7 @@ require_once('../../../config.php');
 		?>
 		<br />
 
-		<p id="msg">
+	
 		
 		</p>
 		
@@ -682,7 +683,7 @@ require_once('../../../config.php');
 		<div id='list' class='col-md-3'></div>
 		</div>
 
-		
+			<p id="msg">
 		<?php
 		if(isset($_POST['save']) && !isset($msg3)){
 		?>

@@ -127,9 +127,10 @@
             
             //$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
             //$DB->execute($sql);
+            echo "<font color =green>$idnumber has been defined sucessfully</font>";
         }
         else
-        {//echo $idnumber . "already exists<br>";
+        {echo "<font color =red>$idnumber" . "already exists<br></font>";
         
         }
         if($cloid){
