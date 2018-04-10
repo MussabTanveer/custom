@@ -60,7 +60,7 @@
             $desc = $u->description;
         }
             ?>
-            <h3>University Name</h3><br />
+            <h3>Name of University</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
@@ -83,7 +83,7 @@
             $desc = $u->description;
         }
             ?>
-            <h3>Department Name</h3><br />
+            <h3>Name of Department</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
@@ -106,7 +106,7 @@
             $desc = $u->description;
         }
             ?>
-            <h3>University Vision</h3><br />
+            <h3>Vision of University</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
@@ -129,7 +129,7 @@
             $desc = $u->description;
         }
             ?>
-            <h3>University Mission</h3><br />
+            <h3>Mission of University</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
@@ -150,7 +150,7 @@
             $desc = $u->description;
         }
             ?>
-            <h3>Department Vision</h3><br />
+            <h3>Vision of Department</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
@@ -172,7 +172,7 @@
             $desc = $u->description;
         }
             ?>
-            <h3>Department Mission</h3><br />
+            <h3>Mission of Department</h3><br />
             <?php
             if(!empty($desc))
                 echo "<div class='row'><div class='col-md-2'></div><div class='col-md-8 effect'><b><i> $desc </i></b></div><div class='col-md-2'></div></div><br />";
