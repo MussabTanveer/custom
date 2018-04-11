@@ -313,10 +313,10 @@
 		$peoNameArray=array();
 		$peoIdArray=array();
 
-		foreach ($peos as $peo) {
-			$id =  $peo->id;
-			$name = $peo->shortname;
-			$idnumber =  $peo->idnumber;
+		foreach ($peos as $p) {
+			$id =  $p->id;
+			$name = $p->shortname;
+			//$idnumpeo =  $p->idnumber;
 			array_push($peoNameArray,$name);
 			array_push($peoIdArray,$id);
 		}
@@ -565,15 +565,15 @@
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
-					<select onChange="dropdownTip(this.value)" name="peo" class="select custom-select" required>
+					<select onChange="dropdownTip(this.value)" name="peo" class="select custom-select" required id="id_select_peo">
 						<option value=''>Choose..</option>
 						<?php
-						foreach ($peos as $peo) {
-						$id =  $peo->id;
-						$name = $peo->shortname;
-						$idnumber = $peo->idnumber;
+						foreach ($peos as $p) {
+						$id =  $p->id;
+						$name = $p->shortname;
+						$idnumpeo = $p->idnumber;
 						?>
-						<option value='<?php echo $id; ?>'><?php echo $idnumber; ?></option>
+						<option value='<?php echo $id; ?>'><?php echo $idnumpeo; ?></option>
 						<?php
 						}
 						?>
@@ -601,12 +601,13 @@
 		if(isset($_POST['save']) && !isset($msg3)){
 		?>
 		<script>
+			document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
 			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
 			document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
-			document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;
 			document.getElementById("id_kpi_cohort_programme").value = <?php echo json_encode($cpkpi); ?>;
 			document.getElementById("id_kpi_cohort_course").value = <?php echo json_encode($cckpi); ?>;
 			document.getElementById("id_kpi_individual_student").value = <?php echo json_encode($iskpi); ?>;
+			document.getElementById("id_select_peo").value = <?php echo json_encode($peo); ?>;
 		</script>
 		<?php
 		}
