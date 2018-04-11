@@ -93,6 +93,7 @@
         $idnumber=$coursecode."-".$shortname; $idnumber=strtoupper($idnumber);
         $description=trim($_POST["description"][$i]);
         $kpi=$_POST["kpi"][$i];
+        $cohortKpi=$_POST["cohortkpi"][$i];
         $plo=$plosIdArray[$i];
         $domain=$domsIdArray[$i];
         $level=$levelsIdArray[$i];
@@ -127,7 +128,7 @@
             
             //$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
             //$DB->execute($sql);
-            echo "<font color =green>$idnumber has been defined sucessfully</font>";
+            echo "<font color =green>$idnumber has been defined sucessfully</font><br>";
         }
         else
         {echo "<font color =red>$idnumber" . "already exists<br></font>";
@@ -137,6 +138,8 @@
             $sql="INSERT INTO mdl_taxonomy_clo_level (frameworkid, cloid, levelid) VALUES($frameworkid, $cloid, $level)";
             $DB->execute($sql);
             $sql="INSERT INTO mdl_clo_kpi (cloid, kpi) VALUES($cloid, $kpi)";
+            $DB->execute($sql);
+            $sql="INSERT INTO mdl_clo_cohort_kpi (cloid, kpi) VALUES($cloid, $cohortKpi)";
             $DB->execute($sql);
             if($domain == 2 || $domain == 3){
                 $sql="INSERT INTO mdl_clo_rubric (cloid, rubric) VALUES($cloid, $rubricsIdArray[$j])";

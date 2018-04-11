@@ -101,6 +101,8 @@ require_once('../../../config.php');
 				$idnumber=$coursecode."-".$shortname; $idnumber=strtoupper($idnumber);
 				$description=trim($_POST["description"][$i]);
 				$kpi=$_POST["kpi"][$i];
+				$cohortKpi=$_POST["cohortkpi"][$i];
+				//var_dump($kpi);
 				$plo=$plosIdArray[$i];
 				$domain=$domsIdArray[$i];
 				$level=$levelsIdArray[$i];
@@ -135,10 +137,10 @@ require_once('../../../config.php');
 					
 					//$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid ,-2, '/0/', 0, '$time', '$time', $USER->id)";
 					//$DB->execute($sql);
-					echo "<font color =green>CLO has been defined sucessfully</font>";
+					echo "<font color =green>CLO has been defined sucessfully<br></font>";
 				}
 				else
-				{ echo $idnumber . "already exists<br>";
+				{ echo "<font color=red> $idnumber already exists<br></font>";
 				
 				}
 				if($cloid){
@@ -146,6 +148,9 @@ require_once('../../../config.php');
 					$DB->execute($sql);
 					$sql="INSERT INTO mdl_clo_kpi (cloid, kpi) VALUES($cloid, $kpi)";
 					$DB->execute($sql);
+					$sql="INSERT INTO mdl_clo_cohort_kpi (cloid, kpi) VALUES($cloid, $cohortKpi)";
+					$DB->execute($sql);
+
 					if($domain == 2 || $domain == 3){
 						$sql="INSERT INTO mdl_clo_rubric (cloid, rubric) VALUES($cloid, $rubricsIdArray[$j])";
 						$DB->execute($sql);
@@ -563,9 +568,11 @@ require_once('../../../config.php');
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 					</span>
 					<label class="col-form-label d-inline" for="id_kpi">
-						Passing Percentage
+						Passing Percentage (Individual Level)
 					</label>
 				</div>
+
+
 				<div class="col-md-9 form-inline felement" data-fieldtype="number">
 					<input type="number"
 							class="form-control"
@@ -577,12 +584,44 @@ require_once('../../../config.php');
 							maxlength="100"
 							step="0.001"
 							min="0" max="100"> %
-					<div class="form-control-feedback" id="id_error_kpi">
+				 <div class="form-control-feedback" id="id_error_kpi">
 					
 					</div>
 				</div>
 			</div>
 			
+
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_cohort_kpi">
+						Passing Percentage (Cohort Level)
+					</label>
+				</div>
+
+
+				<div class="col-md-9 form-inline felement" data-fieldtype="number">
+					<input type="number"
+							class="form-control"
+							name="cohortkpi[]"
+							id="id_cohort_kpi"
+							size=""
+							required
+							placeholder="eg. 50"
+							maxlength="100"
+							step="0.001"
+							min="0" max="100"> %
+				 <div class="form-control-feedback" id="id_error_kpi">
+					
+					</div>
+				</div>
+			</div>
+
+
+
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -785,9 +824,16 @@ require_once('../../../config.php');
 				document.getElementById(divName).appendChild(newdiv2);
 
 				var newdiv3 = document.createElement('div');
-				newdiv3.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_kpi">Passing Percentage</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 50" maxlength="100" step="0.001" min="0" max="100"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
+				newdiv3.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_kpi">Passing Percentage (Individual Level)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 50" maxlength="100" step="0.001" min="0" max="100"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv3);
 				
+
+
+				var newdiv4 = document.createElement('div');
+				newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_cohort_kpi">Passing Percentage (Cohort Level)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="cohortkpi[]" id="id_cohort_kpi" size="" required placeholder="eg. 50" maxlength="100" step="0.001" min="0" max="100"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
+				document.getElementById(divName).appendChild(newdiv4);
+
+
 				//Create select element for PLO selection
 				var selectPLO = document.createElement("select");
 				selectPLO.className = "select custom-select";
