@@ -51,15 +51,35 @@
 		/* if user press save */
 		if(isset($_POST['save'])) {
             $quizname = trim($_POST["name"]);
-			$quizdesc = trim($_POST["description"]);
+            $quizdesc = trim($_POST["description"]);
+            //echo "$quizname<br>";
+            if(strlen($quizname)>50 || strlen($quizdesc)>500)
+            { 	//echo "in IF";
+					
+
+					if(strlen($quizname)>50)
+            		 $lengthMsg= "<font color = red> Length of the name should be less than 50<br></font>";
+  				
+  				if(strlen($quizdesc)>500)
+            	//echo "in IF";
+            	$descMsg= "<font color = red> Length of the description should be less than 500<br></font>";
+            	
+            	goto down;
+           	}
+
             $quesnames=array();
 			foreach ($_POST['quesname'] as $qN)
 			{
+				//if (strlen($qT)>$qN>30)
+				//{ $quesnameMsg= "<font color = red> Length of the Question's should be less than 30<br></font>";
+				//// 	goto down;
+				// }
 				array_push($quesnames,$qN);	
 			}
 			$questexts=array();
 			foreach ($_POST['ques_text'] as $qT)
 			{
+
 				array_push($questexts,$qT);
 			}
 			
@@ -207,9 +227,9 @@
 
 
 
-			redirect($redirect_page1);
+			//redirect($redirect_page1);
 		}
-
+		down:
 		//Get course clo with its level, plo and peo
 		$courseclos=$DB->get_records_sql(
         "SELECT clo.id AS cloid, clo.shortname AS cloname, plo.shortname AS ploname, peo.shortname AS peoname, levels.name AS lname, levels.level AS lvl
@@ -296,6 +316,7 @@
                 <h3>Final Exam</h3>
                 <?php
             }
+            
             ?>
 
             <div class="form-group row fitem ">
@@ -319,6 +340,12 @@
                     </div>
                 </div>
             </div>
+            <?php
+            	
+            	if(isset($lengthMsg))
+            		echo "$lengthMsg";
+
+            ?>
 
             <div class="form-group row fitem">
 				<div class="col-md-3">
@@ -337,7 +364,13 @@
 					<div class="form-control-feedback" id="id_error_description"  style="display: none;">
 					</div>
 				</div>
-			</div>			
+			</div>	
+			  <?php
+            	
+            	if(isset($descMsg))
+            		echo "$descMsg";
+
+            ?>		
 
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
