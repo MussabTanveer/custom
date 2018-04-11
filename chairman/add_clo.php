@@ -566,13 +566,16 @@ require_once('../../../config.php');
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+						<a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right"
+                        data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;Individual (student) – At least 50% marks to qualify a CLO &lt;/p&gt;&lt;/div&gt; "
+                        data-html="true" tabindex="0" data-trigger="focus">
+                        <i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Passing Percentage" aria-label="Help with Passing Percentage"></i>
+                        </a>
 					</span>
 					<label class="col-form-label d-inline" for="id_kpi">
-						Passing Percentage (Individual Level)
+						Passing Percentage Individual (student)
 					</label>
 				</div>
-
-
 				<div class="col-md-9 form-inline felement" data-fieldtype="number">
 					<input type="number"
 							class="form-control"
@@ -581,28 +584,30 @@ require_once('../../../config.php');
 							size=""
 							required
 							placeholder="eg. 50"
-							maxlength="100"
+							maxlength="10"
 							step="0.001"
-							min="0" max="100"> %
-				 <div class="form-control-feedback" id="id_error_kpi">
-					
+							min="0" max="100"
+							value="50"> %
+					<div class="form-control-feedback" id="id_error_kpi">
+						
 					</div>
 				</div>
 			</div>
 			
-
-
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
 						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+						<a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right"
+                        data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;Cohort (course) – Minimum 50% of the students in a mapped course should attain a CLO &lt;/p&gt;&lt;/div&gt; "
+                        data-html="true" tabindex="0" data-trigger="focus">
+                        <i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Passing Percentage" aria-label="Help with Passing Percentage"></i>
+                        </a>
 					</span>
 					<label class="col-form-label d-inline" for="id_cohort_kpi">
-						Passing Percentage (Cohort Level)
+						Passing Percentage Cohort (course)
 					</label>
 				</div>
-
-
 				<div class="col-md-9 form-inline felement" data-fieldtype="number">
 					<input type="number"
 							class="form-control"
@@ -611,16 +616,15 @@ require_once('../../../config.php');
 							size=""
 							required
 							placeholder="eg. 50"
-							maxlength="100"
+							maxlength="10"
 							step="0.001"
-							min="0" max="100"> %
-				 <div class="form-control-feedback" id="id_error_kpi">
-					
+							min="0" max="100"
+							value="50"> %
+					<div class="form-control-feedback" id="id_error_kpi">
+						
 					</div>
 				</div>
 			</div>
-
-
 
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
@@ -824,15 +828,12 @@ require_once('../../../config.php');
 				document.getElementById(divName).appendChild(newdiv2);
 
 				var newdiv3 = document.createElement('div');
-				newdiv3.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_kpi">Passing Percentage (Individual Level)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 50" maxlength="100" step="0.001" min="0" max="100"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
+				newdiv3.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr><a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;Individual (student) – At least 50% marks to qualify a CLO &lt;/p&gt;&lt;/div&gt; " data-html="true" tabindex="0" data-trigger="focus"><i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Passing Percentage" aria-label="Help with Passing Percentage"></i></a></span><label class="col-form-label d-inline" for="id_kpi">Passing Percentage Individual (student)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 50" maxlength="10" step="0.001" min="0" max="100" value="50"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv3);
 				
-
-
 				var newdiv4 = document.createElement('div');
-				newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_cohort_kpi">Passing Percentage (Cohort Level)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="cohortkpi[]" id="id_cohort_kpi" size="" required placeholder="eg. 50" maxlength="100" step="0.001" min="0" max="100"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
+				newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr><a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;Cohort (course) – Minimum 50% of the students in a mapped course should attain a CLO &lt;/p&gt;&lt;/div&gt; " data-html="true" tabindex="0" data-trigger="focus"><i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Passing Percentage" aria-label="Help with Passing Percentage"></i></a></span><label class="col-form-label d-inline" for="id_cohort_kpi">Passing Percentage Cohort (course)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="cohortkpi[]" id="id_cohort_kpi" size="" required placeholder="eg. 50" maxlength="10" step="0.001" min="0" max="100" value="50"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
 				document.getElementById(divName).appendChild(newdiv4);
-
 
 				//Create select element for PLO selection
 				var selectPLO = document.createElement("select");
