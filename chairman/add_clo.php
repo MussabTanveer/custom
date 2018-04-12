@@ -508,9 +508,12 @@ require_once('../../../config.php');
 			</div>
 			
 			<div id="dynamicInput">
+			<div id="div0">
 			<div class="row">
-				<div class="col-md-3"><b>Enter CLO</b></div>
-				<div class="col-md-9"></div>
+				<div class="col-md-9"><b>Enter CLO</b></div>
+				<div class="col-md-3">
+					<i id="cross0" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i>
+				</div>
 			</div>
 
 			<div class="form-group row fitem ">
@@ -704,6 +707,7 @@ require_once('../../../config.php');
 
 			<div id="rubric_dd"></div>
 			
+			</div>
 			</div> <!-- dynamic input fields end -->
 
 			<div class="row">
@@ -773,7 +777,14 @@ require_once('../../../config.php');
 				});
 			});
 		</script>
-		
+		<script>
+			// script to remove clo fields from form
+			$(document).ready(function(){
+				$("#cross0").click(function(){
+					$("#div0").remove();
+				});
+			});
+		</script>
 		<script>
 		// script to create dynamic list of clos on course code input
 		var frameworkid = <?php echo json_encode($frameworkid); ?>;
@@ -815,25 +826,31 @@ require_once('../../../config.php');
 			var domName = <?php echo json_encode($domname); ?>;
 			
 			function addInput(divName){
+				var divWrap = document.createElement('div');
+				var divid = "div"+i;
+				divWrap.setAttribute("id", divid);
+				//divWrap.innerHTML = '<h3>Map Question to CLO</h3>';
+				document.getElementById(divName).appendChild(divWrap);
+
 				var newdiv = document.createElement('div');
-				newdiv.innerHTML = '<div class="row"><div class="col-md-3"><b>Enter CLO</b></div><div class="col-md-9"></div></div>';
-				document.getElementById(divName).appendChild(newdiv);
+				newdiv.innerHTML = '<div class="row"><div class="col-md-9"><b>Enter CLO</b></div><div class="col-md-3"><i id="cross'+i+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+				divWrap.appendChild(newdiv);
 
 				var newdiv1 = document.createElement('div');
 				newdiv1.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_shortname">Name</label></div><div class="col-md-9 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="shortname[]" id="id_shortname" size="" pattern="[c/C][l/L][o/O]-[0-9]{1,}" title="eg. CLO-12" required placeholder="eg. CLO-12" maxlength="100" type="text" > (eg. CLO-12)<div class="form-control-feedback" id="id_error_shortname"><?php if(isset($msg1)){echo $msg1;} ?></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv1);
+				divWrap.appendChild(newdiv1);
 
 				var newdiv2 = document.createElement('div');
 				newdiv2.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_description">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_description" name="description[]" class="form-control" rows="4" cols="80" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_description"  style="display: none;"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv2);
+				divWrap.appendChild(newdiv2);
 
 				var newdiv3 = document.createElement('div');
 				newdiv3.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr><a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;Individual (student) – At least 50% marks to qualify a CLO &lt;/p&gt;&lt;/div&gt; " data-html="true" tabindex="0" data-trigger="focus"><i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Passing Percentage" aria-label="Help with Passing Percentage"></i></a></span><label class="col-form-label d-inline" for="id_kpi">Passing Percentage Individual (student)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="kpi[]" id="id_kpi" size="" required placeholder="eg. 50" maxlength="10" step="0.001" min="0" max="100" value="50"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv3);
+				divWrap.appendChild(newdiv3);
 				
 				var newdiv4 = document.createElement('div');
 				newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr><a class="btn btn-link p-a-0" role="button" data-container="body" data-toggle="popover" data-placement="right" data-content="&lt;div class=&quot;no-overflow&quot;&gt;&lt;p&gt;Cohort (course) – Minimum 50% of the students in a mapped course should attain a CLO &lt;/p&gt;&lt;/div&gt; " data-html="true" tabindex="0" data-trigger="focus"><i class="icon fa fa-question-circle text-info fa-fw " aria-hidden="true" title="Help with Passing Percentage" aria-label="Help with Passing Percentage"></i></a></span><label class="col-form-label d-inline" for="id_cohort_kpi">Passing Percentage Cohort (course)</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="cohortkpi[]" id="id_cohort_kpi" size="" required placeholder="eg. 50" maxlength="10" step="0.001" min="0" max="100" value="50"> %<div class="form-control-feedback" id="id_error_kpi"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv4);
+				divWrap.appendChild(newdiv4);
 
 				//Create select element for PLO selection
 				var selectPLO = document.createElement("select");
@@ -861,7 +878,7 @@ require_once('../../../config.php');
 
 				var newdiv4 = document.createElement('div');
 				newdiv4.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_plo">Map to PLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectPLO.innerHTML+' <span id="plosidnumber'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv4);
+				divWrap.appendChild(newdiv4);
 
 				//Create select element for Domain selection
 				var selectDom = document.createElement("select");
@@ -887,7 +904,7 @@ require_once('../../../config.php');
 
 				var newdivDom = document.createElement('div');
 				newdivDom.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_domain">Taxonomy Domain</label></div><div class="col-md-9 form-inline felement">'+newdivforselectDom.innerHTML+' <div class="form-control-feedback" id="id_error_domain"></div></div></div>';
-				document.getElementById(divName).appendChild(newdivDom);
+				divWrap.appendChild(newdivDom);
 				
 				//Create select element for Level selection
 				var selectLevel = document.createElement("select");
@@ -915,11 +932,11 @@ require_once('../../../config.php');
 				
 				var newdiv5 = document.createElement('div');
 				newdiv5.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_level">Taxonomy Level</label></div><div class="col-md-9 form-inline felement">'+newdivforselectLevel.innerHTML+' <span id="dname'+i+'"></span> <span id="lname'+i+'"></span><div class="form-control-feedback" id="id_error_level"></div></div></div>';
-				document.getElementById(divName).appendChild(newdiv5);
+				divWrap.appendChild(newdiv5);
 				
 				var newdiv6 = document.createElement('div');
 				newdiv6.innerHTML = '<div id="rubric_dd'+i+'"></div>';
-				document.getElementById(divName).appendChild(newdiv6);
+				divWrap.appendChild(newdiv6);
 
 				var domainId = "#id_domain"+i;
 				var levelId = "#id_level"+i;
@@ -953,6 +970,12 @@ require_once('../../../config.php');
 					else {
 						$(rubricId).html("");
 					}
+				});
+				
+				var idname = "#cross" + i;
+				var divname = "#div" + i;
+				$(idname).click(function(){
+					$(divname).remove();
 				});
 				
 				i++;
