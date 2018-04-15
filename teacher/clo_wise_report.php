@@ -52,26 +52,28 @@ th{
 
         //Get course clo with its plo, level, passing percentage
 		$courseclos=$DB->get_records_sql(
-        "SELECT clo.id AS cloid, clo.shortname AS cloname, plo.idnumber AS ploidn, clokpi.kpi AS passpercent, taxlvl.level
+        "SELECT clo.id AS cloid, clo.shortname AS cloname, plo.idnumber AS ploidn, clokpi.kpi AS passpercent, clocohortkpi.kpi AS cohortpasspercent, taxlvl.level
     
-        FROM mdl_competency_coursecomp cc, mdl_competency clo, mdl_competency plo, mdl_clo_kpi clokpi, mdl_taxonomy_clo_level taxclolvl, mdl_taxonomy_levels taxlvl
+        FROM mdl_competency_coursecomp cc, mdl_competency clo, mdl_competency plo, mdl_clo_kpi clokpi, mdl_clo_cohort_kpi clocohortkpi, mdl_taxonomy_clo_level taxclolvl, mdl_taxonomy_levels taxlvl
 
-        WHERE cc.courseid = ? AND cc.competencyid=clo.id AND clo.id=clokpi.cloid AND plo.id=clo.parentid AND clo.id=taxclolvl.cloid AND taxclolvl.levelid=taxlvl.id",
+        WHERE cc.courseid = ? AND cc.competencyid=clo.id AND clo.id=clokpi.cloid AND clo.id=clocohortkpi.cloid AND plo.id=clo.parentid AND clo.id=taxclolvl.cloid AND taxclolvl.levelid=taxlvl.id",
         
         array($course_id));
             
-        $clonames = array(); $plonames = array(); $lnames = array(); $closid = array(); $clospasspercent = array();
+        $clonames = array(); $plonames = array(); $lnames = array(); $closid = array(); $clospasspercent = array(); $clocohortpasspercent = array();
         foreach ($courseclos as $recC) {
             $cid = $recC->cloid;
             $clo = $recC->cloname;
             $plo = $recC->ploidn;
             $level = $recC->level;
             $pp = $recC->passpercent;
+            $cp = $recC->cohortpasspercent;
             array_push($closid, $cid); // array of clo ids
             array_push($clonames, $clo); // array of clo names
             array_push($plonames, $plo); // array of plo idnum
             array_push($lnames, $level); // array of levels
-            array_push($clospasspercent, $pp); // array of clo pass percent
+            array_push($clospasspercent, $pp); // array of clo individual stud pass percent
+            array_push($clocohortpasspercent, $cp); // array of clo cohort course pass percent
         }
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
@@ -381,7 +383,6 @@ th{
             $uniqueplonames = array_unique($plonames);
             ?>
             <th colspan="<?php echo count($closid); ?>">CLO Status (pass/fail)</th>
-            
         </tr>
         <tr>
             <th></th>
@@ -411,12 +412,17 @@ th{
             ?>
         </tr>
         <?php
+        $cohort_clo_stat = array(); // cohort course clo status -> increment for pass
+        for($i=0; $i<count($closid); $i++)
+            $cohort_clo_stat[$i] = 0; // initialize all clos status with 0
+        
         foreach ($seatnos as $seatno) {
         $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
         for($i=0; $i<count($closid); $i++)
             $ind_stud_clo_stat[$i] = 0; // set all clos status to fail
+        
         ?>
-        <tr> 
+        <tr>
             <td> <?php echo "$seatno" ?> </td>
             <?php
             /****** QUIZZES/ASSIGNMENTS RECORDS ******/
@@ -466,8 +472,10 @@ th{
             }
             /****** Student CLOS status ******/
             for($i=0; $i<count($closid); $i++) {
-                if($ind_stud_clo_stat[$i])
+                if($ind_stud_clo_stat[$i]){
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                    $cohort_clo_stat[$i]++;
+                }
                 else
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
             }
@@ -475,7 +483,37 @@ th{
         </tr>
         <?php
         }
+
+        // Total Colspan for last 2 rows
+        $colspan = 0;
+        for($i=0; $i<count($closid); $i++) {
+            $colspan += $closidCountActivity[$i];
+        }
+        $colspan++; // include seat num col
         ?>
+        <tr>
+            <!--Course Level Aggregate Response (Quantitative)-->
+            <th colspan="<?php echo $colspan; ?>" style="text-align: right;">Course Level Aggregate Response (Quantitative):</th>
+            <?php
+            /****** Course CLOS status (Quantitative) ******/
+            for($i=0; $i<count($closid); $i++) {
+                echo "<td>".(($cohort_clo_stat[$i]/count($recStudents))*100)."%</td>";
+            }
+            ?>
+        </tr>
+        <tr>
+            <!--Course Level Status (pass/fail)-->
+            <th colspan="<?php echo $colspan; ?>" style="text-align: right;">Course Level Status (pass/fail):</th>
+            <?php
+            /****** Course CLOS status (pass/fail) ******/
+            for($i=0; $i<count($closid); $i++) {
+                if(($cohort_clo_stat[$i]/count($recStudents))*100 >= $clocohortpasspercent[$i])
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                else
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+            }
+            ?>
+        </tr>
     </table>
 
     <button id="myButton" class="btn btn-primary">Export to Excel</button>
