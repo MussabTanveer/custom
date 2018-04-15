@@ -380,6 +380,8 @@ th{
             }
             $uniqueplonames = array_unique($plonames);
             ?>
+            <th colspan="<?php echo count($closid); ?>">CLO Status (pass/fail)</th>
+            
         </tr>
         <tr>
             <th></th>
@@ -400,10 +402,19 @@ th{
                     <?php
                     }
             }
+            /****** CLOS ******/
+            for($i=0; $i<count($closid); $i++) {
+                ?>
+                <th><?php echo $clonames[$i]; ?></th>
+                <?php
+            }
             ?>
         </tr>
         <?php
         foreach ($seatnos as $seatno) {
+        $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
+        for($i=0; $i<count($closid); $i++)
+            $ind_stud_clo_stat[$i] = 0; // set all clos status to fail
         ?>
         <tr> 
             <td> <?php echo "$seatno" ?> </td>
@@ -418,8 +429,10 @@ th{
                             {
                                 $flag=1;
                                 //if($resultQMulti[$j][$k] == 'P')
-                                if($resultQMulti[$j][$k] >= $clospasspercent[$i])
+                                if($resultQMulti[$j][$k] >= $clospasspercent[$i]){
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                                    $ind_stud_clo_stat[$i] = 1; // set status pass
+                                }
                                 else
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
                             }
@@ -437,8 +450,10 @@ th{
                             {
                                 $flag=1;
                                 //if($resultAMulti[$j][$k] == 'P')
-                                if($resultAMulti[$j][$k] >= $clospasspercent[$i])
+                                if($resultAMulti[$j][$k] >= $clospasspercent[$i]){
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                                    $ind_stud_clo_stat[$i] = 1; // set status pass
+                                }
                                 else
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
                             }
@@ -448,6 +463,13 @@ th{
                             echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
                         }
                     }
+            }
+            /****** Student CLOS status ******/
+            for($i=0; $i<count($closid); $i++) {
+                if($ind_stud_clo_stat[$i])
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                else
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
             }
             ?>
         </tr>
