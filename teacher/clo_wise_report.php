@@ -52,28 +52,58 @@ th{
 
         //Get course clo with its plo, level, passing percentage
 		$courseclos=$DB->get_records_sql(
-        "SELECT clo.id AS cloid, clo.shortname AS cloname, plo.idnumber AS ploidn, clokpi.kpi AS passpercent, clocohortkpi.kpi AS cohortpasspercent, taxlvl.level
-    
-        FROM mdl_competency_coursecomp cc, mdl_competency clo, mdl_competency plo, mdl_clo_kpi clokpi, mdl_clo_cohort_kpi clocohortkpi, mdl_taxonomy_clo_level taxclolvl, mdl_taxonomy_levels taxlvl
-
-        WHERE cc.courseid = ? AND cc.competencyid=clo.id AND clo.id=clokpi.cloid AND clo.id=clocohortkpi.cloid AND plo.id=clo.parentid AND clo.id=taxclolvl.cloid AND taxclolvl.levelid=taxlvl.id",
-        
+        "SELECT
+            clo.id AS cloid,
+            clo.shortname AS cloname,
+            plo.id AS ploid,
+            plo.idnumber AS ploidn,
+            clokpi.kpi AS clostudpass,
+            clocohortkpi.kpi AS clocohortpass,
+            plostudkpi.kpi AS plostudpass,
+            plocohortkpi.kpi AS plocohortpass,
+            taxlvl.level
+        FROM
+            mdl_competency_coursecomp cc,
+            mdl_competency clo,
+            mdl_competency plo,
+            mdl_clo_kpi clokpi,
+            mdl_clo_cohort_kpi clocohortkpi,
+            mdl_plo_kpi_individual_student plostudkpi,
+            mdl_plo_kpi_cohort_course plocohortkpi,
+            mdl_taxonomy_clo_level taxclolvl,
+            mdl_taxonomy_levels taxlvl
+        WHERE
+            cc.courseid = ? AND
+            cc.competencyid=clo.id AND
+            clo.id=clokpi.cloid AND
+            clo.id=clocohortkpi.cloid AND
+            plo.id=plostudkpi.ploid AND
+            plo.id=plocohortkpi.ploid AND
+            plo.id=clo.parentid AND
+            clo.id=taxclolvl.cloid AND
+            taxclolvl.levelid=taxlvl.id",
         array($course_id));
             
-        $clonames = array(); $plonames = array(); $lnames = array(); $closid = array(); $clospasspercent = array(); $clocohortpasspercent = array();
+        $clonames = array(); $plonames = array(); $lnames = array(); $closid = array(); $plosid = array(); $clospasspercent = array(); $clocohortpasspercent = array(); $plospasspercent = array(); $plocohortpasspercent = array();
         foreach ($courseclos as $recC) {
             $cid = $recC->cloid;
             $clo = $recC->cloname;
+            $pid = $recC->ploid;
             $plo = $recC->ploidn;
             $level = $recC->level;
-            $pp = $recC->passpercent;
-            $cp = $recC->cohortpasspercent;
+            $closp = $recC->clostudpass;
+            $clocp = $recC->clocohortpass;
+            $plosp = $recC->plostudpass;
+            $plocp = $recC->plocohortpass;
             array_push($closid, $cid); // array of clo ids
             array_push($clonames, $clo); // array of clo names
+            array_push($plosid, $pid); // array of plo ids
             array_push($plonames, $plo); // array of plo idnum
             array_push($lnames, $level); // array of levels
-            array_push($clospasspercent, $pp); // array of clo individual stud pass percent
-            array_push($clocohortpasspercent, $cp); // array of clo cohort course pass percent
+            array_push($clospasspercent, $closp); // array of clo individual stud pass percent
+            array_push($clocohortpasspercent, $clocp); // array of clo cohort course pass percent
+            array_push($plospasspercent, $plosp); // array of plo individual stud pass percent
+            array_push($plocohortpasspercent, $plocp); // array of plo cohort course pass percent
         }
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
@@ -383,6 +413,7 @@ th{
             $uniqueplonames = array_unique($plonames);
             ?>
             <th colspan="<?php echo count($closid); ?>">CLO Status (pass/fail)</th>
+            <th colspan="<?php echo count($uniqueplonames); ?>">PLO Status (pass/fail)</th>
         </tr>
         <tr>
             <th></th>
@@ -407,6 +438,12 @@ th{
             for($i=0; $i<count($closid); $i++) {
                 ?>
                 <th><?php echo $clonames[$i]; ?></th>
+                <?php
+            }
+            /****** PLOS ******/
+            for($i=0; $i<count($uniqueplonames); $i++) {
+                ?>
+                <th><?php echo $uniqueplonames[$i]; ?></th>
                 <?php
             }
             ?>
