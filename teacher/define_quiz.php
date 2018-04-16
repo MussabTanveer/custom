@@ -227,7 +227,7 @@
 
 
 
-			//redirect($redirect_page1);
+			redirect($redirect_page1);
 		}
 		down:
 		//Get course clo with its level, plo and peo

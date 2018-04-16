@@ -113,6 +113,21 @@
 			$startdate=strtotime($_POST['startdate']);
             $enddate=strtotime($_POST['enddate']);
 
+
+             if(strlen($apname)>50 || strlen($apdesc)>500)
+            { 	//echo "in IF";
+					
+
+					if(strlen($apname)>50)
+            		 $lengthMsg= "<font color = red> Length of the name should be less than 50<br></font>";
+  				
+  				if(strlen($apdesc)>500)
+            	//echo "in IF";
+            	$descMsg= "<font color = red> Length of the description should be less than 500<br></font>";
+            	
+            	goto down;
+           	}
+
 			try {
 				$transaction = $DB->start_delegated_transaction();
 				$record = new stdClass();
@@ -194,6 +209,7 @@
 			      echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
 			redirect($redirect_page1);
 		}
+		down:
 
 		//Get course clo with its level, plo and peo
 		$courseclos=$DB->get_records_sql(
@@ -288,6 +304,10 @@
                     </div>
                 </div>
             </div>
+            <?php
+            if(isset($lengthMsg))
+            		echo "$lengthMsg";
+            	?>
 
             <div class="form-group row fitem">
 				<div class="col-md-3">
@@ -307,6 +327,12 @@
 					</div>
 				</div>
 			</div>
+			 <?php
+            	
+            	if(isset($descMsg))
+            		echo "$descMsg";
+
+            ?>		
 			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">

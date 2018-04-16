@@ -27,21 +27,6 @@
     $dbn = $CFG->dbname;
     $dbu = $CFG->dbuser;
 
-    $mysqli = new mysqli($dbh, $dbu, $dbp, $dbn);
-        if (mysqli_connect_errno()) {
-            printf("Connect failed: %s\n", mysqli_connect_error());
-            echo "EXIT";
-            exit();
-          }
-
-	      $universityVision=$mysqli->real_escape_string($universityVision);
-        $universityMission = $mysqli->real_escape_string($universityMission);
-        $departmentVision = $mysqli->real_escape_string($departmentVision);
-        $departmentMission = $mysqli->real_escape_string($departmentMission);
-        $departmentName = $mysqli->real_escape_string($departmentName);
-        $UniversityName =  $mysqli->real_escape_string($UniversityName);
-
-
     if($departmentName != "")
         {
 
@@ -55,10 +40,13 @@
         }
                 $rev++;
 
+            $record = new stdclass();
+            $record->name='department name';
+            $record->idnumber = 'dn';
+            $record->description=$departmentName;
+            $record->revision=$rev;
+            $insert = $DB->insert_record('vision_mission', $record);
 
-              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department name','dn','$departmentName','$rev')";
-
-                $DB->execute($sql);
         }
 
 
@@ -75,10 +63,12 @@
         }
                 $rev++;
 
-
-              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university name','un','$UniversityName','$rev')";
-
-                $DB->execute($sql);
+            $record = new stdclass();
+            $record->name='university name';
+            $record->idnumber = 'un';
+            $record->description=$UniversityName;
+            $record->revision=$rev;
+            $insert = $DB->insert_record('vision_mission', $record);
         }
 
   
@@ -96,10 +86,12 @@
         }
                 $rev++;
 
-
-              $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university vision','uv','$universityVision','$rev')";
-
-                $DB->execute($sql);
+            $record = new stdclass();
+            $record->name='university vision';
+            $record->idnumber = 'uv';
+            $record->description=$universityVision;
+            $record->revision=$rev;
+            $insert = $DB->insert_record('vision_mission', $record);
         }
 
 
@@ -116,8 +108,12 @@
         }
                 $rev++;
 
-        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('university mission','um','$universityMission','$rev')";
-        $DB->execute($sql);
+            $record = new stdclass();
+            $record->name='university mission';
+            $record->idnumber = 'um';
+            $record->description=$universityMission;
+            $record->revision=$rev;
+            $insert = $DB->insert_record('vision_mission', $record);
 
         }
 
@@ -135,9 +131,12 @@
         }
                 $rev++;
 
-
-        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department vision','dv','$departmentVision','$rev')";
-        $DB->execute($sql);
+            $record = new stdclass();
+            $record->name='department vision';
+            $record->idnumber = 'dv';
+            $record->description=$departmentVision;
+            $record->revision=$rev;
+            $insert = $DB->insert_record('vision_mission', $record);
          }
 
 
@@ -153,9 +152,12 @@
         }
                 $rev++;
 
-        $sql="INSERT INTO  mdl_vision_mission (name,idnumber,description,revision) VALUES ('department mission','dm','$departmentMission','$rev')";
-            
-        $DB->execute($sql);
+            $record = new stdclass();
+            $record->name='department mission';
+            $record->idnumber = 'dm';
+            $record->description=$departmentMission;
+            $record->revision=$rev;
+            $insert = $DB->insert_record('vision_mission', $record);
 
         }
 
