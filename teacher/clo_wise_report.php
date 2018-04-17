@@ -105,6 +105,21 @@ th{
             array_push($plospasspercent, $plosp); // array of plo individual stud pass percent
             array_push($plocohortpasspercent, $plocp); // array of plo cohort course pass percent
         }
+        $uniqueploids = array_unique($plosid);
+        $plosclo = array();
+
+        for($i=0; $i<count($uniqueploids); $i++){
+            $k=0;
+            for($j=0; $j<count($closid); $j++){
+                if($plosid[$j] == $uniqueploids[$i]){
+                    $plosclo[$i][$k] = $closid[$i];
+                    $k++;
+                }
+            }
+        }
+        var_dump($plosclo);
+
+
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
