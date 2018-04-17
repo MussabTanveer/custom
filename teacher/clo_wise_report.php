@@ -117,7 +117,8 @@ th{
                 }
             }
         }
-        var_dump($plosclo);
+        /*var_dump($uniqueploids); echo "<br>";
+        var_dump($plosclo);*/
 
 
         $closidCountActivity = array();
@@ -523,13 +524,55 @@ th{
                     }
             }
             /****** Student CLOS status ******/
+            $ind_stud_plo_stat = array(); // individual student plo status -> 1 for pass, 0 for fail
+            
+            for($i=0; $i<count($uniqueploids); $i++){
+                $k=0;
+                for($j=0; $j<count($closid); $j++){
+                    if($plosid[$j] == $uniqueploids[$i]){
+                        $ind_stud_plo_stat[$i][$k] = 0; // set all plos status to fail
+                        $k++;
+                    }
+                }
+            }
+            /*echo "<br>FAIL  ";
+            var_dump($ind_stud_plo_stat);*/
+            
             for($i=0; $i<count($closid); $i++) {
                 if($ind_stud_clo_stat[$i]){
+                    // for stud plo status logic
+                    $a=0;
+                    foreach($plosclo as $pc){
+                        for($b=0; $b<count($pc); $b++){
+                            if($pc[$b] == $closid[$i]){
+                                $ind_stud_plo_stat[$a][$b] = 1; // set all plo status to pass
+                            }
+                        }
+                        $a++;
+                    }
+                    // stud plo status logic ends
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
                     $cohort_clo_stat[$i]++;
                 }
                 else
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+            }
+            /*echo "<br>PASS ";
+            var_dump($ind_stud_plo_stat);*/
+            $a=0;
+            foreach($plosclo as $pc){
+                $flag = 1;
+                for($b=0; $b<count($pc); $b++){
+                    if($pc[$b] == 0){
+                        $flag = 0; // set plo status to fail
+                    }
+                }
+                if($flag){
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                }
+                else
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                $a++;
             }
             ?>
         </tr>
