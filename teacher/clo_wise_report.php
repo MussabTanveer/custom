@@ -506,16 +506,16 @@ th{
                                 $flag=1;
                                 //if($resultQMulti[$j][$k] == 'P')
                                 if($resultQMulti[$j][$k] >= $clospasspercent[$i]){
-                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i><span style='display: none'>P</span></td>";
                                     $ind_stud_clo_stat[$i] = 1; // set status pass
                                 }
                                 else
-                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i><span style='display: none'>F</span></td>";
                             }
                         }
                         if($flag==0)
                         {
-                            echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                            echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                         }
                     }
                 for($j=0; $j<(count($assignids)+count($massignids)); $j++)
@@ -527,16 +527,16 @@ th{
                                 $flag=1;
                                 //if($resultAMulti[$j][$k] == 'P')
                                 if($resultAMulti[$j][$k] >= $clospasspercent[$i]){
-                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i><span style='display: none'>P</span></td>";
                                     $ind_stud_clo_stat[$i] = 1; // set status pass
                                 }
                                 else
-                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i><span style='display: none'>F</span></td>";
                             }
                         }
                         if($flag==0)
                         {
-                            echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                            echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                         }
                     }
             }
@@ -568,11 +568,11 @@ th{
                         $a++;
                     }
                     // stud plo status logic ends
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i><span style='display: none'>P</span></td>";
                     $cohort_clo_stat[$i]++;
                 }
                 else
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i></td>";
             }
             /*echo "<br>PASS ";
             var_dump($ind_stud_plo_stat);*/
@@ -587,11 +587,11 @@ th{
                 }
                 //echo $countpassclo;
                 if(($countpassclo/count($splo))*100 >= $uniqueplospasspercent[$a]){
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i><span style='display: none'>P</span></td>";
                     $cohort_plo_stat[$a]++;
                 }
                 else
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i><span style='display: none'>F</span></td>";
                 $a++; $countpassclo = 0;
             }
             ?>
@@ -627,16 +627,16 @@ th{
             /****** Course CLOS status (pass/fail) ******/
             for($i=0; $i<count($closid); $i++) {
                 if(($cohort_clo_stat[$i]/count($recStudents))*100 >= $clocohortpasspercent[$i])
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i><span style='display: none'>P</span></td>";
                 else
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i><span style='display: none'>F</span></td>";
             }
             /****** Course PLOS status (pass/fail) ******/
             for($i=0; $i<count($uniqueploids); $i++) {
                 if(($cohort_plo_stat[$i]/count($recStudents))*100 >= $uniqueplocohortpasspercent[$i])
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i><span style='display: none'>P</span></td>";
                 else
-                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i><span style='display: none'>F</span></td>";
             }
             ?>
         </tr>
