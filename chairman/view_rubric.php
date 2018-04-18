@@ -67,10 +67,10 @@
                     //$s = 1;
                     $temp=0;
                     foreach ($scaleInfo as $sInfo) {
-                        //$id = $sInfo->id;
+                        $id = $sInfo->id;
                         $description = $sInfo->description;
                         $score = $sInfo->score;
-                        echo "<td>$description<br>Score: $score</td>";
+                        echo "<td>$description <a href='edit_rubric.php?edit=scale&rubric=$rubric_id&scale=$id&snum=".($temp+1)."&cnum=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>Score: $score</td>";
                         //$s++;
                         $temp++;
                     }

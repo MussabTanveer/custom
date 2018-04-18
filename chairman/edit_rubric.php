@@ -15,6 +15,13 @@
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
 ?>
 <style>
+	input[type='number'] {
+		-moz-appearance:textfield;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
 	label.error {
 		color: red;
 	}
@@ -56,7 +63,7 @@
 		}
 
 	echo "<br />";
-	echo "<h3>Edit $edit</h3>";
+	echo "<h3>Edit Rubric</h3>";
 	?>
 	
 	<form method='post' action="" class="mform" id="rubricForm">
@@ -159,7 +166,7 @@
 		}
 
 	echo "<br />";
-	echo "<h3>Edit $edit $num</h3>";
+	echo "<h3>Edit Criterion $num</h3>";
 	?>
 	
 	<form method='post' action="" class="mform" id="rubricForm">
@@ -200,6 +207,124 @@
 		
 	<?php 
         label2:
+        ?>
+        <div class="btn-btn-info"><br><a href="./view_rubric.php?rubric=<?php echo $rubric_id; ?>" >Back</a></div>
+        <?php
+	}
+	// EDIT SCALE
+	elseif(!empty($_GET['edit']) && !empty($_GET['rubric']) && !empty($_GET['scale']) && !empty($_GET['snum']) && !empty($_GET['cnum']) && $_GET['edit']=="scale")
+	{
+		$edit=$_GET['edit'];
+		$rubric_id=$_GET['rubric'];
+		$scale_id=$_GET['scale'];
+		$snum=$_GET['snum'];
+		$cnum=$_GET['cnum'];
+
+		$rec=$DB->get_records_sql('SELECT description, score FROM mdl_rubric_scale WHERE id=?',array($scale_id));
+		if($rec){
+			foreach ($rec as $records){
+				$description=$records->description;
+				$score=$records->score;
+			}
+		}
+		
+		if(isset($_POST['save']))
+		{
+			$description=$_POST['scaledesc'];
+			$score=$_POST['scalescore'];
+			
+			if(empty($description))
+			{
+				$msgSDesc="<font color='red'>-Please enter scale's description</font>";
+			}
+			elseif(empty($score))
+			{
+				$msgSScore="<font color='red'>-Please enter scale's score</font>";
+			}
+            else{
+				$sql="UPDATE mdl_rubric_scale SET description=?, score=? WHERE id=?";
+				$DB->execute($sql, array($description, $score, $scale_id));
+				$msgSuces = "<font color='green'><b>Rubric criterion's scale successfully updated!</b></font><br />";
+			}
+		}
+	
+		if(isset($msgSuces)){
+			echo $msgSuces;
+			goto label3;
+		}
+
+	echo "<br />";
+	echo "<h3>Edit Scale $snum of Criterion $cnum</h3>";
+	?>
+	
+	<form method='post' action="" class="mform" id="rubricForm">
+		<div class="form-group row fitem">
+            <div class="col-md-3">
+                <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                </span>
+                <label class="col-form-label d-inline" for="id_scaledesc">
+                    Description
+                </label>
+            </div>
+            <div class="col-md-9 form-inline felement" data-fieldtype="editor">
+                <div>
+                    <div>
+                        <textarea required id="id_scaledesc" name="scaledesc" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
+                    </div>
+                </div>
+                <div class="form-control-feedback" id="id_error_scaledesc">
+				<?php
+				if(isset($msgSDesc)){
+					echo $msgSDesc;
+				}
+				?>
+                </div>
+            </div>
+		</div>
+		<div class="form-group row fitem">
+            <div class="col-md-3">
+                <span class="pull-xs-right text-nowrap">
+                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                </span>
+                <label class="col-form-label d-inline" for="id_scalescore">
+                    Score
+                </label>
+            </div>
+            <div class="col-md-9 form-inline felement" data-fieldtype="number">
+                <input type="number"
+                        class="form-control"
+                        name="scalescore"
+                        id="id_scalescore"
+                        size=""
+                        required
+                        placeholder="eg. 1"
+                        maxlength="7"
+                        step="0.001"
+                        min="0" max="100">
+                <div class="form-control-feedback" id="id_error_scalescore">
+				<?php
+				if(isset($msgSScore)){
+					echo $msgSScore;
+				}
+				?>
+                </div>
+            </div>
+        </div>
+		
+		<input class="btn btn-info" type="submit" name="save" value="Save"/>
+	</form>
+
+	<script>
+		document.getElementById("id_scaledesc").value = <?php echo json_encode($description); ?>;
+		document.getElementById("id_scalescore").value = <?php echo json_encode($score); ?>;
+	</script>
+	
+	<br />
+	<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
+		
+	<?php
+        label3:
         ?>
         <div class="btn-btn-info"><br><a href="./view_rubric.php?rubric=<?php echo $rubric_id; ?>" >Back</a></div>
         <?php
