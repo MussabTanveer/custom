@@ -20,7 +20,7 @@
 	}
 </style>
 <?php
-	if(isset($_GET['edit']) && isset($_GET['fwid']))
+	if(!empty($_GET['edit']) && !empty($_GET['fwid']))
 	{
         $id=$_GET['edit'];
         $fw_id=$_GET['fwid'];

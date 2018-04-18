@@ -20,7 +20,7 @@
 	}
 </style>
 <?php
-	if(isset($_GET['edit']))
+	if(!empty($_GET['edit']))
 	{
 		$id=$_GET['edit'];
 		
