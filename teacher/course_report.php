@@ -917,7 +917,7 @@ th{
                                 if($flag==0)
                                 {
                                     for($j=0; $j<$tot_quesQuiz[$i]; $j++){
-                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                     }
                                 }
                             }
@@ -938,7 +938,7 @@ th{
                                 if($flag==0)
                                 {
                                     for($j=0; $j<$tot_quesMQuiz[$i]; $j++){
-                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                     }
                                 }
                             }
@@ -958,7 +958,7 @@ th{
                                 }
                                 if($flag==0)
                                 {
-                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                 }
                             }
 
@@ -977,7 +977,7 @@ th{
                                 }
                                 if($flag==0)
                                 {
-                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                 }
                             }
 
@@ -996,7 +996,7 @@ th{
                                 }
                                 if($flag==0)
                                 {
-                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                 }
                             }
                             
@@ -1015,7 +1015,7 @@ th{
                                 {
                                     foreach ($qnameMidUnique as $quesUnique)
                                     {
-                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                     }
                                 }
                             }
@@ -1035,7 +1035,7 @@ th{
                                 {
                                     foreach ($qnameMMidUnique as $quesUnique)
                                     {
-                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                     }
                                 }
                             }
@@ -1055,7 +1055,7 @@ th{
                                 {
                                     foreach ($qnameFinalUnique as $quesUnique)
                                     {
-                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i></td>';
+                                        echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                                     }
                                 }
                             }
