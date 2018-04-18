@@ -40,7 +40,7 @@
                 $name = $rInfo->name;
                 $description = $rInfo->description;
             }
-            echo "<h3>$name</h3>";
+            echo "<h3>$name <a href='edit_rubric.php?edit=rubric&rubric=$rubric_id'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a></h3>";
             echo "<h4>$description</h4>";
 
             $criterionInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_criterion WHERE rubric = ?', array($rubric_id));
