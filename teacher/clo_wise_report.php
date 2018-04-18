@@ -120,6 +120,19 @@ th{
         /*var_dump($uniqueploids); echo "<br>";
         var_dump($plosclo);*/
 
+        $uniqueplospasspercent = array();
+        for ($i=0; $i < count($uniqueploids); $i++) { 
+            $key = array_search($uniqueploids[$i], $plosid);
+            array_push($uniqueplospasspercent, $plospasspercent[$key]);
+        }
+        /*echo "<br>";
+        var_dump($uniqueplospasspercent);*/
+        $uniqueplocohortpasspercent = array();
+        for ($i=0; $i < count($uniqueploids); $i++) { 
+            $key = array_search($uniqueploids[$i], $plosid);
+            array_push($uniqueplocohortpasspercent, $plocohortpasspercent[$key]);
+        }
+
 
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
@@ -468,6 +481,10 @@ th{
         $cohort_clo_stat = array(); // cohort course clo status -> increment for pass
         for($i=0; $i<count($closid); $i++)
             $cohort_clo_stat[$i] = 0; // initialize all clos status with 0
+
+        $cohort_plo_stat = array(); // cohort course plo status -> increment for pass
+        for($i=0; $i<count($uniqueploids); $i++)
+            $cohort_plo_stat[$i] = 0; // initialize all plos status with 0
         
         foreach ($seatnos as $seatno) {
         $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
@@ -545,7 +562,7 @@ th{
                     foreach($plosclo as $pc){
                         for($b=0; $b<count($pc); $b++){
                             if($pc[$b] == $closid[$i]){
-                                $ind_stud_plo_stat[$a][$b] = 1; // set all plo status to pass
+                                $ind_stud_plo_stat[$a][$b] = 1; // set plo status to pass
                             }
                         }
                         $a++;
@@ -559,20 +576,23 @@ th{
             }
             /*echo "<br>PASS ";
             var_dump($ind_stud_plo_stat);*/
-            $a=0;
-            foreach($plosclo as $pc){
-                $flag = 1;
-                for($b=0; $b<count($pc); $b++){
-                    if($pc[$b] == 0){
-                        $flag = 0; // set plo status to fail
+
+            /****** Student PLOS status ******/
+            $a=0; $countpassclo = 0;
+            foreach($ind_stud_plo_stat as $splo){
+                for($b=0; $b<count($splo); $b++){
+                    if($ind_stud_plo_stat[$a][$b] == 1){
+                        $countpassclo++;
                     }
                 }
-                if($flag){
+                //echo $countpassclo;
+                if(($countpassclo/count($splo))*100 >= $uniqueplospasspercent[$a]){
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                    $cohort_plo_stat[$a]++;
                 }
                 else
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
-                $a++;
+                $a++; $countpassclo = 0;
             }
             ?>
         </tr>
@@ -594,6 +614,10 @@ th{
             for($i=0; $i<count($closid); $i++) {
                 echo "<td>".(($cohort_clo_stat[$i]/count($recStudents))*100)."%</td>";
             }
+            /****** Course PLOS status (Quantitative) ******/
+            for($i=0; $i<count($uniqueploids); $i++) {
+                echo "<td>".(($cohort_plo_stat[$i]/count($recStudents))*100)."%</td>";
+            }
             ?>
         </tr>
         <tr>
@@ -603,6 +627,13 @@ th{
             /****** Course CLOS status (pass/fail) ******/
             for($i=0; $i<count($closid); $i++) {
                 if(($cohort_clo_stat[$i]/count($recStudents))*100 >= $clocohortpasspercent[$i])
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
+                else
+                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
+            }
+            /****** Course PLOS status (pass/fail) ******/
+            for($i=0; $i<count($uniqueploids); $i++) {
+                if(($cohort_plo_stat[$i]/count($recStudents))*100 >= $uniqueplocohortpasspercent[$i])
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'></i></td>";
                 else
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'></i></td>";
