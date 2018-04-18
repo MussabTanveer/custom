@@ -61,7 +61,7 @@
                 for($i=0; $i<count($criteriaDesc); $i++){
                 ?>
                 <tr>
-                    <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
+                    <th>Criterion <?php echo ($i+1)." <a href='edit_rubric.php?edit=criterion&rubric=$rubric_id&criterion=$criteriaId[$i]&num=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>".$criteriaDesc[$i] ?></th>
                     <?php
                     $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
                     //$s = 1;
