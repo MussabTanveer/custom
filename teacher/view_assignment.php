@@ -69,7 +69,7 @@ if($rec){
                 $userid = $records->username;
                 $obtmark = $records->obtmark;
                 "<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>";
-$table->data[] = array($serialno,$userid,$obtmark, "<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>");
+$table->data[] = array($serialno,$userid,$obtmark, "<a href='edit_assignment_marks.php?edit=$marksid&userid=$userid&assignid=$assign_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
 
             }
 
