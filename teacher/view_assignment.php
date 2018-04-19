@@ -51,7 +51,7 @@ else{
 	echo "No record present!";
 }
 $rec=$DB->get_recordset_sql(
-        'SELECT us.username,us.id,maa.obtmark, ma.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid  AND ma.id= ? AND ma.module=? ',array($assign_id,'-4'));
+        'SELECT us.username,us.id,maa.obtmark, ma.id,maa.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid  AND ma.id= ? AND ma.module=? ',array($assign_id,'-4'));
 
 if($rec){
 
@@ -59,16 +59,17 @@ if($rec){
               $serialno = 0;
             $table = new html_table();
             $table->id = "mytable";
-     $table->head = array('S. No.', 'Seat No.', 'Marks Obtained');
+     $table->head = array('S. No.', 'Seat No.', 'Marks Obtained','Edit');
 
 
 
      foreach ($rec as $records) {
                 $serialno++;
+                $marksid=$records->id;
                 $userid = $records->username;
                 $obtmark = $records->obtmark;
-
-$table->data[] = array($serialno,$userid,$obtmark);
+                "<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>";
+$table->data[] = array($serialno,$userid,$obtmark, "<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>");
 
             }
 
