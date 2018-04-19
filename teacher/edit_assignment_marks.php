@@ -121,10 +121,18 @@ if($rec){
         document.getElementById("id_obtmark").value = <?php echo json_encode($obtmark); ?>;
 
 </script>
+<?php
+
+echo "<a href='view_assignment.php?assignid=$assign_id' > Back </a>";
+?>
+
 
 
     <?php
 }
+
+
+
 echo $OUTPUT->footer();
  
     ?>
