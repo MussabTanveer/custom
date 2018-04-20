@@ -29,20 +29,22 @@
         
     $ques=$DB->get_records_sql("SELECT qq.id, qq.quesname, qq.maxmark, qq.cloid, c.shortname FROM mdl_manual_quiz_question qq, mdl_competency c WHERE mquizid=$quizId AND qq.cloid=c.id ORDER BY id");
 
-    $obtMarksq=$DB->get_records_sql("SELECT qat.id, qat.obtmark, u.username FROM mdl_manual_quiz_attempt qat, mdl_user u WHERE quizid=$quizId AND qat.userid=u.id ORDER BY qat.userid, qat.questionid ");
+    $obtMarksq=$DB->get_records_sql("SELECT qat.id, qat.obtmark, u.username ,qat.userid FROM mdl_manual_quiz_attempt qat, mdl_user u WHERE quizid=$quizId AND qat.userid=u.id ORDER BY qat.userid, qat.questionid ");
 
     $obtMarks=array();
     $userNames = array();
     //$cloids=array();
     $cloShortNames=array();
-
+    $userIds = array();
     if($obtMarksq)
     {
         foreach ($obtMarksq as $omark) {
             $username = $omark->username;
             $obtmark = $omark->obtmark;
+            $userId = $omark->userid;
             array_push($userNames,$username);
             array_push ($obtMarks,$obtmark);
+            array_push($userIds, $userId);
         }
     }
     else
@@ -98,7 +100,9 @@
                 <?php echo $userNames[$i]; // display username once every record ?>
             </td><?php
             foreach ($qids as $qid){?>
-            <td ><?php echo $obtMarks[$i]; $i++;?></td>
+            <td ><?php echo $obtMarks[$i]; ?> <?php echo"<a href='edit_activity_marks.php?quizid=$quizId&userId=$userIds[$i]&qId=$qid&courseid=$course_id'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>"; $i++; ?>
+
+            </td>
             <?php
             }?>
         </tr>
