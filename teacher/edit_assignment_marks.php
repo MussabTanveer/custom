@@ -32,12 +32,31 @@ if(!empty($_GET['edit']) && !empty($_GET['userid']))
         $userid=$_GET['userid'];
          $assign_id=$_GET['assignid'];
         // echo $assign_id;
+
+         $recofmaxmark=$DB->get_records_sql('SELECT maxmark FROM mdl_manual_assign_pro WHERE id = ?',array($assign_id));
+           
+if($recofmaxmark){
+            foreach ($recofmaxmark as $records){
+
+          $maxmark=$records->maxmark;
+
+    }
+
+    //echo $maxmark;
+
+//echo $recofmaxmark;
+
 if(isset($_POST['save']))
         {
 
          $newmarks=$_POST['newmarks'];
+      
+        if($newmarks > $maxmark){
 
-        
+         echo "<font color='red'><b>Obtained Marks cannot be greater than Maxmarks!</b></font><br />";
+           
+        }
+        else{
 
 $sql_update="UPDATE mdl_manual_assign_pro_attempt SET obtmark='$newmarks' WHERE id='$id'";
 //echo $id;
@@ -51,7 +70,8 @@ if(isset($msg)){
             echo $msg;
             //goto label;
         }
-
+    }
+}
 ?>
 
 <h3>Edit Assignment Marks For <?php echo $userid; ?></h3>
@@ -70,10 +90,10 @@ if(isset($msg)){
                         class="form-control "
                         name="newmarks"
                         id="id_obtmark"
-                        size=""
+                        size=""                      
                         required
                         maxlength="20" type="text" >
-                <div class="form-control-feedback" id="id_error_idnumber">
+                <div class="form-control-feedback" id="id_error_idnumber"> <?php echo "Maxmarks :$maxmark";  ?>
     </div>
         </div>
         </div>
