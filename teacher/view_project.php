@@ -51,7 +51,7 @@ else{
 	echo "No record present!";
 }
 $rec=$DB->get_recordset_sql(
-        'SELECT us.username,us.id,maa.obtmark, ma.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid AND ma.id= ? AND ma.module=? ',array($project_id,'-5'));
+        'SELECT us.username,us.id,maa.obtmark, ma.id,maa.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid AND ma.id= ? AND ma.module=? ',array($project_id,'-5'));
 
 if($rec){
 
@@ -59,7 +59,7 @@ if($rec){
               $serialno = 0;
             $table = new html_table();
             $table->id = "mytable";
-     $table->head = array('S. No.', 'Seat No.', 'Marks Obtained');
+     $table->head = array('S. No.', 'Seat No.', 'Marks Obtained','Edit');
 
 
 
@@ -67,8 +67,9 @@ if($rec){
                 $serialno++;
                 $userid = $records->username;
                 $obtmark = $records->obtmark;
+                 $marksid=$records->id;
 
-$table->data[] = array($serialno,$userid,$obtmark);
+$table->data[] = array($serialno,$userid,$obtmark,"<a href='edit_project_marks.php?edit=$marksid&userid=$userid&projectid=$project_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
 
             }
 
