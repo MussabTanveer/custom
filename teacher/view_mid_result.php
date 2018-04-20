@@ -47,7 +47,7 @@
         }
 
         else
-            echo "<h3>You do not have any manual $type in this course!</h3>";
+            echo "<h3>You do not have any manual Midterm in this course!</h3>";
 
     }
     else
