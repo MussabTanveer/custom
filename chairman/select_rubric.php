@@ -17,13 +17,13 @@
 	if($rec){
         $serialno = 0;
         $table = new html_table();
-        $table->head = array('S. No.', 'Rubric', 'Description');
+        $table->head = array('S. No.', 'Rubric', 'Description','Delete');
 		foreach ($rec as $records) {
             $serialno++;
 			$id = $records->id;
             $name = $records->name;
             $description = $records->description;
-            $table->data[] = array($serialno, "<a href='./view_rubric.php?rubric=$id'>$name</a>", "<a href='./view_rubric.php?rubric=$id'>$description</a>");
+            $table->data[] = array($serialno, "<a href='./view_rubric.php?rubric=$id'>$name</a>", "<a href='./view_rubric.php?rubric=$id'>$description</a>","<a href='./delete_rubric.php?id=$id' title='Delete' onClick=\"return confirm('Delete Rubric?')\" > <img src='../img/icons/Delete1.png' /></a>");
         }
         echo html_writer::table($table);
         
@@ -33,4 +33,5 @@
     }
 
     echo $OUTPUT->footer();
+
 ?>
