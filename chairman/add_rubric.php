@@ -13,6 +13,7 @@
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
 ?>
 
+<script src="../script/jquery/jquery-3.2.1.js"></script>
 <style>
 	input[type='number'] {
 		-moz-appearance:textfield;
@@ -210,138 +211,138 @@
         
         <div id="dynamicCriterion">
             <div id="crit1">
-            <div class="row">
-                <div class="col-md-4"><h4 style="color: olive;">Criterion 1</h4></div>
-                <div class="col-md-8">
-					<i onClick="removeCriterion('crit1');" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i>
-				</div>
-            </div>
-
-            <div class="form-group row fitem">
-                <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
-                    <label class="col-form-label d-inline" for="id_criteriondesc">
-                        Description
-                    </label>
-                </div>
-                <div class="col-md-9 form-inline felement" data-fieldtype="editor">
-                    <div>
-                        <div>
-                            <textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-control-feedback" id="id_error_criteriondesc" style="display: none;">
-                    </div>
-                </div>
-            </div>
-
-            <div id="dynamicScale1" style="padding-left: 25px;">
                 <div class="row">
-                    <div class="col-md-4">
-                        <h5 style="color: chocolate; display: inline;">Scales</h5>
+                    <div class="col-md-4"><h4 style="color: olive;">Criterion 1</h4></div>
+                    <div class="col-md-8">
+                        <i id="crossC1" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i>
                     </div>
-                    <div class="col-md-8"></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4"><b style="color: teal;">Scale 1</b></div>
-                    <div class="col-md-8"></div>
                 </div>
 
                 <div class="form-group row fitem">
-                    <div class="col-md-2 col-sm-3">
+                    <div class="col-md-3">
                         <span class="pull-xs-right text-nowrap">
                             <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
                         </span>
-                        <label class="col-form-label d-inline" for="id_scaledesc">
+                        <label class="col-form-label d-inline" for="id_criteriondesc">
                             Description
                         </label>
                     </div>
-                    <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor">
+                    <div class="col-md-9 form-inline felement" data-fieldtype="editor">
                         <div>
                             <div>
-                                <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
+                                <textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea>
                             </div>
                         </div>
-                        <div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;">
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-sm-3">
-                        <span class="pull-xs-right text-nowrap">
-                            <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                        </span>
-                        <label class="col-form-label d-inline" for="id_scalescore">
-                            Score
-                        </label>
-                    </div>
-                    <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number">
-                        <input type="number"
-                                class="form-control"
-                                name="scalescore1[]"
-                                id="id_scalescore"
-                                size=""
-                                required
-                                placeholder="eg. 1"
-                                maxlength="7"
-                                step="0.001"
-                                min="0" max="100">
-                        <div class="form-control-feedback" id="id_error_scalescore">
+                        <div class="form-control-feedback" id="id_error_criteriondesc" style="display: none;">
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-3"><b style="color: teal;">Scale 2</b></div>
-                    <div class="col-md-9"></div>
-                </div>
-
-                <div class="form-group row fitem">
-                    <div class="col-md-2 col-sm-3">
-                        <span class="pull-xs-right text-nowrap">
-                            <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                        </span>
-                        <label class="col-form-label d-inline" for="id_scaledesc">
-                            Description
-                        </label>
+                <div id="dynamicScale1" style="padding-left: 25px;">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5 style="color: chocolate; display: inline;">Scales</h5>
+                        </div>
+                        <div class="col-md-8"></div>
                     </div>
-                    <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor">
-                        <div>
+
+                    <div class="row">
+                        <div class="col-md-4"><b style="color: teal;">Scale 1</b></div>
+                        <div class="col-md-8"></div>
+                    </div>
+
+                    <div class="form-group row fitem">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="pull-xs-right text-nowrap">
+                                <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                            </span>
+                            <label class="col-form-label d-inline" for="id_scaledesc">
+                                Description
+                            </label>
+                        </div>
+                        <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor">
                             <div>
-                                <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
+                                <div>
+                                    <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;">
                             </div>
                         </div>
-                        <div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="pull-xs-right text-nowrap">
+                                <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                            </span>
+                            <label class="col-form-label d-inline" for="id_scalescore">
+                                Score
+                            </label>
+                        </div>
+                        <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number">
+                            <input type="number"
+                                    class="form-control"
+                                    name="scalescore1[]"
+                                    id="id_scalescore"
+                                    size=""
+                                    required
+                                    placeholder="eg. 1"
+                                    maxlength="7"
+                                    step="0.001"
+                                    min="0" max="100">
+                            <div class="form-control-feedback" id="id_error_scalescore">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2 col-sm-3">
-                        <span class="pull-xs-right text-nowrap">
-                            <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                        </span>
-                        <label class="col-form-label d-inline" for="id_scalescore">
-                            Score
-                        </label>
+
+                    <div class="row">
+                        <div class="col-md-3"><b style="color: teal;">Scale 2</b></div>
+                        <div class="col-md-9"></div>
                     </div>
-                    <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number">
-                        <input type="number"
-                                class="form-control"
-                                name="scalescore1[]"
-                                id="id_scalescore"
-                                size=""
-                                required
-                                placeholder="eg. 1"
-                                maxlength="7"
-                                step="0.001"
-                                min="0" max="100">
-                        <div class="form-control-feedback" id="id_error_scalescore">
+
+                    <div class="form-group row fitem">
+                        <div class="col-md-2 col-sm-3">
+                            <span class="pull-xs-right text-nowrap">
+                                <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                            </span>
+                            <label class="col-form-label d-inline" for="id_scaledesc">
+                                Description
+                            </label>
+                        </div>
+                        <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor">
+                            <div>
+                                <div>
+                                    <textarea required id="id_scaledesc" name="scaledesc1[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;">
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-3">
+                            <span class="pull-xs-right text-nowrap">
+                                <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                            </span>
+                            <label class="col-form-label d-inline" for="id_scalescore">
+                                Score
+                            </label>
+                        </div>
+                        <div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number">
+                            <input type="number"
+                                    class="form-control"
+                                    name="scalescore1[]"
+                                    id="id_scalescore"
+                                    size=""
+                                    required
+                                    placeholder="eg. 1"
+                                    maxlength="7"
+                                    step="0.001"
+                                    min="0" max="100">
+                            <div class="form-control-feedback" id="id_error_scalescore">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="CS1">
-                    <input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale('dynamicScale1',1,3);">
-                </div>
-            </div> <!-- /dynamic scale end -->
+                    <div id="CS1">
+                        <input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale('dynamicScale1',1,3);">
+                    </div>
+                </div> <!-- /dynamic scale end -->
             </div> <!-- / criterion div wrap -->
         </div> <!-- /dynamic criterion end -->
 
@@ -364,6 +365,15 @@
     <div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
     
     <script>
+        // script to remove pre-entered criterion fields from form
+        $(document).ready(function(){
+            $("#crossC1").click(function(){
+                $("#crit1").remove();
+            });
+        });
+    </script>
+
+    <script>
         // script to add criteria to form
         var c = 2;
         
@@ -374,7 +384,7 @@
             document.getElementById(divName).appendChild(divCritWrap);
 
             var newdiv = document.createElement('div');
-            newdiv.innerHTML = '<br><div class="row"><div class="col-md-4"><h4 style="color: olive;">Criterion '+c+'</h4></div><div class="col-md-8"><i onClick="removeCriterion(\'crit'+c+'\');" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            newdiv.innerHTML = '<br><div class="row"><div class="col-md-4"><h4 style="color: olive;">Criterion '+c+'</h4></div><div class="col-md-8"><i id="crossC'+c+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
             divCritWrap.appendChild(newdiv);
             
             var newdiv1 = document.createElement('div');
@@ -412,6 +422,13 @@
             
             divCritWrap.appendChild(scaleDiv);
             
+            //remove criterion
+            var idname = "#crossC" + c;
+            var divname = "#crit" + c;
+            $(idname).click(function(){
+                $(divname).remove();
+            });
+            
             c++;
         }
 
@@ -437,11 +454,6 @@
             document.getElementById(divName).appendChild(newdiv2);
             
             //i++;
-        }
-
-        // script to remove criterion fields from form
-        function removeCriterion(critId){
-            document.getElementById(critId).innerHTML = "";
         }
     </script>
 
