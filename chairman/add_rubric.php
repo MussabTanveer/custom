@@ -55,6 +55,9 @@
                 $criterionid = $DB->insert_record('rubric_criterion', $record);
                 //var_dump($cd); echo "<br>";
                 //array_push($criterionDesc,$cd);
+                while(!isset($_POST['scalescore'.$i])){
+                    $i++;
+                }
                 foreach ($_POST['scaledesc'.$i] as $sd)
                 {
                     array_push($scaleDesc,$sd);	
@@ -116,6 +119,9 @@
                 $criterionid = $DB->insert_record('rubric_criterion', $record);
                 //var_dump($cd); echo "<br>";
                 //array_push($criterionDesc,$cd);
+                while(!isset($_POST['scalescore'.$i])){
+                    $i++;
+                }
                 foreach ($_POST['scaledesc'.$i] as $sd)
                 {
                     array_push($scaleDesc,$sd);	
