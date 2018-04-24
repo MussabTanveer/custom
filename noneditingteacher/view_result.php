@@ -27,17 +27,14 @@
         }
     </style>
     <?php
-
     if(!empty($_GET['assessmentid']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
-		$course_id = (int)$course_id; // convert course id from string to int
-		$coursecontext = context_course::instance($course_id);
+        $course_id = (int)$course_id; // convert course id from string to int
+        $coursecontext = context_course::instance($course_id);
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         $aid=$_GET['assessmentid'];
-
         $stdids=array();
-
         // Find attached rubric
         $rec=$DB->get_recordset_sql('SELECT
             clo.id AS cloid,
@@ -70,9 +67,7 @@
                 if($levelid>=7) // level belongs to psychomotor or affective domain
                     break;
             }
-
             $rec->close();
-
             if($flag){
                 //echo "CLOID: $cloid LEVELID: $levelid";
                 $flagR=0; $rubric_id=0;
@@ -84,7 +79,6 @@
                 if($flagR){
                     //echo "RUBRICID: $rubric_id";
                     $rubricInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric WHERE id= ?', array($rubric_id));
-
                     if($rubricInfo){
                         // DISPLAY RUBRIC VIEW
                         foreach ($rubricInfo as $rInfo) {
@@ -94,7 +88,6 @@
                         echo "<h3><u>Rubric</u></h3>";
                         echo "<h3>$name</h3>";
                         echo "<h4>$description</h4>";
-
                         $criterionInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_criterion WHERE rubric = ? ORDER BY id', array($rubric_id));
                         $criteriaId = array();
                         $criteriaDesc = array();
@@ -156,7 +149,6 @@
         $obtMarksA=$DB->get_records_sql("SELECT att.id, u.username, att.cid, att.obtmark FROM mdl_assessment_attempt att, mdl_user u WHERE aid=? AND att.userid=u.id ORDER BY att.userid, att.cid ", array($aid));
         $userNames = array();
         $obtMarks = array();
-
         if($obtMarksA)
         {
             foreach ($obtMarksA as $omark) {
@@ -197,7 +189,7 @@
             </td><?php
             $sum = 0;
             foreach ($criteriaId as $cid){?>
-            <td ><?php echo $obtMarks[$i]; $sum+=$obtMarks[$i]; $i++; ?></td>
+            <td ><?php echo $obtMarks[$i]; $sum+=$obtMarks[$i] ; $i++; ?></td>
             <?php
             }?>
             <td ><?php echo $sum; ?></td>

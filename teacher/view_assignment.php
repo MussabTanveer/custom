@@ -36,6 +36,7 @@ if($rec1){
                 $clo=$records->idnumber;
                 $maxmark=$records->maxmark;
 
+
 }
 
 

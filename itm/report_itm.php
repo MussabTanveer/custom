@@ -20,6 +20,9 @@
         <h3>Click the links down below as per need </h3><br>
 
         <a href="./select_frameworktoCourse.php" class="cool-link">Create Courses &amp; Map CLOs</a><br><br>
+
+
+        <a href="../../../course/management.php" class="cool-link">Delete/Edit Courses</a><br><br>
         <!--<a href="./select_frameworktopracCourse.php" class="cool-link">Create Practical Courses &amp; Map CLOs</a><br><br>-->
 
         <!--<a href="./select_course.php" class="cool-link">Add CLOs to Courses</a><br><br>-->
