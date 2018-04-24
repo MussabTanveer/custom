@@ -156,7 +156,7 @@
         <div id="dynamicCriterion">
             <div id="crit1">
                 <div class="row">
-                    <div class="col-md-4"><h4 style="color: olive;">Criterion 1</h4></div>
+                    <div class="col-md-4"><h4 style="color: olive;">Criterion <!--1--></h4></div>
                     <div class="col-md-8">
                         <i id="crossC1" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i>
                     </div>
@@ -192,7 +192,7 @@
 
                     <div id="scale11">
                         <div class="row">
-                            <div class="col-md-4"><b style="color: teal;">Scale 1</b></div>
+                            <div class="col-md-4"><b style="color: teal;">Scale <!--1--></b></div>
                             <div class="col-md-8">
                                 <i id="crossS11" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i>
                             </div>
@@ -243,7 +243,7 @@
 
                     <div id="scale12">
                         <div class="row">
-                            <div class="col-md-4"><b style="color: teal;">Scale 2</b></div>
+                            <div class="col-md-4"><b style="color: teal;">Scale <!--2--></b></div>
                             <div class="col-md-8">
                                 <i id="crossS12" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i>
                             </div>
@@ -343,7 +343,7 @@
             document.getElementById(divName).appendChild(divCritWrap);
 
             var newdiv = document.createElement('div');
-            newdiv.innerHTML = '<br><div class="row"><div class="col-md-4"><h4 style="color: olive;">Criterion '+c+'</h4></div><div class="col-md-8"><i id="crossC'+c+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            newdiv.innerHTML = '<br><div class="row"><div class="col-md-4"><h4 style="color: olive;">Criterion </h4></div><div class="col-md-8"><i id="crossC'+c+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
             divCritWrap.appendChild(newdiv);
             
             var newdiv1 = document.createElement('div');
@@ -365,7 +365,7 @@
             scaleDiv.appendChild(scaleDiv1);
 
             var newdiv3 = document.createElement('div');
-            newdiv3.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale 1</b></div><div class="col-md-8"><i id="crossS'+c+'1" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            newdiv3.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale</b></div><div class="col-md-8"><i id="crossS'+c+'1" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
             scaleDiv1.appendChild(newdiv3);
 
             var newdiv4 = document.createElement('div');
@@ -378,7 +378,7 @@
             scaleDiv.appendChild(scaleDiv2);
 
             var newdiv5 = document.createElement('div');
-            newdiv5.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale 2</b></div><div class="col-md-8"><i id="crossS'+c+'2" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            newdiv5.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale</b></div><div class="col-md-8"><i id="crossS'+c+'2" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
             scaleDiv2.appendChild(newdiv5);
 
             var newdiv6 = document.createElement('div');
@@ -423,7 +423,7 @@
             document.getElementById(divName).appendChild(divScaleWrap);
 
             var newdiv = document.createElement('div');
-            newdiv.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale '+sno+'</b></div><div class="col-md-8"><i id="crossS'+cno+sno+'" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            newdiv.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale </b></div><div class="col-md-8"><i id="crossS'+cno+sno+'" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
             divScaleWrap.appendChild(newdiv);
             
             var newdiv1 = document.createElement('div');

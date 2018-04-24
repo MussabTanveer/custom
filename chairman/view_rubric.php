@@ -61,7 +61,7 @@
                 for($i=0; $i<count($criteriaDesc); $i++){
                 ?>
                 <tr>
-                    <th>Criterion <?php echo ($i+1)." <a href='edit_rubric.php?edit=criterion&rubric=$rubric_id&criterion=$criteriaId[$i]&num=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>".$criteriaDesc[$i] ?></th>
+                    <th>Criterion <?php echo ($i+1)." <a href='edit_rubric.php?edit=criterion&rubric=$rubric_id&criterion=$criteriaId[$i]&num=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a> <a href='delete_rubric_criterion_scale.php?rubric=$rubric_id&criterion=$criteriaId[$i]'><i class='fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a><br>".$criteriaDesc[$i] ?></th>
                     <?php
                     $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
                     //$s = 1;
@@ -70,7 +70,7 @@
                         $id = $sInfo->id;
                         $description = $sInfo->description;
                         $score = $sInfo->score;
-                        echo "<td>$description <a href='edit_rubric.php?edit=scale&rubric=$rubric_id&scale=$id&snum=".($temp+1)."&cnum=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>Score: $score</td>";
+                        echo "<td>$description <a href='edit_rubric.php?edit=scale&rubric=$rubric_id&scale=$id&snum=".($temp+1)."&cnum=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a> <a href='delete_rubric_criterion_scale.php?rubric=$rubric_id&scale=$id'><i class='fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a><br>Score: $score</td>";
                         //$s++;
                         $temp++;
                     }
