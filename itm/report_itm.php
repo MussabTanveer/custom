@@ -29,9 +29,11 @@
 
         <a href="../../../user/editadvanced.php?id=-1" class="cool-link">Add a new User</a><br><br>
 
+       
+
         <a href="../../../admin/tool/uploaduser/index.php" class="cool-link">Upload Users</a><br><br>
 
-        <a href="../../../admin/user.php" class="cool-link">View all Users</a><br><br>
+        <a href="../../../admin/user.php" class="cool-link">View/Edit/Delete Users</a><br><br>
 
         <a href="../../../cohort/index.php" class="cool-link">Add/Edit/View Cohorts</a><br><br>
 
