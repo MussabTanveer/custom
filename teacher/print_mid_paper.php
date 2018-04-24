@@ -31,7 +31,7 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Midterm Name','Print Mid Paper','Delete');
+            $table->head = array('S. No.', 'Midterm Name','Print Mid Paper','Delete','Edit');
             foreach ($midterms as $records) {
                 $serialno++;
                 $qid = $records->id;
@@ -39,9 +39,9 @@
                 $mime = $records->mime;
                 if ($mime)
                 
-                    $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" > <img src='../img/icons/Delete1.png' /></a>");
+                    $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" > <img src='../img/icons/Delete1.png' /></a>","<a href='./edit_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Edit') > <img src='../img/icons/Edit.png' /></a>");
                 else
-                    $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-',"<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" > <img src='../img/icons/Delete1.png' /></a>");
+                    $table->data[] = array($serialno,"<a href='./print_mid.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-',"<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" > <img src='../img/icons/Delete1.png' /></a>","<a href='./edit_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Edit') > <img src='../img/icons/Edit.png' /></a>");
             
             }
 
