@@ -22,19 +22,19 @@
         $type = $_GET['type'];
       //  echo "$Id";
         //echo "$courseId";
-        $sql = "DELETE FROM mdl_manual_quiz WHERE id = $Id";
-        $DB->execute($sql);
-
-        $sql = "DELETE FROM mdl_manual_quiz_attempt WHERE quizid = $Id";
-        $DB->execute($sql);
-
-        $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
-        $DB->execute($sql);
-
-        echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
      
          if ($type == "quiz")
             {
+                 $sql = "DELETE FROM mdl_manual_quiz WHERE id = $Id";
+                $DB->execute($sql);
+
+                $sql = "DELETE FROM mdl_manual_quiz_attempt WHERE quizid = $Id";
+                $DB->execute($sql);
+
+                $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
+                $DB->execute($sql);
+
+                echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
            ?>
                 <a href="./print_quiz_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
              <?php
@@ -43,15 +43,68 @@
         elseif ($type =="midterm")
          {
 
+             $sql = "DELETE FROM mdl_manual_quiz WHERE id = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_quiz_attempt WHERE quizid = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
+            $DB->execute($sql);
+
+            echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
+
         ?>
     <a href="./print_mid_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
 
 <?php
          }
-         elseif ($type == "finalexam") { ?>
+         elseif ($type == "finalexam") { 
+
+             $sql = "DELETE FROM mdl_manual_quiz WHERE id = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_quiz_attempt WHERE quizid = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
+            $DB->execute($sql);
+
+            echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
+
+            ?>
 
             <a href="./print_final_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
 <?php   
+      }
+      elseif ($type == "project") {
+
+              $sql = "DELETE FROM mdl_manual_assign_pro WHERE id = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_assign_pro_attempt WHERE assignproid = $Id";
+            $DB->execute($sql); 
+
+         echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
+            ?>
+            <a href="./print_project_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
+
+     <?php
+
+      }
+      elseif ($type == "assign") {
+          # code...
+          $sql = "DELETE FROM mdl_manual_assign_pro WHERE id = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_assign_pro_attempt WHERE assignproid = $Id";
+            $DB->execute($sql); 
+
+         echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
+            ?>
+            <a href="./print_assign_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
+
+     <?php
       }
 
 

@@ -17,6 +17,7 @@
     if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
+        $type = $_GET['type'];
         $coursecontext = context_course::instance($course_id);
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "$course_id";
@@ -26,7 +27,7 @@
         { 
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Assignment Details','Print Assignment Paper');
+            $table->head = array('S. No.', 'Assignment Details','Print Assignment Paper','Delete');
 
             foreach ($assigns as $assign) 
             {
@@ -37,7 +38,7 @@
                 $aid   = $assign->id;
                  $mime = $assign->mime;
                 if ($mime)
-                 $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","<a href='./print_uploaded_paper2.php?assign=$aid&courseid=$course_id'>Print $aname uploaded paper</a>");
+                 $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","<a href='./print_uploaded_paper2.php?assign=$aid&courseid=$course_id'>Print $aname uploaded paper</a>","<a href='./delete_manual_activity.php?id=$aid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" > <img src='../img/icons/Delete1.png' /></a>");
              else
                 $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","-");
 
