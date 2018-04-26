@@ -492,31 +492,43 @@
         WHERE id = $Id";
         
         $DB->execute($sql);
-        
-       //  $sql ="UPDATE mdl_manual_quiz SET description = '$description' WHERE id = $Id";
-     // $DB->execute($sql);
 
-        echo "<font color = green> Details Updated Successfully </font>";
         if ($type == "assign")
             $redirect = "print_assign_paper.php?type=$type&course=$courseId";
-        elseif ($type == "midterm")
-            $redirect = "print_mid_paper.php?type=$type&course=$courseId";
+        elseif ($type == "project")
+            $redirect = "print_project_paper.php?type=$type&course=$courseId";
 
-
-        $file = $_FILES['assignQues']['name'];
+         $file = $_FILES['assignQues']['name'];
         $file_loc = $_FILES['assignQues']['tmp_name'];
         $file_size = $_FILES['assignQues']['size'];
         $file_type = $_FILES['assignQues']['type'];
-         //Upload PDF
-         if ($file_type == "application/pdf")
-         { 
-              $blobObj = new Blob($x,$dbh,$dbn,$dbu);
-               $blobObj->updateBlob($Id,$file_loc,"application/pdf");
-               // echo "<font color = green> File has been Uploaded successfully! </font>";
-        }
-         else
-            echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
 
-        
-        redirect($redirect);
+        if ($file_size <= 0){
+
+         echo "<font color = green> Details Updated Successfully </font>";
+
+         redirect($redirect);
+     }
+
+      
+         //Upload PDF
+        if($file_size > 0)
+        {
+             if ($file_type == "application/pdf")
+                 { 
+                      $blobObj = new Blob($x,$dbh,$dbn,$dbu);
+                       $blobObj->updateBlob($Id,$file_loc,"application/pdf");
+                          echo "<font color = green> Details Updated Successfully </font>";
+                         redirect($redirect);
+
+                       // echo "<font color = green> File has been Uploaded successfully! </font>";
+                }
+                 else
+                  {  
+                    echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+                     //echo "<font color = green> Details Updated Successfully </font>";
+                  }
+
+        }        
+      
     }
