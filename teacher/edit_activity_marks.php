@@ -100,12 +100,19 @@
      if(isset($_POST['save']))
     {
         $newObtMark = $_POST['mark'];
-        //echo $newObtMark;
-        $sql ="UPDATE mdl_manual_quiz_attempt SET obtmark = $newObtMark WHERE quizid = $quizId AND userid = $userId AND questionid=$qId";
-        $DB->execute($sql);
+
+        if ($newObtMark <= $maxmark)
+        
+        {
+            $sql ="UPDATE mdl_manual_quiz_attempt SET obtmark = $newObtMark WHERE quizid = $quizId AND userid = $userId AND questionid=$qId";
+           $DB->execute($sql);
         echo "<font color = green> Marks Updated Successfully </font>";
         $redirect = "view_activity_result1.php?quiz=$quizId&courseid=$courseid";
         redirect($redirect);
+        }
+        else
+             echo "<font color='red'><b>Obtained Marks cannot be greater than Maxmarks. </b></font><br />";
+       
     }
 
 
