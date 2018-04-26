@@ -29,23 +29,43 @@
 			
 			$shortname=$_POST['shortname'];
 			$description=$_POST['description'];
-			$idnumber=$_POST['idnumber'];
+			$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
 			$time = time();
-			
-			//echo $shortname;
-			//echo $description;
-			//echo $idnumber;
-			
-			$check=$DB->get_records_sql('SELECT * from mdl_competency_framework WHERE idnumber=? AND id!=?', array($idnumber,$id));
-			if(count($check)){
-				$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'20' )
+			{
+				//echo "IN IF";
+				if(empty($shortname))
+				{
+					$msg1="<font color='red'>-Please enter framework name</font>";
+				}
+				if(empty($idnumber))
+				{
+					$msg2="<font color='red'>-Please enter ID number</font>";
+				}
+				if(strlen($shortname)> '30')
+				{
+					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+				}
+				if(strlen($idnumber)>'20' )
+				{
+					$msg2="<font color='red'>-Length of the ID Number should be less than 20</font>";
+				}
 			}
 			else{
-				$sql_update="UPDATE mdl_competency_framework SET shortname='$shortname',description='$description',idnumber='$idnumber',timemodified='$time',usermodified=$USER->id WHERE id=$id";
-				$DB->execute($sql_update);
-				$msg3 = "<font color='green'><b>Framework successfully updated!</b></font><br />";
+				//echo $shortname;
+				//echo $description;
+				//echo $idnumber;
+				
+				$check=$DB->get_records_sql('SELECT * from mdl_competency_framework WHERE idnumber=? AND id!=?', array($idnumber,$id));
+				if(count($check)){
+					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
+				}
+				else{
+					$sql_update="UPDATE mdl_competency_framework SET shortname=?,description=?,idnumber=?,timemodified=?,usermodified=? WHERE id=?";
+					$DB->execute($sql_update, array($shortname, $description, $idnumber, $time, $USER->id, $id));
+					$msg3 = "<font color='green'><b>Framework successfully updated!</b></font><br />";
+				}
 			}
-		
 		}
 	
 		if(isset($msg3)){

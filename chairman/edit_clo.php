@@ -30,75 +30,95 @@
 		$fw_id=$_GET['fwid'];
 		
 		if(isset($_POST['save']))
-		{	
+		{
 			//$shortname=$_POST['shortname'];
 			$description=$_POST['description'];
 			//$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
-			
-
-			$id = $_GET['edit'];
-			$fw_id=$_GET['fwid'];
 			$kpi = $_POST['kpi'];
-		
-			
 			$time = time();
 
-        			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ? ', array($id));
-					
-					if($revisions){
-	            		foreach ($revisions as $revision){
-							
-							$plo = $revision->parentid;
-							$fwidd= $revision->competencyframeworkid; 
-							$shortname = $revision->shortname;
-							$idnumber = $revision->idnumber;
-
-	            		}
-        			}
-        			
-        			$levels=$DB->get_records_sql('SELECT * FROM `mdl_taxonomy_clo_level` where cloid = ? ', array($id));
-					
-					if($levels){
-	            		foreach ($levels as $level){
-							
-							$levelid = $level->levelid;
-							
-
-	            		}
-        			}
-
-
-       			
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time',$USER->id)";
-					$DB->execute($sql);
-
-					$query=$DB->get_records_sql("SELECT MAX(id) as id FROM  mdl_competency");
-
-							foreach ($query as $q){
-
-								$lastId = $q->id;
-							}
-							
-					$sql="INSERT INTO mdl_taxonomy_clo_level (frameworkid, cloid , levelid) VALUES ('$fwidd','$lastId','$levelid')";
-
-						$DB->execute($sql);
-
-
-
-					$sql="INSERT INTO mdl_clo_revision (cloid , revision) VALUES ('$id','$lastId')";
-
-						$DB->execute($sql);
-
-
-
-							
-					$sql="INSERT INTO mdl_clo_kpi (cloid , kpi) VALUES ('$lastId','$kpi')";
-
-						$DB->execute($sql);
-				
-					$msg3 = "<font color='green'><b>CLO successfully updated!</b></font><br />";
-				
+			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ? ', array($id));
 			
+			if($revisions){
+				foreach ($revisions as $revision){
+					$plo = $revision->parentid;
+					$fwidd= $revision->competencyframeworkid; 
+					$shortname = $revision->shortname;
+					$idnumber = $revision->idnumber;
+				}
+			}
+			
+			$levels=$DB->get_records_sql('SELECT * FROM `mdl_taxonomy_clo_level` where cloid = ? ', array($id));
+			
+			if($levels){
+				foreach ($levels as $level){
+					$levelid = $level->levelid;
+				}
+			}
+			
+			/*$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) 
+			VALUES ('$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time',$USER->id)";
+			$DB->execute($sql);*/
+
+			try {
+				$transaction = $DB->start_delegated_transaction();
+				$record = new stdClass();
+				$record->shortname = $shortname;
+				$record->description = $description;
+				$record->descriptionformat = 1;
+				$record->idnumber = $idnumber;
+				$record->competencyframeworkid = $fwidd;
+				$record->parentid = $plo;
+				$record->path = '/0/';
+				$record->sortorder = 0;
+				$record->timecreated = $time;
+				$record->timemodified = $time;
+				$record->usermodified = $USER->id;
+				
+				$cloid = $DB->insert_record('competency', $record);
+
+				/*$query=$DB->get_records_sql("SELECT MAX(id) as id FROM  mdl_competency");
+
+				foreach ($query as $q){
+					$lastId = $q->id;
+				}*/
+						
+				/*$sql="INSERT INTO mdl_taxonomy_clo_level (frameworkid, cloid , levelid) VALUES ('$fwidd','$cloid','$levelid')";
+				$DB->execute($sql);*/
+
+				$record = new stdClass();
+				$record->frameworkid = $fwidd;
+				$record->cloid = $cloid;
+				$record->levelid = $levelid;
+				
+				$DB->insert_record('taxonomy_clo_level', $record);
+
+				/*$sql="INSERT INTO mdl_clo_revision (cloid , revision) VALUES ('$id','$cloid')";
+				$DB->execute($sql);*/
+
+				$record = new stdClass();
+				$record->cloid = $id;
+				$record->revision = $cloid;
+				
+				$DB->insert_record('clo_revision', $record);
+						
+				/*$sql="INSERT INTO mdl_clo_kpi (cloid , kpi) VALUES ('$cloid','$kpi')";
+				$DB->execute($sql);*/
+
+				$record = new stdClass();
+				$record->cloid = $cloid;
+				$record->kpi = $kpi;
+				
+				$DB->insert_record('clo_kpi', $record);
+
+				$transaction->allow_commit();
+			
+				$msg3 = "<font color='green'><b>CLO successfully updated!</b></font><br />";
+			} catch(Exception $e) {
+				$transaction->rollback($e);
+				$msg3 = "<font color='red'>CLO failed to edit!</font>";
+			}
+				
 		}
 		
 		if(isset($msg3)){
@@ -193,7 +213,7 @@
 					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
 				</span>
 				<label class="col-form-label d-inline" for="id_kpi">
-					Passing Percentage
+					Passing Percentage Individual (student)
 				</label>
 			</div>
 			<div class="col-md-9 form-inline felement" data-fieldtype="number">
@@ -244,25 +264,23 @@
     </script>
 	
 	<?php
-		
 		}
     ?>
 	<br />
 	<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 	
-
     <?php 
         label:
         ?>
         <div class="btn-btn-info"><br><a href="./select_frameworktoCLO.php" >Back</a></div>
         <?php
-        echo $OUTPUT->footer();
 	}
 	else
     {?>
         <h3 style="color:red;"> Invalid Selection </h3>
         <a href="./select_frameworktoCLO.php">Back</a>
     	<?php
-        echo $OUTPUT->footer();
-    }?>
+	}
+	echo $OUTPUT->footer();
+	?>
 	

@@ -33,7 +33,7 @@
 			$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
             $time = time();
             
-            if(empty($shortname) || empty($idnumber))
+            if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10')
 			{
 				if(empty($shortname))
 				{
@@ -42,6 +42,14 @@
 				if(empty($idnumber))
 				{
 					$msg2="<font color='red'>-Please enter ID number</font>";
+				}
+				if(strlen($shortname) > '30')
+				{
+					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
+				}
+				if(strlen($idnumber) > '10')
+				{
+					$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
 				}
 			}
 			elseif(substr($idnumber,0,4) != 'PEO-')
@@ -59,8 +67,8 @@
                     $msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
                 }
                 else{
-                    $sql_update="UPDATE mdl_competency SET shortname='$shortname',description='$description',idnumber='$idnumber',timemodified='$time',usermodified=$USER->id WHERE id=$id";
-                    $DB->execute($sql_update);
+                    $sql_update="UPDATE mdl_competency SET shortname=?,description=?,idnumber=?,timemodified=?,usermodified=? WHERE id=?";
+                    $DB->execute($sql_update, array($shortname, $description, $idnumber, $time, $USER->id, $id));
                     $msg3 = "<font color='green'><b>PEO successfully updated!</b></font><br />";
                 }
             }
@@ -94,7 +102,7 @@
 						pattern="[p/P][e/E][o/O]-[0-9]{1,}"
 						title="eg. PEO-1"
 						required
-						maxlength="20" type="text" >
+						maxlength="20" >
 				<div class="form-control-feedback" id="id_error_idnumber">
 				<?php
 				if(isset($msg2)){
@@ -121,7 +129,7 @@
 						id="id_shortname"
 						size=""
 						required
-						maxlength="30" type="text" >
+						maxlength="30" >
 				<div class="form-control-feedback" id="id_error_shortname">
 				<?php
 				if(isset($msg1)){
