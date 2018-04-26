@@ -31,7 +31,9 @@
         <a href="../../../user/editadvanced.php?id=-1" class="cool-link">Add a New User</a><br><br>
         
         <a href="../../../admin/tool/uploaduser/index.php" class="cool-link">Upload Users</a><br><br>
-       <a href="../../../admin/user/user_bulk.php" class="cool-link">Users Bulk actions</a><br><br>
+        
+        <a href="../../../admin/user/user_bulk.php" class="cool-link">Bulk User Actions</a><br><br>
+        
         <a href="../../../admin/user.php" class="cool-link">View/Edit/Delete Users</a><br><br>
         
         <a href="./select_course_enrol.php" class="cool-link">Enrol/Unenrol Users from Courses</a><br><br>
