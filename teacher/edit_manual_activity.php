@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Edit Activity");
-    $PAGE->set_heading("Edit a Activity");
+    $PAGE->set_heading("Edit an Activity");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_manual_activity.php');
     
     require_login();
