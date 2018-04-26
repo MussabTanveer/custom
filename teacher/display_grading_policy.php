@@ -49,7 +49,7 @@
                     $table->data[] = array($serial,strtoupper($name), $percentage.'%', "Predefined");
                 }
                 else{
-                    $table->data[] = array($serial,strtoupper($name), $percentage.'%', "<a href='edit_grading_policy.php?course=$course_id&edit=$id' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='display_grading_policy.php?course=$course_id&delete=$id' onClick=\"return confirm('Delete grading policy of $name?')\" title='Delete'><img src='../img/icons/delete.png' /></a>");
+                    $table->data[] = array($serial,strtoupper($name), $percentage.'%', "<a href='edit_grading_policy.php?course=$course_id&edit=$id' title='Edit'><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a> <a href='display_grading_policy.php?course=$course_id&delete=$id' onClick=\"return confirm('Delete grading policy of $name?')\" title='Delete'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>");
                 }
             }
             $table->data[] = array("<b>Total:</b>", "", $sum.'%', "");
