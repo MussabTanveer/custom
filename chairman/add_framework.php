@@ -21,7 +21,7 @@
 	}
 </style>
 <?php
-	if(isset($_POST['save'])){
+	if(isset($_POST['save']) || isset($_POST['return'])){
 		$shortname=$_POST['shortname'];
 		$description=$_POST['description'];
 		$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
@@ -57,55 +57,33 @@
 				$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 			}
 			else{
-				$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
-				$DB->execute($sql);
-				$msg3 = "<font color='green'><b>OBE Framework successfully added!</b></font><br />";
-			}
-		}
-	}
+				/*$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) 
+				VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
+				$DB->execute($sql);*/
 
-	elseif(isset($_POST['return'])){
-		$shortname=$_POST['shortname'];
-		$description=$_POST['description'];
-		$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
-		$time = time();
-		
-		if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'20' )
-		{
-			if(empty($shortname))
-			{
-				$msg1="<font color='red'>-Please enter framework name</font>";
-			}
-			if(empty($idnumber))
-			{
-				$msg2="<font color='red'>-Please enter ID number</font>";
-			}
-			if(strlen($shortname)> '30')
-			{
-				$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
-			}
-			if(strlen($idnumber)>'20' )
-			{
-				$msg2="<font color='red'>-Length of the ID Number should be less than 20</font>";
-			}
-		}
-		else{
-			//echo $shortname;
-			//echo $description;
-			//echo $idnumber;
-			$check=$DB->get_records_sql('SELECT * from mdl_competency_framework WHERE idnumber=?', array($idnumber));
-			if(count($check)){
-				$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
-			}
-			else{
-				$sql="INSERT INTO mdl_competency_framework (shortname, description, idnumber, contextid, descriptionformat, scaleid, scaleconfiguration, taxonomies, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', '$idnumber', 1, 1, 2, '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]', 'outcome,outcome,outcome,outcome', '$time', '$time', $USER->id)";
-				$DB->execute($sql);
+				$record = new stdClass();
+				$record->shortname = $shortname;
+				$record->description = $description;
+				$record->idnumber = $idnumber;
+				$record->contextid = 1;
+				$record->descriptionformat = 1;
+				$record->scaleid = 2;
+				$record->scaleconfiguration = '[{\"scaleid\":\"2\"},{\"id\":1,\"scaledefault\":1,\"proficient\":1},{\"id\":2,\"scaledefault\":0,\"proficient\":1}]';
+				$record->taxonomies = 'outcome,outcome,outcome,outcome';
+				$record->timecreated = $time;
+				$record->timemodified = $time;
+				$record->usermodified = $USER->id;
+				
+				$DB->insert_record('competency_framework', $record);
+
 				$msg3 = "<font color='green'><b>OBE Framework successfully added!</b></font><br />";
+				
+				if(isset($_POST['return'])){
+					$redirect_page1='./report_chairman.php';
+					redirect($redirect_page1);
+				}
 			}
-		$redirect_page1='../index.php';
-		redirect($redirect_page1);
 		}
-		
 	}
 	
 	//delete code starts from here
@@ -135,20 +113,21 @@
 	}
 	// del code ends
 
-	$rec=$DB->get_records_sql('SELECT id,shortname from mdl_competency_framework');
+	$rec=$DB->get_records_sql('SELECT id, shortname, idnumber from mdl_competency_framework');
 	
 	if($rec){
 		$i = 1;
 		echo "<h3>Already Present Frameworks</h3>";
 		foreach ($rec as $records){
 			$shortname1 = $records->shortname;
+			$idnumber1 = $records->idnumber;
 			$id=$records->id;
 			echo "<div class='row'>
-					<div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
-						<div class='col-md-10 col-sm-8 col-xs-4'>
-							<a href='edit_framework.php?edit=$id' title='Edit'><img src='../img/icons/edit.png' /></a>
-							<a href='add_framework.php?delete=$id' onClick=\"return confirm('Delete OBE framework?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
-						</div>
+					<div class='col-md-3 col-sm-4 col-xs-8'>$i. $shortname1 ($idnumber1)</div>
+					<div class='col-md-9 col-sm-8 col-xs-4'>
+						<a href='edit_framework.php?edit=$id' title='Edit'><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
+						<a href='add_framework.php?delete=$id' onClick=\"return confirm('Delete OBE framework?')\" title='Delete'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>
+					</div>
 				  </div>"; //link to edit_framework.php and delete
 			$i++;
 		}
@@ -246,7 +225,7 @@
 
 	</form>
 	<?php
-		if(isset($_POST['save']) && !isset($msg3)){
+		if((isset($_POST['save']) || isset($_POST['return'])) && !isset($msg3)){
 		?>
 		<script>
 			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;

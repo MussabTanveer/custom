@@ -47,7 +47,7 @@
 			}
 		}
 	
-		if(isset($_POST['return'])){
+		if(isset($_POST['save']) || isset($_POST['return'])){
 			$shortname=trim($_POST['shortname']);
 			$description=trim($_POST['description']);
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
@@ -65,60 +65,6 @@
 				{
 					$msg2="<font color='red'>-Please enter ID number</font>";
 				}
-
-			if(strlen($shortname)> '30')
-			{
-				$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
-			}
-			if(strlen($idnumber)>'10' )
-			{
-				$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
-			}
-
-
-			}
-			elseif(substr($idnumber,0,4) != 'PEO-')
-			{
-				$msg2="<font color='red'>-The ID number must start with PEO-</font>";
-			}
-			else{
-				//echo $shortname;
-				//echo $description;
-				//echo $idnumber;
-				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $fw_id));
-				if(count($check)){
-					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
-				}
-				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber', '$fw_id', '/0/', 0, '$time', '$time', $USER->id)";
-					$DB->execute($sql);
-					$msg3 = "<font color='green'><b>PEO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
-				}
-				$redirect_page1='../index.php';
-			redirect($redirect_page1); 
-			}
-            
-		}
-
-        elseif(isset($_POST['save'])){
-			$shortname=trim($_POST['shortname']);
-			$description=trim($_POST['description']);
-			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
-			$fw_id=$_POST['fid'];
-			$fw_shortname=$_POST['fname'];
-			$time = time();
-			
-			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10')
-			{
-				if(empty($shortname))
-				{
-					$msg1="<font color='red'>-Please enter PEO name</font>";
-				}
-				if(empty($idnumber))
-				{
-					$msg2="<font color='red'>-Please enter ID number</font>";
-				}
-
 				if(strlen($shortname)> '30')
 				{
 					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
@@ -127,9 +73,6 @@
 				{
 					$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
 				}
-
-
-
 			}
 			elseif(substr($idnumber,0,4) != 'PEO-')
 			{
@@ -144,12 +87,32 @@
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
 				else{
-					$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber', '$fw_id', '/0/', 0, '$time', '$time', $USER->id)";
-					$DB->execute($sql);
+					/*$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, path, sortorder, timecreated, timemodified, usermodified) 
+					VALUES ('$shortname', '$description', 1, '$idnumber', '$fw_id', '/0/', 0, '$time', '$time', $USER->id)";
+					$DB->execute($sql);*/
+					$record = new stdClass();
+					$record->shortname = $shortname;
+					$record->description = $description;
+					$record->descriptionformat = 1;
+					$record->idnumber = $idnumber;
+					$record->competencyframeworkid = $fw_id;
+					$record->path = '/0/';
+					$record->sortorder = 0;
+					$record->timecreated = $time;
+					$record->timemodified = $time;
+					$record->usermodified = $USER->id;
+					
+					$DB->insert_record('competency', $record);
+
 					$msg3 = "<font color='green'><b>PEO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
+					if(isset($_POST['return'])){
+						$redirect_page1='./report_chairman.php';
+						redirect($redirect_page1); 
+					}
 				}
 			}
 		}
+        
 		/* delete code */
 		elseif(isset($_GET['delete']) && isset($_GET['fwid'])){
 			$id_d=$_GET['delete'];
@@ -185,12 +148,13 @@
 			echo "<h3>Already Present PEOs</h3>";
 			foreach ($peos as $records){
 				$shortname1 = $records->shortname;
+				$idnumber1 = $records->idnumber;
 				$id=$records->id;
 				echo "<div class='row'>
-						<div class='col-md-3 col-sm-4 col-xs-8'>$i. $shortname1</div>
-						<div class='col-md-9 col-sm-8 col-xs-4'>
-							<a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><img src='../img/icons/edit.png' /></a>
-							<a href='add_peo.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete PEO?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
+						<div class='col-lg-2 col-md-3 col-sm-4 col-xs-8'>$i. $shortname1 ($idnumber1)</div>
+						<div class='col-lg-10 col-md-9 col-sm-8 col-xs-4'>
+							<a href='edit_peo.php?edit=$id&fwid=$fw_id' title='Edit'><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
+							<a href='add_peo.php?delete=$id&fwid=$fw_id' onClick=\"return confirm('Delete PEO?')\" title='Delete'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>
 		                </div>
         	          </div>";
 				$i++;
@@ -306,7 +270,7 @@
 			
 		</form>
 		<?php
-		if(isset($_POST['save']) && !isset($msg3)){
+		if((isset($_POST['save']) || isset($_POST['return'])) && !isset($msg3)){
 		?>
 		<script>
 			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;

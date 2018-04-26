@@ -23,7 +23,7 @@
 			$id = $records->id;
             $name = $records->name;
             $description = $records->description;
-            $table->data[] = array($serialno, "<a href='./view_rubric.php?rubric=$id'>$name</a>", "<a href='./view_rubric.php?rubric=$id'>$description</a>","<a href='./delete_rubric.php?id=$id' title='Delete' onClick=\"return confirm('Delete Rubric?')\" > <img src='../img/icons/Delete1.png' /></a>");
+            $table->data[] = array($serialno, "<a href='./view_rubric.php?rubric=$id'>$name</a>", "<a href='./view_rubric.php?rubric=$id'>$description</a>","<a href='./delete_rubric.php?id=$id' title='Delete' onClick=\"return confirm('Delete Rubric?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>");
         }
         echo html_writer::table($table);
         

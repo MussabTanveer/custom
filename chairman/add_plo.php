@@ -59,7 +59,7 @@
 			}
 		}
 	
-		if(isset($_POST['save'])){
+		if(isset($_POST['save']) || isset($_POST['return'])){
 			$shortname=trim($_POST['shortname']);
 			$description=trim($_POST['description']);
 			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
@@ -116,8 +116,8 @@
 					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
 				}
 				else{
-					/*try {
-						$transaction = $DB->start_delegated_transaction();*/
+					try {
+						$transaction = $DB->start_delegated_transaction();
 						$record = new stdClass();
 						$record->shortname = $shortname;
 						$record->description = $description;
@@ -155,126 +155,19 @@
 							$DB->insert_record('plo_kpi_individual_student', $record);
 						}
 						$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
-					/*} catch(Exception $e) {
-						$transaction->rollback($e);
-						$msg3 = "<font color='red'>PLO failed to define!</font>";
-					}*/
-				}
-			}
-		}
-
-        elseif(isset($_POST['return'])){
-			$shortname=trim($_POST['shortname']);
-			$description=trim($_POST['description']);
-			$idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
-			$frameworkid=$_POST['frameworkid'];
-			$framework_shortname=$_POST['framework_shortname'];
-			$cpkpi=$_POST["kpi_cohort_programme"];
-			$cckpi=$_POST["kpi_cohort_course"];
-			$iskpi=$_POST["kpi_individual_student"];
-			$peo=$_POST['peo'];
-			$time = time();
-
-			//echo "peo = $peo";
-			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10' || empty($cpkpi) || empty($cckpi) || empty($iskpi) || empty($peo) || is_null($peo))
-			{
-				//echo " IN IF";
-				if(empty($shortname))
-				{
-					$msg1="<font color='red'>-Please enter PLO name</font>";
-				}
-				if(empty($idnumber))
-				{
-					$msg2="<font color='red'>-Please enter ID number</font>";
-				}
-				if(empty($peo) || is_null($peo))
-				{
-					$msg4="<font color='red'>-Please select PEO</font>";
-				}
-				if(strlen($shortname)> '30')
-				{
-					$msg1="<font color='red'>-Length of the Name should be less than 30</font>";
-				}
-				if(strlen($idnumber)>'10' )
-				{
-					$msg2="<font color='red'>-Length of the ID Number should be less than 10</font>";
-				}
-				if(empty($cpkpi))
-				{
-					$msg5="<font color='red'>-Please enter PLO Cohort Programme KPI</font>";
-				}
-				if(empty($cckpi))
-				{
-					$msg6="<font color='red'>-Please enter PLO Cohort Course KPI</font>";
-				}
-				if(empty($iskpi))
-				{
-					$msg7="<font color='red'>-Please enter PLO Individual Student KPI</font>";
-				}
-			}
-			elseif(substr($idnumber,0,4) != 'PLO-')
-			{
-				$msg2="<font color='red'>-The ID number must start with PLO-</font>";
-			}
-			else{
-				//echo $shortname;
-				//echo $description;
-				//echo $idnumber;
-				$check=$DB->get_records_sql('SELECT * from mdl_competency WHERE idnumber=? AND competencyframeworkid=?', array($idnumber, $frameworkid));
-				
-				if(count($check)){
-					$msg2="<font color='red'>-Please enter UNIQUE ID number</font>";
-				}
-				else{
-					/*try {
-						$transaction = $DB->start_delegated_transaction();*/
-						$record = new stdClass();
-						$record->shortname = $shortname;
-						$record->description = $description;
-						$record->descriptionformat = 1;
-						$record->idnumber = $idnumber;
-						$record->competencyframeworkid = $frameworkid;
-						$record->parentid = $peo;
-						$record->path = '/0/'.$peo.'/';
-						$record->sortorder = 0;
-						$record->timecreated = $time;
-						$record->timemodified = $time;
-						$record->usermodified = $USER->id;
-						
-						$ploid = $DB->insert_record('competency', $record);
-						
-						//echo "PLO ID: $ploid";
-						/*$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber,competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) VALUES ('$shortname', '$description', 1, '$idnumber',$frameworkid , $peo, '/0/$peo/', 0, '$time', '$time', $USER->id)";
-						$DB->execute($sql);*/
-						
-						if($ploid){
-							//kpi_cohort_programme
-							$record = new stdClass();
-							$record->ploid = $ploid;
-							$record->kpi = $cpkpi;
-							$DB->insert_record('plo_kpi_cohort_programme', $record);
-							//kpi_cohort_course
-							$record = new stdClass();
-							$record->ploid = $ploid;
-							$record->kpi = $cckpi;
-							$DB->insert_record('plo_kpi_cohort_course', $record);
-							//kpi_individual_student
-							$record = new stdClass();
-							$record->ploid = $ploid;
-							$record->kpi = $iskpi;
-							$DB->insert_record('plo_kpi_individual_student', $record);
+						$transaction->allow_commit();
+						if (isset($_POST['return'])){
+							$redirect_page1='./report_chairman.php';
+							redirect($redirect_page1);
 						}
-						$msg3 = "<font color='green'><b>PLO successfully defined!</b></font><br /><p><b>Add another below.</b></p>";
-					/*} catch(Exception $e) {
+					} catch(Exception $e) {
 						$transaction->rollback($e);
 						$msg3 = "<font color='red'>PLO failed to define!</font>";
-					}*/
+					}
 				}
-				$redirect_page1='../index.php';
-				redirect($redirect_page1); 
 			}
 		}
-
+        
 		/* delete code */
 		elseif(isset($_GET['delete']))
 		{
@@ -321,9 +214,9 @@
 			array_push($peoIdArray,$id);
 		}
 
-		$plos=$DB->get_records_sql('SELECT id,shortname FROM  `mdl_competency` 
+		$plos=$DB->get_records_sql('SELECT id, shortname, idnumber FROM  `mdl_competency`
 		WHERE competencyframeworkid = ? 
-		AND idnumber LIKE "plo%" ',
+		AND idnumber LIKE "plo%" ORDER BY id',
 			array($frameworkid));
 			
 		if($plos){
@@ -331,12 +224,13 @@
 			echo "<h3>Already Present PLOs In Framework</h3>";
 			foreach ($plos as $records){
 				$shortname1 = $records->shortname;
+				$idnumber1 = $records->idnumber;
 				$id=$records->id;
 				echo "<div class='row'>
-						<div class='col-md-2 col-sm-4 col-xs-8'>$i. $shortname1</div>
-						<div class='col-md-10 col-sm-8 col-xs-4'>
-							<a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><img src='../img/icons/edit.png' /></a>
-							<a href='add_plo.php?delete=$id&fwid=$frameworkid' onClick=\"return confirm('Delete PLO?')\" title='Delete'><img src='../img/icons/delete.png' /></a>
+						<div class='col-md-4 col-sm-4 col-xs-8'>$i. $shortname1 ($idnumber1)</div>
+						<div class='col-md-8 col-sm-8 col-xs-4'>
+							<a href='edit_plo.php?edit=$id&fwid=$frameworkid' title='Edit'><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
+							<a href='add_plo.php?delete=$id&fwid=$frameworkid' onClick=\"return confirm('Delete PLO?')\" title='Delete'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>
 						</div>
 					  </div>";//link to edit_plo.php and delete
 				$i++;			
@@ -598,7 +492,7 @@
 		</form>
 		<?php
 		//echo $shortname;
-		if(isset($_POST['save']) && !isset($msg3)){
+		if((isset($_POST['save']) || isset($_POST['return'])) && !isset($msg3)){
 		?>
 		<script>
 			document.getElementById("id_idnumber").value = <?php echo json_encode($idnumber); ?>;

@@ -799,7 +799,7 @@ require_once('../../../config.php');
 				for (var i = 0; i < clonames.length; ++i) {
 					if(clocourses[i] == n){
 						flag = 1;
-						cnames += clonames[i] + " <a href='edit_clo.php?edit="+cloids[i]+"&fwid="+frameworkid+"' title='Edit'><img src='../img/icons/edit.png' /></a> <a href='add_clo.php?delete="+cloids[i]+"&fwid="+frameworkid+"' onClick=\"return confirm('Delete CLO?')\" title='Delete'><img src='../img/icons/delete.png' /></a><br />";
+						cnames += clonames[i] + " <a href='edit_clo.php?edit="+cloids[i]+"&fwid="+frameworkid+"' title='Edit'><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a> <a href='add_clo.php?delete="+cloids[i]+"&fwid="+frameworkid+"' onClick=\"return confirm('Delete CLO?')\" title='Delete'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a><br />";
 					}
 				}
 				if(flag == 0){
