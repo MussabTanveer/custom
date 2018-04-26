@@ -14,7 +14,6 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-  
     
     if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid11) && $SESSION->fid11 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
     {
@@ -34,7 +33,7 @@
             }
         }
     
-        if(isset($_POST['save'])){
+        if(isset($_POST['save']) || isset($_POST['return'])){
             $fullname=trim($_POST['fullname']);
             $shortname=trim($_POST['shortname']);
             $idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
@@ -59,505 +58,242 @@
                 {
                     $msg3="<font color='red'>-Please select course code</font>";
                 }
-            }/*
-            elseif(substr($idnumber,0,4) != 'PEO-')
-            {
-                $msg3="<font color='red'>-The ID number must start with PEO-</font>";
-            }*/
-            else{
-                /*$sql="INSERT INTO mdl_course (category, fullname, shortname, idnumber, summary, summaryformat, newsitems, startdate, enddate, timecreated, timemodified, enablecompletion)
-                VALUES (1, '$fullname', '$shortname', '$idnumber', '$summary', 1, 5, '$startdate', '$enddate', '$time', '$time', 1)";
-                $DB->execute($sql);*/
-                
-                $record = new stdClass();
-                $record->category = 1;
-                $record->fullname = $fullname;
-                $record->shortname = $shortname;
-                $record->idnumber = $idnumber;
-                $record->summary = $summary;
-                $record->summaryformat = 1;
-                $record->newsitems = 5;
-                $record->startdate = $startdate;
-                $record->enddate = $enddate;
-                $record->timecreated = $time;
-                $record->timemodified = $time;
-                $record->enablecompletion = 1;
-                
-                $courseid = $DB->insert_record('course', $record);
-
-                $record1 = new stdClass();
-                $record1->courseid = $courseid;
-                $record1->format = 'topics';
-                $record1->sectionid = 0;
-                $record1->name = 'hiddensections';
-                $record1->value = 0;
-                $record2 = new stdClass();
-                $record2->courseid = $courseid;
-                $record2->format = 'topics';
-                $record2->sectionid = 0;
-                $record2->name = 'coursedisplay';
-                $record2->value = 0;
-
-                $records = array($record1, $record2);
-                $DB->insert_records('course_format_options', $records);
-
-                $record1 = new stdClass();
-                $record1->course = $courseid;
-                $record1->section = 0;
-                $record1->summary = '';
-                $record1->summaryformat = 1;
-                $record1->sequence = "";
-                $record1->visible = 1;
-                $record2 = new stdClass();
-                $record2->course = $courseid;
-                $record2->section = 1;
-                $record2->summary = '';
-                $record2->summaryformat = 1;
-                $record2->sequence = "";
-                $record2->visible = 1;
-                $record3 = new stdClass();
-                $record3->course = $courseid;
-                $record3->section = 2;
-                $record3->summary = '';
-                $record3->summaryformat = 1;
-                $record3->sequence = "";
-                $record3->visible = 1;
-                $record4 = new stdClass();
-                $record4->course = $courseid;
-                $record4->section = 3;
-                $record4->summary = '';
-                $record4->summaryformat = 1;
-                $record4->sequence = "";
-                $record4->visible = 1;
-                $record5 = new stdClass();
-                $record5->course = $courseid;
-                $record5->section = 4;
-                $record5->summary = '';
-                $record5->summaryformat = 1;
-                $record5->sequence = "";
-                $record5->visible = 1;
-                
-                $records = array($record1, $record2, $record3, $record4, $record5);
-                $DB->insert_records('course_sections', $records);
-
-                $record1 = new stdClass();
-                $record1->enrol = "manual";
-                $record1->status = 0;
-                $record1->courseid = $courseid;
-                $record1->sortorder = 0;
-                $record1->expirythreshold = 86400;
-                $record1->roleid = 5;
-                $record1->customint1 = NULL;
-                $record1->customint2 = NULL;
-                $record1->customint3 = NULL;
-                $record1->customint4 = NULL;
-                $record1->customint5 = NULL;
-                $record1->customint6 = NULL;
-                $record1->timecreated = $time;
-                $record1->timemodified = $time;
-                $record2 = new stdClass();
-                $record2->enrol = "guest";
-                $record2->status = 1;
-                $record2->courseid = $courseid;
-                $record2->sortorder = 1;
-                $record2->expirythreshold = 0;
-                $record2->roleid = 0;
-                $record2->customint1 = NULL;
-                $record2->customint2 = NULL;
-                $record2->customint3 = NULL;
-                $record2->customint4 = NULL;
-                $record2->customint5 = NULL;
-                $record2->customint6 = NULL;
-                $record2->timecreated = $time;
-                $record2->timemodified = $time;
-                $record3 = new stdClass();
-                $record3->enrol = "self";
-                $record3->status = 1;
-                $record3->courseid = $courseid;
-                $record3->sortorder = 2;
-                $record3->expirythreshold = 86400;
-                $record3->roleid = 5;
-                $record3->customint1 = 0;
-                $record3->customint2 = 0;
-                $record3->customint3 = 0;
-                $record3->customint4 = 1;
-                $record3->customint5 = 0;
-                $record3->customint6 = 1;
-                $record3->timecreated = $time;
-                $record3->timemodified = $time;
-                
-                $records = array($record1, $record2, $record3);
-                $DB->insert_records('enrol', $records);
-
-                /* map weightage with course automatically */
-                $names = array(); $percents = array();
-                $records=$DB->get_records_sql('SELECT * FROM `mdl_grading_policy_chairman` ORDER BY revision DESC LIMIT 3');
-                if($records){
-                    foreach ($records as $rec){
-                        $name = $rec->name;
-                        $percent = $rec->percentage;
-                        array_push($names, $name);
-                        array_push($percents, $percent);
-                    }
-                }
-
-                $m_pos = array_search("mid term",$names);
-                $a_pos = array_search("activities",$names);
-                $f_pos = array_search("final exam",$names);
-
-                /*if($a_pos >= 0){
-                    echo "<h4>Quiz, Assignment, Project, Other: $percents[$a_pos]%</h4><br>";
-                }*/
-                if($m_pos >= 0){
-                    //echo "<h4>Midterm: $percents[$m_pos]%</h4><br>";
-                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$percents[$m_pos]')";
-                    $DB->execute($sql);
-                    
-                }
-                if($f_pos >= 0){
-                    //echo "<h4>Final Exam: $percents[$f_pos]%</h4><br>";
-                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$percents[$f_pos]')";
-                    $DB->execute($sql);
-                }
-                
-                $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
-                WHERE id = ? ',
-                array($courseid));
-                if ($course != NULL){
-                    foreach ($course as $rec) {
-                        $id =  $rec->id;
-                        $idnumber =  $rec->idnumber;
-                    }
-                }  
-                $count=0;
-                $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
-                WHERE idnumber like '{$idnumber}%' 
-                AND competencyframeworkid =? ",
-                array($fw_id));
-                $flag=false;
-                if ($competencies != NULL){
-                    foreach ($competencies as $rec) {
-                        $id =  $rec->id;
-                        $idnumber =  $rec->idnumber;
-                        //echo "$idnumber";
-
-
-                 $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
-                                WHERE idnumber = ? 
-                                AND competencyframeworkid =? ",
-                                array($idnumber,$fw_id));
-
-
-                 foreach ($competenciesRev as $competencyRev) {
-                   // echo "Working";
-                        $id =  $competencyRev->id;
-                        $idnumber =  $competencyRev->idnumber;
-                        //echo "$idnumber";
-                    }
-
-
-                   
-                        $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
-                                    WHERE courseid = ?
-                                    AND competencyid =? ",
-                                    array($courseid,$id));
-                        if ($check == NULL)
-                        {   //echo "$id<br>";
-                            $flag=true;
-                        
-                            $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
-                            $DB->execute($sql);
-                        }
-
-
-
-
-                    }
-                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-                    $msg5="<p><b>Add another below.</b></p>";
-                    if($flag == true)
-                    {
-                        // echo " <font color='green'>CLOs successfully mapped with the course </font>";
-                        $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
-                    }
-                
-                }
-                else 
-                {   echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
-                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-                    $msg5="<p><b>Add another below.</b></p>";
-                    goto end;
-                }
-                
-                // if ($flag == false)
-                    //{
-                    //    echo " <font color='green'>CLOs are already mapped with the course </font>";
-                // }
-            end:
             }
-        }
-        elseif(isset($_POST['return'])){
-            $fullname=trim($_POST['fullname']);
-            $shortname=trim($_POST['shortname']);
-            $idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
-            $startdate=strtotime($_POST['startdate']);
-            $enddate=strtotime($_POST['enddate']);
-            $summary=trim($_POST['summary_editor']);
-            $fw_id=$_POST['fid'];
-            $fw_shortname=$_POST['fname'];
-            $time = time();
-            
-            if(empty($fullname) || empty($shortname) || empty($idnumber))
-            {
-                if(empty($fullname))
-                {
-                    $msg1="<font color='red'>-Please enter full name</font>";
-                }
-                if(empty($shortname))
-                {
-                    $msg2="<font color='red'>-Please enter short name</font>";
-                }
-                if(empty($idnumber))
-                {
-                    $msg3="<font color='red'>-Please select course code</font>";
-                }
-            }/*
-            elseif(substr($idnumber,0,4) != 'PEO-')
-            {
-                $msg3="<font color='red'>-The ID number must start with PEO-</font>";
-            }*/
             else{
                 /*$sql="INSERT INTO mdl_course (category, fullname, shortname, idnumber, summary, summaryformat, newsitems, startdate, enddate, timecreated, timemodified, enablecompletion)
                 VALUES (1, '$fullname', '$shortname', '$idnumber', '$summary', 1, 5, '$startdate', '$enddate', '$time', '$time', 1)";
                 $DB->execute($sql);*/
+
+                try {
+                    $transaction = $DB->start_delegated_transaction();
                 
-                $record = new stdClass();
-                $record->category = 1;
-                $record->fullname = $fullname;
-                $record->shortname = $shortname;
-                $record->idnumber = $idnumber;
-                $record->summary = $summary;
-                $record->summaryformat = 1;
-                $record->newsitems = 5;
-                $record->startdate = $startdate;
-                $record->enddate = $enddate;
-                $record->timecreated = $time;
-                $record->timemodified = $time;
-                $record->enablecompletion = 1;
-                
-                $courseid = $DB->insert_record('course', $record);
-                
-                $record1 = new stdClass();
-                $record1->courseid = $courseid;
-                $record1->format = 'topics';
-                $record1->sectionid = 0;
-                $record1->name = 'hiddensections';
-                $record1->value = 0;
-                $record2 = new stdClass();
-                $record2->courseid = $courseid;
-                $record2->format = 'topics';
-                $record2->sectionid = 0;
-                $record2->name = 'coursedisplay';
-                $record2->value = 0;
-
-                $records = array($record1, $record2);
-                $DB->insert_records('course_format_options', $records);
-
-                $record1 = new stdClass();
-                $record1->course = $courseid;
-                $record1->section = 0;
-                $record1->summary = '';
-                $record1->summaryformat = 1;
-                $record1->sequence = "";
-                $record1->visible = 1;
-                $record2 = new stdClass();
-                $record2->course = $courseid;
-                $record2->section = 1;
-                $record2->summary = '';
-                $record2->summaryformat = 1;
-                $record2->sequence = "";
-                $record2->visible = 1;
-                $record3 = new stdClass();
-                $record3->course = $courseid;
-                $record3->section = 2;
-                $record3->summary = '';
-                $record3->summaryformat = 1;
-                $record3->sequence = "";
-                $record3->visible = 1;
-                $record4 = new stdClass();
-                $record4->course = $courseid;
-                $record4->section = 3;
-                $record4->summary = '';
-                $record4->summaryformat = 1;
-                $record4->sequence = "";
-                $record4->visible = 1;
-                $record5 = new stdClass();
-                $record5->course = $courseid;
-                $record5->section = 4;
-                $record5->summary = '';
-                $record5->summaryformat = 1;
-                $record5->sequence = "";
-                $record5->visible = 1;
-                
-                $records = array($record1, $record2, $record3, $record4, $record5);
-                $DB->insert_records('course_sections', $records);
-
-                $record1 = new stdClass();
-                $record1->enrol = "manual";
-                $record1->status = 0;
-                $record1->courseid = $courseid;
-                $record1->sortorder = 0;
-                $record1->expirythreshold = 86400;
-                $record1->roleid = 5;
-                $record1->customint1 = NULL;
-                $record1->customint2 = NULL;
-                $record1->customint3 = NULL;
-                $record1->customint4 = NULL;
-                $record1->customint5 = NULL;
-                $record1->customint6 = NULL;
-                $record1->timecreated = $time;
-                $record1->timemodified = $time;
-                $record2 = new stdClass();
-                $record2->enrol = "guest";
-                $record2->status = 1;
-                $record2->courseid = $courseid;
-                $record2->sortorder = 1;
-                $record2->expirythreshold = 0;
-                $record2->roleid = 0;
-                $record2->customint1 = NULL;
-                $record2->customint2 = NULL;
-                $record2->customint3 = NULL;
-                $record2->customint4 = NULL;
-                $record2->customint5 = NULL;
-                $record2->customint6 = NULL;
-                $record2->timecreated = $time;
-                $record2->timemodified = $time;
-                $record3 = new stdClass();
-                $record3->enrol = "self";
-                $record3->status = 1;
-                $record3->courseid = $courseid;
-                $record3->sortorder = 2;
-                $record3->expirythreshold = 86400;
-                $record3->roleid = 5;
-                $record3->customint1 = 0;
-                $record3->customint2 = 0;
-                $record3->customint3 = 0;
-                $record3->customint4 = 1;
-                $record3->customint5 = 0;
-                $record3->customint6 = 1;
-                $record3->timecreated = $time;
-                $record3->timemodified = $time;
-                
-                $records = array($record1, $record2, $record3);
-                $DB->insert_records('enrol', $records);
-
-                /* map weightage with course automatically */
-                $names = array(); $percents = array();
-                $records=$DB->get_records_sql('SELECT * FROM `mdl_grading_policy_chairman` ORDER BY revision DESC LIMIT 3');
-                if($records){
-                    foreach ($records as $rec){
-                        $name = $rec->name;
-                        $percent = $rec->percentage;
-                        array_push($names, $name);
-                        array_push($percents, $percent);
-                    }
-                }
-
-                $m_pos = array_search("mid term",$names);
-                $a_pos = array_search("activities",$names);
-                $f_pos = array_search("final exam",$names);
-
-                /*if($a_pos >= 0){
-                    echo "<h4>Quiz, Assignment, Project, Other: $percents[$a_pos]%</h4><br>";
-                }*/
-                if($m_pos >= 0){
-                    //echo "<h4>Midterm: $percents[$m_pos]%</h4><br>";
-                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$percents[$m_pos]')";
-                    $DB->execute($sql);
+                    $record = new stdClass();
+                    $record->category = 1;
+                    $record->fullname = $fullname;
+                    $record->shortname = $shortname;
+                    $record->idnumber = $idnumber;
+                    $record->summary = $summary;
+                    $record->summaryformat = 1;
+                    $record->newsitems = 5;
+                    $record->startdate = $startdate;
+                    $record->enddate = $enddate;
+                    $record->timecreated = $time;
+                    $record->timemodified = $time;
+                    $record->enablecompletion = 1;
                     
-                }
-                if($f_pos >= 0){
-                    //echo "<h4>Final Exam: $percents[$f_pos]%</h4><br>";
-                    $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$percents[$f_pos]')";
-                    $DB->execute($sql);
-                }
+                    $courseid = $DB->insert_record('course', $record);
 
-                $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
-                    WHERE id = ? ',
-                     array($courseid));
-                if ($course != NULL){
-                    foreach ($course as $rec) {
-                        $id =  $rec->id;
-                        $idnumber =  $rec->idnumber;
+                    $record1 = new stdClass();
+                    $record1->courseid = $courseid;
+                    $record1->format = 'topics';
+                    $record1->sectionid = 0;
+                    $record1->name = 'hiddensections';
+                    $record1->value = 0;
+                    $record2 = new stdClass();
+                    $record2->courseid = $courseid;
+                    $record2->format = 'topics';
+                    $record2->sectionid = 0;
+                    $record2->name = 'coursedisplay';
+                    $record2->value = 0;
+
+                    $records = array($record1, $record2);
+                    $DB->insert_records('course_format_options', $records);
+
+                    $record1 = new stdClass();
+                    $record1->course = $courseid;
+                    $record1->section = 0;
+                    $record1->summary = '';
+                    $record1->summaryformat = 1;
+                    $record1->sequence = "";
+                    $record1->visible = 1;
+                    $record2 = new stdClass();
+                    $record2->course = $courseid;
+                    $record2->section = 1;
+                    $record2->summary = '';
+                    $record2->summaryformat = 1;
+                    $record2->sequence = "";
+                    $record2->visible = 1;
+                    $record3 = new stdClass();
+                    $record3->course = $courseid;
+                    $record3->section = 2;
+                    $record3->summary = '';
+                    $record3->summaryformat = 1;
+                    $record3->sequence = "";
+                    $record3->visible = 1;
+                    $record4 = new stdClass();
+                    $record4->course = $courseid;
+                    $record4->section = 3;
+                    $record4->summary = '';
+                    $record4->summaryformat = 1;
+                    $record4->sequence = "";
+                    $record4->visible = 1;
+                    $record5 = new stdClass();
+                    $record5->course = $courseid;
+                    $record5->section = 4;
+                    $record5->summary = '';
+                    $record5->summaryformat = 1;
+                    $record5->sequence = "";
+                    $record5->visible = 1;
+                    
+                    $records = array($record1, $record2, $record3, $record4, $record5);
+                    $DB->insert_records('course_sections', $records);
+
+                    $record1 = new stdClass();
+                    $record1->enrol = "manual";
+                    $record1->status = 0;
+                    $record1->courseid = $courseid;
+                    $record1->sortorder = 0;
+                    $record1->expirythreshold = 86400;
+                    $record1->roleid = 5;
+                    $record1->customint1 = NULL;
+                    $record1->customint2 = NULL;
+                    $record1->customint3 = NULL;
+                    $record1->customint4 = NULL;
+                    $record1->customint5 = NULL;
+                    $record1->customint6 = NULL;
+                    $record1->timecreated = $time;
+                    $record1->timemodified = $time;
+                    $record2 = new stdClass();
+                    $record2->enrol = "guest";
+                    $record2->status = 1;
+                    $record2->courseid = $courseid;
+                    $record2->sortorder = 1;
+                    $record2->expirythreshold = 0;
+                    $record2->roleid = 0;
+                    $record2->customint1 = NULL;
+                    $record2->customint2 = NULL;
+                    $record2->customint3 = NULL;
+                    $record2->customint4 = NULL;
+                    $record2->customint5 = NULL;
+                    $record2->customint6 = NULL;
+                    $record2->timecreated = $time;
+                    $record2->timemodified = $time;
+                    $record3 = new stdClass();
+                    $record3->enrol = "self";
+                    $record3->status = 1;
+                    $record3->courseid = $courseid;
+                    $record3->sortorder = 2;
+                    $record3->expirythreshold = 86400;
+                    $record3->roleid = 5;
+                    $record3->customint1 = 0;
+                    $record3->customint2 = 0;
+                    $record3->customint3 = 0;
+                    $record3->customint4 = 1;
+                    $record3->customint5 = 0;
+                    $record3->customint6 = 1;
+                    $record3->timecreated = $time;
+                    $record3->timemodified = $time;
+                    
+                    $records = array($record1, $record2, $record3);
+                    $DB->insert_records('enrol', $records);
+
+                    /* map weightage with course automatically */
+                    $names = array(); $percents = array();
+                    $records=$DB->get_records_sql('SELECT * FROM `mdl_grading_policy_chairman` ORDER BY revision DESC LIMIT 3');
+                    if($records){
+                        foreach ($records as $rec){
+                            $name = $rec->name;
+                            $percent = $rec->percentage;
+                            array_push($names, $name);
+                            array_push($percents, $percent);
+                        }
                     }
-                }   
-                $count=0;
-                $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
-                WHERE idnumber like '{$idnumber}%' 
-                AND competencyframeworkid =? ",
-                array($fw_id));
-                $flag=false;
-                if ($competencies != NULL){
-                    foreach ($competencies as $rec) {
-                        $id =  $rec->id;
-                        $idnumber =  $rec->idnumber;
-                        //echo "$idnumber";
 
+                    $m_pos = array_search("mid term",$names);
+                    $a_pos = array_search("activities",$names);
+                    $f_pos = array_search("final exam",$names);
 
-                        $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                    /*if($a_pos >= 0){
+                        echo "<h4>Quiz, Assignment, Project, Other: $percents[$a_pos]%</h4><br>";
+                    }*/
+                    if($m_pos >= 0){
+                        //echo "<h4>Midterm: $percents[$m_pos]%</h4><br>";
+                        $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','mid term','$percents[$m_pos]')";
+                        $DB->execute($sql);
+                        
+                    }
+                    if($f_pos >= 0){
+                        //echo "<h4>Final Exam: $percents[$f_pos]%</h4><br>";
+                        $sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$courseid','final exam','$percents[$f_pos]')";
+                        $DB->execute($sql);
+                    }
+                    
+                    $course=$DB->get_records_sql('SELECT * FROM `mdl_course` 
+                    WHERE id = ? ',
+                    array($courseid));
+                    if ($course != NULL){
+                        foreach ($course as $rec) {
+                            $id =  $rec->id;
+                            $idnumber =  $rec->idnumber;
+                        }
+                    }  
+                    $count=0;
+                    $competencies=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
+                    WHERE idnumber like '{$idnumber}%' 
+                    AND competencyframeworkid =? ",
+                    array($fw_id));
+                    $flag=false;
+                    if ($competencies != NULL){
+                        foreach ($competencies as $rec) {
+                            $id =  $rec->id;
+                            $idnumber =  $rec->idnumber;
+                            //echo "$idnumber";
+
+                            $competenciesRev=$DB->get_records_sql("SELECT * FROM `mdl_competency` 
                             WHERE idnumber = ? 
                             AND competencyframeworkid =? ",
                             array($idnumber,$fw_id));
 
-
-                        foreach ($competenciesRev as $competencyRev) {
-                        // echo "Working";
-                            $id =  $competencyRev->id;
-                            $idnumber =  $competencyRev->idnumber;
-                            //echo "$idnumber";
-                        }
-
-                        $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
-                                    WHERE courseid = ?
-                                    AND competencyid =? ",
-                                    array($courseid,$id));
-                        if ($check == NULL)
-                        {   
-                            $flag=true;
-                        
-                            $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
-                            $DB->execute($sql);
+                            foreach ($competenciesRev as $competencyRev) {
+                            // echo "Working";
+                                $id =  $competencyRev->id;
+                                $idnumber =  $competencyRev->idnumber;
+                                //echo "$idnumber";
+                            }
                             
+                            $check=$DB->get_records_sql("SELECT * FROM `mdl_competency_coursecomp`
+                            WHERE courseid = ?
+                            AND competencyid =? ",
+                            array($courseid,$id));
+                            if ($check == NULL)
+                            {   //echo "$id<br>";
+                                $flag=true;
+                            
+                                $sql="INSERT INTO mdl_competency_coursecomp (courseid, competencyid,ruleoutcome,timecreated,timemodified,usermodified,sortorder) VALUES ('$courseid', '$id','1','$time','$time', '$USER->id','0')";
+                                $DB->execute($sql);
+                            }
+
                         }
+                        $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+                        $msg5="<p><b>Add another below.</b></p>";
+                        if($flag == true)
+                        {
+                            // echo " <font color='green'>CLOs successfully mapped with the course </font>";
+                            $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
+                        }
+                    
                     }
-                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-                    $msg5="<p><b>Add another below.</b></p>";
-                    if($flag == true)
-                    {
-                        //echo " <font color='green'>CLOs successfully mapped with the course </font>";
-                        $msg4 .= "<font color='green'><b>& mapped with respective CLOs!</b></font><br />";
+                    else 
+                    {   echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
+                        $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
+                        $msg5="<p><b>Add another below.</b></p>";
+                        //goto end;
                     }
-
-                    $redirect_page1='../index.php';
-                    redirect($redirect_page1);
-            
+                    //end:
+                    $transaction->allow_commit();
+                    if (isset($_POST['return']) && $competencies != NULL){
+                        $redirect_page1='./report_itm.php';
+                        redirect($redirect_page1);
+                    }
+                    
+                } catch(Exception $e) {
+                    $msg4 = "<br><font color='red'><b> Course creation failed! Please create course again. </b></font>";
+                    $transaction->rollback($e);
+                    $msg4 = "<br><font color='red'><b> Course creation failed! Please create course again. </b></font>";
                 }
-                else 
-                {   
-                    echo " <font color='red'>No CLOs of this course have been added to the framework</font>";
-                    $msg4 = "<br><font color='green'><b>Course successfully created </b></font>";
-                    $msg5="<p><b>Add another below.</b></p>";
-                    goto end2;
-                }
-                // if ($flag == false)
-                //{
-                //    echo " <font color='green'>CLOs are already mapped with the course </font>";
-                // }
-
-            end2:
             }
         }
-
+        
         $courseCodes=$DB->get_records_sql("SELECT DISTINCT idnumber FROM mdl_competency WHERE competencyframeworkid = ? AND idnumber NOT LIKE 'PLO%' AND parentid !=0 ORDER BY idnumber", array($fw_id));
         $ccs = array(); // course codes array
         foreach ($courseCodes as $cc) {
@@ -585,9 +321,6 @@
                     <?php echo $fw_shortname; ?>
                 </div>
             </div>
-
-          
-
 
             <div class="form-group row fitem">
                 <div class="col-md-3">
@@ -814,20 +547,16 @@
         ?>
         <br />
         <div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
-                        
-        <?php 
-            echo $OUTPUT->footer();
-        ?>
         
-            <script src="../script/datepicker/wbn-datepicker.min.js"></script>
-            <script type="text/javascript">
-              $(function () {
-                $('.wbn-datepicker').datepicker()
-          
-                var $jsDatepicker = $('#value-specified-js').datepicker()
-                $jsDatepicker.val('2017-05-30')
-              })
-            </script>
+        <script src="../script/datepicker/wbn-datepicker.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+            $('.wbn-datepicker').datepicker()
+        
+            var $jsDatepicker = $('#value-specified-js').datepicker()
+            $jsDatepicker.val('2017-05-30')
+            })
+        </script>
         <?php
     }
     else
@@ -835,5 +564,6 @@
         <h3 style="color:red;"> Invalid Selection </h3>
         <a href="./select_frameworktoCourse.php">Back</a>
         <?php
-        echo $OUTPUT->footer();
-    }?>
+    }
+    echo $OUTPUT->footer();
+    ?>
