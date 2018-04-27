@@ -76,7 +76,7 @@
         echo "<font color = red > Invalid form submission! </font> <br>";
     }
     ?>
-    <a href="./teacher_courses.php">Back</a>
+    <a href="../teacher/teacher_courses.php">Back</a>
     <?php
         echo $OUTPUT->footer();
     ?>
