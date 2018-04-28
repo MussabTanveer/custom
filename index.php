@@ -10,7 +10,7 @@
     $redirect_page3='./student/report_student.php';
     $redirect_page4='./chairman/report_chairman.php';
     $redirect_page5='./itm/report_itm.php';
-    $redirect_page6='./noneditingteacher/report_noneditingteacher.php';
+    $redirect_page6='./teacher/teacher_courses.php';
 
     $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id)); // for Chairman
 
