@@ -134,7 +134,7 @@
 
 
 
-         $sql =$DB->get_records_sql('SELECT * FROM mdl_manual_assign_pro WHERE id = ?',array($Id));
+        $sql =$DB->get_records_sql('SELECT * FROM mdl_manual_assign_pro WHERE id = ?',array($Id));
         if($sql)
         {
             foreach ($sql as $rec) 
@@ -217,16 +217,13 @@
             
             <div class="form-group row fitem ">
                 <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                        <abbr class="initialism text-danger" title="Required"><i  aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
                     <label class="col-form-label d-inline" for="assignQues">
                         Upload Paper
                     </label>
                 </div>
                 <div class="col-md-9 form-inline felement">
                     <div class="btn btn-default btn-file">
-                        <input  type="file" name="assignQues" id="assignQues" accept="application/pdf" placeholder="Only PDFs are allowed">
+                        <input type="file" name="assignQues" id="assignQues" accept="application/pdf" placeholder="Only PDFs are allowed">
                     </div>
                     (Only PDFs are allowed)
                 </div>
@@ -292,16 +289,12 @@
 
             <div class="form-group row fitem">
                 <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
                     <label for="id_startdate">
                         Start Date
                     </label>
                 </div>
                 <div class="col-md-9 form-inline felement" data-fieldtype="text">
                     <input type="text"
-                        required
                         class="form-control wbn-datepicker"
                         name="startdate"
                         id="id_startdate"
@@ -315,16 +308,12 @@
 
             <div class="form-group row fitem">
                 <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
                     <label for="id_enddate">
                         Due Date
                     </label>
                 </div>
                 <div class="col-md-9 form-inline felement" data-fieldtype="text">
                     <input type="text"
-                        required
                         class="form-control wbn-datepicker"
                         name="enddate"
                         id="id_enddate"
@@ -348,53 +337,52 @@
 
 
     <script>
-            var closid = <?php echo json_encode($closid); ?>;
-            var plos = <?php echo json_encode($plos); ?>;
-            //var peos = <?php echo json_encode($peos); ?>;
-            var levels = <?php echo json_encode($levels); ?>;
-            var levelnos = <?php echo json_encode($lvlno); ?>;
+        var closid = <?php echo json_encode($closid); ?>;
+        var plos = <?php echo json_encode($plos); ?>;
+        //var peos = <?php echo json_encode($peos); ?>;
+        var levels = <?php echo json_encode($levels); ?>;
+        var levelnos = <?php echo json_encode($lvlno); ?>;
 
-            function dropdownTip(value,id){
-                var plo = "plo" + id;
-                //var peo = "peo" + id;
-                var tax = "tax" + id;
-                if(value == 'NULL'){
-                    document.getElementById(plo).innerHTML = "";
-                    //document.getElementById(peo).innerHTML = "";
-                    document.getElementById(tax).innerHTML = "";
-                }
-                else{
-                    for(var i=0; i<closid.length ; i++){
-                        if(closid[i] == value){
-                            document.getElementById(plo).innerHTML = "PLO: " + plos[i];
-                            //document.getElementById(peo).innerHTML = peos[i];
-                            document.getElementById(tax).innerHTML = "LEVEL: " + levels[i] + " (" + levelnos[i] + ")";
-                            break;
-                        }
+        function dropdownTip(value,id){
+            var plo = "plo" + id;
+            //var peo = "peo" + id;
+            var tax = "tax" + id;
+            if(value == 'NULL'){
+                document.getElementById(plo).innerHTML = "";
+                //document.getElementById(peo).innerHTML = "";
+                document.getElementById(tax).innerHTML = "";
+            }
+            else{
+                for(var i=0; i<closid.length ; i++){
+                    if(closid[i] == value){
+                        document.getElementById(plo).innerHTML = "PLO: " + plos[i];
+                        //document.getElementById(peo).innerHTML = peos[i];
+                        document.getElementById(tax).innerHTML = "LEVEL: " + levels[i] + " (" + levelnos[i] + ")";
+                        break;
                     }
                 }
             }
-            
-        </script>
-
-
-<script type="text/javascript">
-    //alert("Im working");
-    document.getElementById("id_description").value = <?php echo json_encode("$desc"); ?>;
-    document.getElementById("id_name").value = <?php echo json_encode("$name"); ?>;
-    document.getElementById("id_maxmark").value = <?php echo json_encode("$maxmark"); ?>;
-   
-</script>
-
-    <script src="../script/datepicker/wbn-datepicker.min.js"></script>
-        <script type="text/javascript">
-            $(function () {
-            $('.wbn-datepicker').datepicker()
+        }
         
-            var $jsDatepicker = $('#value-specified-js').datepicker()
-            $jsDatepicker.val('2017-05-30')
-            })
-        </script>
+    </script>
+
+    <script type="text/javascript">
+        //alert("Im working");
+        document.getElementById("id_description").value = <?php echo json_encode("$desc"); ?>;
+        document.getElementById("id_name").value = <?php echo json_encode("$name"); ?>;
+        document.getElementById("id_maxmark").value = <?php echo json_encode("$maxmark"); ?>;
+        document.getElementById("selectclo").value = <?php echo json_encode("$cloid"); ?>;
+    </script>
+
+    <script src="../script/datepicker/wbn-datepicker.js"></script>
+    <script type="text/javascript">
+        $(function () {
+        $('.wbn-datepicker').datepicker()
+    
+        var $jsDatepicker = $('#value-specified-js').datepicker()
+        $jsDatepicker.val('2017-05-30')
+        })
+    </script>
 
         <script>
             //form validation
@@ -421,16 +409,6 @@
                         },
                         "clo": {
                             required: true
-                        },
-                        "startdate": {
-                            required: true,
-                            minlength: 1,
-                            maxlength: 100
-                        },
-                        "enddate": {
-                            required: true,
-                            minlength: 1,
-                            maxlength: 100
                         }
                     },
                     messages: {
@@ -454,16 +432,6 @@
                         },
                         "clo": {
                             required: "Please select CLO."
-                        },
-                        "startdate": {
-                            required: "Please enter start date.",
-                            minlength: "Please enter more than 1 characters.",
-                            maxlength: "Please enter no more than 10 characters."
-                        },
-                        "enddate": {
-                            required: "Please enter end date.",
-                            minlength: "Please enter more than 1 characters.",
-                            maxlength: "Please enter no more than 10 characters."
                         }
                     }
                 });
@@ -471,8 +439,8 @@
         </script>
 
 
-        <?php
-  if(isset($_POST['save']))
+    <?php
+    if(isset($_POST['save']))
     {
         $n = trim($_POST['name']);
         $description = trim($_POST['description']);
@@ -498,37 +466,39 @@
         elseif ($type == "project")
             $redirect = "print_project_paper.php?type=$type&course=$courseId";
 
-         $file = $_FILES['assignQues']['name'];
+        $file = $_FILES['assignQues']['name'];
         $file_loc = $_FILES['assignQues']['tmp_name'];
         $file_size = $_FILES['assignQues']['size'];
         $file_type = $_FILES['assignQues']['type'];
 
         if ($file_size <= 0){
-
-         echo "<font color = green> Details Updated Successfully </font>";
-
-         redirect($redirect);
-     }
+            echo "<font color = green> Details Updated Successfully </font>";
+            redirect($redirect);
+        }
 
       
-         //Upload PDF
+        //Upload PDF
         if($file_size > 0)
         {
-             if ($file_type == "application/pdf")
-                 { 
-                      $blobObj = new Blob($x,$dbh,$dbn,$dbu);
-                       $blobObj->updateBlob($Id,$file_loc,"application/pdf");
-                          echo "<font color = green> Details Updated Successfully </font>";
-                         redirect($redirect);
+            if ($file_type == "application/pdf")
+            {
+                $blobObj = new Blob($x,$dbh,$dbn,$dbu);
+                $blobObj->updateBlob($Id,$file_loc,"application/pdf");
+                    echo "<font color = green> Details Updated Successfully </font>";
+                    redirect($redirect);
 
-                       // echo "<font color = green> File has been Uploaded successfully! </font>";
-                }
-                 else
-                  {  
-                    echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
-                     //echo "<font color = green> Details Updated Successfully </font>";
-                  }
+                // echo "<font color = green> File has been Uploaded successfully! </font>";
+            }
+            else
+            {  
+                echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+                //echo "<font color = green> Details Updated Successfully </font>";
+            }
 
         }        
       
     }
+
+    echo $OUTPUT->footer();
+ 
+    ?>

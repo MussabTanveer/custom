@@ -30,13 +30,15 @@
             foreach ($assigns as $assign) 
             {
                 # code...
-                 $serialno++;
+                $serialno++;
                 $aname = $assign->name;
                 $adesc = $assign->description;
                 $aid   = $assign->id;
                 $mime = $assign->mime;
-                 if ($mime)
-                 $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","<a href='./print_uploaded_paper2.php?assign=$aid&courseid=$course_id'>Print $aname uploaded paper</a>","<a href='./delete_manual_activity.php?id=$aid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>","<a href='./edit_manual_activity2.php?id=$aid&course=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>");
+                if ($mime)
+                    $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","<a href='./print_uploaded_paper2.php?assign=$aid&courseid=$course_id'>Print $aname uploaded paper</a>","<a href='./delete_manual_activity.php?id=$aid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>","<a href='./edit_manual_activity2.php?id=$aid&course=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>");
+                else
+                    $table->data[] = array($serialno,"<a href='./print_assign.php?assign=$aid&courseid=$course_id'>Print $aname</a>","-","","");
             ?>
            
             

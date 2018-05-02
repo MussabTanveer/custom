@@ -111,19 +111,23 @@
             $apmaxmark = trim($_POST["maxmark"]);
 			$apclo = trim($_POST["clo"]);
 			$startdate=strtotime($_POST['startdate']);
-            $enddate=strtotime($_POST['enddate']);
+			$enddate=strtotime($_POST['enddate']);
+			
+			echo $apdesc; echo "<br>";
+			echo $startdate; echo "<br>";
+			echo $enddate; echo "<br>";
 
 
-             if(strlen($apname)>50 || strlen($apdesc)>500)
+            if(strlen($apname)>50 || strlen($apdesc)>500)
             { 	//echo "in IF";
 					
 
-					if(strlen($apname)>50)
-            		 $lengthMsg= "<font color = red> Length of the name should be less than 50<br></font>";
+				if(strlen($apname)>50)
+					$lengthMsg= "<font color = red> Length of the name should be less than 50<br></font>";
   				
   				if(strlen($apdesc)>500)
             	//echo "in IF";
-            	$descMsg= "<font color = red> Length of the description should be less than 500<br></font>";
+            		$descMsg= "<font color = red> Length of the description should be less than 500<br></font>";
             	
             	goto down;
            	}
@@ -142,23 +146,34 @@
 	            	$record->module=-4;
 	            }
 	            elseif($type=="project"){
-
 	            	$record->module=-5;
 	            }
 
 				$assign_pro_id = $DB->insert_record('manual_assign_pro', $record); // get assign/pro id of newly inserted record
 
 					
-			$file = $_FILES['assignQues']['name'];
-		    $file_loc = $_FILES['assignQues']['tmp_name'];
-		    $file_size = $_FILES['assignQues']['size'];
-		    $file_type = $_FILES['assignQues']['type'];
+				$file = $_FILES['assignQues']['name'];
+				$file_loc = $_FILES['assignQues']['tmp_name'];
+				$file_size = $_FILES['assignQues']['size'];
+				$file_type = $_FILES['assignQues']['type'];
+
+				//Upload PDF
+				if ($file_size>0 )
+				{
+					if ($file_type == "application/pdf")
+					{
+						$blobObj = new Blob($x,$dbh,$dbn,$dbu);
+						$blobObj->updateBlob($assign_pro_id,$file_loc,"application/pdf");
+						echo "<font color = green> File has been Uploaded successfully! </font>";
+					}
+					else
+						echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+				}
 
 				// Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
 				// Automated mapping code starts from here
 				if($type == "assign"){
-                  
 
 					$reca=$DB->get_records_sql('SELECT id as assign_id FROM mdl_grading_policy WHERE name="assignment" AND courseid=?',array($course_id));
 					if($reca){
@@ -173,10 +188,9 @@
 					else{
 						$msga="Pls define Assignment in Define Grading Policy tab first";
 					}
+
 				}
 				elseif($type == "project"){
-
-				
 
 					$recp=$DB->get_records_sql('SELECT id as project_id FROM mdl_grading_policy WHERE name="project" AND courseid=?',array($course_id));
 					if($recp){
@@ -195,18 +209,9 @@
 				} catch(Exception $e) {
 					$transaction->rollback($e);
 			}
+			
 			$redirect_page1="./report_teacher.php?course=$course_id";
 
-
-		    //Upload PDF
-			if ($file_type == "application/pdf")
-			   { 
-			      $blobObj = new Blob($x,$dbh,$dbn,$dbu);
-			       $blobObj->updateBlob($assign_pro_id,$file_loc,"application/pdf");
-			        echo "<font color = green> File has been Uploaded successfully! </font>";
-			    }
-			    else
-			      echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
 			redirect($redirect_page1);
 		}
 		down:
@@ -336,16 +341,13 @@
 			
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
-					<span class="pull-xs-right text-nowrap">
-						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-					</span>
 					<label class="col-form-label d-inline" for="assignQues">
 						Upload Paper
 					</label>
 				</div>
 				<div class="col-md-9 form-inline felement">
 					<div class="btn btn-default btn-file">
-						<input required type="file" name="assignQues" id="assignQues" accept="application/pdf" placeholder="Only PDFs are allowed">
+						<input type="file" name="assignQues" id="assignQues" accept="application/pdf" placeholder="Only PDFs are allowed">
 					</div>
 					(Only PDFs are allowed)
 				</div>
@@ -408,16 +410,12 @@
             
 			<div class="form-group row fitem">
                 <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
                     <label for="id_startdate">
                         Start Date
                     </label>
                 </div>
                 <div class="col-md-9 form-inline felement" data-fieldtype="text">
                     <input type="text"
-						required
                         class="form-control wbn-datepicker"
                         name="startdate"
                         id="id_startdate"
@@ -430,16 +428,12 @@
 
             <div class="form-group row fitem">
                 <div class="col-md-3">
-                    <span class="pull-xs-right text-nowrap">
-                    <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
-                    </span>
                     <label for="id_enddate">
                         Due Date
                     </label>
                 </div>
                 <div class="col-md-9 form-inline felement" data-fieldtype="text">
                     <input type="text"
-						required
                         class="form-control wbn-datepicker"
                         name="enddate"
                         id="id_enddate"
@@ -499,7 +493,7 @@
 			
 		</script>
 
-		<script src="../script/datepicker/wbn-datepicker.min.js"></script>
+		<script src="../script/datepicker/wbn-datepicker.js"></script>
 		<script type="text/javascript">
 			$(function () {
 			$('.wbn-datepicker').datepicker()
@@ -534,16 +528,6 @@
 						},
 						"clo": {
 							required: true
-						},
-						"startdate": {
-							required: true,
-							minlength: 1,
-							maxlength: 100
-						},
-						"enddate": {
-							required: true,
-							minlength: 1,
-							maxlength: 100
 						}
 					},
 					messages: {
@@ -567,16 +551,6 @@
 						},
 						"clo": {
 							required: "Please select CLO."
-						},
-						"startdate": {
-							required: "Please enter start date.",
-							minlength: "Please enter more than 1 characters.",
-							maxlength: "Please enter no more than 10 characters."
-						},
-						"enddate": {
-							required: "Please enter end date.",
-							minlength: "Please enter more than 1 characters.",
-							maxlength: "Please enter no more than 10 characters."
 						}
 					}
 				});

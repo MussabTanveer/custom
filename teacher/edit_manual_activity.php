@@ -152,5 +152,5 @@
         
         redirect($redirect);
     }
-
+    echo $OUTPUT->footer();
     ?>
