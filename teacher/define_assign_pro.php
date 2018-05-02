@@ -146,6 +146,7 @@
 	            	$record->module=-4;
 	            }
 	            elseif($type=="project"){
+
 	            	$record->module=-5;
 	            }
 
@@ -156,19 +157,6 @@
 				$file_loc = $_FILES['assignQues']['tmp_name'];
 				$file_size = $_FILES['assignQues']['size'];
 				$file_type = $_FILES['assignQues']['type'];
-
-				//Upload PDF
-				if ($file_size>0 )
-				{
-					if ($file_type == "application/pdf")
-					{
-						$blobObj = new Blob($x,$dbh,$dbn,$dbu);
-						$blobObj->updateBlob($assign_pro_id,$file_loc,"application/pdf");
-						echo "<font color = green> File has been Uploaded successfully! </font>";
-					}
-					else
-						echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
-				}
 
 				// Insert this assign/pro id in mdl_grading_mapping table according to type (assignment, project) which is in $type variable above
 
@@ -188,7 +176,6 @@
 					else{
 						$msga="Pls define Assignment in Define Grading Policy tab first";
 					}
-
 				}
 				elseif($type == "project"){
 
@@ -209,8 +196,20 @@
 				} catch(Exception $e) {
 					$transaction->rollback($e);
 			}
-			
 			$redirect_page1="./report_teacher.php?course=$course_id";
+
+			//Upload PDF
+			if ($file_size>0 )
+			{
+				if ($file_type == "application/pdf")
+				{
+					$blobObj = new Blob($x,$dbh,$dbn,$dbu);
+					$blobObj->updateBlob($assign_pro_id,$file_loc,"application/pdf");
+					echo "<font color = green> File has been Uploaded successfully! </font>";
+				}
+				else
+					echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
+			}
 
 			redirect($redirect_page1);
 		}
