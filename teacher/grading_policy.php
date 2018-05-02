@@ -95,18 +95,18 @@
 				}
 				if($project && in_array("project", $names)){
 					$sql="UPDATE mdl_grading_policy SET percentage=? WHERE courseid=? AND name=?";
-					$DB->execute($sql, array($quiz, $course_id, 'project'));
+					$DB->execute($sql, array($project, $course_id, 'project'));
 				}
 				elseif($project){
-					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','project','$quiz')";
+					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','project','$project')";
 					$DB->execute($sql);
 				}
 				if($other && in_array("other", $names)){
 					$sql="UPDATE mdl_grading_policy SET percentage=? WHERE courseid=? AND name=?";
-					$DB->execute($sql, array($assign, $course_id, 'other'));
+					$DB->execute($sql, array($other, $course_id, 'other'));
 				}
 				elseif($other){
-					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','other','$assign')";
+					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','other','$other')";
 					$DB->execute($sql);
 				}
 
