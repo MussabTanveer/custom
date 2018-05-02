@@ -70,6 +70,8 @@ require_once('../../../config.php');
 		elseif(isset($_POST['return'])) {
 
 			$coursecode = trim($_POST["idnumber"]); $coursecode=strtoupper($coursecode);
+			$courseName = trim($_POST["courseName"]); $courseName=strtoupper($courseName);
+			//echo "$courseName";
 			$frameworkid = $_POST["frameworkid"];
 			$plosIdArray=array();
 			foreach ($_POST['plos'] as $ploId)
@@ -172,6 +174,7 @@ require_once('../../../config.php');
 			$record->practicalcredithours = $pchs;
 			$record->coursecontent= $coursecontent;
 			$record->book=$bookname;
+			$record->coursename=$courseName;
 
 			$id = $DB->insert_record('course_info', $record);
 			if ($id)
@@ -413,6 +416,33 @@ require_once('../../../config.php');
 					</div>
 				</div>
 			</div>
+
+				<div class="form-group row fitem">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" ><i aria-hidden="true" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="courseName">
+						Course Name
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="text">
+					<input type="text"
+							class="form-control"
+							name="courseName"
+							id="courseName"
+							size=""
+							
+							title="eg. DataBase Management System"
+							required
+							placeholder="eg. DBMS"
+							maxlength="100" type="text" > (eg. DataBase Management System)
+					<div class="form-control-feedback" id="id_error_idnumber">
+					
+					</div>
+				</div>
+			</div>
+
 
 			<!--<div class="form-group row fitem">
 				<div class="col-md-3">

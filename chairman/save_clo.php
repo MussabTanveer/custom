@@ -15,6 +15,11 @@
 
 	$coursecode = trim($_POST["idnumber"]);
      $coursecode=strtoupper($coursecode);
+    
+    $courseName = trim($_POST["courseName"]);
+     $courseName=strtoupper($courseName);
+     echo "$courseName";
+
 	
     /*if($_FILES['myfile']['size'] > 0)
     {
@@ -58,6 +63,7 @@
                 $record->practicalcredithours = $pchs;
                 $record->coursecontent= $coursecontent;
                 $record->book=$bookname;
+                $record->coursename = $courseName;
 
                 $id = $DB->insert_record('course_info', $record);
             if ($id)
