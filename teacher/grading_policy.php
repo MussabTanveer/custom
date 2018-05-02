@@ -34,23 +34,34 @@
 		$coursecontext = context_course::instance($course_id);
 		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
 		
-		if(isset($_POST['save'])){
+		if(isset($_POST['save']) || isset($_POST['return'])){
 			$sum = 0;
-			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
+			$names = array();
+			$rec=$DB->get_records_sql('SELECT name, percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
 			foreach ($rec as $records){
-                $percentage=$records->percentage;
+				$name=$records->name;
+				$percentage=$records->percentage;
+				array_push($names, $name);
                 $sum+=$percentage;
             }
            
-			for ($i=0; $i < count($_POST["activity"]); $i++) {
+			/*for ($i=0; $i < count($_POST["activity"]); $i++) {
 				$sum+=trim($_POST["percentage"][$i]);
-			}
+			}*/
+
+			$quiz = trim($_POST["quiz"]);
+			$assign = trim($_POST["assign"]);
+			$project = trim($_POST["project"]);
+			$other = trim($_POST["other"]);
+
+			$sum += $quiz + $assign + $project + $other;
+
 			//echo $sum;
 			if($sum > 100){
 				$msgP = "<font color = red>Total percentage of all evaluation methods should be 100%</font><br />";
 			}
 			else{
-				for ($i=0; $i < count($_POST["activity"]); $i++) {
+				/*for ($i=0; $i < count($_POST["activity"]); $i++) {
 					# code...
 					$activity=trim($_POST["activity"][$i]);
 					$percentage=trim($_POST["percentage"][$i]);
@@ -65,49 +76,52 @@
 					{
 						// percentage not entered for activity
 					}
+				}*/
+				if($quiz && in_array("quiz", $names)){
+					$sql="UPDATE mdl_grading_policy SET percentage=? WHERE courseid=? AND name=?";
+					$DB->execute($sql, array($quiz, $course_id, 'quiz'));
 				}
+				elseif($quiz){
+					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','quiz','$quiz')";
+					$DB->execute($sql);
+				}
+				if($assign && in_array("assignment", $names)){
+					$sql="UPDATE mdl_grading_policy SET percentage=? WHERE courseid=? AND name=?";
+					$DB->execute($sql, array($assign, $course_id, 'assignment'));
+				}
+				elseif($assign){
+					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','assignment','$assign')";
+					$DB->execute($sql);
+				}
+				if($project && in_array("project", $names)){
+					$sql="UPDATE mdl_grading_policy SET percentage=? WHERE courseid=? AND name=?";
+					$DB->execute($sql, array($quiz, $course_id, 'project'));
+				}
+				elseif($project){
+					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','project','$quiz')";
+					$DB->execute($sql);
+				}
+				if($other && in_array("other", $names)){
+					$sql="UPDATE mdl_grading_policy SET percentage=? WHERE courseid=? AND name=?";
+					$DB->execute($sql, array($assign, $course_id, 'other'));
+				}
+				elseif($other){
+					$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','other','$assign')";
+					$DB->execute($sql);
+				}
+
 				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
+				if(isset($_POST['return'])){
+					$redirect_page="./report_teacher.php?course=$course_id";
+					redirect($redirect_page);
+				}
 			}
 		}
-		elseif(isset($_POST['return'])) {
-			$sum = 0;
-			$rec=$DB->get_records_sql('SELECT percentage FROM mdl_grading_policy WHERE courseid=?',array($course_id));
-			foreach ($rec as $records){
-                $percentage=$records->percentage;
-                $sum+=$percentage;
-            }
-			for ($i=0; $i < count($_POST["activity"]); $i++) {
-				$sum+=trim($_POST["percentage"][$i]);
-			}
-			//echo $sum;
-			if($sum > 100){
-				$msgP = "<font color = red>Total percentage of all evaluation methods should be 100%</font><br />";
-			}
-			else{
-				for ($i=0; $i < count($_POST["activity"]); $i++) {
-					# code...
-					$activity=trim($_POST["activity"][$i]);
-					$percentage=trim($_POST["percentage"][$i]);
-					//echo $activity;
-					//echo $percentage;
-					if($percentage != '') 
-					{
-						$sql="INSERT INTO mdl_grading_policy (courseid,name,percentage) VALUES ('$course_id','$activity','$percentage')";
-						$DB->execute($sql);
-					}
-					else 
-					{
-						// percentage not entered for activity
-					}
-				}
-				$msgP = "<font color = green>Grading Policy saved successfully!</font><br />";
-				$redirect_page="./report_teacher.php?course=$course_id";
-				redirect($redirect_page);
-			}
-		}
+
 		if(isset($msgP)){
 			echo $msgP;
 		}
+
 		$gps=$DB->get_records_sql('SELECT SUM(percentage) AS sum FROM `mdl_grading_policy` WHERE courseid = ?', array($course_id));
 		foreach($gps as $gp){
 			$sum = $gp->sum;
@@ -140,14 +154,100 @@
 					echo html_writer::table($table);
 					echo "<h5>Remaining ".(100-$sum)."% <h5><br />";
 				}
-                
             }
         }
 
 		if($sum < 100){
 		?>
-		<h3>Select an Activity to choose Grading Policy for:</h3>
+		<!--<h3>Select an Activity to choose Grading Policy for:</h3>-->
 		<form method='post' action="" class="mform" id="gpForm">
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<label class="col-form-label d-inline" for="id_act">
+						Quiz
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="number">
+				<span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+				<input type="number"
+							class="form-control"
+							name="quiz"
+							id="id_quiz"
+							size=""
+							maxlength="7"
+							step="0.001"
+							min="0" max="100">
+					<div class="form-control-feedback" id="id_error_name">
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<label class="col-form-label d-inline" for="id_mt">
+						Assignment
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="number">
+				<span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+				<input type="number"
+							class="form-control"
+							name="assign"
+							id="id_assign"
+							size=""=
+							maxlength="7"
+							step="0.001"
+							min="0" max="100">
+							
+					<div class="form-control-feedback" id="id_error_name">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<label class="col-form-label d-inline" for="id_fe">
+						Project
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="number">
+				<span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+					<input type="number"
+							class="form-control"
+							name="project"
+							id="id_project"
+							size=""
+							maxlength="7"
+							step="0.001"
+							min="0" max="100">
+							
+					<div class="form-control-feedback" id="id_error_name">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<label class="col-form-label d-inline" for="id_fe">
+						Other (Viva, Class Performance, Attendance, etc.)
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement" data-fieldtype="number">
+				<span class="input-group-addon" style="display: inline;"><i class="fa fa-percent"></i></span>
+					<input type="number"
+							class="form-control"
+							name="other"
+							id="id_other"
+							size=""
+							maxlength="7"
+							step="0.001"
+							min="0" max="100">
+							
+					<div class="form-control-feedback" id="id_error_name">
+					</div>
+				</div>
+			</div>
+		<!--
 		<div id="dynamicInput">
 			<div class="form-group row fitem" id="div0">
 				<div class="col-md-4 form-inline felement">
@@ -157,8 +257,6 @@
 						<option value="quiz">Quiz</option>
 						<option value="assignment">Assignment</option>
 						<option value="project">Project</option>
-						<!--<option value="mid term">Mid Term</option>-->
-					   	<!--<option value="final exam">Final Exam</option>-->
 						<option value="other">Other</option>
 					</select>
 				</div>
@@ -186,12 +284,98 @@
 				<input class="btn btn-success" type="button" value="Add another" onClick="addInput('dynamicInput');">
 			</div>
 		</div>
+		-->
 		<br />
 		<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
 		<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
 		<a class="btn btn-default" type="submit" <?php echo "href='./report_teacher.php?course=$course_id'" ?>>Cancel</a>
 		</form>
 
+		<script>
+			//form validation
+			$(document).ready(function () {
+				$('#gpForm').validate({ // initialize the plugin
+					rules: {
+						"quiz": {
+							number: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						},
+						"assign": {
+							number: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						},
+						"project": {
+							number: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						},
+						"other": {
+							number: true,
+							step: 0.001,
+							range: [0, 100],
+							min: 0,
+							max: 100,
+							minlength: 1,
+							maxlength: 7
+						}
+					},
+					messages: {
+						"quiz": {
+							number: "Only numeric values are allowed.",
+							step: "Please enter nearest percentage value.",
+							range: "Please enter percentage between 0 and 100%.",
+							min: "Please enter percentage greater than or equal to 0%.",
+							max: "Please enter percentage less than or equal to 100%.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						},
+						"assign": {
+							number: "Only numeric values are allowed.",
+							step: "Please enter nearest percentage value.",
+							range: "Please enter percentage between 0 and 100%.",
+							min: "Please enter percentage greater than or equal to 0%.",
+							max: "Please enter percentage less than or equal to 100%.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						},
+						"project": {
+							number: "Only numeric values are allowed.",
+							step: "Please enter nearest percentage value.",
+							range: "Please enter percentage between 0 and 100%.",
+							min: "Please enter percentage greater than or equal to 0%.",
+							max: "Please enter percentage less than or equal to 100%.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						},
+						"other": {
+							number: "Only numeric values are allowed.",
+							step: "Please enter nearest percentage value.",
+							range: "Please enter percentage between 0 and 100%.",
+							min: "Please enter percentage greater than or equal to 0%.",
+							max: "Please enter percentage less than or equal to 100%.",
+							minlength: "Please enter more than 1 numbers.",
+							maxlength: "Please enter no more than 6 numbers (including decimal part)."
+						}
+					}
+				});
+			});
+		</script>
+
+		<!--
 		<script>
 			// script to remove first activity and percent fields from form
 			$(document).ready(function(){
@@ -200,6 +384,7 @@
 				});
 			});
 		</script>
+		
 		<script>
 			// script to add more activity and percent fields to form
 			var counter = 1;
@@ -215,6 +400,7 @@
 				counter++;
 			}
 		</script>
+		
 		<script>
 			//form validation
 			$(document).ready(function () {
@@ -252,6 +438,7 @@
 				});
 			});
 		</script>
+		-->
 		<?php
 		}
 		else{
