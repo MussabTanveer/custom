@@ -41,7 +41,10 @@ if($rec && $course_code){
         $coursecontent=$records->coursecontent;
         $book=$records->book;
 
-        echo "<h3>Theory Credit Hours</h3>";
+    
+
+    }
+       echo "<h3>Theory Credit Hours</h3>";
         echo $theorycredithours;
         echo "<br><br>";
 
@@ -57,7 +60,10 @@ if($rec && $course_code){
         echo $book;
         echo "<br><br>";
 
-    }
+
+
+
+
 
 }
 
