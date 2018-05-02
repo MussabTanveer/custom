@@ -174,6 +174,10 @@ require_once('../../../config.php');
 			$record->book=$bookname;
 
 			$id = $DB->insert_record('course_info', $record);
+			if ($id)
+			{
+				echo "<font color = green> Course Profile has been updated sucessfully </font>";
+			}
 			
 
 			//$sql1="INSERT INTO mdl_course_info (coursecode,theorycredithours,practicalcredithours,coursecontent,book) VALUES($coursecode,$tchs,$pchs,$coursecontent,$bookname)";
