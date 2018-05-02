@@ -24,44 +24,48 @@ if(isset($_GET['course'])  ){
 //$coursecode=$_GET['coursecode'];
 //echo $coursecode;
 
-$rec=$DB->get_recordset_sql('SELECT ci.coursecode,ci.theorycredithours,ci.practicalcredithours,ci.coursecontent,ci.book FROM mdl_course_info ci, mdl_course c WHERE c.id= ?',array($course_id));
+$coursecodesql = $DB->get_records_sql('SELECT idnumber FROM mdl_course WHERE id=?', array($course_id));
 
-if($rec){
+$course_code = "";
+foreach($coursecodesql as $cc){
+    $course_code = $cc->idnumber;
+}
 
- 
-            $table = new html_table();
-     $table->head = array( 'Theory credithours','Practical credithours','Course Content','Book');
+$rec=$DB->get_records_sql('SELECT * FROM mdl_course_info WHERE coursecode= ?',array($course_code));
 
-      foreach ($rec as $records) {
+if($rec && $course_code){
 
-           // $coursecode = $records->coursecode;
-            $theorycredithours=$records->theorycredithours;
-             $practicalcredithours=$records->practicalcredithours;
-             $coursecontent=$records->coursecontent;
-             $book=$records->book;
+    foreach ($rec as $records) {
+        $theorycredithours=$records->theorycredithours;
+        $practicalcredithours=$records->practicalcredithours;
+        $coursecontent=$records->coursecontent;
+        $book=$records->book;
 
+        echo "<h3>Theory Credit Hours</h3>";
+        echo $theorycredithours;
+        echo "<br><br>";
 
-             $table->data[] = array($theorycredithours,$practicalcredithours,$coursecontent,$book);
+        echo "<h3>Practical Credit Hours</h3>";
+        echo $practicalcredithours;
+        echo "<br><br>";
 
+        echo "<h3>Course Content</h3>";
+        echo $coursecontent;
+        echo "<br><br>";
 
-      }
+        echo "<h3>Books</h3>";
+        echo $book;
+        echo "<br><br>";
 
-if(!empty($book) && !empty($theorycredithours) &&  !empty($practicalcredithours) && !empty($coursecontent)){
-
-echo html_writer::table($table);
+    }
 
 }
+
 else{
 
 echo "<font color=red size=5>Course profile hasn't been entered yet!</font>";
 
 }
-
-}
-
-
-
-
 
 
 }
