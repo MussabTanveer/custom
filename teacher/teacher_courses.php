@@ -53,7 +53,7 @@
         echo "<br />";
     }
     else{
-        echo "<h3>You are not currently enrolled as teacher in any course!</h3>";
+        echo "<h3>You are not currently enrolled as theory teacher in any course!</h3>";
     }
 
     $rec1=$DB->get_records_sql('SELECT c.id, c.fullname , c.shortname, c.idnumber
