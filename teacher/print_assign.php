@@ -141,7 +141,9 @@
                 $astartdate  = $assign->startdate;
                 $aEnddate   = $assign->enddate;
                // echo "$astartdate";
+                 if ($astartdate != 0)
                  $astartdate = date('d-m-y' ,$astartdate);
+                if ($aEnddate != 0)
                 $aEnddate = date('d-m-y' ,$aEnddate);   
                  $x=$pdf->GetX();
          				 $pdf->write(10,"Name: ",0);
@@ -152,9 +154,11 @@
                  $y=$pdf->GetY();
                  $pdf -> SetXY($x,$y);
                 $pdf->SetFont('Arial','B',13);
+                if($adesc != ""){
                  $pdf->write(10,"Description:",0);
                   $pdf->SetFont('Arial','',13);
                  $pdf->write(10,"$adesc",0);
+               }
          				 $y=$pdf->GetY();
          				 $pdf->SetXY($x,$y);
                  $pdf->SetFont('Arial','B',13);
@@ -170,16 +174,22 @@
                    $y=$pdf->GetY();
                  $pdf->SetXY($x,$y);
                  $pdf->SetFont('Arial','B',13);
-                  $pdf->write(10,"StartDate: ",0);
-                   $pdf->SetFont('Arial','',13);
-                  $pdf->write(10,"$astartdate ",0);
+                 if ($astartdate != 0)
+                 {
+                     $pdf->write(10,"StartDate: ",0);
+                     $pdf->SetFont('Arial','',13);
+                     $pdf->write(10,"$astartdate ",0);
+                   }
 
                    $y=$pdf->GetY();
                  $pdf->SetXY($x,$y);
+                  if ($aEnddate != 0)
+                 {
                    $pdf->SetFont('Arial','B',13);
                   $pdf->write(10,"EndDate: ",0);
                    $pdf->SetFont('Arial','',13);
                   $pdf->write(10,"$aEnddate ",0);
+                }
  				 $i++;                   
             }
              $pdf->Output();
