@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Assignment Results");
     $PAGE->set_heading("Assignment Results");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_assignment.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_other2.php');
 
        header('Content-Type: text/plain');
    
@@ -18,15 +18,15 @@
     }
     echo $OUTPUT->header();
 
-if(isset($_GET['assignid']))
+if(isset($_GET['otherid']))
     {
-$assign_id=$_GET['assignid'];
-//echo $assign_id;
+$other_id=$_GET['otherid'];
+//echo $other_id;
 
 
 //$id=$_POST['id'];
 //echo $id;
-$rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($assign_id));
+$rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_other ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($other_id));
 
 if($rec1){
 
@@ -52,7 +52,7 @@ else{
 	echo "No record present!";
 }
 $rec=$DB->get_recordset_sql(
-        'SELECT us.username,us.id,maa.obtmark, ma.id,maa.id from mdl_manual_assign_pro_attempt maa , mdl_manual_assign_pro ma, mdl_user us where us.id=maa.userid AND ma.id=maa.assignproid  AND ma.id= ? AND ma.module=? ',array($assign_id,'-4'));
+        'SELECT us.username,us.id,maa.obtmark, ma.id,maa.id from mdl_manual_other_attempt maa , mdl_manual_other ma, mdl_user us where us.id=maa.userid AND ma.id=maa.otherid  AND ma.id= ? AND ma.module=? ',array($other_id,'-6'));
 
 if($rec){
 
@@ -70,7 +70,7 @@ if($rec){
                 $userid = $records->username;
                 $obtmark = $records->obtmark;
                 //"<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>";
-$table->data[] = array($serialno,$userid,$obtmark, "<a href='edit_assignment_marks.php?edit=$marksid&userid=$userid&assignid=$assign_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
+$table->data[] = array($serialno,$userid,$obtmark, "<a href='edit_other_marks.php?edit=$marksid&userid=$userid&otherid=$other_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
 
             }
 
