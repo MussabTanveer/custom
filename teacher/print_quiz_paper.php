@@ -26,16 +26,16 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Print Quiz Details','Print Quiz Paper','Delete','Edit');
+            $table->head = array('S. No.', 'Print Quiz Details','Print Quiz Paper','Export To Excel','Delete','Edit');
             foreach ($quizzes as $records) {
                 $serialno++;
                 $qid = $records->id;
                 $qname = $records->name;
                 $mime = $records->mime;
                 if ($mime)
-                    $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname uploaded paper</a>","<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>","<a href='./edit_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>");
+                    $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>","<a href='./print_uploaded_paper.php?quiz=$qid&courseid=$course_id'>Print $qname uploaded paper</a>","<a href='./downloadExcel.php?id=$qid&course=$course_id&type=$type' title='Download') ><i class='icon fa fa-download text-info' aria-hidden='true' title='Download' aria-label='Download'></i></a>","<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>","<a href='./edit_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>");
                 else
-                    $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-',"<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>","<a href='./edit_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>");
+                    $table->data[] = array($serialno,"<a href='./print_quiz.php?quiz=$qid&courseid=$course_id'>Print $qname</a>",'-',"<a href='./downloadExcel.php?id=$qid&course=$course_id&type=$type' title='Download') ><i class='icon fa fa-download text-info' aria-hidden='true' title='Download' aria-label='Download'></i></a>","<a href='./delete_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this activity and its attempt?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>","<a href='./edit_manual_activity.php?id=$qid&course=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>");
             }
             echo html_writer::table($table);
             echo "<br />";

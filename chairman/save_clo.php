@@ -18,7 +18,7 @@
     
     $courseName = trim($_POST["courseName"]);
      $courseName=strtoupper($courseName);
-     echo "$courseName";
+     //echo "$courseName";
 
 	
     /*if($_FILES['myfile']['size'] > 0)
