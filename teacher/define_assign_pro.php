@@ -168,7 +168,7 @@
 						foreach ($reca as $recorda) {
 							$assign_id=$recorda->assign_id; 
 						}
-						echo $assign_id;
+						//echo $assign_id;
 						$sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
 						('$course_id',-4,'$assign_pro_id','$assign_id') ";
 						$DB->execute($sql);

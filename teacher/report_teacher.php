@@ -41,6 +41,7 @@
         <a href="javascript:void(0)" onclick="toggle_visibility('tools');" class="cool-link">Course Evaluation Tools &amp; Mappings</a><br><br>
         <div id="tools" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual');" class="cool-link">&#10070; Manual Evaluation</a><br><br>
+            
             <div id="manual" style="display: none">
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_quiz');" class="cool-link">&#10022; Quiz</a><br>
                 <div id="manual_quiz" style="display: none">
@@ -60,6 +61,11 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_assignment?type=assign&course=$course_id'" ?> class="cool-link">&#10146; View Results</a><br>
                 </div>
+
+
+
+
+
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_pro');" class="cool-link">&#10022; Project</a><br>
                 <div id="manual_pro" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Define Project</a><br>
@@ -87,7 +93,19 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a></a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_final_result.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; View Result</a><br>
                 </div>
-            </div>
+           
+                 
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('other');" class="cool-link">&#10022; Other</a><br>
+                <div id="other" style="display: none">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Define Other</a><br>
+                   
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_other_selection.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form </a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; View Results</a><br>
+                </div>
+ </div>
+
             <br>
             &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('online');" class="cool-link">&#10070; Online Evaluation</a><br><br>
             <div id="online" style="display: none">
