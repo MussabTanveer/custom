@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("View Result");
     $PAGE->set_heading("View Result");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_quiz_result1.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_activity_result1.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
