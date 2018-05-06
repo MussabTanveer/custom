@@ -15,8 +15,24 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+?>
 
- if(!empty($_GET['type']) && !empty($_GET['course']))
+<style>
+	input[type='number'] {
+		-moz-appearance:textfield;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+	label.error {
+		color: red;
+	}
+</style>
+
+<?php
+
+    if(!empty($_GET['type']) && !empty($_GET['course']))
     {
         $course_id=$_GET['course'];
         $coursecontext = context_course::instance($course_id);
@@ -25,17 +41,17 @@
         $type=$_GET['type'];
          //echo "$type";
 
-if(isset($_POST['save'])) {
+        if(isset($_POST['save'])) {
             $oname = trim($_POST["name"]);
             $odesc = trim($_POST["description"]);
             $omaxmark = trim($_POST["maxmark"]);
             $oclo = trim($_POST["clo"]);
 
 
-            echo $odesc; 
-            echo $oclo;
+            //echo $odesc; 
+            //echo $oclo;
              
-    if(strlen($oname)>50 || strlen($odesc)>500)
+            if(strlen($oname)>50 || strlen($odesc)>500)
             {   //echo "in IF";
                     
 
@@ -50,7 +66,7 @@ if(isset($_POST['save'])) {
             }
 
 
-        try {
+            try {
                 $transaction = $DB->start_delegated_transaction();
                 $record = new stdClass();
                 $record->courseid = $course_id;
@@ -62,44 +78,38 @@ if(isset($_POST['save'])) {
 
                 $other_id_new = $DB->insert_record('manual_other', $record);
 
+                $rec_o=$DB->get_records_sql('SELECT id as other_id FROM mdl_grading_policy WHERE name="other" AND courseid=?',array($course_id));
 
-           $rec_o=$DB->get_records_sql('SELECT id as other_id FROM mdl_grading_policy WHERE name="other" AND courseid=?',array($course_id));
-
-
-           if($rec_o){
-                        foreach ($rec_o as $recordo) {
-                            $other_id=$recordo->other_id; 
-                        }
-
-                        $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
-                        ('$course_id',-6,'$other_id_new','$other_id') ";
-                        $DB->execute($sql);
-
-
-
-            }
-
-            else{
-                        $msga="Pls define Other in Define Grading Policy tab first";
+                if($rec_o){
+                    foreach ($rec_o as $recordo) {
+                        $other_id=$recordo->other_id; 
                     }
 
+                    $sql="INSERT INTO mdl_grading_mapping (courseid,module,instance,gradingitem) VALUES 
+                    ('$course_id',-6,'$other_id_new','$other_id') ";
+                    $DB->execute($sql);
 
-          $transaction->allow_commit();
+                }
+
+                else{
+                    $msga="Pls define Other in Define Grading Policy tab first";
+                }
+
+                $transaction->allow_commit();
             
-}
-catch(Exception $e) {
-                    $transaction->rollback($e);}
+            }
+            catch(Exception $e) {
+                $transaction->rollback($e);
+            }
 
-                    $redirect_page1="./report_teacher.php?course=$course_id";
-                    redirect($redirect_page1);
+            $redirect_page1="./report_teacher.php?course=$course_id";
+            redirect($redirect_page1);
 
-}
+        }
 
-down:
-
-
+        down:
         
-$courseclos=$DB->get_records_sql(
+        $courseclos=$DB->get_records_sql(
         "SELECT clo.id AS cloid, clo.shortname AS cloname, plo.shortname AS ploname, peo.shortname AS peoname, levels.name AS lname, levels.level AS lvl
     
         FROM mdl_competency_coursecomp cc, mdl_competency clo, mdl_competency plo, mdl_competency peo, mdl_taxonomy_levels levels, mdl_taxonomy_clo_level clolevel
@@ -109,7 +119,7 @@ $courseclos=$DB->get_records_sql(
         
         array($course_id));
 
-$clonames = array(); $closid = array(); $plos = array(); $peos = array(); $levels = array(); $lvlno = array();
+        $clonames = array(); $closid = array(); $plos = array(); $peos = array(); $levels = array(); $lvlno = array();
         foreach ($courseclos as $recC) {
             $cid = $recC->cloid;
             $clo = $recC->cloname;
@@ -133,22 +143,22 @@ $clonames = array(); $closid = array(); $plos = array(); $peos = array(); $level
 
 <br />
 <?php
-
-$reco=$DB->get_records_sql('SELECT id as other_id FROM mdl_grading_policy WHERE name="other" AND courseid=?',array($course_id));
-            if($reco){
-                $flag=1;
-            }
-            else{
-                $msga="<h4 style='color:red;'>Please define Other Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
-            }
+        $flag=0;
+        $reco=$DB->get_records_sql('SELECT id as other_id FROM mdl_grading_policy WHERE name="other" AND courseid=?',array($course_id));
+        if($reco){
+            $flag=1;
+        }
+        else{
+            $msga="<h4 style='color:red;'>Please define Other Grading Policy first.</h4><br /><a href='./grading_policy.php?course=$course_id'>Click here..</a>";
+        }
         
-if($flag){
-?>
+        if($flag){
+        ?>
 
-<form method='post' action="" class="mform" id="assproForm" enctype="multipart/form-data">
+        <form method='post' action="" class="mform" id="otherForm" enctype="multipart/form-data">
 
-<h3>Other</h3>
-<div class="form-group row fitem ">
+            <h3>Other</h3>
+            <div class="form-group row fitem ">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
                         <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
@@ -170,14 +180,12 @@ if($flag){
                 </div>
             </div>
 
-
-
             <?php
             if(isset($lengthMsg))
-                    echo "$lengthMsg";
-                ?>
+                echo "$lengthMsg";
+            ?>
 
-                <div class="form-group row fitem">
+            <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
                     </span>
@@ -195,15 +203,13 @@ if($flag){
                     </div>
                 </div>
             </div>
-             <?php
-                
-                if(isset($descMsg))
-                    echo "$descMsg";
-
-            ?>   
+            <?php
+            if(isset($descMsg))
+                echo "$descMsg";
+            ?>
 
 
-<div class="form-group row fitem ">
+            <div class="form-group row fitem ">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
                         <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
@@ -226,9 +232,6 @@ if($flag){
                     </div>
                 </div>
             </div>
-
-
-
 
 
             <div class="form-group row fitem ">
@@ -261,27 +264,24 @@ if($flag){
                     </div>
                 </div>
             </div>
- <br />
+        <br />
         <button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
             <a class="btn btn-default" type="submit" href="./report_teacher.php?course=<?php echo $course_id ?>">Cancel</a>
             <br /><br />
             <div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
         </form>
-        <br /><br /><br /><br />
+        <br /><br />
 
 
-
-<?php
-}
-if(isset($msga)){
+        <?php
+        }
+        if(isset($msga)){
             echo $msga;
         }
 
+        ?>
 
-
-?>
-
-<script>
+        <script>
             var closid = <?php echo json_encode($closid); ?>;
             var plos = <?php echo json_encode($plos); ?>;
             //var peos = <?php echo json_encode($peos); ?>;
@@ -308,16 +308,12 @@ if(isset($msga)){
                     }
                 }
             }
-            
         </script>
-
-
-
 
         <script>
             //form validation
             $(document).ready(function () {
-                $('#assproForm').validate({ // initialize the plugin
+                $('#otherForm').validate({ // initialize the plugin
                     rules: {
                         "name": {
                             required: true,
@@ -368,9 +364,9 @@ if(isset($msga)){
             });
         </script>
 
-<?php
-}
-else
+    <?php
+    }
+    else
     {?>
         <h3 style="color:red;"> Invalid Selection </h3>
         <a href="./teacher_courses.php">Back</a>
@@ -378,9 +374,6 @@ else
     }
 ?>
 
-
-
 <?php
 echo $OUTPUT->footer();
-
 ?>

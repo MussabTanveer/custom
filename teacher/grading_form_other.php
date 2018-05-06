@@ -96,7 +96,7 @@ if(!empty($_GET['other']) && !empty($_GET['courseid']))
 
     <script>
         //<!-- Cache form data -->
-        var value = 'other' + <?php echo json_encode($other); ?>; // assign/pro id is the form key
+        var value = 'other' + <?php echo json_encode($other); ?>; // other id is the form key
         //alert(value);
         $("#myForm").formcache({key:value});
     </script>
