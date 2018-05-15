@@ -440,7 +440,8 @@ th{
                 }
             }
             $uniqueplonames = array_unique($plonames);
-            ?>
+            $uniqueplonames =  array_values($uniqueplonames);//Reindexing the array.
+           // var_dump($uniqueplonames);            ?>
             <th colspan="<?php echo count($closid); ?>">CLO Status (pass/fail)</th>
             <th colspan="<?php echo count($uniqueplonames); ?>">PLO Status (pass/fail)</th>
         </tr>
@@ -472,7 +473,7 @@ th{
             /****** PLOS ******/
             for($i=0; $i<count($uniqueplonames); $i++) {
                 ?>
-                <th><?php echo $uniqueplonames[$i]; ?></th>
+                <th><?php echo $uniqueplonames[$i]; //var_dump($uniqueplonames) ?></th>
                 <?php
             }
             ?>
@@ -542,11 +543,13 @@ th{
             }
             /****** Student CLOS status ******/
             $ind_stud_plo_stat = array(); // individual student plo status -> 1 for pass, 0 for fail
+            $uniqueploids = array_values($uniqueploids); //Reindexing the array.
             
             for($i=0; $i<count($uniqueploids); $i++){
                 $k=0;
                 for($j=0; $j<count($closid); $j++){
                     if($plosid[$j] == $uniqueploids[$i]){
+                       // var_dump($uniqueploids);
                         $ind_stud_plo_stat[$i][$k] = 0; // set all plos status to fail
                         $k++;
                     }
