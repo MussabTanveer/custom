@@ -116,9 +116,9 @@
             </div>
         </div>
         
-        <!--<a "href='../../../question/edit.php?cmid=13'" class="cool-link">Add Questions to Assessment</a><br><br>-->
+        <!--<a "href='../../../question/edit.php?cmid=13'" class="cool-link">Add Questions to Assessment</a><br><br>
 
-        <!--<a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>-->
+        <a href="./display_courses-4.php" class="cool-link">View Course CLOs Mapping to Levels &amp; PLOs</a><br><br>-->
         
         <a href="javascript:void(0)" onclick="toggle_visibility('clorep');" class="cool-link">CLO Reports</a><br><br>
         <div id="clorep" style="display: none">
