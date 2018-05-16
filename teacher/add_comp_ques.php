@@ -70,6 +70,7 @@
 		// Get Quiz Questions
         $rec=$DB->get_recordset_sql(
         'SELECT
+			qu.competencyid,
 			qu.id,
             qu.name,
             qu.questiontext
@@ -81,7 +82,7 @@
         WHERE
             q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid',
         
-        array(substr($activity_id,1)));
+		array(substr($activity_id,1)));
 		
 		?>
 		
@@ -101,6 +102,7 @@
 				$i = 0;
 				foreach($rec as $records)
 				{
+					$qcid = $records->competencyid;
 					$qid = $records->id;
 					$qname = $records->name;
 					$qtext = $records->questiontext;
@@ -122,7 +124,7 @@
 							$plname = $recC->ploname;
 							$pename = $recC->peoname;
 							?>
-							<option value='<?php echo $cid; ?>'><?php echo $cname; ?></option>
+							<option value='<?php echo $cid; ?>' <?php if($cid == $qcid) echo 'selected' ?>><?php echo $cname; ?></option>
 							<?php
 							}
 							?>
