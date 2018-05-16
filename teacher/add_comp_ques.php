@@ -18,6 +18,10 @@
         $activity_id=$_POST['activityid'];
         //echo "Quiz ID : $quiz_id";
 		$course_id=$_POST['courseid'];
+
+		$coursecontext = context_course::instance($course_id);
+		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
+		
         //echo "Course ID : $course_id";
         ?>
 		
