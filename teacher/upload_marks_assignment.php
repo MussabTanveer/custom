@@ -36,7 +36,11 @@
 
     <?php 
 
-$qid=$_GET['id'];        
+$qid=$_GET['id'];    
+$assignmarks = $DB->get_records_sql('SELECT maxmark From mdl_manual_assign_pro Where id =?',array($qid));  
+foreach($assignmarks as $assg){
+    $marks=$assg->maxmark;
+}  
 
 // check file name is not empty
 if (!empty($_FILES['assignmarks']['name'])) {
@@ -59,10 +63,11 @@ if (!empty($_FILES['assignmarks']['name'])) {
         $tempfile=$reader->open($inputFileName);
         $count = 1;
         $abc=1;
-            
+        
         //Number of sheet in excel file
        foreach ($reader->getSheetIterator() as $sheet) {
              if($abc>=1){
+           
             
             // Number of Rows in Excel sheet
             foreach ($sheet->getRowIterator() as $row) {
@@ -94,9 +99,16 @@ if (!empty($_FILES['assignmarks']['name'])) {
         
                      $pfix="sn";
                      ${$pfix.strtolower($x)}=$row[$x];
-                         if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" ){
+                         if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" && ${$pfix.strtolower($x)} <= $marks ){
                              $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid','${$pfix.strtolower($x)}')";
                              $DB->execute($sql1);
+                             $checkbit=0;
+                              }
+                              else{
+                                $sql2="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                                $DB->execute($sql2);
+                                $checkbit=1;
+                                echo "<h3 style='color:green;'>Students With higher Obtained marks are assigned 0.</h3>";
                               }
                      }
                  }
@@ -105,7 +117,9 @@ if (!empty($_FILES['assignmarks']['name'])) {
             $abc++;
         }
 if($sql1){
-         echo "<h3 style='color:green;'>Result has been uploaded!</h3>";}
+         echo "<h3 style='color:green;'>Result has been uploaded!</h3>";   
+    }
+
         //Close excel file
         $reader->close();
  
