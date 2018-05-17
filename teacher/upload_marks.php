@@ -39,15 +39,11 @@
         $qid=$_GET['id'];    
 
         $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($qid));
-                            
-                            if($check){
-
-
-                               echo "<font color=red>Sorry cannot upload marks because they have already been uploaded!</font>";
-                               goto end;
-
-                            }
-
+        
+        if($check){
+            echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
+            goto end;
+        }
 
         // check file name is not empty
         if (!empty($_FILES['quizmarks']['name'])) {
@@ -83,12 +79,11 @@
                             //$prefix = "pre";
                             //${$prefix.strtolower($x)}=$row[$x];
                             $quesids=$row[$x];
-                            $rec1=$DB->get_records_sql('SELECT id  FROM mdl_manual_quiz_question WHERE quesname = ?', array($quesids));
+                            $rec1=$DB->get_records_sql('SELECT id  FROM mdl_manual_quiz_question WHERE quesname = ? AND mquizid = ?', array($quesids, $qid));
                             if($rec1){
                                 $a="question";
                                 foreach ($rec1 as $record1){
                                 ${$a.strtolower($x)}=$record1->id;}
-                                
                             }
                             // echo ${$prefix.strtolower($x)};
                             // $a=$row[1];
