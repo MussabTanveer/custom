@@ -36,7 +36,19 @@
     </form>
 
     <?php
-        $qid=$_GET['id'];        
+        $qid=$_GET['id'];    
+
+        $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($qid));
+                            
+                            if($check){
+
+
+                               echo "<font color=red>Sorry cannot upload marks because they have already been uploaded!</font>";
+                               goto end;
+
+                            }
+
+
         // check file name is not empty
         if (!empty($_FILES['quizmarks']['name'])) {
             
@@ -136,11 +148,17 @@
         echo "<font color=red>Please Select Excel File</font>";
     }
     }
+
+
+
+
     else
     {?>
         <h3 style="color:red;"> Invalid Selection </h3>
         <a href="./teacher_courses.php">Back</a>
         <?php
     }
+    end:
+    
     echo $OUTPUT->footer();
 ?>
