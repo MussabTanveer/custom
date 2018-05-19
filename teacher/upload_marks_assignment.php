@@ -58,7 +58,7 @@ if (!empty($_FILES['assignmarks']['name'])) {
     
         // Read excel file by using ReadFactory object.
         $reader = ReaderFactory::create(Type::XLSX);
- 
+
         // Open file
         $tempfile=$reader->open($inputFileName);
         $count = 1;
@@ -76,48 +76,50 @@ if (!empty($_FILES['assignmarks']['name'])) {
                 // header is in the first row. 
                  if ($count > 1) { 
                     
-            //         //$arri = array_map('strval', $arr);
+                    //$arri = array_map('strval', $arr);
                 
                     
-            //         // Data of excel sheet
-                     $c1=count($row);
-                     $sn=$row[0];
-            $rec=$DB->get_records_sql('SELECT id  FROM mdl_user WHERE username = ?', array($sn));
-                     if ($rec){
-                         foreach($rec as $records){
-                        
-                         $uid=$records->id;
+                    // Data of excel sheet
+                    $c1=count($row);
+                    $sn=$row[0];
+                    $rec=$DB->get_records_sql('SELECT id  FROM mdl_user WHERE username = ?', array($sn));
+                    if ($rec){
+                        foreach($rec as $records){
+                            $uid=$records->id;
                         }
-                     }
-                     else{
-                         $uid="A";
-                     }
+                    }
+                    else{
+                        $uid="A";
+                    }
                
-
-                     for($x=1;$x<$c1;$x++){
-                
-        
-                     $pfix="sn";
-                     ${$pfix.strtolower($x)}=$row[$x];
-                         if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" && ${$pfix.strtolower($x)} <= $marks ){
-                             $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid','${$pfix.strtolower($x)}')";
-                             $DB->execute($sql1);
-                             $checkbit=0;
-                              }
-                              else{
-                                $sql2="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
-                                $DB->execute($sql2);
-                                $checkbit=1;
-                                echo "<h3 style='color:green;'>Students With higher Obtained marks are assigned 0.</h3>";
-                              }
-                     }
-                 }
+                    $checkbit=0;
+                    for($x=1;$x<$c1;$x++){
+                        $pfix="sn";
+                        ${$pfix.strtolower($x)}=$row[$x];
+                        if(${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $marks ){
+                            $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid','${$pfix.strtolower($x)}')";
+                            $DB->execute($sql1);
+                        }
+                        elseif(${$pfix.strtolower($x)} == "" && $uid <> "A"){
+                            $sql2="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                            $DB->execute($sql2);
+                        }
+                        elseif (${$pfix.strtolower($x)} > $marks && $uid <> "A") {
+                            $sql2="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                            $DB->execute($sql2);
+                            $checkbit=1;
+                        }
+                    }
+                }
                 $count++;
             }}
             $abc++;
         }
-if($sql1){
-         echo "<h3 style='color:green;'>Result has been uploaded!</h3>";   
+    if($sql1){
+        echo "<h3 style='color:green;'>Result has been uploaded!</h3>";   
+    }
+    if($checkbit){
+        echo "<h3 style='color:red;'>Some students with obtained marks greater than maximum marks are assigned 0.</h3>";
     }
 
         //Close excel file
@@ -129,7 +131,7 @@ if($sql1){
     }
  
 } else {
- 
+
     echo "<font color=red>Please Select Excel File</font>";
      
 }
