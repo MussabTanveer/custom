@@ -55,11 +55,11 @@
             mdl_competency c,
             mdl_question_attempt_steps qas
         WHERE 
-            q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
+            q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
+            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
         ORDER BY qa.attempt, qa.userid',
         
-        array($quiz_id));
+        array($quiz_id, 1));
 
         if($rec){
             ?>
