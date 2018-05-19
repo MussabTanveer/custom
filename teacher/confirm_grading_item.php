@@ -23,8 +23,20 @@
 		{
 			array_push($gitemarray,$gitem);	
 		}
+
+
+		$pactivityArray = array();
+		foreach ($_POST['pactivity'] as $value) {
+
+			array_push($pactivityArray, $value);
+		}
+
+		//var_dump($pactivityArray);
 	}
 	$activityidsarray=$SESSION->activityids;
+
+	//var_dump($activityidsarray);
+	
 	/*
 	echo $activityidsarray[0];
 	echo "<br>";
@@ -38,7 +50,22 @@
 	echo "<br>";
 	echo $activityidsarray[5];
 	echo "<br>";echo "<br>";
+
+	echo $pactivityArray[0];
+	echo "<br />";
+	echo $pactivityArray[1];
+	echo "<br />";
+	echo $pactivityArray[2];
+	echo "<br />";
+	echo $pactivityArray[3];
+	echo "<br />";
+	echo $pactivityArray[4];
+	echo "<br />";
+	echo $pactivityArray[5];
+	echo "<br />";*/
 	
+
+	/*
 	echo $gitemarray[0];
 	echo "<br>";
 	echo $gitemarray[1];
@@ -52,6 +79,7 @@
 	echo $gitemarray[5];
 	echo "<br>";echo "<br>";
 	*/
+
 	$i=0;
 	foreach ($activityidsarray as $aid)
 	{
@@ -71,10 +99,27 @@
 				$DB->execute($sql);
 			}
 		}
+
+		if($pactivityArray[$i] != ''){
+			
+			
+
+			//$check=$DB->get_records_sql('SELECT * FROM `mdl_parent_mapping` WHERE courseid = ? AND module = ? AND instance = ? AND gradingitem = ?', array($course_id,$mod,$aid,$gitemarray[$i]));
+			
+			//if(!$check)	
+			//{
+
+				$sql="INSERT INTO mdl_parent_mapping (parentid,childid) 
+				VALUES ($pactivityArray[$i] , $aid)";
+				$DB->execute($sql);
+			//}
+		}
+
+
 		$i++;
 	}
 	
-	echo "<font color='green'>Grading items successfully mapped with activities!</font>";
+	echo "<font color='green'>Grading items and subactivities successfully mapped!</font>";
 	echo "<br>";
 ?>
 <a href="./teacher_courses.php">Back</a>
