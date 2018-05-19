@@ -121,8 +121,12 @@
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-                            if (${$pfix.strtolower($x)} <>"A" && $uid <> "A" ){
+                            if (${$pfix.strtolower($x)} <> "" && $uid <> "A" ){
                                 $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
+                                $DB->execute($sql1);
+                            }
+                            elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
+                                $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
                                 $DB->execute($sql1);
                             }
                         }
