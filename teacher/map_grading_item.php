@@ -41,6 +41,7 @@ label.error {
             $i = 0;
             $activityids = array();
             ?>
+            <a href="./define_parent_activity.php?course=<?php echo $course_id ?>" style="float:right; margin-bottom: 25px" class="btn btn-primary">Define Parent Activity</a>
             <form action="confirm_grading_item.php" method="post" id="mapForm">
                 <table class="generaltable">
                     <tr class="table-head">
