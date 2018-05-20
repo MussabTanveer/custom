@@ -109,12 +109,12 @@ if (!empty($_FILES['assignmarks']['name'])) {
                             $DB->execute($sql1);
                         }
                         elseif(${$pfix.strtolower($x)} == "" && $uid <> "A"){
-                            $sql2="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
-                            $DB->execute($sql2);
+                            $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                            $DB->execute($sql1);
                         }
                         elseif (${$pfix.strtolower($x)} > $marks && $uid <> "A") {
-                            $sql2="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
-                            $DB->execute($sql2);
+                            $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                            $DB->execute($sql1);
                             $checkbit=1;
                         }
                     }

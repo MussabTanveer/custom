@@ -118,7 +118,9 @@
                         else{
                             $uid="A";
                         }
-                        for($x=1;$x<$c1;$x++){                    
+                        
+                        $checkbit=0;
+                        for($x=1;$x<$c1;$x++){                   
                 
                             $pfix="sn";
                             ${$pfix.strtolower($x)}=$row[$x];
@@ -136,9 +138,8 @@
                             elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
                                 $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
                                 $DB->execute($sql1);
-                               
                             }
-                            else{
+                            elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
                                 $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
                                 $DB->execute($sql1);
                                 $checkbit=1;
@@ -147,14 +148,15 @@
                     }
                     $count++;
                 }
-                if($checkbit == 1){
-                    echo "<h3 style='color:green;'>Students With higher Obtained marks are assigned 0.</h3>";
-
-                }}
+                
+            }
                 $abc++;
             }
             if($sql1){
                 echo "<h3 style='color:green;'>Result has been uploaded!</h3>";
+            }
+            if($checkbit){
+                echo "<h3 style='color:red;'>Some students with obtained marks greater than maximum marks are assigned 0.</h3>";
             }
             //Close excel file
             $reader->close();
