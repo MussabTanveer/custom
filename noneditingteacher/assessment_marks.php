@@ -222,6 +222,7 @@
                     $ccount=0;
                     foreach ($cnames as $cname){
                         $ccount++;
+
                         ?><th> <?php echo $cname ; ?> </th>
                         <?php
                     }
@@ -229,24 +230,29 @@
                 </tr>
                 <?php
                 
-                $users=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
+                $users=$DB->get_records_sql("SELECT u.id AS sid,substring(u.username,4,8) AS seatnum, u.firstname, u.lastname
                 FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
                 WHERE ra.userid = u.id
                 AND ra.contextid = cxt.id
                 AND cxt.contextlevel = 50
                 AND cxt.instanceid = c.id
                 AND c.id = $course_id
-                AND (roleid=5)");
+                AND (roleid=5) ORDER BY seatnum");
                 
                 if($users)
                 {
                     foreach ($users as $user ) {
+                        
+
                     ?>
                     <tr>
+
                         <td>
                             <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
                         </td>
                         <?php
+
+  
                         for($i=0; $i<count($cids); $i++){
                         //foreach ($cnames as $cname){
                         ?>
