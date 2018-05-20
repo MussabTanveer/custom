@@ -36,10 +36,17 @@
     </form>
 
     <?php
-        $qid=$_GET['id'];    
-
+        $qid=$_GET['id'];     
+        $quizmaxmarks = $DB->get_records_sql('SELECT * From mdl_manual_quiz_question Where mquizid =?',array($qid));  
+        $checkcount = 0;
+        $maxmarks[$checkcount] = 0;
+        foreach ($quizmaxmarks as $marks){
+            $checkcount++;
+            $maxmarks[$checkcount] = $marks->maxmark ;  
+            
+        }      
         $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($qid));
-        
+        $checkbit=0;
         if($check){
             echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
             goto end;
@@ -121,17 +128,28 @@
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-                            if (${$pfix.strtolower($x)} <> "" && $uid <> "A" ){
+                            
+                            if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
                                 $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
-                                $DB->execute($sql1);
+                                $DB->execute($sql1);   
                             }
                             elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
                                 $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
                                 $DB->execute($sql1);
+                               
+                            }
+                            else{
+                                $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
+                                $DB->execute($sql1);
+                                $checkbit=1;
                             }
                         }
                     }
                     $count++;
+                }
+                if($checkbit == 1){
+                    echo "<h3 style='color:green;'>Students With higher Obtained marks are assigned 0.</h3>";
+
                 }}
                 $abc++;
             }
