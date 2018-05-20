@@ -216,7 +216,7 @@ if(performance.navigation.type == 2){
                 <input type="hidden" value='<?php echo $course_id; ?>' name="courseid">
                 <input type="submit" value="View Consolidated Report" name="view_consolidated" class="btn btn-secondary">
             </form>-->
-            <a href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
+            
 
             <script>
             $('#form_check2').on('submit', function (e) {
@@ -233,6 +233,12 @@ if(performance.navigation.type == 2){
         else{
             echo "<h3>No Manual activity found!</h3>";
         }
+
+        ?>
+
+        <a style="margin-top: 20px" href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
+
+        <?php
         
     }
     else
