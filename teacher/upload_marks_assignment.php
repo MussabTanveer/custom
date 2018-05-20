@@ -42,6 +42,14 @@ foreach($assignmarks as $assg){
     $marks=$assg->maxmark;
 }  
 
+$check=$DB->get_records_sql('SELECT *  FROM mdl_manual_assign_pro_attempt WHERE assignproid = ?', array($qid));
+        $checkbit=0;
+        if($check){
+            echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
+            goto end;
+        }
+
+
 // check file name is not empty
 if (!empty($_FILES['assignmarks']['name'])) {
       
@@ -142,5 +150,6 @@ else
     <a href="./teacher_courses.php">Back</a>
     <?php
 }
+end:
 echo $OUTPUT->footer();
 ?>

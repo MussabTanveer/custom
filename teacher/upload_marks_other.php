@@ -36,7 +36,18 @@
 
     <?php 
 
-$qid=$_GET['id'];        
+$qid=$_GET['id'];      
+
+$check=$DB->get_records_sql('SELECT *  FROM mdl_manual_other_attempt WHERE otherid = ?', array($qid));
+        $checkbit=0;
+        if($check){
+            echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
+            goto end;
+        }
+
+
+
+
 
 // check file name is not empty
 if (!empty($_FILES['othermarks']['name'])) {
@@ -126,5 +137,6 @@ else
     <a href="./teacher_courses.php">Back</a>
     <?php
 }
+end:
 echo $OUTPUT->footer();
 ?>
