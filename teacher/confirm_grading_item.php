@@ -109,8 +109,8 @@
 			//if(!$check)	
 			//{
 
-				$sql="INSERT INTO mdl_parent_mapping (parentid,childid) 
-				VALUES ($pactivityArray[$i] , $aid)";
+				$sql="INSERT INTO mdl_parent_mapping (parentid,childid,module) 
+				VALUES ($pactivityArray[$i] , $aid,$mod)";
 				$DB->execute($sql);
 			//}
 		}
