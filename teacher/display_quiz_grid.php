@@ -150,13 +150,12 @@
                             $prev_seat = $curr_seat;
                             $count = $tot_ques;
                         }
-                        
                     }
                     if($one_rec){
-                        $data_temp[] = $one_rec;
+                        $data_temp = $one_rec;
                     }
                     if($data_temp){
-                    foreach($data_temp as $data){ //  // now print very last student record
+                    foreach($data_temp as $data){ // now print very last student record
                         ?>
                         <tr>
                         <?php
