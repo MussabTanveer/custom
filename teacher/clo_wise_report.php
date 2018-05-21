@@ -435,7 +435,7 @@ th{
             /****** Activity Names + Attempt ******/
             for($i=0; $i<count($closid); $i++){
                 $attemptno = 1;
-                for($j=0; $j<($quizids+count($mquizids)); $j++)
+                for($j=0; $j<(count($parentids)+count($mquizids)); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
                     <th><?php echo $quiznames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
@@ -472,7 +472,7 @@ th{
             <?php
             /****** QUIZZES/ASSIGNMENTS RECORDS ******/
             for($i=0; $i<count($closid); $i++){
-                for($j=0; $j<($quizids+count($mquizids)); $j++)
+                for($j=0; $j<(count($parentids)+count($mquizids)); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                         $flag=0;
                         for($k=0; $k<count($seatnosQMulti[$j]); $k++){
