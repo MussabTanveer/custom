@@ -57,14 +57,14 @@ if(!empty($_GET['as_pro']) && !empty($_GET['courseid']))
             <th> Marks </th>
         </tr>
         <?php
-        $users=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
+        $users=$DB->get_records_sql("SELECT u.id AS sid,substring(u.username,4,8) AS seatorder, u.username AS seatnum, u.firstname, u.lastname
         FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
         WHERE ra.userid = u.id
         AND ra.contextid = cxt.id
         AND cxt.contextlevel = 50
         AND cxt.instanceid = c.id
         AND c.id = $course_id
-        AND (roleid=5)");
+        AND (roleid=5) ORDER BY seatorder");
         
         if($users)
         {
