@@ -218,14 +218,14 @@ th{
                         array_push($seatnosQ,$un);
                         array_push($closQ,$clo);
                     }
-                    //array_push($quiznames,$quizname);
-                    $cloQuizUnique = array_unique($closQ);
-                    array_push($cloQCount,count($cloQuizUnique));
-                    array_push($seatnosQMulti,$seatnosQ);
-                    array_push($closUniqueQMulti,$cloQuizUnique);
-                    array_push($closQMulti,$closQ);
-                    array_push($resultQMulti,$resultQ);
                 }
+                array_push($quiznames,$activityname);
+                $cloQuizUnique = array_unique($closQ);
+                array_push($cloQCount,count($cloQuizUnique));
+                array_push($seatnosQMulti,$seatnosQ);
+                array_push($closUniqueQMulti,$cloQuizUnique);
+                array_push($closQMulti,$closQ);
+                array_push($resultQMulti,$resultQ);
             }
         }
 
