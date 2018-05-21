@@ -97,14 +97,18 @@ th{
         }
 
         // Get Child Activities
+        $childidsMulti = array(); $childmodulesMulti = array();
         for($i = 0; $i < count($parentids); $i++){
             $childActivity=$DB->get_records_sql("SELECT * FROM `mdl_parent_mapping` WHERE parentid = ? ", array($parentids[$i]));
-            $childids = array();
+            $childids = array(); $childmodules = array();
             foreach ($childActivity as $caid) {
                 $id = $caid->childid;
                 $module = $caid->module;
                 array_push($childids, $id); // array of child activity ids
+                array_push($childmodules, $module); // array of child modules
             }
+            array_push($childidsMulti, $childids); // array of all child activity ids
+            array_push($childmodulesMulti, $childmodules); // array of all child modules
         }
 
         // Get course online quiz ids
