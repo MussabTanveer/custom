@@ -147,7 +147,7 @@ th{
         //print_r($mquizids);
         
         // Get attempted course manual assignment/project ids
-        $courseMAssignId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)", array($course_id));
+        $courseMAssignId=$DB->get_records_sql("SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)", array($course_id));
         $massignids = array();
         foreach ($courseMAssignId as $qid) {
             $id = $qid->id;
@@ -422,6 +422,7 @@ th{
         }
         */
         // MANUAL ASSIGNMENTS/PROJECTS
+        var_dump($massignids);
         for($i=0; $i < count($massignids); $i++){
             // Get assign records
             $recMAssign=$DB->get_recordset_sql(
