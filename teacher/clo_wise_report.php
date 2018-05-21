@@ -90,10 +90,12 @@ th{
         
         // Get Parent Activities
         $parentActivity=$DB->get_records_sql("SELECT * FROM `mdl_parent_activity` WHERE courseid = ? ", array($course_id));
-        $parentids = array();
+        $parentids = array(); $parentnames = array();
         foreach ($parentActivity as $paid) {
             $id = $paid->id;
+            $name = $paid->name;
             array_push($parentids, $id); // array of parent activity ids
+            array_push($parentnames, $name); // array of parent activity names
         }
 
         // Get Child Activities
@@ -162,6 +164,10 @@ th{
         // ONLINE CHILD ACTIVITIES MERGE
         // ONLINE QUIZ
         for($p=0; $p < count($parentids); $p++){
+            $seatnosQ = array();
+            $closQ = array();
+            $resultQ = array();
+            $activityname = $parentnames[$p];
             for($i=0; $i < count($childidsMulti[$p]); $i++){
                 if($childmodulesMulti[$p][$i] == 16){
                     $recQuiz=$DB->get_recordset_sql(
@@ -191,11 +197,11 @@ th{
                     
                     array($childidsMulti[$p][$i],1));
 
-                    $seatnosQ = array();
-                    $closQ = array();
-                    $resultQ = array();
+                    //$seatnosQ = array();
+                    //$closQ = array();
+                    //$resultQ = array();
                     
-                    $quizname = "";
+                    //$quizname = "";
                     foreach($recQuiz as $rq){
                         $quizname = $rq->quiz_name;
                         $un = $rq->seat_no;
@@ -212,7 +218,7 @@ th{
                         array_push($seatnosQ,$un);
                         array_push($closQ,$clo);
                     }
-                    array_push($quiznames,$quizname);
+                    //array_push($quiznames,$quizname);
                     $cloQuizUnique = array_unique($closQ);
                     array_push($cloQCount,count($cloQuizUnique));
                     array_push($seatnosQMulti,$seatnosQ);
@@ -222,7 +228,7 @@ th{
                 }
             }
         }
-        
+
         // MANUAL QUIZ/MIDTERM/FINAL
         for($i=0; $i < count($mquizids); $i++){
             $recMQuiz=$DB->get_recordset_sql(
