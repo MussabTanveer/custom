@@ -88,6 +88,14 @@ th{
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
         
+        // Get Parent Activity
+        $parentActivity=$DB->get_records_sql("SELECT * FROM `mdl_parent_activity` WHERE courseid = ? ", array($course_id));
+        $parentids = array();
+        foreach ($parentActivity as $paid) {
+            $id = $paid->id;
+            array_push($parentids, $id); // array of parent activity ids
+        }
+
         // Get course online quiz ids
         $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
         $quizids = array();
