@@ -155,7 +155,7 @@ th{
         }
         //print_r($massignids);
         
-        /**** ONLINE+MANUAL QUIZZES ****/
+        /**** ONLINE+MANUAL QUIZZES & ASSIGNMENTS ****/
         // Find students quiz records
         $seatnosQMulti = array();
         $closUniqueQMulti = array();
@@ -163,6 +163,14 @@ th{
         $resultQMulti = array();
         $cloQCount = array();
         $quiznames = array();
+
+        // Find students assignment records
+        $seatnosAMulti = array();
+        $closUniqueAMulti = array();
+        $closAMulti = array();
+        $resultAMulti = array();
+        $cloACount = array();
+        $assignnames = array();
         
         // ONLINE CHILD ACTIVITIES MERGE
         // ONLINE QUIZ
@@ -170,9 +178,14 @@ th{
             $seatnosQ = array();
             $closQ = array();
             $resultQ = array();
+            $seatnosA = array();
+            $closA = array();
+            $resultA = array();
+            
             $activityname = $parentnames[$p];
             for($i=0; $i < count($childidsMulti[$p]); $i++){
-                if($childmodulesMulti[$p][$i] == 16){
+                if($childmodulesMulti[$p][$i] == 16){ // ONLINE QUIZ
+                    $mod = 16;
                     $quizids++;
                     $recQuiz=$DB->get_recordset_sql(
                     'SELECT
@@ -223,21 +236,69 @@ th{
                         array_push($closQ,$clo);
                     }
                 }
-                
-                //$cloQuizUnique = array_unique($closQ);
-                //array_push($cloQCount,count($cloQuizUnique));
-                //array_push($seatnosQMulti,$seatnosQ);
-                //array_push($closUniqueQMulti,$cloQuizUnique);
-                //array_push($closQMulti,$closQ);
-                //array_push($resultQMulti,$resultQ);
+                elseif($childmodulesMulti[$p][$i] == 1){ // ONLINE ASSIGNMENT
+                    // Get assign records
+                    $mod = 1;
+                    $assignids++;
+                    $recAssign=$DB->get_recordset_sql(
+                        'SELECT
+                        u.username AS seat_no,
+                        a.name AS assign_name,
+                        a.grade AS maxmark,
+                        ag.grade AS marksobtained,
+                        cmc.competencyid AS clo_id
+                        FROM
+                            mdl_assign a,
+                            mdl_assign_grades ag,
+                            mdl_user u,
+                            mdl_course_modules cm,
+                            mdl_competency_modulecomp cmc
+                        WHERE
+                            a.id=? AND ag.userid=u.id AND ag.grade != ? AND a.id=ag.assignment AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid
+                        ORDER BY ag.userid',
+                        
+                    array($childidsMulti[$p][$i],-1,$course_id,1));
+                    //$seatnosA = array();
+                    //$closA = array();
+                    //$resultA = array();
+                    
+                    //$assignname = "";
+                    foreach($recAssign as $as){
+                        $assignname = $as->assign_name;
+                        $un = $as->seat_no;
+                        $clo = $as->clo_id;
+                        $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                        $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                        /*if( (($mobtained/$amax)*100) > 50){
+                            array_push($resultA,"P");
+                        }
+                        else{
+                            array_push($resultA,"F");
+                        }*/
+                        array_push($resultA,(($mobtained/$amax)*100));
+                        array_push($seatnosA,$un);
+                        array_push($closA,$clo);
+                    }
+                }
             }
-            $cloQuizUnique = array_unique($closQ);
-            array_push($cloQCount,count($cloQuizUnique));
-            array_push($seatnosQMulti,$seatnosQ);
-            array_push($closUniqueQMulti,$cloQuizUnique);
-            array_push($closQMulti,$closQ);
-            array_push($resultQMulti,$resultQ);
-            array_push($quiznames,$activityname);
+            if($mod == 16){
+                $cloQuizUnique = array_unique($closQ);
+                array_push($cloQCount,count($cloQuizUnique));
+                array_push($seatnosQMulti,$seatnosQ);
+                array_push($closUniqueQMulti,$cloQuizUnique);
+                array_push($closQMulti,$closQ);
+                array_push($resultQMulti,$resultQ);
+                array_push($quiznames,$activityname);
+            }
+            elseif($mod == 1){
+                $cloAssignUnique = array_unique($closA);
+                array_push($seatnosAMulti,$seatnosA);
+                array_push($closAMulti,$closA);
+                array_push($resultAMulti,$resultA);
+                array_push($cloACount,count($cloAssignUnique));
+                array_push($closUniqueAMulti,$cloAssignUnique);
+                array_push($assignnames,$activityname);
+            }
         }
         var_dump($quiznames); echo "<br>";
         var_dump($cloQCount); echo "<br>";
@@ -301,6 +362,7 @@ th{
         echo "<br><br>"; print_r($quiznames); echo "<br><br>"; print_r($cloQCount);
         echo "<br><br>"; print_r($seatnosQMulti); echo "<br><br>"; print_r($closUniqueQMulti);
         echo "<br><br>"; print_r($closQMulti); echo "<br><br>"; print_r($resultQMulti);*/
+        
         /**** ONLINE+MANUAL ASSIGNMENTS ****/
         // Find students assignment records
         $seatnosAMulti = array();
@@ -310,6 +372,7 @@ th{
         $cloACount = array();
         $assignnames = array();
         
+        /*
         // ONLINE ASSIGNMENTS
         for($i=0; $i < count($assignids); $i++){
             // Get assign records
@@ -342,12 +405,6 @@ th{
                 $clo = $as->clo_id;
                 $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
                 $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
-                /*if( (($mobtained/$amax)*100) > 50){
-                    array_push($resultA,"P");
-                }
-                else{
-                    array_push($resultA,"F");
-                }*/
                 array_push($resultA,(($mobtained/$amax)*100));
                 array_push($seatnosA,$un);
                 array_push($closA,$clo);
@@ -360,6 +417,7 @@ th{
             array_push($cloACount,count($cloAssignUnique));
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
+        */
         // MANUAL ASSIGNMENTS/PROJECTS
         for($i=0; $i < count($massignids); $i++){
             // Get assign records
