@@ -404,7 +404,7 @@ th{
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
         
-        for($i=0; $i<($quizids+count($mquizids)); $i++)
+        for($i=0; $i<(count($parentids)+count($mquizids)); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
