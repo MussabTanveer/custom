@@ -35,6 +35,7 @@
             qa.userid,
             us.idnumber,
             us.username,
+            substring(us.username,4,8) AS seatorder,
             qa.attempt,
             qu.name,
             c.shortname,
@@ -54,10 +55,10 @@
             mdl_question_attempts qua,
             mdl_competency c,
             mdl_question_attempt_steps qas
-        WHERE 
+        WHERE
             q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
             AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-        ORDER BY qa.attempt, qa.userid',
+        ORDER BY seatorder, qu.id',
         
         array($quiz_id, 1));
 
@@ -73,8 +74,9 @@
                     <th> Marks Obtained </th>
                 </tr>
                 <?php
-                    $count = 0; $first = 0;
+                    $count = 0; $first = 0; $prev_seat = ""; $one_rec = "";
                     foreach ($rec as $records){
+                        $curr_seat = $records->username;
                         if($count === $tot_ques){ // 1 student record collected
                             //echo $count;
                             
@@ -96,7 +98,7 @@
                                 
                                 if($first === 0){ // display stud no & name only once
                                     ?>
-                                    <td><?php echo $un;?></td>
+                                    <td><?php echo strtoupper($un);?></td>
                                     <td><?php echo $qname;?></td>
                                     <td><?php echo $qtext;?></td>
                                     <td><?php echo $competency;?></td>
@@ -124,8 +126,31 @@
                             unset($data_temp);
                         }
                         //echo $count;
-                        $data_temp[] = $records;
-                        $count++;
+                        if($curr_seat == $prev_seat || $prev_seat == ""){
+                            if($one_rec){
+                                $data_temp[] = $one_rec;
+                                $one_rec = "";
+                            }
+                            $data_temp[] = $records;
+                            $prev_seat = $curr_seat;
+                            $count++;
+                        }
+                        elseif($curr_seat != $prev_seat && $count == 0){
+                            if($one_rec){
+                                $data_temp[] = $one_rec;
+                                $one_rec = "";
+                            }
+                            $data_temp[] = $records;
+                            $prev_seat = $curr_seat;
+                            $count++;
+                        }
+                        elseif($curr_seat != $prev_seat && $count != 0){
+                            $one_rec = $records;
+                            //print_r($one_rec);
+                            $prev_seat = $curr_seat;
+                            $count = $tot_ques;
+                        }
+                        
                     }
                     if($data_temp){
                     foreach($data_temp as $data){ //  // now print very last student record
