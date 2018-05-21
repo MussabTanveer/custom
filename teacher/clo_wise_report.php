@@ -88,12 +88,23 @@ th{
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
         
-        // Get Parent Activity
+        // Get Parent Activities
         $parentActivity=$DB->get_records_sql("SELECT * FROM `mdl_parent_activity` WHERE courseid = ? ", array($course_id));
         $parentids = array();
         foreach ($parentActivity as $paid) {
             $id = $paid->id;
             array_push($parentids, $id); // array of parent activity ids
+        }
+
+        // Get Child Activities
+        for($i = 0; $i < count($parentids); $i++){
+            $childActivity=$DB->get_records_sql("SELECT * FROM `mdl_parent_mapping` WHERE parentid = ? ", array($parentids[$i]));
+            $childids = array();
+            foreach ($childActivity as $caid) {
+                $id = $caid->childid;
+                $module = $caid->module;
+                array_push($childids, $id); // array of child activity ids
+            }
         }
 
         // Get course online quiz ids
