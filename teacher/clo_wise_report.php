@@ -110,7 +110,11 @@ th{
             array_push($childidsMulti, $childids); // array of all child activity ids
             array_push($childmodulesMulti, $childmodules); // array of all child modules
         }
+        var_dump($parentids); echo "<br>";
+        var_dump($childidsMulti); echo "<br>";
+        var_dump($childmodulesMulti); echo "<br>";
 
+        /*
         // Get course online quiz ids
         $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
         $quizids = array();
@@ -126,6 +130,7 @@ th{
             $id = $aid->id;
             array_push($assignids, $id); // array of assign ids
         }
+        */
 
         // Get attempted course manual quiz/midterm/final ids
         $courseMQuizId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)", array($course_id));
@@ -154,63 +159,70 @@ th{
         $cloQCount = array();
         $quiznames = array();
         
+        // ONLINE CHILD ACTIVITIES MERGE
         // ONLINE QUIZ
-        for($i=0; $i < count($quizids); $i++){
-            $recQuiz=$DB->get_recordset_sql(
-            'SELECT
-            q.name AS quiz_name,
-            qa.userid,
-            u.idnumber AS std_id,
-            u.username AS seat_no,
-            CONCAT(u.firstname, " ", u.lastname) AS std_name,
-            qu.competencyid,
-            SUM(qua.maxmark) AS maxmark,
-            SUM(qua.maxmark*qas.fraction) AS marksobtained
-            FROM
-                mdl_quiz q,
-                mdl_quiz_slots qs,
-                mdl_question qu,
-                mdl_question_categories qc,
-                mdl_quiz_attempts qa,
-                mdl_question_attempts qua,
-                mdl_question_attempt_steps qas,
-                mdl_user u
-            WHERE
-                q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-            GROUP BY qa.userid, qu.competencyid
-            ORDER BY qa.userid, qu.competencyid',
-            
-            array($quizids[$i],1));
-            $seatnosQ = array();
-            $closQ = array();
-            $resultQ = array();
-            
-            $quizname = "";
-            foreach($recQuiz as $rq){
-                $quizname = $rq->quiz_name;
-                $un = $rq->seat_no;
-                $clo=$rq->competencyid;
-                $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
-                $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
-                /*if( (($mobtained/$qmax)*100) > 50){
-                    array_push($resultQ,"P");
+        for($p=0; $p < count($parentids); $p++){
+            for($i=0; $i < count($childidsMulti[$p]); $i++){
+                if($childmodulesMulti[$p][$i] == 16){
+                    $recQuiz=$DB->get_recordset_sql(
+                    'SELECT
+                    q.name AS quiz_name,
+                    qa.userid,
+                    u.idnumber AS std_id,
+                    u.username AS seat_no,
+                    CONCAT(u.firstname, " ", u.lastname) AS std_name,
+                    qu.competencyid,
+                    SUM(qua.maxmark) AS maxmark,
+                    SUM(qua.maxmark*qas.fraction) AS marksobtained
+                    FROM
+                        mdl_quiz q,
+                        mdl_quiz_slots qs,
+                        mdl_question qu,
+                        mdl_question_categories qc,
+                        mdl_quiz_attempts qa,
+                        mdl_question_attempts qua,
+                        mdl_question_attempt_steps qas,
+                        mdl_user u
+                    WHERE
+                        q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
+                    GROUP BY qa.userid, qu.competencyid
+                    ORDER BY qa.userid, qu.competencyid',
+                    
+                    array($childidsMulti[$p][$i],1));
+
+                    $seatnosQ = array();
+                    $closQ = array();
+                    $resultQ = array();
+                    
+                    $quizname = "";
+                    foreach($recQuiz as $rq){
+                        $quizname = $rq->quiz_name;
+                        $un = $rq->seat_no;
+                        $clo=$rq->competencyid;
+                        $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                        $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
+                        /*if( (($mobtained/$qmax)*100) > 50){
+                            array_push($resultQ,"P");
+                        }
+                        else{
+                            array_push($resultQ,"F");
+                        }*/
+                        array_push($resultQ,(($mobtained/$qmax)*100));
+                        array_push($seatnosQ,$un);
+                        array_push($closQ,$clo);
+                    }
+                    array_push($quiznames,$quizname);
+                    $cloQuizUnique = array_unique($closQ);
+                    array_push($cloQCount,count($cloQuizUnique));
+                    array_push($seatnosQMulti,$seatnosQ);
+                    array_push($closUniqueQMulti,$cloQuizUnique);
+                    array_push($closQMulti,$closQ);
+                    array_push($resultQMulti,$resultQ);
                 }
-                else{
-                    array_push($resultQ,"F");
-                }*/
-                array_push($resultQ,(($mobtained/$qmax)*100));
-                array_push($seatnosQ,$un);
-                array_push($closQ,$clo);
             }
-            array_push($quiznames,$quizname);
-            $cloQuizUnique = array_unique($closQ);
-            array_push($cloQCount,count($cloQuizUnique));
-            array_push($seatnosQMulti,$seatnosQ);
-            array_push($closUniqueQMulti,$cloQuizUnique);
-            array_push($closQMulti,$closQ);
-            array_push($resultQMulti,$resultQ);
         }
+        
         // MANUAL QUIZ/MIDTERM/FINAL
         for($i=0; $i < count($mquizids); $i++){
             $recMQuiz=$DB->get_recordset_sql(
