@@ -174,6 +174,7 @@ th{
         
         // ONLINE CHILD ACTIVITIES MERGE
         // ONLINE QUIZ
+        $mod=0;
         for($p=0; $p < count($parentids); $p++){
             $seatnosQ = array();
             $closQ = array();
@@ -290,6 +291,7 @@ th{
                 array_push($closQMulti,$closQ);
                 array_push($resultQMulti,$resultQ);
                 array_push($quiznames,$activityname);
+                $mod=0;
             }
             elseif($mod == 1){
                 $assignids++;
@@ -300,6 +302,7 @@ th{
                 array_push($cloACount,count($cloAssignUnique));
                 array_push($closUniqueAMulti,$cloAssignUnique);
                 array_push($assignnames,$activityname);
+                $mod=0;
             }
         }
         /*var_dump($quiznames); echo "<br>";
@@ -422,7 +425,6 @@ th{
         }
         */
         // MANUAL ASSIGNMENTS/PROJECTS
-        var_dump($massignids);
         for($i=0; $i < count($massignids); $i++){
             // Get assign records
             $recMAssign=$DB->get_recordset_sql(
