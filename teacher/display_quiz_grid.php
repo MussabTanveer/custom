@@ -174,7 +174,7 @@
                         
                         if($first === 0){ // display stud no & name only once
                             ?>
-                            <td><?php echo $un;?></td>
+                            <td><?php echo strtoupper($un);?></td>
                             <td><?php echo $qname;?></td>
                             <td><?php echo $qtext;?></td>
                             <td><?php echo $competency;?></td>
