@@ -227,10 +227,11 @@ th{
                 $cloQuizUnique = array_unique($closQ);
                 array_push($cloQCount,count($cloQuizUnique));
                 array_push($seatnosQMulti,$seatnosQ);
-                array_push($closUniqueQMulti,$cloQuizUnique);
+                //array_push($closUniqueQMulti,$cloQuizUnique);
                 array_push($closQMulti,$closQ);
                 array_push($resultQMulti,$resultQ);
             }
+            array_push($closUniqueQMulti,$cloQuizUnique);
             array_push($quiznames,$activityname);
         }
         var_dump($quiznames); echo "<br>";
