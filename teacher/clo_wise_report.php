@@ -31,14 +31,14 @@ th{
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
         // Get all students of course
-        $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
+        $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, substring(u.username,4,8) AS seatorder, u.firstname, u.lastname
         FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
         WHERE ra.userid = u.id
         AND ra.contextid = cxt.id
         AND cxt.contextlevel = ?
         AND cxt.instanceid = c.id
         AND c.id = ?
-        AND (roleid=5)", array(50, $course_id));
+        AND (roleid=5) ORDER BY seatorder", array(50, $course_id));
         $stdids = array();
         $seatnos = array();
         foreach($recStudents as $records){
@@ -47,6 +47,7 @@ th{
             array_push($stdids,$id);
             array_push($seatnos,$seatno);
         }
+
         //Get course clo with its plo, level, passing percentage
 		$courseclos=$DB->get_records_sql(
         "SELECT
@@ -86,6 +87,7 @@ th{
         $closidCountActivity = array();
         for($j=0; $j<count($closid); $j++)
             $closidCountActivity[$j]=0;
+        
         // Get course online quiz ids
         $courseQuizId=$DB->get_records_sql("SELECT * FROM `mdl_quiz` WHERE course = ? ", array($course_id));
         $quizids = array();
@@ -101,6 +103,7 @@ th{
             $id = $aid->id;
             array_push($assignids, $id); // array of assign ids
         }
+
         // Get attempted course manual quiz/midterm/final ids
         $courseMQuizId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)", array($course_id));
         $mquizids = array();
@@ -109,6 +112,7 @@ th{
             array_push($mquizids, $id); // array of quiz/mt/final ids
         }
         //print_r($mquizids);
+        
         // Get attempted course manual assignment/project ids
         $courseMAssignId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)", array($course_id));
         $massignids = array();
