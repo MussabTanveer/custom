@@ -219,7 +219,7 @@ th{
                         array_push($closQ,$clo);
                     }
                 }
-                array_push($quiznames,$activityname);
+                
                 $cloQuizUnique = array_unique($closQ);
                 array_push($cloQCount,count($cloQuizUnique));
                 array_push($seatnosQMulti,$seatnosQ);
@@ -227,7 +227,14 @@ th{
                 array_push($closQMulti,$closQ);
                 array_push($resultQMulti,$resultQ);
             }
+            array_push($quiznames,$activityname);
         }
+        var_dump($quiznames); echo "<br>";
+        var_dump($cloQCount); echo "<br>";
+        var_dump($seatnosQMulti); echo "<br>";
+        var_dump($closUniqueQMulti); echo "<br>";
+        var_dump($closQMulti); echo "<br>";
+        var_dump($resultQMulti); echo "<br>";
 
         // MANUAL QUIZ/MIDTERM/FINAL
         for($i=0; $i < count($mquizids); $i++){
