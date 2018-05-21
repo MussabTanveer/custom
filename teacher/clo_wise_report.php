@@ -186,7 +186,7 @@ th{
             for($i=0; $i < count($childidsMulti[$p]); $i++){
                 if($childmodulesMulti[$p][$i] == 16){ // ONLINE QUIZ
                     $mod = 16;
-                    $quizids++;
+                    //$quizids++;
                     $recQuiz=$DB->get_recordset_sql(
                     'SELECT
                     q.name AS quiz_name,
@@ -239,7 +239,7 @@ th{
                 elseif($childmodulesMulti[$p][$i] == 1){ // ONLINE ASSIGNMENT
                     // Get assign records
                     $mod = 1;
-                    $assignids++;
+                    //$assignids++;
                     $recAssign=$DB->get_recordset_sql(
                         'SELECT
                         u.username AS seat_no,
@@ -282,6 +282,7 @@ th{
                 }
             }
             if($mod == 16){
+                $quizids++;
                 $cloQuizUnique = array_unique($closQ);
                 array_push($cloQCount,count($cloQuizUnique));
                 array_push($seatnosQMulti,$seatnosQ);
@@ -291,6 +292,7 @@ th{
                 array_push($quiznames,$activityname);
             }
             elseif($mod == 1){
+                $assignids++;
                 $cloAssignUnique = array_unique($closA);
                 array_push($seatnosAMulti,$seatnosA);
                 array_push($closAMulti,$closA);
@@ -467,7 +469,7 @@ th{
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
         
-        for($i=0; $i<(count($parentids)+count($mquizids)); $i++)
+        for($i=0; $i<($quizids+count($mquizids)); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
@@ -499,7 +501,7 @@ th{
             /****** Activity Names + Attempt ******/
             for($i=0; $i<count($closid); $i++){
                 $attemptno = 1;
-                for($j=0; $j<(count($parentids)+count($mquizids)); $j++)
+                for($j=0; $j<($quizids+count($mquizids)); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
                     <th><?php echo $quiznames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
@@ -536,7 +538,7 @@ th{
             <?php
             /****** QUIZZES/ASSIGNMENTS RECORDS ******/
             for($i=0; $i<count($closid); $i++){
-                for($j=0; $j<(count($parentids)+count($mquizids)); $j++)
+                for($j=0; $j<($quizids+count($mquizids)); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                         $flag=0;
                         for($k=0; $k<count($seatnosQMulti[$j]); $k++){
