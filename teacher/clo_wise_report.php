@@ -416,7 +416,7 @@ th{
         
         ?>
         <tr>
-            <td> <?php echo "$seatno" ?> </td>
+            <th> <?php echo strtoupper($seatno) ?> </th>
             <?php
             /****** QUIZZES/ASSIGNMENTS RECORDS ******/
             for($i=0; $i<count($closid); $i++){
