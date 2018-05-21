@@ -112,9 +112,9 @@ th{
             array_push($childidsMulti, $childids); // array of all child activity ids
             array_push($childmodulesMulti, $childmodules); // array of all child modules
         }
-        var_dump($parentids); echo "<br>";
+        /*var_dump($parentids); echo "<br>";
         var_dump($childidsMulti); echo "<br>";
-        var_dump($childmodulesMulti); echo "<br>";
+        var_dump($childmodulesMulti); echo "<br>";*/
 
         /*
         // Get course online quiz ids
@@ -302,12 +302,12 @@ th{
                 array_push($assignnames,$activityname);
             }
         }
-        var_dump($quiznames); echo "<br>";
+        /*var_dump($quiznames); echo "<br>";
         var_dump($cloQCount); echo "<br>";
         var_dump($seatnosQMulti); echo "<br>";
         var_dump($closUniqueQMulti); echo "<br>";
         var_dump($closQMulti); echo "<br>";
-        var_dump($resultQMulti); echo "<br>";
+        var_dump($resultQMulti); echo "<br>";*/
 
         // MANUAL QUIZ/MIDTERM/FINAL
         for($i=0; $i < count($mquizids); $i++){
@@ -367,6 +367,7 @@ th{
         
         /**** ONLINE+MANUAL ASSIGNMENTS ****/
         // Find students assignment records
+        /*
         $seatnosAMulti = array();
         $closUniqueAMulti = array();
         $closAMulti = array();
@@ -374,7 +375,7 @@ th{
         $cloACount = array();
         $assignnames = array();
         
-        /*
+        
         // ONLINE ASSIGNMENTS
         for($i=0; $i < count($assignids); $i++){
             // Get assign records
