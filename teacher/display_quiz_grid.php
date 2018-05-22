@@ -127,6 +127,7 @@
                         }
                         //echo $count;
                         if($curr_seat == $prev_seat || $prev_seat == ""){
+                            //echo "hello1";
                             if($one_rec){
                                 $data_temp[] = $one_rec;
                                 $one_rec = "";
@@ -136,6 +137,7 @@
                             $count++;
                         }
                         elseif($curr_seat != $prev_seat && $count == 0){
+                            //echo "hello2";
                             if($one_rec){
                                 $data_temp[] = $one_rec;
                                 $one_rec = "";
@@ -145,57 +147,103 @@
                             $count++;
                         }
                         elseif($curr_seat != $prev_seat && $count != 0){
+                            //echo "hello3";
                             $one_rec = $records;
                             //print_r($one_rec);
                             $prev_seat = $curr_seat;
                             $count = $tot_ques;
                         }
                     }
-                    if($one_rec){
-                        $data_temp = $one_rec;
-                    }
+                    
                     if($data_temp){
-                    foreach($data_temp as $data){ // now print very last student record
-                        ?>
-                        <tr>
-                        <?php
-                        $uid = $data->idnumber;
-                        $un = $data->username;
-                        // $attempt = $data->attempt;
-                        $qname = $data->name;
-                        $qtext = $data->questiontext;
-                        $competency=$data->shortname;
-                        // $qrightans = $data->rightanswer;
-                        // $qresponse = $data->responsesummary;
-                        $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
-                        $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
-                        //$cname = $data->category;
-                        
-                        if($first === 0){ // display stud no & name only once
+                        foreach($data_temp as $data){ // now print very last/second last student record
                             ?>
-                            <td><?php echo strtoupper($un);?></td>
-                            <td><?php echo $qname;?></td>
-                            <td><?php echo $qtext;?></td>
-                            <td><?php echo $competency;?></td>
-                            <td><?php echo $qmax;?></td>
-                            <td><?php echo $mobtained;?></td>
+                            <tr>
                             <?php
-                            $first++;
-                        }
-                        else{
+                            $uid = $data->idnumber;
+                            $un = $data->username;
+                            // $attempt = $data->attempt;
+                            $qname = $data->name;
+                            $qtext = $data->questiontext;
+                            $competency=$data->shortname;
+                            // $qrightans = $data->rightanswer;
+                            // $qresponse = $data->responsesummary;
+                            $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                            $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
+                            //$cname = $data->category;
+                            
+                            if($first === 0){ // display stud no & name only once
+                                ?>
+                                <td><?php echo strtoupper($un);?></td>
+                                <td><?php echo $qname;?></td>
+                                <td><?php echo $qtext;?></td>
+                                <td><?php echo $competency;?></td>
+                                <td><?php echo $qmax;?></td>
+                                <td><?php echo $mobtained;?></td>
+                                <?php
+                                $first++;
+                            }
+                            else{
+                                ?>
+                                <td> </td>
+                                <td><?php echo $qname;?></td>
+                                <td><?php echo $qtext;?></td>
+                                <td><?php echo $competency;?></td>
+                                <td><?php echo $qmax;?></td>
+                                <td><?php echo $mobtained;?></td>
+                                <?php
+                            }
                             ?>
-                            <td> </td>
-                            <td><?php echo $qname;?></td>
-                            <td><?php echo $qtext;?></td>
-                            <td><?php echo $competency;?></td>
-                            <td><?php echo $qmax;?></td>
-                            <td><?php echo $mobtained;?></td>
+                            </tr>
                             <?php
                         }
-                        ?>
-                        </tr>
-                        <?php
+                        $count = 0;
+                        $first = 0;
+                        unset($data_temp);
                     }
+                    if($one_rec){
+                        $data_temp[] = $one_rec;
+                        foreach($data_temp as $data){ // now print very last student record
+                            ?>
+                            <tr>
+                            <?php
+                            $uid = $data->idnumber;
+                            $un = $data->username;
+                            // $attempt = $data->attempt;
+                            $qname = $data->name;
+                            $qtext = $data->questiontext;
+                            $competency=$data->shortname;
+                            // $qrightans = $data->rightanswer;
+                            // $qresponse = $data->responsesummary;
+                            $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                            $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
+                            //$cname = $data->category;
+                            
+                            if($first === 0){ // display stud no & name only once
+                                ?>
+                                <td><?php echo strtoupper($un);?></td>
+                                <td><?php echo $qname;?></td>
+                                <td><?php echo $qtext;?></td>
+                                <td><?php echo $competency;?></td>
+                                <td><?php echo $qmax;?></td>
+                                <td><?php echo $mobtained;?></td>
+                                <?php
+                                $first++;
+                            }
+                            else{
+                                ?>
+                                <td> </td>
+                                <td><?php echo $qname;?></td>
+                                <td><?php echo $qtext;?></td>
+                                <td><?php echo $competency;?></td>
+                                <td><?php echo $qmax;?></td>
+                                <td><?php echo $mobtained;?></td>
+                                <?php
+                            }
+                            ?>
+                            </tr>
+                            <?php
+                        }
                     }
                     ?>
                 </table>
