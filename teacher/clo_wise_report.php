@@ -197,7 +197,7 @@ th{
                     CONCAT(u.firstname, " ", u.lastname) AS std_name,
                     qu.competencyid,
                     SUM(qua.maxmark) AS maxmark,
-                    SUM(qua.maxmark*qas.fraction) AS marksobtained
+                    SUM(qua.maxmark*COALESCE(qas.fraction, 0)) AS marksobtained
                     FROM
                         mdl_quiz q,
                         mdl_quiz_slots qs,
@@ -209,7 +209,7 @@ th{
                         mdl_user u
                     WHERE
                         q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
                     GROUP BY qa.userid, qu.competencyid
                     ORDER BY qa.userid, qu.competencyid',
                     
