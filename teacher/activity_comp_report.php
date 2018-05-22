@@ -56,10 +56,11 @@
                 qa.userid,
                 u.idnumber AS std_id,
                 u.username AS seat_no,
+                substring(u.username,4,8) AS seatorder,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
-                SUM(qua.maxmark*qas.fraction) AS marksobtained
+                SUM(qua.maxmark*COALESCE(qas.fraction)) AS marksobtained
                 FROM
                     mdl_quiz q,
                     mdl_quiz_slots qs,
@@ -70,14 +71,14 @@
                     mdl_question_attempt_steps qas,
                     mdl_user u
                 WHERE
-                    q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                    AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-                GROUP BY qa.userid, qu.competencyid
-                ORDER BY qa.userid, qu.competencyid',
+                q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
+                AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
+                GROUP BY seatorder, qu.competencyid
+                ORDER BY seatorder, qu.competencyid',
                 
                 array($quiz_id,1));
 
-              $kpisArray = array();
+            $kpisArray = array();
 
 
             if($rec){
@@ -108,102 +109,93 @@
                         ?>
                     </tr>
 
-                    <?php
-
+                <?php
 
                 foreach ($cloids as $id) {
-            
-            
                     $kpis=$DB->get_records_sql("SELECT kpi FROM mdl_clo_kpi
                     WHERE cloid = ? ORDER BY cloid",array($id));
-
-                    if($kpis)
-                    {
-
-                        foreach($kpis as $kp)
-                        {
+                    if($kpis) {
+                        foreach($kpis as $kp) {
                             $kpi = $kp->kpi;
                             array_push($kpisArray, $kpi);
                         }
-                     }
-                
-                  }
-                 /*  var_dump($kpisArray);echo "<br>";
-                  var_dump($cloids);echo "<br>";
-                  var_dump($label);*/
+                    }
+                }
+                /*var_dump($kpisArray);echo "<br>";
+                var_dump($cloids);echo "<br>";
+                var_dump($label);*/
 
-                  $kpiIndex=0;
+                $kpiIndex=0;
 
-
-                    $count = 0; $first = 0; $i = 0;
-                    $tot_stdnt = 0; // total students count
-                    $pass = array(); $fail = array();
+                $count = 0; $first = 0; $i = 0;
+                $tot_stdnt = 0; // total students count
+                $pass = array(); $fail = array();
                     
-                    for($x = 0; $x < $tot_comp; $x++) { // initialize array
-                        $pass[$x] = 0;
-                    }
+                for($x = 0; $x < $tot_comp; $x++) { // initialize array
+                    $pass[$x] = 0;
+                }
 
-                    foreach ($rec as $records){
-                         $kpiIndex=0;
-                        if($count === $tot_comp){ // 1 student record collected
-                            $tot_stdnt++;
-                            //echo $count;
-                            ?>
-                            <tr>
-                            <?php
-                            foreach($data_temp as $data){ // loop as many times as comp count
-                                $uid = $data->userid;
-                                $sid = $data->std_id;
-                                $seat = $data->seat_no;
-                                $uname = $data->std_name;
-                                $max = $data->maxmark;
-                                $obt = $data->marksobtained;
-                                
-                                if($first === 0){ // display stud no & name only once
-                                    $serialno++;
-                                    ?>
-                                    <td><?php echo $serialno;?></td>
-                                    <td><?php echo $seat;?></td>
-                                    <td><?php echo $uname;?></td>
-                                    <?php
-                                    $first++;
-                                }
-                    ?>
-                            <td><?php
-                                //echo "Obt =$obt max= $max";
-                              //  echo "<br>";
-                              //  echo "$kpisArray[$kpiIndex]";
-                                $kpiToPass = $kpisArray[$kpiIndex];
-                                $kpiIndex++;
-                              //  echo "$kpiToPass<br>";
-
-                                if( (($obt/$max)*100) >= $kpiToPass){
-                                    $pass[$i]++;
-                                    $i++;
-                                    echo "<font color='green'>Pass</font>";
-                                }
-                                else{
-                                    $i++;
-                                    echo "<font color='red'>Fail</font>";
-                                }
-                                ?>
-                            </td>
-                    <?php
-                            }
-                            $count = 0;
-                            $first = 0;
-                            $i = 0;
-                            unset($data_temp);
-                            ?>
-                            </tr>
-                            <?php
-                        }
+                foreach ($rec as $records){
+                    $kpiIndex=0;
+                    if($count === $tot_comp){ // 1 student record collected
+                        $tot_stdnt++;
                         //echo $count;
-                        $data_temp[] = $records;
-                        $count++;
+                        ?>
+                        <tr>
+                        <?php
+                        foreach($data_temp as $data){ // loop as many times as comp count
+                            $uid = $data->userid;
+                            $sid = $data->std_id;
+                            $seat = $data->seat_no;
+                            $uname = $data->std_name;
+                            $max = $data->maxmark;
+                            $obt = $data->marksobtained;
+                            
+                            if($first === 0){ // display stud no & name only once
+                                $serialno++;
+                                ?>
+                                <td><?php echo $serialno;?></td>
+                                <td><?php echo strtoupper($seat);?></td>
+                                <td><?php echo $uname;?></td>
+                                <?php
+                                $first++;
+                            }
+                        ?>
+                        <td><?php
+                            //echo "Obt =$obt max= $max";
+                            //  echo "<br>";
+                            //  echo "$kpisArray[$kpiIndex]";
+                            $kpiToPass = $kpisArray[$kpiIndex];
+                            $kpiIndex++;
+                            //  echo "$kpiToPass<br>";
+
+                            if( (($obt/$max)*100) >= $kpiToPass){
+                                $pass[$i]++;
+                                $i++;
+                                echo "<font color='green'>Pass</font>";
+                            }
+                            else{
+                                $i++;
+                                echo "<font color='red'>Fail</font>";
+                            }
+                            ?>
+                        </td>
+                    <?php
+                        }
+                        $count = 0;
+                        $first = 0;
+                        $i = 0;
+                        unset($data_temp);
+                        ?>
+                        </tr>
+                        <?php
                     }
-                      $kpiIndex=0;
-                    ?>
+                    //echo $count;
+                    $data_temp[] = $records;
+                    $count++;
+                }
+                $kpiIndex=0;
+                ?>
 
                     <tr>
                         <?php // now print very last student record
@@ -220,19 +212,19 @@
                                 $serialno++;
                                 ?>
                                 <td><?php echo $serialno;?></td>
-                                <td><?php echo $seat;?></td>
+                                <td><?php echo strtoupper($seat);?></td>
                                 <td><?php echo $uname;?></td>
                                 <?php
                                 $first++;
                             }
                             ?>
                         <td><?php
-                          //  echo "Obt =$obt max= $max";
-                         //   echo "<br>";
-                              //  echo "$kpisArray[$kpiIndex]";
-                                $kpiToPass = $kpisArray[$kpiIndex];
-                                $kpiIndex++;
-                              //  echo "$kpiToPass<br>";
+                            // echo "Obt =$obt max= $max";
+                            // echo "<br>";
+                            //  echo "$kpisArray[$kpiIndex]";
+                            $kpiToPass = $kpisArray[$kpiIndex];
+                            $kpiIndex++;
+                            // echo "$kpiToPass<br>";
 
                             if( (($obt/$max)*100) >= $kpiToPass){
                                 $pass[$i]++;
@@ -249,7 +241,6 @@
                         }
                         ?>
                     </tr>
-                    
                 </table>
                 
                 <button id="myButton" class="btn btn-primary">Export to Excel</button>
@@ -286,7 +277,7 @@
 
         }
         /******************* ASSIGNMENT **********************/
-        else if(substr($activity_id,0,1) == 'A'){
+        else if(substr($activity_id,0,1) == 'A') {
             $assign_id = substr($activity_id,1);
             $mod = 1;
 
@@ -400,21 +391,21 @@
                             for($k=0;$k<$tot_comp;$k++){
                             ?>
                             <td><?php
-                        // echo "Obt =$obt max= $max";
-                              //  echo "<br>";
-                                //  echo "$pass[$i] at i = $i<br>";
-                           // echo "<br>";
+                            // echo "Obt =$obt max= $max";
+                            //  echo "<br>";
+                            //  echo "$pass[$i] at i = $i<br>";
+                            // echo "<br>";
                             $kpiToPass = $kpisArray[$kpiIndex];
-                             //  $kpiIndex++;
-                               // echo "$kpiToPass<br>";
+                            //  $kpiIndex++;
+                            // echo "$kpiToPass<br>";
 
                                 if($result >= $kpiToPass ){
                                     $pass[$i]++;
-                                   // $i++;
+                                    // $i++;
                                     echo "<font color='green'>Pass</font>";
                                 }
                                 else{
-                                   // $i++;
+                                    // $i++;
                                     echo "<font color='red'>Fail</font>";
                                 }
                                 ?>
@@ -424,7 +415,6 @@
                         ?>
                         </tr>
                         <?php
-                    
                     }
                     ?>
                     
@@ -453,14 +443,11 @@
                         $DB->execute($sql);
                     }
                 }
-            
             }
             else{
                 echo "<h3>No students have attempted the activity!</h3>";
             }
-        
         }
-
 
         echo $OUTPUT->footer();
 
