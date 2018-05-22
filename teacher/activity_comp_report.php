@@ -60,7 +60,7 @@
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
-                SUM(qua.maxmark*COALESCE(qas.fraction)) AS marksobtained
+                SUM(qua.maxmark*COALESCE(qas.fraction, 0)) AS marksobtained
                 FROM
                     mdl_quiz q,
                     mdl_quiz_slots qs,
