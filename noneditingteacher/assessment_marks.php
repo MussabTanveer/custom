@@ -234,10 +234,10 @@
                 FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
                 WHERE ra.userid = u.id
                 AND ra.contextid = cxt.id
-                AND cxt.contextlevel = 50
+                AND cxt.contextlevel = ?
                 AND cxt.instanceid = c.id
-                AND c.id = $course_id
-                AND (roleid=5) ORDER BY seatorder");
+                AND c.id = ?
+                AND (roleid=5) ORDER BY seatorder", array(50, $course_id));
                 
                 if($users)
                 {
