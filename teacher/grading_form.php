@@ -119,6 +119,7 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
         ?>
         <br />
         <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
+        <button type="reset" value="Reset" class="btn btn-warning">Clear Form</button>
     </form>
 
     <script>
