@@ -52,7 +52,7 @@ else{
 	echo "No record present!";
 }
 $rec=$DB->get_recordset_sql(
-        'SELECT us.username,us.id,maa.obtmark, ma.id,maa.id from mdl_manual_other_attempt maa , mdl_manual_other ma, mdl_user us where us.id=maa.userid AND ma.id=maa.otherid  AND ma.id= ? AND ma.module=? ',array($other_id,'-6'));
+        'SELECT substring(us.username,4,8) AS seatorder,us.username,us.id,maa.obtmark, ma.id,maa.id from mdl_manual_other_attempt maa , mdl_manual_other ma, mdl_user us where us.id=maa.userid AND ma.id=maa.otherid  AND ma.id= ? AND ma.module=? ORDER BY seatorder ',array($other_id,'-6'));
 
 if($rec){
 
