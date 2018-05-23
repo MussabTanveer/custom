@@ -29,6 +29,9 @@
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 	}
+    input:invalid {
+        border: 1px solid red;
+    }
 </style>
 <?php
 if(!empty($_GET['other']) && !empty($_GET['courseid']))
@@ -92,6 +95,7 @@ if(!empty($_GET['other']) && !empty($_GET['courseid']))
         ?>
         <br />
         <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
+        <button type="reset" value="Reset" class="btn btn-warning">Clear Form</button>
     </form>
 
     <script>
