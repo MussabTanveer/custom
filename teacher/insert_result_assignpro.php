@@ -16,7 +16,15 @@
     if(isset($_POST['submit']))
 	{
         // GET DATA
-		$aspro_id = $_POST['aspro_id'];
+        $aspro_id = $_POST['aspro_id'];
+        
+        // Check marks already entered or not
+        $edit = 0;
+        $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_assign_pro_attempt WHERE assignproid = ?', array($aspro_id));
+        if($check){
+            $edit = 1;
+        }
+
         $sidarray = array();
 		foreach ($_POST['studid'] as $sid)
 		{
@@ -35,11 +43,17 @@
         try {
             $transaction = $DB->start_delegated_transaction();
             for ($j=0 ; $j<sizeof($sidarray); $j++){ // loop stud id times
-                $record = new stdClass();
-                $record->assignproid = $aspro_id;
-                $record->userid = $sidarray[$j];
-                $record->obtmark = $marksarray[$j];
-                $DB->insert_record('manual_assign_pro_attempt', $record);
+                if(!$edit) {
+                    $record = new stdClass();
+                    $record->assignproid = $aspro_id;
+                    $record->userid = $sidarray[$j];
+                    $record->obtmark = $marksarray[$j];
+                    $DB->insert_record('manual_assign_pro_attempt', $record);
+                }
+                else {
+                    $sql_update="UPDATE mdl_manual_assign_pro_attempt SET obtmark=? WHERE assignproid=? AND userid=?";
+                    $DB->execute($sql_update, array($marksarray[$j], $aspro_id, $sidarray[$j]));
+                }
                 //$sql="INSERT INTO manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES ('$aspro_id','$sidarray[$j]','$marksarray[$j]')";
                 //$DB->execute($sql);
             }
