@@ -39,26 +39,22 @@ label.error {
        
 
         
-
-
-
-        if($rec){
-            $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ?', array($course_id));
-            $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ?', array($course_id));
+            $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ?', array($course_id));
+            $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ?', array($course_id));
             
             if($recQ || $recA){
             $i = 0;
             $activityids = array();
             ?>
            
-            <a href="./define_parent_activity.php?course=<?php echo $course_id ?>" style="float:right; margin-bottom: 25px" class="btn btn-primary">Define Parent Activity</a>
+            <a href="./define_parent_activity.php?course=<?php echo $course_id ?>&flag=1" style="float:right; margin-bottom: 25px" class="btn btn-primary">Define Parent Activity</a>
             
             
-            <form action="confirm_grading_item.php" method="post" id="mapForm">
+            <form action="confirm_manual_mapping.php" method="post" id="mapForm">
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> Activities </th>
-                        <th> Grading Items </th>
+                        
                         <th> Select Parent Activity </th>
                     </tr>
                     <?php
@@ -73,20 +69,7 @@ label.error {
                                 
                     <tr>
                         <td><?php echo $qname;?> </td>
-                        <td>
-                            <select required name="gitem[]" class="select custom-select" id="item<?php echo $i ?>">
-                                <option value=''>Choose..</option>
-                                <?php
-                                foreach ($rec as $recItem) {
-                                    $gid = $recItem->id;
-                                    $gname = $recItem->name;
-                                    ?>
-                                    <option value='<?php echo $gid; ?>'><?php echo $gname; ?></option>
-                                <?php
-                                }
-                                ?>
-                            </select>
-                        </td>
+            
 
                       
                         <td>
@@ -166,21 +149,7 @@ label.error {
                                     
                         <tr>
                             <td><?php echo $aname;?> </td>
-                            <td>
-                                <select required name="gitem[]" class="select custom-select" id="item<?php echo $i ?>">
-                                    <option value=''>Choose..</option>
-                                    <?php
-                                    foreach ($rec as $recItem) {
-                                        $gid = $recItem->id;
-                                        $gname = $recItem->name;
-                                        ?>
-                                        <option value='<?php echo $gid; ?>'><?php echo $gname; ?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                            </td>
-
+                            
 
                               <td>
                             <select required class="select custom-select" name="pactivity[]" id="pact<?php echo $i ?>">
@@ -251,16 +220,9 @@ label.error {
                 $(document).ready(function () {
                     $('#mapForm').validate({ // initialize the plugin
                         rules: {
-                            "gitem[]": {
-                                required: true
-                            },
+                            
                             "pactivity[]":{
                                 required: true
-                            }
-                        },
-                        messages: {
-                            "clo": {
-                                required: "&nbsp;Please select Grading Item."
                             }
                         }
                     });
@@ -269,11 +231,7 @@ label.error {
 
             <?php
             }
-        }
-        else{
-            echo "<h3>Found no graded item for this course!</h3>";
-
-        }
+       
 
     }
     else

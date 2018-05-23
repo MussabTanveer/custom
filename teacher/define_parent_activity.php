@@ -20,6 +20,9 @@
         $name = $_GET['name'];
         $desc = $_GET['description'];
         $course_id = $_GET['course_id'];
+        $flag = $_GET['flag'];
+        //echo "$flag";
+        
 
         $sql="INSERT INTO mdl_parent_activity (name,description,courseid) VALUES 
                         ('$name','$desc','$course_id')";
@@ -29,8 +32,12 @@
             echo "<font color = green >Parent Activity has been defined successfully.</font>";
          }
 
-         $redirect="./map_grading_item.php?course=$course_id";
-         redirect($redirect);
+         if ($flag == 0)
+            $redirect="./map_grading_item.php?course=$course_id";
+        else 
+            $redirect="./map_manual_activity.php?course=$course_id";
+
+       redirect($redirect);
 
 
     }
@@ -43,8 +50,7 @@
     if(isset($_GET['course']))
     {
         $course_id=$_GET['course'];
-
-
+        $flag = $_GET['flag'];
 
 ?>
                     
@@ -95,7 +101,7 @@
             </div>
 
             <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
-
+            <input type="hidden" name="flag" value="<?php echo $flag; ?>">
 
         <button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
         <a class="btn btn-default" type="submit" href="./map_grading_item.php?course=<?php echo $course_id ?>">Cancel</a>

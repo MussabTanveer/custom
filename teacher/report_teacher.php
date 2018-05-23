@@ -98,6 +98,7 @@
                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('other');" class="cool-link">&#10022; Other</a><br>
                 <div id="other" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Define Other</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_other1.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Edit/Delete Other</a><br>
                    
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_other_selection.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form </a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
