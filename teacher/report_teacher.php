@@ -104,6 +104,9 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10146; View Results</a><br>
                 </div>
+
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./map_manual_activity.php?course=<?php echo $course_id; ?>" class="cool-link">&#10022; Map Subactivities To Parent Activity</a><br>
+               
  </div>
 
             <br>
