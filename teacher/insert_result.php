@@ -15,6 +15,13 @@
 
     if(isset($_POST['submit']))
 	{
+        $edit = 0;
+        $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($quizId));
+        $checkbit=0;
+        if($check){
+            echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
+            $edit = 1;
+        }
         // GET DATA
 		$ques_count = $_POST['quescount'];
 		$quiz_id = $_POST['quizid'];
