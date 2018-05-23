@@ -174,6 +174,7 @@ th{
         
         // ONLINE CHILD ACTIVITIES MERGE
         // ONLINE QUIZ
+        $mod=0;
         for($p=0; $p < count($parentids); $p++){
             $seatnosQ = array();
             $closQ = array();
@@ -196,7 +197,7 @@ th{
                     CONCAT(u.firstname, " ", u.lastname) AS std_name,
                     qu.competencyid,
                     SUM(qua.maxmark) AS maxmark,
-                    SUM(qua.maxmark*qas.fraction) AS marksobtained
+                    SUM(qua.maxmark*COALESCE(qas.fraction, 0)) AS marksobtained
                     FROM
                         mdl_quiz q,
                         mdl_quiz_slots qs,
@@ -208,7 +209,7 @@ th{
                         mdl_user u
                     WHERE
                         q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
                     GROUP BY qa.userid, qu.competencyid
                     ORDER BY qa.userid, qu.competencyid',
                     
@@ -290,6 +291,7 @@ th{
                 array_push($closQMulti,$closQ);
                 array_push($resultQMulti,$resultQ);
                 array_push($quiznames,$activityname);
+                $mod=0;
             }
             elseif($mod == 1){
                 $assignids++;
@@ -300,6 +302,7 @@ th{
                 array_push($cloACount,count($cloAssignUnique));
                 array_push($closUniqueAMulti,$cloAssignUnique);
                 array_push($assignnames,$activityname);
+                $mod=0;
             }
         }
         /*var_dump($quiznames); echo "<br>";
@@ -422,7 +425,6 @@ th{
         }
         */
         // MANUAL ASSIGNMENTS/PROJECTS
-        var_dump($massignids);
         for($i=0; $i < count($massignids); $i++){
             // Get assign records
             $recMAssign=$DB->get_recordset_sql(

@@ -36,14 +36,14 @@ th{
         $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));
 
         // Get all students of course
-        $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, u.firstname, u.lastname
+        $recStudents=$DB->get_records_sql("SELECT u.id AS sid, substring(u.username,4,8) AS seatorder, u.username AS seatnum, u.firstname, u.lastname
         FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
         WHERE ra.userid = u.id
         AND ra.contextid = cxt.id
         AND cxt.contextlevel = ?
         AND cxt.instanceid = c.id
         AND c.id = ?
-        AND (roleid=5)", array(50, $course_id));
+        AND (roleid=5) ORDER BY seatorder", array(50, $course_id));
 
         if($rec){
             $modules = array();
@@ -119,7 +119,7 @@ th{
                         qua.rightanswer,
                         qua.responsesummary,
                         qua.maxmark,
-                        qua.maxmark*qas.fraction AS marksobtained,
+                        qua.maxmark*COALESCE(qas.fraction, 0) AS marksobtained,
                         qc.name AS category
                     FROM
                         mdl_quiz q,
@@ -133,8 +133,8 @@ th{
                         mdl_question_attempt_steps qas
                     WHERE 
                         q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
-                    ORDER BY qa.attempt, qa.userid, qu.id',
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
+                    ORDER BY qa.userid, qu.id',
                     
                     array($instances[$i], 1));
                     
@@ -511,7 +511,7 @@ th{
                         qua.rightanswer,
                         qua.responsesummary,
                         qua.maxmark,
-                        qua.maxmark*qas.fraction AS marksobtained,
+                        qua.maxmark*COALESCE(qas.fraction, 0) AS marksobtained,
                         qc.name AS category
                     FROM
                         mdl_quiz q,
@@ -525,10 +525,10 @@ th{
                         mdl_question_attempt_steps qas
                     WHERE 
                         q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL  
-                    ORDER BY qa.attempt, qa.userid, qu.id',
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
+                    ORDER BY qa.userid, qu.id',
                     
-                    array($instances[$pos]));
+                    array($instances[$pos], 1));
                     
                     $seatnosM = array();
                     $qnamesM = array();
@@ -898,7 +898,7 @@ th{
                 foreach ($seatnos as $seatno) {
                     ?>
                     <tr> 
-                        <td>  <?php echo "$seatno" ?> </td>
+                        <td>  <?php echo strtoupper($seatno) ?> </td>
                         <?php
 
                             /****** ONLINE QUIZZES ******/

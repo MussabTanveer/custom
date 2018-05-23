@@ -35,6 +35,7 @@
             qa.userid,
             us.idnumber,
             us.username,
+            substring(us.username,4,8) AS seatorder,
             qa.attempt,
             qu.name,
             c.shortname,
@@ -42,7 +43,7 @@
             qua.rightanswer,
             qua.responsesummary,
             qua.maxmark,
-            qua.maxmark*qas.fraction AS marksobtained,
+            qua.maxmark*COALESCE(qas.fraction, 0) AS marksobtained,
             qc.name AS category
         FROM
             mdl_quiz q,
@@ -54,10 +55,10 @@
             mdl_question_attempts qua,
             mdl_competency c,
             mdl_question_attempt_steps qas
-        WHERE 
+        WHERE
             q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-        ORDER BY qa.attempt, qa.userid',
+            AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
+        ORDER BY seatorder, qu.id',
         
         array($quiz_id, 1));
 
@@ -78,7 +79,7 @@
                         if($count === $tot_ques){ // 1 student record collected
                             //echo $count;
                             
-                            foreach($data_temp as $data){ // loop as many times as comp count
+                            foreach($data_temp as $data){ // loop as many times as ques count
                                 ?>
                                 <tr>
                                 <?php
@@ -96,7 +97,7 @@
                                 
                                 if($first === 0){ // display stud no & name only once
                                     ?>
-                                    <td><?php echo $un;?></td>
+                                    <td><?php echo strtoupper($un);?></td>
                                     <td><?php echo $qname;?></td>
                                     <td><?php echo $qtext;?></td>
                                     <td><?php echo $competency;?></td>
@@ -127,48 +128,52 @@
                         $data_temp[] = $records;
                         $count++;
                     }
+                    
                     if($data_temp){
-                    foreach($data_temp as $data){ //  // now print very last student record
-                        ?>
-                        <tr>
-                        <?php
-                        $uid = $data->idnumber;
-                        $un = $data->username;
-                        // $attempt = $data->attempt;
-                        $qname = $data->name;
-                        $qtext = $data->questiontext;
-                        $competency=$data->shortname;
-                        // $qrightans = $data->rightanswer;
-                        // $qresponse = $data->responsesummary;
-                        $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
-                        $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
-                        //$cname = $data->category;
-                        
-                        if($first === 0){ // display stud no & name only once
+                        foreach($data_temp as $data){ // now print very last student record
                             ?>
-                            <td><?php echo $un;?></td>
-                            <td><?php echo $qname;?></td>
-                            <td><?php echo $qtext;?></td>
-                            <td><?php echo $competency;?></td>
-                            <td><?php echo $qmax;?></td>
-                            <td><?php echo $mobtained;?></td>
+                            <tr>
                             <?php
-                            $first++;
-                        }
-                        else{
+                            $uid = $data->idnumber;
+                            $un = $data->username;
+                            // $attempt = $data->attempt;
+                            $qname = $data->name;
+                            $qtext = $data->questiontext;
+                            $competency=$data->shortname;
+                            // $qrightans = $data->rightanswer;
+                            // $qresponse = $data->responsesummary;
+                            $qmax = $data->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                            $mobtained = $data->marksobtained; $mobtained = number_format($mobtained, 2);
+                            //$cname = $data->category;
+                            
+                            if($first === 0){ // display stud no & name only once
+                                ?>
+                                <td><?php echo strtoupper($un);?></td>
+                                <td><?php echo $qname;?></td>
+                                <td><?php echo $qtext;?></td>
+                                <td><?php echo $competency;?></td>
+                                <td><?php echo $qmax;?></td>
+                                <td><?php echo $mobtained;?></td>
+                                <?php
+                                $first++;
+                            }
+                            else{
+                                ?>
+                                <td> </td>
+                                <td><?php echo $qname;?></td>
+                                <td><?php echo $qtext;?></td>
+                                <td><?php echo $competency;?></td>
+                                <td><?php echo $qmax;?></td>
+                                <td><?php echo $mobtained;?></td>
+                                <?php
+                            }
                             ?>
-                            <td> </td>
-                            <td><?php echo $qname;?></td>
-                            <td><?php echo $qtext;?></td>
-                            <td><?php echo $competency;?></td>
-                            <td><?php echo $qmax;?></td>
-                            <td><?php echo $mobtained;?></td>
+                            </tr>
                             <?php
                         }
-                        ?>
-                        </tr>
-                        <?php
-                    }
+                        $count = 0;
+                        $first = 0;
+                        unset($data_temp);
                     }
                     ?>
                 </table>
