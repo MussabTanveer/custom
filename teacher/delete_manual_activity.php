@@ -107,17 +107,38 @@
      <?php
       }
 
+ elseif ($type == "other") {
+          # code...
+          $sql = "DELETE FROM mdl_manual_other WHERE id = $Id";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_manual_other_attempt WHERE otherid = $Id";
+            $DB->execute($sql); 
+
+         echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
+            ?>
+            <a href="./view_other1.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
+<?php
+
+}
 
     }
     else
     {
         echo "<font color = red> Error </font><br>";
-    ?>
-        <a href="./print_quiz_paper.php" > Go Back </a>
+
+
+?>
+        <a href="./view_other1.php" > Go Back </a>
     <?php
-    }
+
+
+     echo $OUTPUT->footer();
+
+     }
+?>
+    
 
 
 
 
- echo $OUTPUT->footer();
