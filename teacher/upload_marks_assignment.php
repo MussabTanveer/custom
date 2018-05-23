@@ -25,14 +25,7 @@
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
     ?>
 
-    <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
 
-         <div class="btn btn-default btn-file">
-            <input  type="file" name="assignmarks" id="assignmarks" placeholder="Only excel files are allowed!">
-        </div>
-        <input class="btn btn-info" type="submit" name="Upload" value="Upload" >
-        
-    </form>
 
     <?php 
 
@@ -44,9 +37,21 @@
 
     $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_assign_pro_attempt WHERE assignproid = ?', array($qid));
     if($check){
-        echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
+        echo "<font color=red>Notice: Sorry, cannot upload marks because they have already been uploaded!</font>";
         goto end;
     }
+
+?>
+        <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
+
+         <div class="btn btn-default btn-file">
+            <input  type="file" name="assignmarks" id="assignmarks" placeholder="Only excel files are allowed!">
+        </div>
+        <input class="btn btn-info" type="submit" name="Upload" value="Upload" >
+        
+    </form>
+
+    <?php
 
     // check file name is not empty
     if (!empty($_FILES['assignmarks']['name'])) {

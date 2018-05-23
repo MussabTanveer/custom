@@ -146,7 +146,7 @@
             }
         }
         
-        $obtMarksA=$DB->get_records_sql("SELECT att.id, u.username, att.cid, att.obtmark FROM mdl_assessment_attempt att, mdl_user u WHERE aid=? AND att.userid=u.id ORDER BY att.userid, att.cid ", array($aid));
+        $obtMarksA=$DB->get_records_sql("SELECT att.id,substring(u.username,4,8) AS seatorder, u.username, att.cid, att.obtmark FROM mdl_assessment_attempt att, mdl_user u WHERE aid=? AND att.userid=u.id ORDER BY seatorder ", array($aid));
         $userNames = array();
         $obtMarks = array();
         if($obtMarksA)
