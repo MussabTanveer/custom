@@ -51,6 +51,18 @@
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         $aid=$_GET['assessmentid'];
 
+
+        $check=$DB->get_records_sql('SELECT * FROM mdl_assessment_attempt WHERE aid=?',array($aid));
+
+        if($check){
+
+            
+           echo "<font color=red>Notice: The Marks for this assessment have already been upload, Cannot upload marks!</font>";
+
+           goto end;
+
+        }
+
         // Associated CLOs with Course and their Mapping
 
         $rec=$DB->get_recordset_sql('SELECT
@@ -334,5 +346,6 @@
         <a href="../teacher/teacher_courses.php">Back</a>
     <?php
     }
+    end:
     echo $OUTPUT->footer();
 ?>
