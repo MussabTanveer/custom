@@ -46,7 +46,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_quiz');" class="cool-link">&#10022; Quiz</a><br>
                 <div id="manual_quiz" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Define Quiz</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_quiz_paper.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Quiz Paper</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_quiz_paper.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print/Edit/Delete Quiz</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_quiz_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form </a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
@@ -55,7 +55,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_assign');" class="cool-link">&#10022; Assignment</a><br>
                 <div id="manual_assign" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Define Assignment</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_assign_paper.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Print Assignment Details</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_assign_paper.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Print/Edit/Delete Assignment</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_assign_selection.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form </a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
@@ -69,7 +69,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_pro');" class="cool-link">&#10022; Project</a><br>
                 <div id="manual_pro" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Define Project</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_project_paper.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Print Project Details</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_project_paper.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Print/Edit/Delete Project</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_pro_selection.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form </a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
@@ -78,7 +78,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_mt');" class="cool-link">&#10022; Midterm</a><br>
                 <div id="manual_mt" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10146; Define Midterm</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_mid_paper.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10146; Print Midterm Paper</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_mid_paper.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10146; Print/Edit/Delete Midterm</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_midterm_selection.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_quiz.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a><br>
@@ -87,7 +87,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="toggle_visibility('manual_fe');" class="cool-link">&#10022; Final Exam</a><br>
                 <div id="manual_fe" style="display: none">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./define_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Define Final Exam</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_final_paper.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Print Final Exam Paper</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_final_paper.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Print/Edit/Delete Final Exam</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./grading_form_final_selection.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Online Grading Form</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10146; Upload Result</a></a><br>
