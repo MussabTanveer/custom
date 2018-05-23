@@ -21,7 +21,6 @@
         $edit = 0;
         $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($quiz_id));
         if($check){
-            echo "<font color=red>Sorry, cannot upload marks because they have already been uploaded!</font>";
             $edit = 1;
         }
         
@@ -68,7 +67,7 @@
                         $DB->insert_record('manual_quiz_attempt', $record);
                     }
                     else {
-                        $sql_update="UPDATE manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
+                        $sql_update="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
                         $DB->execute($sql_update, array($marksarray[$i], $quiz_id, $sidarray[$j], $qidarray[$qidx]));
                     }
                     //$sql="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES ('$quiz_id','$sidarray[$j]','$qidarray[$qidx]','$marksarray[$i]')";
