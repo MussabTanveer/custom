@@ -29,6 +29,9 @@
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 	}
+    input:invalid {
+        border: 1px solid red;
+    }
 </style>
 <?php
 if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
