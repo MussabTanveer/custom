@@ -17,7 +17,15 @@
 	{
         // GET DATA
 		$c_count = $_POST['ccount'];
-		$a_id = $_POST['aid'];
+        $a_id = $_POST['aid'];
+        
+        // Check marks already entered or not
+        $edit = 0;
+        $check=$DB->get_records_sql('SELECT * FROM mdl_assessment_attempt WHERE aid=?',array($a_id));
+        if($check){
+           $edit = 1;
+        }
+
         $cidarray = array();
 		foreach ($_POST['cid'] as $cid)
 		{
@@ -48,12 +56,18 @@
             for ($j=0 ; $j<sizeof($sidarray); $j++){ // loop stud id times
                 for (; $i<sizeof($marksarray) ; $i++){ // loop marks obt time (for inserting marks of particular stud ques count times)
                     $ccount++;
-                    $record = new stdClass();
-                    $record->aid = $a_id;
-                    $record->userid = $sidarray[$j];
-                    $record->cid = $cidarray[$cidx];
-                    $record->obtmark = $marksarray[$i];
-                    $DB->insert_record('assessment_attempt', $record);
+                    if(!$edit) {
+                        $record = new stdClass();
+                        $record->aid = $a_id;
+                        $record->userid = $sidarray[$j];
+                        $record->cid = $cidarray[$cidx];
+                        $record->obtmark = $marksarray[$i];
+                        $DB->insert_record('assessment_attempt', $record);
+                    }
+                    else {
+                        $sql_update="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
+                        $DB->execute($sql_update, array($marksarray[$i], $a_id, $sidarray[$j], $cidarray[$cidx]));
+                    }
                     //$sql="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES ('$aid','$stdids[$j]','$cids[$qidx]','$mrkobt[$i]')";
                     //$DB->execute($sql);
                     $cidx++; // next ques id index
