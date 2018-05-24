@@ -51,18 +51,6 @@
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         $aid=$_GET['assessmentid'];
 
-
-        $check=$DB->get_records_sql('SELECT * FROM mdl_assessment_attempt WHERE aid=?',array($aid));
-
-        if($check){
-
-            
-           echo "<font color=red>Notice: The Marks for this assessment have already been upload, Cannot upload marks!</font>";
-
-           goto end;
-
-        }
-
         // Associated CLOs with Course and their Mapping
 
         $rec=$DB->get_recordset_sql('SELECT
@@ -254,8 +242,7 @@
                 if($users)
                 {
                     foreach ($users as $user ) {
-                        
-
+                    
                     ?>
                     <tr>
 
@@ -290,17 +277,22 @@
             <input type="hidden" value='<?php echo $ccount; ?>' name="ccount">
             <input type="hidden" value='<?php echo $aid; ?>' name="aid">
             <?php
-            foreach($cids as $cid)
+            //print_r($cids);
+            foreach($cids as $key => $cid)
             {
-            echo '<input type="hidden" name="cid[]" value="'. $cid. '">';
+                //echo $cid;
+                echo '<input type="hidden" name="cid['.$key.']" value="'. $cid.'">';
             }
-            foreach($stdids as $sid)
+            //print_r($stdids);
+            foreach($stdids as $key => $sid)
             {
-            echo '<input type="hidden" name="studid[]" value="'. $sid. '">';
+                //echo $sid;
+                echo '<input type="hidden" name="studid['.$key.']" value="'. $sid.'">';
             }
             ?>
             <br />
             <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
+            <button type="reset" value="Reset" class="btn btn-warning">Clear Form</button>
         </form>
         <br />
         <button id="myButton2" class="btn btn-success">Export to Excel</button>
@@ -346,6 +338,5 @@
         <a href="../teacher/teacher_courses.php">Back</a>
     <?php
     }
-    end:
     echo $OUTPUT->footer();
 ?>
