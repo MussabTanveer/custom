@@ -9,74 +9,80 @@
     $PAGE->set_heading("Edit Project Marks");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/edit_project_marks.php');
     
-    
 	require_login();
-
-if($SESSION->oberole != "teacher"){
+    if($SESSION->oberole != "teacher"){
         header('Location: ../index.php');
     }
-
+    echo $OUTPUT->header();
 ?>
-
 <style>
+    input[type='number'] {
+        -moz-appearance:textfield;
+        max-width: 50px;
+        border: none;
+    }
+    input[type='number']:focus {
+        outline: none;
+        border: none;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
     label.error {
         color: red;
     }
+    input:invalid {
+        border: 1px solid red;
+    }
+    input:valid {
+        border: 1px solid grey;
+    }
 </style>
 <?php
-echo $OUTPUT->header();
 
-if(!empty($_GET['edit']) && !empty($_GET['userid']))
+    if(!empty($_GET['edit']) && !empty($_GET['userid']) && !empty($_GET['projectid']))
     {
         $id=$_GET['edit'];
         $userid=$_GET['userid'];
-         $project_id=$_GET['projectid'];
+        $project_id=$_GET['projectid'];
         // echo $assign_id;
-
-         $recofmaxmark=$DB->get_records_sql('SELECT maxmark FROM mdl_manual_assign_pro WHERE id = ?',array($project_id));
-           
-if($recofmaxmark){
+        $recofmaxmark=$DB->get_records_sql('SELECT maxmark FROM mdl_manual_assign_pro WHERE id = ?',array($project_id));
+        if($recofmaxmark){
             foreach ($recofmaxmark as $records){
+                $maxmark=$records->maxmark;
+            }
 
-          $maxmark=$records->maxmark;
-
-    }
-
-    //echo $maxmark;
-
-//echo $recofmaxmark;
-
-if(isset($_POST['save']))
-        {
-
-         $newmarks=$_POST['newmarks'];
-      
-        if($newmarks > $maxmark){
-
-         echo "<font color='red'><b>Obtained Marks cannot be greater than Maxmarks!</b></font><br />";
-           
-        }
-        else{
-
-$sql_update="UPDATE mdl_manual_assign_pro_attempt SET obtmark='$newmarks' WHERE id='$id'";
-//echo $id;
-$DB->execute($sql_update);
-                $msg = "<font color='green'><b>Marks successfully updated!</b></font><br />";
-
-
-}
-    }
-if(isset($msg)){
-            echo $msg;
-            //goto label;
+            //echo $maxmark;
+            //echo $recofmaxmark;
+            
+            if(isset($_POST['save']))
+            {
+                $newmarks=$_POST['newmarks'];
+        
+                if($newmarks > $maxmark){
+                    echo "<font color='red'><b>Obtained Marks cannot be greater than Maxmarks!</b></font><br />";
+                }
+                else{
+                    $sql_update="UPDATE mdl_manual_assign_pro_attempt SET obtmark=? WHERE id=?";
+                    //echo $id;
+                    $DB->execute($sql_update, array($newmarks, $id));
+                    $msg = "<font color='green'><b>Marks successfully updated!</b></font><br />";
+                    $redirect = "view_project.php?projectid=$project_id";
+                    redirect($redirect);
+                }
+            }
+            if(isset($msg)){
+                echo $msg;
+                //goto label;
+            }
         }
     }
-}
 ?>
 
-<h3>Edit Project Marks For <?php echo $userid; ?></h3>
+    <h3>Edit Project Marks For <?php echo $userid; ?></h3>
     <form method='post' action="" class="mform" id="fwForm">
-    <div class="form-group row fitem">
+        <div class="form-group row fitem">
             <div class="col-md-3">
                 <span class="pull-xs-right text-nowrap">
                     <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
@@ -86,38 +92,38 @@ if(isset($msg)){
                 </label>
             </div>
             <div class="col-md-9 form-inline felement" data-fieldtype="text">
-                <input type="text"
+                <input type="number"
                         class="form-control "
                         name="newmarks"
                         id="id_obtmark"
-                        size=""                      
+                        size=""
                         required
-                        maxlength="20" type="text" >
-                <div class="form-control-feedback" id="id_error_idnumber"> <?php echo "Maxmarks :$maxmark";  ?>
-    </div>
+                        placeholder="eg 10"
+                        step="0.001"
+                        min="0" max="<?php echo $maxmark; ?>">
+                <div class="form-control-feedback" id="id_error_idnumber"> <?php echo "Maxmarks: $maxmark"; ?>
+                </div>
+            </div>
         </div>
-        </div>
-<input class="btn btn-info" type="submit" name="save" value="Save"/>
+        <input class="btn btn-info" type="submit" name="save" value="Save"/>
     </form>
 
-                    <script>
+    <script>
         //form validation
         $(document).ready(function () {
             $('#fwForm').validate({ // initialize the plugin
                 rules: {
                     "newmarks": {
                         required: true,
-                        minlength: 1,
-                        maxlength: 20
                     }
                 },
-                    messages: {
+                messages: {
                     "newmarks": {
                         required: "Please enter new marks!."
                     }
                 }
 
-    });
+            });
         });
     </script>
 
@@ -139,20 +145,9 @@ if($rec){
 
 <script>
         document.getElementById("id_obtmark").value = <?php echo json_encode($obtmark); ?>;
-
 </script>
 <?php
-
-echo "<a href='view_project.php?projectid=$project_id' > Back </a>";
-?>
-
-
-
-    <?php
+    echo "<a href='view_project.php?projectid=$project_id' > Back </a>";
 }
-
-
-
-echo $OUTPUT->footer();
- 
-    ?>
+    echo $OUTPUT->footer();
+?>
