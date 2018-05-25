@@ -85,6 +85,7 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
         
         if($users)
         {
+            $indx = 0;
             foreach ($users as $user ) {
             ?>
             <tr>
@@ -96,10 +97,10 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
                 foreach ($quesnames as $qname){
                 ?>
                 <td style="background-color: #ECEEEF;">
-                    <input type="number" name="marks[]" step="0.001" min="0" max="<?php echo $maxmarks[$i]; ?>" required />
-                </td >
+                    <input type="number" name="marks[<?php echo $indx; ?>]" step="0.001" min="0" max="<?php echo $maxmarks[$i]; ?>" />
+                </td>
                 <?php
-                $i++;
+                $i++; $indx++;
                 }
                 ?>
             </tr>
