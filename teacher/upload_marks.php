@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-
 <?php
     require_once('../../../config.php');
     require_once('../script/spout-2.4.3/spout-2.4.3/src/Spout/Autoloader/autoload.php');
@@ -16,6 +14,9 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+    ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <?php
     use Box\Spout\Reader\ReaderFactory;
     use Box\Spout\Common\Type;
     

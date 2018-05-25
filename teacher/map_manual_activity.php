@@ -1,6 +1,3 @@
-
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/validation/jquery.validate.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -17,7 +14,8 @@
     echo $OUTPUT->header();
 
 ?>
-
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
 <style>
 label.error {
     color: red;

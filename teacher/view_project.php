@@ -1,6 +1,4 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/table2excel/jquery.table2excel.min.js"></script>
-<?php 
+<?php
     require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
@@ -9,28 +7,31 @@
     $PAGE->set_heading("Projects Results");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/view_project.php');
 
-       header('Content-Type: text/plain');
+    header('Content-Type: text/plain');
    
 
-      require_login();
+    require_login();
     if($SESSION->oberole != "teacher"){
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-
-if(isset($_GET['projectid']))
+    ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <script src="../script/table2excel/jquery.table2excel.min.js"></script>
+    <?php
+    if(isset($_GET['projectid']))
     {
-$project_id=$_GET['projectid'];
-//echo $assign_id;
+        $project_id=$_GET['projectid'];
+        //echo $assign_id;
 
 
-//$id=$_POST['id'];
-//echo $id;
-$rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($project_id));
+        //$id=$_POST['id'];
+        //echo $id;
+        $rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($project_id));
 
-if($rec1){
+        if($rec1){
 
- foreach ($rec1 as $records) {
+            foreach ($rec1 as $records) {
                 
                 $name = $records->name;
                 $clo=$records->idnumber;

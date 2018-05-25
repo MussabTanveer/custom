@@ -1,3 +1,18 @@
+<?php
+    require_once('../../../config.php');
+    $context = context_system::instance();
+    $PAGE->set_context($context);
+    $PAGE->set_pagelayout('standard');
+    $PAGE->set_title("Edit Activity");
+    $PAGE->set_heading("Edit an Activity");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_manual_activity3.php');
+    
+    require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
+?>
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 <script src="../script/validation/jquery.validate.js"></script>
 <script src="../script/validation/additional-methods.min.js"></script>
@@ -14,22 +29,7 @@
     }
 </style>
 <link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
-
 <?php
-    require_once('../../../config.php');
-    $context = context_system::instance();
-    $PAGE->set_context($context);
-    $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Edit Activity");
-    $PAGE->set_heading("Edit an Activity");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_manual_activity3.php');
-    
-    require_login();
-    if($SESSION->oberole != "teacher"){
-        header('Location: ../index.php');
-    }
-    echo $OUTPUT->header();
-
 
 if(isset($_GET['id']) && isset($_GET['course']))
     {
@@ -78,24 +78,14 @@ if(isset($_GET['id']) && isset($_GET['course']))
                 $name = $rec->name;
                 $desc = strip_tags($rec->description);
                 $maxmark = $rec->maxmark;
-                
-                 
-
                 $cloid = $rec->cloid;
 
             }
 
         }
 ?>
-
         <form method='post' action="" class="mform" id="assproForm" enctype="multipart/form-data">
-            
-           
-                <h3>Other</h3>
-              
-            
-          
-
+            <h3>Other</h3>
             <div class="form-group row fitem ">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
@@ -162,7 +152,6 @@ if(isset($_GET['id']) && isset($_GET['course']))
                     </div>
                 </div>
             </div>
-
 
                 <div class="form-group row fitem ">
                 <div class="col-md-3">
@@ -320,9 +309,10 @@ if(isset($_GET['id']) && isset($_GET['course']))
         maxmark = '$maxmark', cloid = '$acloid' WHERE id = $Id";
         
         $DB->execute($sql);
- redirect($redirect);
-       }
+        redirect($redirect);
+    }
 
     echo $OUTPUT->footer();
  
     ?>
+    

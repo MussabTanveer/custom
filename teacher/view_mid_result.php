@@ -1,6 +1,3 @@
-
-
-
 <?php 
    require_once('../../../config.php');
     $context = context_system::instance();

@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/table2excel/jquery.table2excel.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -15,6 +13,8 @@
     }
     echo $OUTPUT->header();
 ?>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.js"></script>
 <style>
 td{
     text-align:center;

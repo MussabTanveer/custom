@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -14,6 +12,9 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+    ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <?php
 
     /*if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid2) && $SESSION->cid2 != "xyz"))
     {

@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -22,6 +20,7 @@
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
     ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
 	<div>

@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -15,6 +13,7 @@
     }
     echo $OUTPUT->header();
     ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
     <?php
     if(!empty($_GET['type']) && !empty($_GET['course']))

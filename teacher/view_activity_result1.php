@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/table2excel/jquery.table2excel.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -14,6 +12,10 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+    ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <script src="../script/table2excel/jquery.table2excel.min.js"></script>
+    <?php
 
     if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
     {
@@ -77,7 +79,7 @@
     //$cloShortNames=array();
     
     ?>
-    <table border='10' cellpadding='15' id ="mytable">
+    <table class="generaltable" id ="mytable">
     <tr>
     <th> Seat No. </th>
     <?php

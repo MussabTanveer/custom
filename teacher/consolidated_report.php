@@ -1,6 +1,3 @@
-<script src="../script/chart/Chart.bundle.js"></script>
-<script src="../script/chart/utils.js"></script>
-
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -15,6 +12,10 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+    ?>
+    <script src="../script/chart/Chart.bundle.js"></script>
+    <script src="../script/chart/utils.js"></script>
+    <?php
 
     if(isset($_POST['view_consolidated']) && isset($_POST['courseid']) && $_POST['activityid'])
     {

@@ -1,3 +1,18 @@
+<?php
+    require_once('../../../config.php');
+    $context = context_system::instance();
+    $PAGE->set_context($context);
+    $PAGE->set_pagelayout('standard');
+    $PAGE->set_title("Edit Activity");
+    $PAGE->set_heading("Edit an Activity");
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_manual_activity2.php');
+    
+    require_login();
+    if($SESSION->oberole != "teacher"){
+        header('Location: ../index.php');
+    }
+    echo $OUTPUT->header();
+?>
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 <script src="../script/validation/jquery.validate.js"></script>
 <script src="../script/validation/additional-methods.min.js"></script>
@@ -14,21 +29,7 @@
     }
 </style>
 <link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
-
 <?php
-    require_once('../../../config.php');
-    $context = context_system::instance();
-    $PAGE->set_context($context);
-    $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("Edit Activity");
-    $PAGE->set_heading("Edit an Activity");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/chairman/edit_manual_activity2.php');
-    
-    require_login();
-    if($SESSION->oberole != "teacher"){
-        header('Location: ../index.php');
-    }
-    echo $OUTPUT->header();
 
 
     global $CFG;

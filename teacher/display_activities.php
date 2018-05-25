@@ -1,9 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script>
-if(performance.navigation.type == 2){
-   location.reload(true);
-}
-</script>
 <?php 
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -18,6 +12,14 @@ if(performance.navigation.type == 2){
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+    ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <script>
+    if(performance.navigation.type == 2){
+    location.reload(true);
+    }
+    </script>
+    <?php
 
     /*if((isset($_POST['submit']) && isset( $_POST['courseid'])) || (isset($SESSION->cid3) && $SESSION->cid3 != "xyz"))
     {
