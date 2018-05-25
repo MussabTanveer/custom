@@ -40,13 +40,16 @@
         $marksarray = array();
         foreach ($_POST['marks'] as $mobt)
         {
+            if($mobt == "") {
+                $mobt = NULL;
+            }
             array_push($marksarray,$mobt);	
         }
         //var_dump ($ques_count); echo "<br>";
         //var_dump ($quiz_id); echo "<br>";
         //var_dump ($qidarray); echo "<br>";
         //var_dump ($sidarray); echo "<br>";
-        //var_dump ($marksarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
 
         // INSERT DATA
         $i = 0; // initialize

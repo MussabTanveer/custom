@@ -33,6 +33,9 @@
         $marksarray = array();
 		foreach ($_POST['marks'] as $mobt)
 		{
+            if($mobt == "") {
+                $mobt = NULL;
+            }
 			array_push($marksarray,$mobt);	
         }
         //var_dump ($other_id); echo "<br>";
