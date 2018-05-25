@@ -111,13 +111,13 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
         <input type="hidden" value='<?php echo $qcount; ?>' name="quescount">
         <input type="hidden" value='<?php echo $quizId; ?>' name="quizid">
         <?php
-        foreach($qids as $qid)
+        foreach($qids as $key => $qid)
         {
-        echo '<input type="hidden" name="quesid[]" value="'. $qid. '">';
+            echo '<input type="hidden" name="quesid['.$key.']" value="'.$qid.'">';
         }
-        foreach($stdids as $sid)
+        foreach($stdids as $key => $sid)
         {
-        echo '<input type="hidden" name="studid[]" value="'. $sid. '">';
+            echo '<input type="hidden" name="studid['.$key.']" value="'.$sid.'">';
         }
         ?>
         <br />

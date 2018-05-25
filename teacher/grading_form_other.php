@@ -88,9 +88,9 @@ if(!empty($_GET['other']) && !empty($_GET['courseid']))
         </table>
         <input type="hidden" value='<?php echo $other; ?>' name="other_id">
         <?php
-        foreach($stdids as $sid)
+        foreach($stdids as $key => $sid)
         {
-        echo '<input type="hidden" name="studid[]" value="'. $sid. '">';
+            echo '<input type="hidden" name="studid['.$key.']" value="'.$sid.'">';
         }
         ?>
         <br />

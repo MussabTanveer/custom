@@ -88,9 +88,9 @@ if(!empty($_GET['as_pro']) && !empty($_GET['courseid']))
         </table>
         <input type="hidden" value='<?php echo $as_pro; ?>' name="aspro_id">
         <?php
-        foreach($stdids as $sid)
+        foreach($stdids as $key => $sid)
         {
-        echo '<input type="hidden" name="studid[]" value="'. $sid. '">';
+            echo '<input type="hidden" name="studid['.$key.']" value="'.$sid.'">';
         }
         ?>
         <br />
