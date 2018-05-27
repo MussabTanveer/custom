@@ -55,7 +55,7 @@
             $userid = $records->username;
             $obtmark = $records->obtmark;
             //"<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>";
-            $table->data[] = array($serialno,$userid,$obtmark, "<a href='edit_other_marks.php?edit=$marksid&userid=$userid&otherid=$other_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
+            $table->data[] = array($serialno,strtoupper($userid),$obtmark, "<a href='edit_other_marks.php?edit=$marksid&userid=$userid&otherid=$other_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
         }
 
     echo html_writer::table($table);

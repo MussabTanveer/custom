@@ -99,7 +99,7 @@
         ?>
         <tr>
             <td>
-                <?php echo $userNames[$i]; // display username once every record ?>
+                <?php echo strtoupper($userNames[$i]); // display username once every record ?>
             </td><?php
             foreach ($qids as $qid){?>
             <td ><?php echo $obtMarks[$i]; ?> <?php echo"<a href='edit_activity_marks.php?quizid=$quizId&userId=$userIds[$i]&qId=$qid&courseid=$course_id'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>"; $i++; ?>

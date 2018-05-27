@@ -70,7 +70,7 @@ if($rec){
                 $obtmark = $records->obtmark;
                  $marksid=$records->id;
 
-$table->data[] = array($serialno,$userid,$obtmark,"<a href='edit_project_marks.php?edit=$marksid&userid=$userid&projectid=$project_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
+$table->data[] = array($serialno,strtoupper($userid),$obtmark,"<a href='edit_project_marks.php?edit=$marksid&userid=$userid&projectid=$project_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
 
             }
 
