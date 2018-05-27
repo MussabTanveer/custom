@@ -323,6 +323,7 @@ label.error {
                 foreach($recQ as $records)
                         {
                             $qid = $records->id;
+                           // echo "$qid<br/>";
                             $childid = $qid;
                             $qname = $records->name;
                             array_push($mactivitiesids,"Q".$qid);
@@ -360,7 +361,7 @@ label.error {
                             $flagA = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ? AND module = ?",array($aid,$course_id,1));
                             if ($flagA)
                              {
-                                var_dump($flagA);
+                                //var_dump($flagA);
                                 $aid = "A".$aid;
                               ?>
                                 
