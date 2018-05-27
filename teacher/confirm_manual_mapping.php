@@ -29,6 +29,8 @@
 		//var_dump($pactivityArray);
 	}
 	$activityidsarray=$SESSION->activityids;
+	$modules=$SESSION->modules;
+	//var_dump($modules); echo "<br/>";
 
 	//var_dump($activityidsarray);
 	
@@ -60,30 +62,12 @@
 	echo "<br />";*/
 	
 
-	/*
-	echo $gitemarray[0];
-	echo "<br>";
-	echo $gitemarray[1];
-	echo "<br>";
-	echo $gitemarray[2];
-	echo "<br>";
-	echo $gitemarray[3];
-	echo "<br>";
-	echo $gitemarray[4];
-	echo "<br>";
-	echo $gitemarray[5];
-	echo "<br>";echo "<br>";
-	*/
-
 	$i=0;
 	foreach ($activityidsarray as $aid)
 	{
 
 		if($pactivityArray[$i] != ''){
-			if(substr($aid,0,1) == 'Q')
-				$mod = 16;
-			else
-				$mod = 1;
+			
 			$aid = substr($aid,1);
 			
 
@@ -93,7 +77,7 @@
 			//{
 
 				$sql="INSERT INTO mdl_parent_mapping (parentid,childid,module) 
-				VALUES ($pactivityArray[$i] , $aid,$mod)";
+				VALUES ($pactivityArray[$i] , $aid,$modules[$i])";
 				$DB->execute($sql);
 			//}
 		}

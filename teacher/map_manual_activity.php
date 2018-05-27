@@ -43,6 +43,7 @@ label.error {
             if($recQ || $recA){
             $i = 0;
             $activityids = array();
+            $modules = array();
             ?>
            
             <a href="./define_parent_activity.php?course=<?php echo $course_id ?>&flag=1" style="float:right; margin-bottom: 25px" class="btn btn-primary">Define Parent Activity</a>
@@ -62,7 +63,9 @@ label.error {
                         $qid = $records->id;
                         $childid = $qid;
                         $qname = $records->name;
+                        $module = $records->module;
                         array_push($activityids,"Q".$qid);
+                        array_push($modules, $module);
                     ?>
                                 
                     <tr>
@@ -142,7 +145,9 @@ label.error {
                             $aid = $records->id;
                             $childid = $aid;
                             $aname = $records->name;
+                            $module = $records->module;
                             array_push($activityids,"A".$aid);
+                            array_push($modules, $module);
                         ?>
                                     
                         <tr>
@@ -204,6 +209,8 @@ label.error {
                         }
                         global $SESSION;
                         $SESSION->activityids = $activityids;
+                       // var_dump($modules);
+                        $SESSION->modules=$modules;
                         
                         ?>
                 </table>
