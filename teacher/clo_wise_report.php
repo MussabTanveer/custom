@@ -237,7 +237,7 @@ th{
                     }
                 }
                 elseif($childmodulesMulti[$p][$i] == -1 || $childmodulesMulti[$p][$i] == -2 || $childmodulesMulti[$p][$i] == -3){ // MANUAL QUIZ/MIDTERM/FINAL
-                    $mod = -1;
+                    $mod = 16;
                     //$quizids++;
                     $recMQuiz=$DB->get_recordset_sql(
                         'SELECT
@@ -327,8 +327,8 @@ th{
                     }
                 }
                 elseif($childmodulesMulti[$p][$i] == -4 || $childmodulesMulti[$p][$i] == -5){ // MANUAL ASSIGNMENT/PROJECT
-                    // Get assign records
-                    $mod = -4;
+                    // Get assign/pro records
+                    $mod = 1;
                     //$assignids++;
                     $recMAssign=$DB->get_recordset_sql(
                         'SELECT
@@ -369,6 +369,49 @@ th{
                         array_push($closA,$clo);
                     }
                 }
+                elseif($childmodulesMulti[$p][$i] == -6){ // MANUAL OTHER
+                    // Get other records
+                    $mod = 1;
+                    //$assignids++;
+                    $recMOther=$DB->get_recordset_sql(
+                        'SELECT
+                        u.username AS seat_no,
+                        o.name AS assign_name,
+                        o.maxmark AS maxmark,
+                        att.obtmark AS marksobtained,
+                        o.cloid AS clo_id
+                        FROM
+                            mdl_manual_other o,
+                            mdl_user u,
+                            mdl_manual_other_attempt att
+                        WHERE
+                            o.id=? AND att.userid=u.id AND o.id=att.assignproid
+                        ORDER BY att.userid',
+                        
+                    array($childidsMulti[$p][$i]));
+
+                    //$seatnosA = array();
+                    //$closA = array();
+                    //$resultA = array();
+                    
+                    //$assignname = "";
+                    foreach($recMOther as $as){
+                        $assignname = $as->assign_name;
+                        $un = $as->seat_no;
+                        $clo = $as->clo_id;
+                        $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                        $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                        /*if( (($mobtained/$amax)*100) > 50){
+                            array_push($resultA,"P");
+                        }
+                        else{
+                            array_push($resultA,"F");
+                        }*/
+                        array_push($resultA,(($mobtained/$amax)*100));
+                        array_push($seatnosA,$un);
+                        array_push($closA,$clo);
+                    }
+                }
             }
             if($mod == 16){
                 $quizids++;
@@ -381,29 +424,7 @@ th{
                 array_push($quiznames,$activityname);
                 $mod=0;
             }
-            elseif($mod == -1){
-                $quizids++;
-                $cloQuizUnique = array_unique($closQ);
-                array_push($cloQCount,count($cloQuizUnique));
-                array_push($seatnosQMulti,$seatnosQ);
-                array_push($closUniqueQMulti,$cloQuizUnique);
-                array_push($closQMulti,$closQ);
-                array_push($resultQMulti,$resultQ);
-                array_push($quiznames,$activityname);
-                $mod=0;
-            }
             elseif($mod == 1){
-                $assignids++;
-                $cloAssignUnique = array_unique($closA);
-                array_push($seatnosAMulti,$seatnosA);
-                array_push($closAMulti,$closA);
-                array_push($resultAMulti,$resultA);
-                array_push($cloACount,count($cloAssignUnique));
-                array_push($closUniqueAMulti,$cloAssignUnique);
-                array_push($assignnames,$activityname);
-                $mod=0;
-            }
-            elseif($mod == -4){
                 $assignids++;
                 $cloAssignUnique = array_unique($closA);
                 array_push($seatnosAMulti,$seatnosA);
