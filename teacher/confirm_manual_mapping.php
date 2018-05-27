@@ -77,8 +77,8 @@
 			//{
 
 				$sql="INSERT INTO mdl_parent_mapping (parentid,childid,module) 
-				VALUES ($pactivityArray[$i] , $aid,$modules[$i])";
-				$DB->execute($sql);
+				VALUES (?,?,?)";
+				$DB->execute($sql,	array($pactivityArray[$i] , $aid, $modules[$i]));
 			//}
 		}
 

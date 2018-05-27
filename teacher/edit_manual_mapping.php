@@ -24,11 +24,11 @@
         $module = $_GET['mod'];
         $coursecontext = context_course::instance($course_id);
 		is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
-        //echo "Course ID : $course_id Activity id : $ActivityId";
+       // echo "Course ID : $course_id Activity id : $ActivityId";
 
-       // echo "$Id<br>";
+        //echo "$Id<br>";
         $ActivityId = substr($Id, 1);
-       // echo "Activity ID :$ActivityId <br>";
+        //echo "Activity ID :$ActivityId <br>";
        // echo "$Id<br>";
         $flag = substr($Id, 0,1);
        // echo "Flag: $flag<br>";
@@ -50,7 +50,7 @@
              
               if ($flag == "A")
               {
-                //echo "Assignment";
+                echo "Assignment";
 
                  $getParent = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($ActivityId,$module));
 
@@ -214,6 +214,87 @@
 
                  }
 
+
+
+             }
+             elseif ($flag == "O") {
+              
+                $getParent = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($ActivityId,$module));
+
+                 $data = $DB->get_records_sql("SELECT * FROM mdl_manual_other WHERE id =?",array($ActivityId));
+
+
+
+                 if($data)
+                 {
+                    ?>
+                    <tr>
+                    <?php
+
+                    foreach($data as $q)
+                    {
+                        $name = $q->name;
+                        $id = $q->id;
+                        $childid = "O".$id;
+                        ?>
+                        <td>
+                            <?php echo "$name"; ?>
+                        </td>
+
+                        
+                         <?php
+
+                            ?>
+                                <td>
+                                    <select class="select custom-select" name="pactivity" id="pactivity">
+                                        <option value=''>Choose..</option>
+
+                                        <?php
+
+                                        foreach ($getParent as $gp)
+                                            {
+                                                $pid = $gp->parentid;
+                                           }
+
+                                        foreach ($ParentActivites as $pa) {
+                                            # code...
+                                            $id = $pa->id;
+                                            $name = $pa->name;
+
+                                            
+
+                                            if ($pid == $id) {
+                                        ?>
+                                       
+                                        <option selected value="<?php echo $id; ?>">
+                                                        <?php echo $name; ?>
+                                                   
+                                         </option>
+
+                                          <?php
+                                                }
+                                                else
+                                                    {?>
+
+                                                     <option  value="<?php echo $id; ?>">
+                                                        <?php echo $name; ?>
+                                                   
+                                         </option>         
+
+                                                <?php
+                                            }
+                                         }
+
+                                        ?>
+
+                                    </select>
+                            </td>
+                        </tr>
+                            <?php 
+
+                    }
+
+                 }
 
 
              }

@@ -35,8 +35,9 @@ label.error {
         
        $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ?', array($course_id));
        $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ?', array($course_id));
+       $recO=$DB->get_records_sql('SELECT * FROM `mdl_manual_other` WHERE courseid = ?', array($course_id));
             
-            if($recQ || $recA){
+            if($recQ || $recA || $recO){
             $i = 0;
             $activityids = array();
             $modules = array();
@@ -221,6 +222,84 @@ label.error {
                                 $i++;
                             }
                         }
+
+
+
+                        foreach($recO as $records)
+                        {
+                            $oid = $records->id;
+                            $childid = $oid;
+                            $oname = $records->name;
+                            $module = $records->module;
+                            
+
+                        $flagO = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($oid,$module));
+
+                        if (!$flagO)
+                        {
+                            array_push($activityids,"O".$oid);
+                            array_push($modules, $module);
+                        ?>
+                                    
+                        <tr>
+                            <td><?php echo $oname;?> </td>
+                            
+
+                              <td>
+                            <select required class="select custom-select" name="pactivity[]" id="pact<?php echo $i ?>">
+                                <option value=''>Choose..</option>
+                                <?php
+
+                                    $SelectedParentActivity = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =?",array($childid));
+
+                                    foreach ($SelectedParentActivity as $spa)
+                                    {
+                                        $parentida = $spa->parentid;
+                                       // break;
+
+                                    }
+
+
+
+                                     foreach ($ParentActivites as $parentActivity)
+                                    {
+                                       
+                                        $id = $parentActivity->id;
+                                        $name = $parentActivity->name;
+
+                                        if($id == $parentida)
+                                        {
+                                       ?>
+                                       <option selected value="<?php echo $id; ?>">
+                                                <?php echo $name; ?>
+                                           
+                                       </option>
+                                       <?php
+                                         }
+                                         else
+                                           {
+                                            ?>
+                                            <option value="<?php echo $id; ?>">
+                                                        <?php echo $name; ?>
+                                                   
+                                               </option>
+                                            <?php
+                                           }
+                                    }
+
+                                ?>
+
+                             </select>
+
+                        </td>
+
+
+                            </tr>
+                            <?php
+                                $i++;
+                            }
+                        }
+
                         global $SESSION;
                         $SESSION->activityids = $activityids;
                        // var_dump($modules);
@@ -254,7 +333,7 @@ label.error {
             ?>
              <h3 style="margin-top: 30px">Already Mapped Activities</h3>
 <?php
-        $mactivitiesids = array();
+       // $mactivitiesids = array();
         
         if($recQ || $recA)
 
@@ -274,7 +353,7 @@ label.error {
                             $childid = $qid;
                             $qname = $records->name;
                             $module = $records->module;
-                            array_push($mactivitiesids,"Q".$qid);
+                           // array_push($mactivitiesids,"Q".$qid);
                             ?>
                             <tr>
                             <?php
@@ -304,7 +383,7 @@ label.error {
                             $childid = $aid;
                             $aname = $records->name;
                             $module = $records->module;
-                            array_push($mactivitiesids,"A".$aid);
+                            //array_push($mactivitiesids,"A".$aid);
                                   ?>
                             <tr>
                             <?php
@@ -318,6 +397,38 @@ label.error {
                                  <td>  <?php echo "$aname<br/>"; ?> </td>
                                 <td> 
                                     <a href="./edit_manual_mapping.php?id=<?php echo $aid; ?>&course=<?php echo $course_id; ?>&mod=<?php echo $module; ?>" title='Edit'> <i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
+                                </td>
+                          
+                        <?php
+                          } 
+                          ?>
+                      </tr>
+                <?php
+
+
+                        }
+
+
+                        foreach($recO as $records)
+                        {
+                            $oid = $records->id;
+                            $childid = $oid;
+                            $aname = $records->name;
+                            $module = $records->module;
+                            //array_push($mactivitiesids,"O".$oid);
+                                  ?>
+                            <tr>
+                            <?php
+                            $flagO = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($oid,$module));
+                            if ($flagO)
+                             {
+                                //var_dump($flagA);
+                                $oid = "O".$oid;
+                              ?>
+                                
+                                 <td>  <?php echo "$aname<br/>"; ?> </td>
+                                <td> 
+                                    <a href="./edit_manual_mapping.php?id=<?php echo $oid; ?>&course=<?php echo $course_id; ?>&mod=<?php echo $module; ?>" title='Edit'> <i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
                                 </td>
                           
                         <?php
