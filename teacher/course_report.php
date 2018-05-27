@@ -400,7 +400,7 @@ th{
                             $massignname = $as->assign_name;
                             $un = $as->seat_no;
                             $clo = $as->shortname;
-                            $mamax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                            $mamax = $as->maxmark; $mamax = number_format($mamax, 2); // 2 decimal places
                             $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
                             /*if( (($mobtained/$amax)*100) > 50){
                                 array_push($resultA,"<font color='green'>P</font>");
