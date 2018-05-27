@@ -112,9 +112,9 @@
 			$startdate=strtotime($_POST['startdate']);
 			$enddate=strtotime($_POST['enddate']);
 			
-			echo $apdesc; echo "<br>";
-			echo $startdate; echo "<br>";
-			echo $enddate; echo "<br>";
+			//echo $apdesc; echo "<br>";
+			//echo $startdate; echo "<br>";
+			//echo $enddate; echo "<br>";
 
 
             if(strlen($apname)>50 || strlen($apdesc)>500)
