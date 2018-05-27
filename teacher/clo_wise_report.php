@@ -236,7 +236,7 @@ th{
                         array_push($closQ,$clo);
                     }
                 }
-                if($childmodulesMulti[$p][$i] == -1){ // MANUAL QUIZ
+                elseif($childmodulesMulti[$p][$i] == -1 || $childmodulesMulti[$p][$i] == -2 || $childmodulesMulti[$p][$i] == -3){ // MANUAL QUIZ/MIDTERM/FINAL
                     $mod = -1;
                     //$quizids++;
                     $recMQuiz=$DB->get_recordset_sql(
@@ -326,7 +326,7 @@ th{
                         array_push($closA,$clo);
                     }
                 }
-                elseif($childmodulesMulti[$p][$i] == -4){ // MANUAL ASSIGNMENT
+                elseif($childmodulesMulti[$p][$i] == -4 || $childmodulesMulti[$p][$i] == -5){ // MANUAL ASSIGNMENT/PROJECT
                     // Get assign records
                     $mod = -4;
                     //$assignids++;
