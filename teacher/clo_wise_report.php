@@ -173,7 +173,6 @@ th{
         $assignnames = array();
         
         // ONLINE CHILD ACTIVITIES MERGE
-        // ONLINE QUIZ
         $mod=0;
         for($p=0; $p < count($parentids); $p++){
             $seatnosQ = array();
@@ -327,8 +326,62 @@ th{
                         array_push($closA,$clo);
                     }
                 }
+                elseif($childmodulesMulti[$p][$i] == -4){ // MANUAL ASSIGNMENT
+                    // Get assign records
+                    $mod = -4;
+                    //$assignids++;
+                    $recMAssign=$DB->get_recordset_sql(
+                        'SELECT
+                        u.username AS seat_no,
+                        a.name AS assign_name,
+                        a.maxmark AS maxmark,
+                        att.obtmark AS marksobtained,
+                        a.cloid AS clo_id
+                        FROM
+                            mdl_manual_assign_pro a,
+                            mdl_user u,
+                            mdl_manual_assign_pro_attempt att
+                        WHERE
+                            a.id=? AND att.userid=u.id AND a.id=att.assignproid
+                        ORDER BY att.userid',
+                        
+                    array($childidsMulti[$p][$i]));
+
+                    //$seatnosA = array();
+                    //$closA = array();
+                    //$resultA = array();
+                    
+                    //$assignname = "";
+                    foreach($recMAssign as $as){
+                        $assignname = $as->assign_name;
+                        $un = $as->seat_no;
+                        $clo = $as->clo_id;
+                        $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
+                        $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
+                        /*if( (($mobtained/$amax)*100) > 50){
+                            array_push($resultA,"P");
+                        }
+                        else{
+                            array_push($resultA,"F");
+                        }*/
+                        array_push($resultA,(($mobtained/$amax)*100));
+                        array_push($seatnosA,$un);
+                        array_push($closA,$clo);
+                    }
+                }
             }
             if($mod == 16){
+                $quizids++;
+                $cloQuizUnique = array_unique($closQ);
+                array_push($cloQCount,count($cloQuizUnique));
+                array_push($seatnosQMulti,$seatnosQ);
+                array_push($closUniqueQMulti,$cloQuizUnique);
+                array_push($closQMulti,$closQ);
+                array_push($resultQMulti,$resultQ);
+                array_push($quiznames,$activityname);
+                $mod=0;
+            }
+            elseif($mod == -1){
                 $quizids++;
                 $cloQuizUnique = array_unique($closQ);
                 array_push($cloQCount,count($cloQuizUnique));
@@ -350,15 +403,15 @@ th{
                 array_push($assignnames,$activityname);
                 $mod=0;
             }
-            if($mod == -1){
-                $quizids++;
-                $cloQuizUnique = array_unique($closQ);
-                array_push($cloQCount,count($cloQuizUnique));
-                array_push($seatnosQMulti,$seatnosQ);
-                array_push($closUniqueQMulti,$cloQuizUnique);
-                array_push($closQMulti,$closQ);
-                array_push($resultQMulti,$resultQ);
-                array_push($quiznames,$activityname);
+            elseif($mod == -4){
+                $assignids++;
+                $cloAssignUnique = array_unique($closA);
+                array_push($seatnosAMulti,$seatnosA);
+                array_push($closAMulti,$closA);
+                array_push($resultAMulti,$resultA);
+                array_push($cloACount,count($cloAssignUnique));
+                array_push($closUniqueAMulti,$cloAssignUnique);
+                array_push($assignnames,$activityname);
                 $mod=0;
             }
         }
@@ -481,7 +534,7 @@ th{
             array_push($cloACount,count($cloAssignUnique));
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
-        */
+        
         // MANUAL ASSIGNMENTS/PROJECTS
         for($i=0; $i < count($massignids); $i++){
             // Get assign records
@@ -512,12 +565,12 @@ th{
                 $clo = $as->clo_id;
                 $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
                 $mobtained = $as->marksobtained; $mobtained = number_format($mobtained, 2);
-                /*if( (($mobtained/$amax)*100) > 50){
-                    array_push($resultA,"P");
-                }
-                else{
-                    array_push($resultA,"F");
-                }*/
+                //if( (($mobtained/$amax)*100) > 50){
+                //    array_push($resultA,"P");
+                //}
+                //else{
+                //    array_push($resultA,"F");
+                //}
                 array_push($resultA,(($mobtained/$amax)*100));
                 array_push($seatnosA,$un);
                 array_push($closA,$clo);
@@ -530,13 +583,13 @@ th{
             array_push($cloACount,count($cloAssignUnique));
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
-        
+        */
         for($i=0; $i<($quizids/*+count($mquizids)*/); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
         
-        for($i=0; $i<($assignids+count($massignids)); $i++)
+        for($i=0; $i<($assignids/*+count($massignids)*/); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueAMulti[$i]))
                     $closidCountActivity[$j]++;
@@ -569,7 +622,7 @@ th{
                     <th><?php echo $quiznames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
                     <?php
                     }
-                for($j=0; $j<($assignids+count($massignids)); $j++)
+                for($j=0; $j<($assignids/*+count($massignids)*/); $j++)
                     if(in_array($closid[$i], $closUniqueAMulti[$j])){
                     ?>
                     <th><?php echo $assignnames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
@@ -621,7 +674,7 @@ th{
                             echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
                         }
                     }
-                for($j=0; $j<($assignids+count($massignids)); $j++)
+                for($j=0; $j<($assignids/*+count($massignids)*/); $j++)
                     if(in_array($closid[$i], $closUniqueAMulti[$j])){
                         $flag=0;
                         for($k=0; $k<count($seatnosAMulti[$j]); $k++){
