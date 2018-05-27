@@ -132,10 +132,7 @@ th{
             $id = $aid->id;
             array_push($assignids, $id); // array of assign ids
         }
-        */
-
-        $quizids = 0;
-        $assignids = 0;
+        
 
         // Get attempted course manual quiz/midterm/final ids
         $courseMQuizId=$DB->get_records_sql("SELECT * FROM `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)", array($course_id));
@@ -153,7 +150,10 @@ th{
             $id = $qid->id;
             array_push($massignids, $id); // array of assign/pro ids
         }
-        //print_r($massignids);
+        //print_r($massignids);*/
+
+        $quizids = 0;
+        $assignids = 0;
         
         /**** ONLINE+MANUAL QUIZZES & ASSIGNMENTS ****/
         // Find students quiz records
@@ -237,6 +237,52 @@ th{
                         array_push($closQ,$clo);
                     }
                 }
+                if($childmodulesMulti[$p][$i] == -1){ // MANUAL QUIZ
+                    $mod = -1;
+                    //$quizids++;
+                    $recMQuiz=$DB->get_recordset_sql(
+                        'SELECT
+                        q.name AS quiz_name,
+                        qa.userid,
+                        u.username AS seat_no,
+                        CONCAT(u.firstname, " ", u.lastname) AS std_name,
+                        qu.cloid,
+                        SUM(qu.maxmark) AS maxmark,
+                        SUM(qa.obtmark) AS marksobtained
+                        FROM
+                            mdl_manual_quiz q,
+                            mdl_manual_quiz_question qu,
+                            mdl_manual_quiz_attempt qa,
+                            mdl_user u
+                        WHERE
+                            q.id=? AND q.id=qu.mquizid AND q.id=qa.quizid AND qa.userid=u.id AND qu.id=qa.questionid
+                        GROUP BY qa.userid, qu.cloid
+                        ORDER BY qa.userid, qu.cloid',
+                        
+                        array($childidsMulti[$p][$i]));
+                    
+                    //$seatnosQ = array();
+                    //$closQ = array();
+                    //$resultQ = array();
+                    
+                    //$quizname = "";
+                    foreach($recMQuiz as $rq){
+                        $quizname = $rq->quiz_name;
+                        $un = $rq->seat_no;
+                        $clo=$rq->cloid;
+                        $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
+                        $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
+                        /*if( (($mobtained/$qmax)*100) > 50){
+                            array_push($resultQ,"P");
+                        }
+                        else{
+                            array_push($resultQ,"F");
+                        }*/
+                        array_push($resultQ,(($mobtained/$qmax)*100));
+                        array_push($seatnosQ,$un);
+                        array_push($closQ,$clo);
+                    }
+                }
                 elseif($childmodulesMulti[$p][$i] == 1){ // ONLINE ASSIGNMENT
                     // Get assign records
                     $mod = 1;
@@ -304,6 +350,17 @@ th{
                 array_push($assignnames,$activityname);
                 $mod=0;
             }
+            if($mod == -1){
+                $quizids++;
+                $cloQuizUnique = array_unique($closQ);
+                array_push($cloQCount,count($cloQuizUnique));
+                array_push($seatnosQMulti,$seatnosQ);
+                array_push($closUniqueQMulti,$cloQuizUnique);
+                array_push($closQMulti,$closQ);
+                array_push($resultQMulti,$resultQ);
+                array_push($quiznames,$activityname);
+                $mod=0;
+            }
         }
         /*var_dump($quiznames); echo "<br>";
         var_dump($cloQCount); echo "<br>";
@@ -312,7 +369,7 @@ th{
         var_dump($closQMulti); echo "<br>";
         var_dump($resultQMulti); echo "<br>";*/
 
-        // MANUAL QUIZ/MIDTERM/FINAL
+        /* MANUAL QUIZ/MIDTERM/FINAL
         for($i=0; $i < count($mquizids); $i++){
             $recMQuiz=$DB->get_recordset_sql(
             'SELECT
@@ -345,12 +402,12 @@ th{
                 $clo=$rq->cloid;
                 $qmax = $rq->maxmark; $qmax = number_format($qmax, 2); // 2 decimal places
                 $mobtained = $rq->marksobtained; $mobtained = number_format($mobtained, 2);
-                /*if( (($mobtained/$qmax)*100) > 50){
-                    array_push($resultQ,"P");
-                }
-                else{
-                    array_push($resultQ,"F");
-                }*/
+                //if( (($mobtained/$qmax)*100) > 50){
+                //    array_push($resultQ,"P");
+                //}
+                //else{
+                //    array_push($resultQ,"F");
+                //}
                 array_push($resultQ,(($mobtained/$qmax)*100));
                 array_push($seatnosQ,$un);
                 array_push($closQ,$clo);
@@ -363,6 +420,7 @@ th{
             array_push($closQMulti,$closQ);
             array_push($resultQMulti,$resultQ);
         }
+        */
         /*
         echo "<br><br>"; print_r($quiznames); echo "<br><br>"; print_r($cloQCount);
         echo "<br><br>"; print_r($seatnosQMulti); echo "<br><br>"; print_r($closUniqueQMulti);
@@ -473,7 +531,7 @@ th{
             array_push($closUniqueAMulti,$cloAssignUnique);
         }
         
-        for($i=0; $i<($quizids+count($mquizids)); $i++)
+        for($i=0; $i<($quizids/*+count($mquizids)*/); $i++)
             for($j=0; $j<count($closid); $j++)
                 if(in_array($closid[$j], $closUniqueQMulti[$i]))
                     $closidCountActivity[$j]++;
@@ -505,7 +563,7 @@ th{
             /****** Activity Names + Attempt ******/
             for($i=0; $i<count($closid); $i++){
                 $attemptno = 1;
-                for($j=0; $j<($quizids+count($mquizids)); $j++)
+                for($j=0; $j<($quizids/*+count($mquizids)*/); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                     ?>
                     <th><?php echo $quiznames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
@@ -542,7 +600,7 @@ th{
             <?php
             /****** QUIZZES/ASSIGNMENTS RECORDS ******/
             for($i=0; $i<count($closid); $i++){
-                for($j=0; $j<($quizids+count($mquizids)); $j++)
+                for($j=0; $j<($quizids/*+count($mquizids)*/); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
                         $flag=0;
                         for($k=0; $k<count($seatnosQMulti[$j]); $k++){
