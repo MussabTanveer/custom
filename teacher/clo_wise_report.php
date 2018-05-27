@@ -376,7 +376,7 @@ th{
                     $recMOther=$DB->get_recordset_sql(
                         'SELECT
                         u.username AS seat_no,
-                        o.name AS assign_name,
+                        o.name AS other_name,
                         o.maxmark AS maxmark,
                         att.obtmark AS marksobtained,
                         o.cloid AS clo_id
@@ -385,7 +385,7 @@ th{
                             mdl_user u,
                             mdl_manual_other_attempt att
                         WHERE
-                            o.id=? AND att.userid=u.id AND o.id=att.assignproid
+                            o.id=? AND att.userid=u.id AND o.id=att.otherid
                         ORDER BY att.userid',
                         
                     array($childidsMulti[$p][$i]));
@@ -396,7 +396,7 @@ th{
                     
                     //$assignname = "";
                     foreach($recMOther as $as){
-                        $assignname = $as->assign_name;
+                        $assignname = $as->other_name;
                         $un = $as->seat_no;
                         $clo = $as->clo_id;
                         $amax = $as->maxmark; $amax = number_format($amax, 2); // 2 decimal places
