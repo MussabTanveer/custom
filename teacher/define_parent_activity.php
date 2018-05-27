@@ -15,30 +15,27 @@
 
 
 
-     if(isset($_GET['save']))
+     if(isset($_POST['save']))
     {
-        $name = $_GET['name'];
-        $desc = $_GET['description'];
-        $course_id = $_GET['course_id'];
-        $flag = $_GET['flag'];
+        $name = $_POST['name'];
+        $desc = $_POST['description'];
+        $course_id = $_POST['course_id'];
+        $flag = $_POST['flag'];
         //echo "$flag";
         
 
-        $sql="INSERT INTO mdl_parent_activity (name,description,courseid) VALUES 
-                        ('$name','$desc','$course_id')";
+        $sql="INSERT INTO mdl_parent_activity (name,description,courseid) VALUES (?,?,?)";
         
-         if ($DB->execute($sql))
-         {
+        if ($DB->execute($sql, array($name, $desc, $course_id)))
+        {
             echo "<font color = green >Parent Activity has been defined successfully.</font>";
-         }
-
-         if ($flag == 0)
+        }
+        if ($flag == 0)
             $redirect="./map_grading_item.php?course=$course_id";
         else 
             $redirect="./map_manual_activity.php?course=$course_id";
 
-       redirect($redirect);
-
+        redirect($redirect);
 
     }
 
@@ -54,7 +51,7 @@
 
 ?>
                     
-    <form action="" method="get" class="mform" >
+    <form action="" method="POST" class="mform" >
 
         <h3>Parent Activity</h3>
          <div class="form-group row fitem ">
@@ -113,12 +110,5 @@
     else
         echo "<font color=red size =20px> Error </font>";
 
-
-
-?>
-
-
-
-<?php
 echo $OUTPUT->footer();
 ?>
