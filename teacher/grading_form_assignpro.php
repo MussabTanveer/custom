@@ -79,7 +79,7 @@ if(!empty($_GET['as_pro']) && !empty($_GET['courseid']))
                     <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
                 </td>
                 <td style="background-color: #ECEEEF;">
-                    <input type="number" name="marks[<?php echo $indx; ?>]" step="0.001" min="0" max="<?php echo $maxmarks; ?>" required />
+                    <input type="number" name="marks[<?php echo $indx; ?>]" step="0.001" min="0" max="<?php echo $maxmarks; ?>" />
                 </td >
             </tr>
             <?php
