@@ -68,7 +68,7 @@ label.error {
                         <?php
 
                         //Flag to check mapped activites
-                        $flagQ = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ?",array($qid,$course_id));
+                        $flagQ = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ? AND module = ?",array($qid,$course_id,16));
 
                          
                          if (!$flagQ)
@@ -186,7 +186,7 @@ label.error {
                             
 
 
-                     $flagA = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ?",array($aid,$course_id));
+                    $flagA = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ? AND module = ?",array($aid,$course_id,1));
                         
                                       
                         if (!$flagA)
@@ -329,9 +329,10 @@ label.error {
                             ?>
                             <tr>
                             <?php
-                           // echo "$qid";
+                            //Flag to check mapped activites
+                            $flagQ = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ? AND module = ?",array($qid,$course_id,16));
                             if ($flagQ)
-                             { // echo "$qid";
+                            { // echo "$qid";
                                 $qid = "Q".$qid;
                               ?>
                                 
@@ -356,7 +357,7 @@ label.error {
                                   ?>
                             <tr>
                             <?php
-
+                            $flagA = $DB->get_records_sql("SELECT * FROM mdl_grading_mapping WHERE instance =? AND courseid = ? AND module = ?",array($aid,$course_id,1));
                             if ($flagA)
                              {
                                 var_dump($flagA);
