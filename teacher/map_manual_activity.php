@@ -30,15 +30,11 @@ label.error {
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "Course ID : $course_id";
 
-        // Get Grading Items
-        $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy WHERE courseid = ? ORDER BY id", array($course_id));
-
         $ParentActivites = $DB->get_records_sql("SELECT * FROM mdl_parent_activity WHERE courseid =?",array($course_id));
-       
-
+    
         
-            $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ?', array($course_id));
-            $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ?', array($course_id));
+       $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ?', array($course_id));
+       $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ?', array($course_id));
             
             if($recQ || $recA){
             $i = 0;
@@ -64,13 +60,23 @@ label.error {
                         $childid = $qid;
                         $qname = $records->name;
                         $module = $records->module;
+                        
+
+                //Flag to check mapped activites
+                $flagQ = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($qid,$module));
+                   
+                   if (!$flagQ)
+                   {
+
                         array_push($activityids,"Q".$qid);
                         array_push($modules, $module);
                     ?>
+
                                 
                     <tr>
                         <td><?php echo $qname;?> </td>
-            
+                        
+
 
                       
                         <td>
@@ -140,12 +146,19 @@ label.error {
                     <?php
                         $i++;
                         }
+                    }
                         foreach($recA as $records)
                         {
                             $aid = $records->id;
                             $childid = $aid;
                             $aname = $records->name;
                             $module = $records->module;
+                            
+
+                        $flagA = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($aid,$module));
+
+                        if (!$flagA)
+                        {
                             array_push($activityids,"A".$aid);
                             array_push($modules, $module);
                         ?>
@@ -203,9 +216,10 @@ label.error {
                         </td>
 
 
-                        </tr>
-                        <?php
-                            $i++;
+                            </tr>
+                            <?php
+                                $i++;
+                            }
                         }
                         global $SESSION;
                         $SESSION->activityids = $activityids;
@@ -235,7 +249,92 @@ label.error {
             </script>
 
             <?php
-            }
+            }                  
+
+            ?>
+             <h3 style="margin-top: 30px">Already Mapped Activities</h3>
+<?php
+        $mactivitiesids = array();
+        
+        if($recQ || $recA)
+
+        {
+            ?>
+            <table class="generaltable" style="margin-top: 25px">
+                <tr class="table-head">
+                    <th> Activities </th>
+                    <th>Edit</th>
+                </tr>
+            <?php
+
+                foreach($recQ as $records)
+                        {
+                            $qid = $records->id;
+                           // echo "$qid<br/>";
+                            $childid = $qid;
+                            $qname = $records->name;
+                            $module = $records->module;
+                            array_push($mactivitiesids,"Q".$qid);
+                            ?>
+                            <tr>
+                            <?php
+                            //Flag to check mapped activites
+                            $flagQ = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($qid,$module));
+                            
+                            if ($flagQ)
+                            { // echo "$qid";
+                                $qid = "Q".$qid;
+                              ?>
+                                
+                                 <td>  <?php echo "$qname<br/>"; ?> </td>
+                                <td> 
+                                    <a href="./edit_manual_mapping.php?id=<?php echo $qid; ?>&course=<?php echo $course_id; ?>&mod=<?php echo $module; ?>" title='Edit'> <i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
+                                </td>
+                          
+                        <?php
+                          } 
+                          ?>
+                      </tr>
+                <?php
+                        }
+
+                        foreach($recA as $records)
+                        {
+                            $aid = $records->id;
+                            $childid = $aid;
+                            $aname = $records->name;
+                            $module = $records->module;
+                            array_push($mactivitiesids,"A".$aid);
+                                  ?>
+                            <tr>
+                            <?php
+                            $flagA = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($aid,$module));
+                            if ($flagA)
+                             {
+                                //var_dump($flagA);
+                                $aid = "A".$aid;
+                              ?>
+                                
+                                 <td>  <?php echo "$aname<br/>"; ?> </td>
+                                <td> 
+                                    <a href="./edit_manual_mapping.php?id=<?php echo $aid; ?>&course=<?php echo $course_id; ?>&mod=<?php echo $module; ?>" title='Edit'> <i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>
+                                </td>
+                          
+                        <?php
+                          } 
+                          ?>
+                      </tr>
+                <?php
+
+
+                        }
+
+                        ?>
+
+            </table>
+
+<?php
+        }
        
 
     }
