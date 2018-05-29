@@ -57,7 +57,7 @@
         for ($j=0 ; $j<sizeof($sidarray); $j++){ // loop stud id times
             for ($i=0; $i<sizeof($marksarray) ; $i++){ // loop marks obt time (for inserting marks of particular stud ques count times)
                 $qcount++;
-                if($marksarray[$i] != ""){
+                if(is_null($marksarray[$i])){
                     $flag = 1; // true if student record has marks
                 }
                 if($qcount == $ques_count){
@@ -69,7 +69,7 @@
             if(!$flag){
                 echo "hello";
                 array_splice($sidarray, $j, 1); // remove student seat number
-                array_splice($marksarray, $i-$ques_count, $ques_count); // remove student marks
+                array_splice($marksarray, $i-($ques_count+1), $ques_count); // remove student marks
             }
             $flag = 0;
         }
