@@ -39,8 +39,24 @@
 			array_push($marksarray,$mobt);	
         }
         //var_dump ($aspro_id); echo "<br>";
-        //var_dump ($sidarray); echo "<br>";
-        //var_dump ($marksarray); echo "<br>";
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
+
+        //FILTER DATA FOR NULL RECORDS
+        $len = count($sidarray);
+        for ($i=0 ; $i<$len; $i++){ // loop stud id times
+            if($marksarray[$i] == NULL){
+                //echo "hello$i<br>";
+                unset($sidarray[$i]); // remove student seat number
+                unset($marksarray[$i]); // remove student marks
+            }
+        }
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
+        $sidarray = array_values($sidarray);
+        $marksarray = array_values($marksarray);
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
 
         // INSERT DATA
         try {
