@@ -73,8 +73,8 @@
             }
             $flag = 0;
         }
-        array_values($sidarray);
-        array_values($marksarray);
+        $sidarray = array_values($sidarray);
+        $marksarray = array_values($marksarray);
         print_r ($sidarray); echo "<br>";
         print_r ($marksarray); echo "<br>";
 
