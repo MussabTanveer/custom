@@ -55,8 +55,10 @@
         $qcount=0; // to track ques count
         $flag = 0;
         $i = 0;
-        for ($j=0 ; $j<sizeof($sidarray); $j++){ // loop stud id times
-            for (; $i<sizeof($marksarray) ; $i++){ // loop marks obt time (for inserting marks of particular stud ques count times)
+        $lens = count($sidarray);
+        $lenm = count($marksarray);
+        for ($j=0 ; $j<$lens; $j++){ // loop stud id times
+            for (; $i<$lenm; $i++){ // loop marks obt time (for inserting marks of particular stud ques count times)
                 $qcount++;
                 if($marksarray[$i] != NULL){
                     //echo "hello";
@@ -71,8 +73,10 @@
             }
             if(!$flag){
                 //echo "hello";
-                array_splice($sidarray, $j, 1); // remove student seat number
-                array_splice($marksarray, $i-$ques_count, $ques_count); // remove student marks
+                unset($sidarray[$j]); // remove student seat number
+                for($q=0; $q<$ques_count; $q++){
+                    unset($marksarray[$i-$ques_count+$q]); // remove student marks
+                }
             }
             $flag = 0;
         }
