@@ -51,6 +51,29 @@
         //var_dump ($sidarray); echo "<br>";
         //print_r ($marksarray); echo "<br>";
 
+        //FILTER DATA FOR NULL RECORDS
+        $qcount=0; // to track ques count
+        $flag = 0;
+        for ($j=0 ; $j<sizeof($sidarray); $j++){ // loop stud id times
+            for ($i=0; $i<sizeof($marksarray) ; $i++){ // loop marks obt time (for inserting marks of particular stud ques count times)
+                $qcount++;
+                if($marksarray[$i] != ""){
+                    $flag = 1; // true if student record has marks
+                }
+                if($qcount == $ques_count){
+                    $i++;
+                    $qcount=0; // set ques count to 0
+                    break;
+                }
+            }
+            if(!$flag){
+                array_splice($sidarray, $j, 1); // remove student seat number
+                array_splice($marksarray, $i-$ques_count, $ques_count); // remove student marks
+            }
+        }
+        array_values($sidarray);
+        array_values($marksarray);
+
         // INSERT DATA
         $i = 0; // initialize
         $qidx = 0; // to track ques index
