@@ -76,7 +76,7 @@ if(!empty($_GET['other']) && !empty($_GET['courseid']))
             ?>
             <tr>
                 <td>
-                    <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
+                    <?php echo strtoupper($user->seatnum); array_push ($stdids,$user->sid); ?>
                 </td>
                 <td style="background-color: #ECEEEF;">
                     <input type="number" name="marks[<?php echo $indx; ?>]" step="0.001" min="0" max="<?php echo $maxmarks; ?>" />

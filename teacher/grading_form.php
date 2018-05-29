@@ -90,7 +90,7 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
             ?>
             <tr>
                 <td>
-                    <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
+                    <?php echo strtoupper($user->seatnum); array_push ($stdids,$user->sid); ?>
                 </td>
                 <?php
                 $i=0;
