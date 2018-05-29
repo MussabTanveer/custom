@@ -48,8 +48,8 @@
         //var_dump ($ques_count); echo "<br>";
         //var_dump ($quiz_id); echo "<br>";
         //var_dump ($qidarray); echo "<br>";
-        print_r ($sidarray); echo "<br>";
-        print_r ($marksarray); echo "<br>";
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
 
         //FILTER DATA FOR NULL RECORDS
         $qcount=0; // to track ques count
@@ -80,12 +80,12 @@
             }
             $flag = 0;
         }
-        print_r ($sidarray); echo "<br>";
-        print_r ($marksarray); echo "<br>";
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
         $sidarray = array_values($sidarray);
         $marksarray = array_values($marksarray);
-        print_r ($sidarray); echo "<br>";
-        print_r ($marksarray); echo "<br>";
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
 
         // INSERT DATA
         $i = 0; // initialize
