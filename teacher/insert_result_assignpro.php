@@ -29,7 +29,7 @@
                 array_push($useridsupdate, $userid);
             }
         }
-        print_r($useridsupdate); echo "<br>";
+        //print_r($useridsupdate); echo "<br>";
 
         $sidarray = array();
 		foreach ($_POST['studid'] as $sid)
