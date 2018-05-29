@@ -19,9 +19,16 @@
 
         // Check marks already entered or not
         $edit = 0;
+        $useridsupdate = array();
         $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($quiz_id));
         if($check){
             $edit = 1;
+            foreach($check as $c){
+                $userid = $c->userid;
+                array_push($useridsupdate, $userid);
+            }
+            $useridsupdate = array_unique($useridsupdate);
+            $useridsupdate = array_values($useridsupdate);
         }
         
         // GET DATA
@@ -102,12 +109,21 @@
                         $record->userid = $sidarray[$j];
                         $record->questionid = $qidarray[$qidx];
                         $record->obtmark = $marksarray[$i];
-                        
                         $DB->insert_record('manual_quiz_attempt', $record);
                     }
                     else {
-                        $sql_update="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
-                        $DB->execute($sql_update, array($marksarray[$i], $quiz_id, $sidarray[$j], $qidarray[$qidx]));
+                        if(in_array($sidarray[$j], $useridsupdate)){
+                            $sql_update="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
+                            $DB->execute($sql_update, array($marksarray[$i], $quiz_id, $sidarray[$j], $qidarray[$qidx]));
+                        }
+                        else{
+                            $record = new stdClass();
+                            $record->quizid = $quiz_id;
+                            $record->userid = $sidarray[$j];
+                            $record->questionid = $qidarray[$qidx];
+                            $record->obtmark = $marksarray[$i];
+                            $DB->insert_record('manual_quiz_attempt', $record);
+                        }
                     }
                     //$sql="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES ('$quiz_id','$sidarray[$j]','$qidarray[$qidx]','$marksarray[$i]')";
                     //$DB->execute($sql);
