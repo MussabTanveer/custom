@@ -48,8 +48,8 @@
         //var_dump ($ques_count); echo "<br>";
         //var_dump ($quiz_id); echo "<br>";
         //var_dump ($qidarray); echo "<br>";
-        //var_dump ($sidarray); echo "<br>";
-        //print_r ($marksarray); echo "<br>";
+        print_r ($sidarray); echo "<br>";
+        print_r ($marksarray); echo "<br>";
 
         //FILTER DATA FOR NULL RECORDS
         $qcount=0; // to track ques count
@@ -67,12 +67,16 @@
                 }
             }
             if(!$flag){
+                echo "hello";
                 array_splice($sidarray, $j, 1); // remove student seat number
                 array_splice($marksarray, $i-$ques_count, $ques_count); // remove student marks
             }
+            $flag = 0;
         }
         array_values($sidarray);
         array_values($marksarray);
+        print_r ($sidarray); echo "<br>";
+        print_r ($marksarray); echo "<br>";
 
         // INSERT DATA
         $i = 0; // initialize
