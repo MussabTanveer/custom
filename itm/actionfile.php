@@ -20,25 +20,25 @@
         $dropdown=$_GET['dropdown'];
         
         if($dropdown=='coursecode'){
-            $rec=$DB->get_records_sql('SELECT * FROM `mdl_course` WHERE idnumber = "'.$name.'" ORDER BY id DESC');
+            $rec=$DB->get_records_sql("SELECT * FROM `mdl_course` WHERE  idnumber = ? OR idnumber like ? ORDER BY id DESC",array($name,"%$name%") );;
             $rec||die('<h3> No data available or wrong entry <h3>'.$OUTPUT->footer());
         }
         if($dropdown=='coursename'){
-            $rec=$DB->get_records_sql('SELECT * FROM `mdl_course` WHERE fullname = "'.$name.'" ORDER BY id DESC');    
+            $rec=$DB->get_records_sql("SELECT * FROM `mdl_course` WHERE fullname = ? OR fullname like ? AND id != ? ORDER BY id DESC" ,array($name,"%$name%",1));    
             $rec||die('<h3> No data available or wrong entry <h3>'.$OUTPUT->footer());
         }
         if($dropdown=='shortname'){
-            $rec=$DB->get_records_sql('SELECT * FROM `mdl_course` WHERE shortname = "'.$name.'" ORDER BY id DESC');
+            $rec=$DB->get_records_sql("SELECT * FROM `mdl_course` WHERE shortname = ? OR shortname like ? AND id != ? ORDER BY id DESC" ,array($name,"%$name%",1));
             $rec||die('<h3> No data available or wrong entry <h3>'.$OUTPUT->footer());
         }
         if($dropdown == 'startdate'){
             $date = strtotime($date);
-            $rec=$DB->get_records_sql('SELECT * FROM `mdl_course` WHERE startdate = "'.$date.'" ORDER BY id DESC');
+            $rec=$DB->get_records_sql("SELECT * FROM `mdl_course` WHERE startdate = ? AND id !=? ORDER BY id DESC",array($date,1));
             $rec||die('<h3> No data available <h3>'.$OUTPUT->footer());
         }
         if($dropdown == 'enddate'){
             $date = strtotime($date);
-            $rec=$DB->get_records_sql('SELECT * FROM `mdl_course` WHERE enddate = "'.$date.'" ORDER BY id DESC');
+            $rec=$DB->get_records_sql("SELECT * FROM `mdl_course` WHERE enddate = ?  AND id !=? ORDER BY id DESC",array($date,1));
             $rec||die('<h3> No data available <h3>'.$OUTPUT->footer());
         }
         if($rec){
