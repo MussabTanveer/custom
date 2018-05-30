@@ -23,15 +23,15 @@
     </script>
     <?php
     if($dropdown=='name'){
-    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid AND CONCAT( u.firstname, " ", u.lastname ) LIKE "%'.$name.'%" ORDER BY u.idnumber;');
+    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid AND (CONCAT( u.firstname, " ", u.lastname ) = ? OR CONCAT( u.firstname, " ", u.lastname ) LIKE ?) ORDER BY u.idnumber;',array($name,"%$name%"));
     $rec||die('<h3> No data available or wrong entry <h3>'.$OUTPUT->footer());
     }
     if($dropdown=='seatnumber'){
-    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid AND u.username="'.$name.'" ORDER BY u.idnumber;');
+    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid AND (u.username=? OR u.username LIKE ? )  ORDER BY u.idnumber;',array($name,"%$name%"));
     $rec||die('<h3> No data available or wrong entry <h3>'.$OUTPUT->footer());
     }
     if($dropdown=='batchnumber'){
-    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid AND substr(u.username,4,2)="'.$bat.'"  ORDER BY u.idnumber;');
+    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid AND (substr(u.username,4,2)=? OR substr(u.username,4,2) LIKE ? )  ORDER BY u.idnumber;',array($bat,"%$bat%"));
     $rec||die('<h3> No data available or wrong entry <h3>'.$OUTPUT->footer());
     }
     if($dropdown == 'cohort'){
