@@ -17,11 +17,10 @@
 
 <?php
 
-    if(!empty($_GET['quizid']) && !empty($_GET['userId']) && !empty($_GET['qId'])  && !empty($_GET['courseid']))
+    if(!empty($_GET['quizid']) && !empty($_GET['userId']) && !empty($_GET['courseid']))
     {
         $quizId = $_GET['quizid'];
         $userId = $_GET['userId'];
-        $qId = $_GET['qId'];
         $courseid = $_GET['courseid'];
 
       $sql = "DELETE FROM mdl_manual_quiz_attempt WHERE quizid = $quizId AND userid =$userId ";
