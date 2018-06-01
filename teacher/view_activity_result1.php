@@ -102,7 +102,7 @@
                 <?php echo strtoupper($userNames[$i]); // display username once every record ?>
             </td><?php
             foreach ($qids as $qid){?>
-            <td ><?php echo $obtMarks[$i]; ?> <?php echo"<a href='edit_activity_marks.php?quizid=$quizId&userId=$userIds[$i]&qId=$qid&courseid=$course_id'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a><br>"; $i++; ?>
+            <td ><?php echo $obtMarks[$i]; ?> <?php echo"<a href='delete_quiz_marks.php?quizid=$quizId&userId=$userIds[$i]&courseid=$course_id'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete'onClick=\"return confirm('Are you sure you want to delete the marks of all questions for the following Roll no?')\"  aria-label='Delete'></i></a><br>"; $i++; ?>
 
             </td>
             <?php
