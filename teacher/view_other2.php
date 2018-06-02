@@ -20,9 +20,10 @@
     <script src="../script/table2excel/jquery.table2excel.min.js"></script>
     <?php
 
-    if(!empty($_GET['otherid']))
+    if(!empty($_GET['otherid']) && isset($_GET['courseid']))
     {
     $other_id=$_GET['otherid'];
+     $courseid=$_GET['courseid'];
     //echo $other_id;
     
     //$id=$_POST['id'];
@@ -48,14 +49,14 @@
         $serialno = 0;
         $table = new html_table();
         $table->id = "mytable";
-        $table->head = array('S. No.', 'Seat No.', 'Marks Obtained','Edit');
+        $table->head = array('S. No.', 'Seat No.', 'Marks Obtained','Delete');
         foreach ($rec as $records) {
             $serialno++;
             $marksid=$records->id;
             $userid = $records->username;
             $obtmark = $records->obtmark;
             //"<a href='edit_assignment_marks.php?edit=$marksid' title='Edit'><img src='../img/icons/edit.png' /></a>";
-            $table->data[] = array($serialno,strtoupper($userid),$obtmark, "<a href='edit_other_marks.php?edit=$marksid&userid=$userid&otherid=$other_id' title='Edit'><img src='../img/icons/edit.png' /></a>");
+            $table->data[] = array($serialno,strtoupper($userid),$obtmark,"<a href='delete_other_marks.php?delete=$marksid&courseid=$courseid&otherid=$other_id'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete'onClick=\"return confirm('Are you sure you want to delete the marks of other activity for the Roll no. $userid?')\"  aria-label='Delete'></i></a><br></a>" );
         }
 
     echo html_writer::table($table);
