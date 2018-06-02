@@ -16,7 +16,6 @@
     <script src="../script/jquery/jquery-3.2.1.js"></script>
     <script src="../script/table2excel/jquery.table2excel.min.js"></script>
     <?php
-
     if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
     {
     $course_id=$_GET['courseid'];
@@ -30,9 +29,7 @@
     $quesmarks=array(); 
         
     $ques=$DB->get_records_sql("SELECT qq.id, qq.quesname, qq.maxmark, qq.cloid, c.shortname FROM mdl_manual_quiz_question qq, mdl_competency c WHERE mquizid=$quizId AND qq.cloid=c.id ORDER BY id");
-
     $obtMarksq=$DB->get_records_sql("SELECT qat.id, qat.obtmark, substring(u.username,4,8) AS seatorder,u.username ,qat.userid FROM mdl_manual_quiz_attempt qat, mdl_user u WHERE quizid=$quizId AND qat.userid=u.id ORDER BY seatorder, qat.questionid");
-
     $obtMarks=array();
     $userNames = array();
     //$cloids=array();
@@ -54,7 +51,6 @@
     echo "<font color=red>The selected activity has not been graded yet!</font>";
         goto down;
     }
-
     //var_dump($obtMarks);
     if($ques)
     {
@@ -64,7 +60,6 @@
             $maxmark=$q->maxmark; 
             //$cloid=$q->cloid;
             $shortname=$q->shortname;
-
             array_push ($cloShortNames,$shortname);
             //array_push ($cloids,$cloid);
             array_push ($quesnames,$qname);
