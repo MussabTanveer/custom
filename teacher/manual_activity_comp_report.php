@@ -47,27 +47,23 @@
                 
             $rec=$DB->get_recordset_sql(
                 'SELECT
-                qa.userid,
-                u.idnumber AS std_id,
-                u.username AS seat_no,
-                CONCAT(u.firstname, " ", u.lastname) AS std_name,
-                qu.cloid,
-               
-                   SUM(qa.obtmark) AS marksobtained,
-                   SUM(qu.maxmark) AS maxmark
+                    qa.userid,
+                    u.idnumber AS std_id,
+                    u.username AS seat_no,
+                    substring(u.username,4,8) AS seatorder,
+                    CONCAT(u.firstname, " ", u.lastname) AS std_name,
+                    qu.cloid,
+                    SUM(qa.obtmark) AS marksobtained,
+                    SUM(qu.maxmark) AS maxmark
                 FROM
                     mdl_manual_quiz q,
-                    
                     mdl_manual_quiz_question qu,
-                   
                     mdl_manual_quiz_attempt qa,
-                   
                     mdl_user u
                 WHERE
                     q.id=? AND q.id=qa.quizid AND qa.userid=u.id AND q.id=qu.mquizid AND qa.questionid=qu.id
-                    
-                GROUP BY qa.userid, qu.cloid
-                ORDER BY qa.userid, qu.cloid',
+                GROUP BY seatorder, qu.cloid
+                ORDER BY seatorder, qu.cloid',
                 
                 array($quiz_id));
 
@@ -290,19 +286,20 @@
             //Get assign comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
             
-                    FROM mdl_competency c, mdl_manual_assign_pro a
-            
-                    WHERE a.id=? AND a.cloid=c.id
-                    
-                    ORDER BY a.cloid",
-                    
-                    array($assign_id));
+                FROM mdl_competency c, mdl_manual_assign_pro a
+        
+                WHERE a.id=? AND a.cloid=c.id
+                
+                ORDER BY a.cloid",
+                
+                array($assign_id));
                     
             $rec=$DB->get_recordset_sql(
                 'SELECT
                 ag.userid,
                 u.idnumber AS std_id,
                 u.username AS seat_no,
+                substring(u.username,4,8) AS seatorder,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 a.maxmark AS maxmark,
                 ag.obtmark AS marksobtained
@@ -312,7 +309,7 @@
                     mdl_user u
                 WHERE
                     a.id=? AND ag.userid=u.id  AND a.id=ag.assignproid
-                ORDER BY ag.userid',
+                ORDER BY seatorder',
                 
             array($assign_id));
 
