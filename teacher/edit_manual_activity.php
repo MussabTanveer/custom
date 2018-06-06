@@ -479,7 +479,7 @@
         //echo $newObtMark;
 
         $sql_update="UPDATE mdl_manual_quiz SET name =?, description = ? WHERE id=?";
-       // $DB->execute($sql_update, array($n, $description, $Id));
+        $DB->execute($sql_update, array($n, $description, $Id));
 
         $quesNames = $_POST['quesname'];
         $quesTexts = $_POST['ques_text'];
@@ -520,7 +520,7 @@
         elseif ($type == "finalexam")
              $redirect = "print_final_paper.php?type=$type&course=$courseId";
         
-       // redirect($redirect);
+        redirect($redirect);
     }
     echo $OUTPUT->footer();
     ?>
