@@ -778,6 +778,7 @@ th{
     </script>
 
 <?php
+    echo "<br><a href='./report_teacher.php?course=$course_id'>Back</a>";
     }
     else
     {?>

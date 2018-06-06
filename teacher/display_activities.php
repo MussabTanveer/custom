@@ -241,6 +241,8 @@
         <a style="margin-top: 20px" href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
 
         <?php
+
+        echo "<br><br><a href='./report_teacher.php?course=$course_id'>Back</a>";
         
     }
     else

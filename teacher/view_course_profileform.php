@@ -126,6 +126,8 @@
             echo "<font color=red size=5>Course profile has not been entered by the chairman yet!</font>";
         }
 
+        echo "<a href='./report_teacher.php?course=$course_id'>Back</a>";
+
     }
     else {
 

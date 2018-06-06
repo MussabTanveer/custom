@@ -444,6 +444,7 @@
 		else{
 			echo "<font color = green>Grading Policy is already 100%<br />Cannot add another evaluation method.<br />Either <a href=display_grading_policy.php?course=$course_id>delete</a> or <a href=display_grading_policy.php?course=$course_id>edit</a> grading policy.</font>";
 		}
+		echo "<br><a href='./report_teacher.php?course=$course_id'>Back</a>";
 	}
 	else{
 		?>

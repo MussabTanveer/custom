@@ -172,6 +172,7 @@
             <br />
             <?php
         }
+        echo "<a href='./report_teacher.php?course=$course_id'>Back</a>";
     }
     else
     {?>

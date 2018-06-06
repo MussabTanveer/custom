@@ -63,6 +63,7 @@
         }
         else
             echo "<h4 style='color:red'> <br />Found no Graded Activity of this Course! </h4>";
+        echo "<a href='./report_teacher.php?course=$course_id'>Back</a>";
     }
     else{
         ?>

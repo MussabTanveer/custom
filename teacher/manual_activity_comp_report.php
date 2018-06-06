@@ -463,7 +463,8 @@
         
         }
 
-
+        echo "<a href='./display_activities.php?course=$courseid'>Back</a>";
+        
         echo $OUTPUT->footer();
 
         ?>

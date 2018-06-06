@@ -190,6 +190,7 @@
             </script>
 
             <?php
+            echo "<a href='./display_activities.php?course=$course_id'>Back</a>";
             echo $OUTPUT->footer();
         }
         else{

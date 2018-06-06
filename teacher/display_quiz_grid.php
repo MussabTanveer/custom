@@ -273,9 +273,7 @@
         ORDER BY qa.attempt, qa.userid
         */
 
-        ?>
-
-        <?php
+        echo "<br><br><a href='./display_activities-2.php?course=$course_id'>Back</a>";
         echo $OUTPUT->footer();
     }
     else
