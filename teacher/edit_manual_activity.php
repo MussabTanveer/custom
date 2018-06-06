@@ -180,10 +180,11 @@
 
             <?php
             $index = 0;
-            for ($i = 0 ; $i<count($quesTextArray); $i++)
+            $i = 0 ;
+            for (; $i<count($quesTextArray); $i++)
             { 
                 ?>
-
+                <div id="dynamicInput<?php echo $i; ?>">
                 <h3 style="margin-top: 40px">Map Question to CLO</h3>
                 <div class="form-group row fitem ">
                         <div class="col-md-3">
@@ -267,7 +268,7 @@
                             </label>
                         </div>
                         <div class="col-md-9 form-inline felement">
-                            <select  onChange="dropdownTip(this.value, <?php echo $i; ?>)" name="clo[]" class="select custom-select" id="clo<?php echo $i; ?>">
+                            <select required onChange="dropdownTip(this.value, <?php echo $i; ?>)" name="clo[]" class="select custom-select" id="clo<?php echo $i; ?>">
                                 <option value=''>Choose..</option>
                                 <?php
 
@@ -302,15 +303,25 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 <?php
-            } ?>
+            } 
+           $i--;
+            ?>
 
 
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-9">
+                    <input class="btn btn-success" type="button" value="Add another question" onClick="addInput('dynamicInput<?php echo $i; ?>');">
+                </div>
+            </div>
 
             <input class="btn btn-info" type="submit" name="save" value="Save"/>
             
 
-
+            <br /><br />
+            <div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
         </form>
 
 
@@ -329,9 +340,9 @@
         var quesNamesArray = <?php echo json_encode($quesNamesArray); ?>;
         var maxmarkArray  = <?php echo json_encode($maxmarkArray); ?>;
                
-        console.log(quesTextArray);
-        console.log(quesNamesArray);
-        console.log(maxmarkArray);
+       // console.log(quesTextArray);
+       // console.log(quesNamesArray);
+       // console.log(maxmarkArray);
                 
         for(var i=0 ; i<quesTextArray.length; i++)
         {
@@ -379,6 +390,82 @@
                 }
             }
         }
+
+
+
+        var i = <?php echo json_encode($i); ?> ;
+        i=i+1;
+        var type = <?php echo json_encode($type); ?>;
+       // var closid = <?php echo json_encode($closid); ?>;
+        var clonames = <?php echo json_encode($clonames); ?>;
+
+            function addInput(divName){
+                //alert("Work");
+                var divWrap = document.createElement('div');
+                var divid = "div"+i;
+                divWrap.setAttribute("id", divid);
+                divWrap.innerHTML = '<h3>Map Question to CLO</h3>';
+                document.getElementById(divName).appendChild(divWrap);
+
+                /*var newh3 = document.createElement('h3');
+                newh3.innerHTML = 'Map Question to CLO';
+                document.getElementById(divName).appendChild(newh3);*/
+
+                var newdiv = document.createElement('div');
+                newdiv.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_quesname'+i+'">Name</label></div><div class="col-md-5 form-inline felement" data-fieldtype="text"><input type="text" class="form-control" name="quesname[]" id="id_quesname'+i+'" size="" required maxlength="100"><div class="form-control-feedback" id="id_error_quesname"></div></div><div class="col-md-4"><i id="cross'+i+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+                divWrap.appendChild(newdiv);
+
+                var newdiv1 = document.createElement('div');
+                newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"></span><label class="col-form-label d-inline" for="id_ques_text'+i+'">Text</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea id="id_ques_text'+i+'" name="ques_text[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="800"></textarea></div></div><div class="form-control-feedback" id="id_error_ques_text" style="display: none;"></div></div></div>';
+                divWrap.appendChild(newdiv1);
+
+                var newdiv2 = document.createElement('div');
+                newdiv2.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_maxmark'+i+'">Max Mark</label></div><div class="col-md-9 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="maxmark[]" id="id_maxmark'+i+'" maxlength="10" size="" required step="0.001" min="0" max="100"><div class="form-control-feedback" id="id_error_maxmark"></div></div></div>';
+                divWrap.appendChild(newdiv2);
+
+                //Create select element for CLO selection
+                var selectCLO = document.createElement("select");
+                var selectid="clo"+i;
+                selectCLO.setAttribute("id", selectid);
+                selectCLO.className = "select custom-select";
+                selectCLO.name = "clo[]";
+                jsFuncVal = "dropdownTip(this.value, "+i+")";
+                selectCLO.setAttribute("required", "required");
+                selectCLO.setAttribute("onChange", jsFuncVal);
+
+                //Create and append the options
+                var option = document.createElement("option");
+                option.value = "";
+                option.text = "Choose..";
+                selectCLO.appendChild(option);
+                for (var l = 0; l < closid.length; l++) {
+                    var option = document.createElement("option");
+                    option.value = closid[l];
+                    option.text = clonames[l];
+                    selectCLO.appendChild(option);
+                }
+
+                var newdivforselectCLO = document.createElement('div');
+                newdivforselectCLO.appendChild(selectCLO);
+
+                var newdiv3 = document.createElement('div');
+                newdiv3.innerHTML = '<div class="form-group row fitem "><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_clo">CLO</label></div><div class="col-md-9 form-inline felement">'+newdivforselectCLO.innerHTML+' <span id="plo'+i+'"></span> <span id="tax'+i+'"></span><div class="form-control-feedback" id="id_error_plo"></div></div></div>';
+                divWrap.appendChild(newdiv3);
+
+                if(type == "finalexam"){
+                    var newdiv4 = document.createElement('div');
+                    newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><label class="col-form-label d-inline" for="id_sepattempt">Separate Attempt</label></div><div class="col-md-9 form-inline felement"><input type="checkbox" value="'+i+'" name="separateattempt[]" id="id_sepattempt"><div class="form-control-feedback" id="id_error_sepattempt"></div></div></div>';
+                    divWrap.appendChild(newdiv4);
+                }
+
+                var idname = "#cross" + i;
+                var divname = "#div" + i;
+                $(idname).click(function(){
+                    $(divname).remove();
+                });
+                
+                i++;
+            }
         
 </script>
 
@@ -392,14 +479,16 @@
         //echo $newObtMark;
 
         $sql_update="UPDATE mdl_manual_quiz SET name =?, description = ? WHERE id=?";
-        $DB->execute($sql_update, array($n, $description, $Id));
+       // $DB->execute($sql_update, array($n, $description, $Id));
 
         $quesNames = $_POST['quesname'];
         $quesTexts = $_POST['ques_text'];
         $maxMarks = $_POST['maxmark'];
         $clos = $_POST['clo'];
 
-        /*var_dump($quesTexts);
+        /*var_dump($quesNames);
+        echo "<br/>";
+        var_dump($quesTexts);
         echo "<br/>";
         var_dump($maxMarks);
         echo "<br/>";
@@ -409,9 +498,18 @@
         
         for ($i=0; $i<count($quesNames) ; $i++)
         {
-            $sql_update="UPDATE mdl_manual_quiz_question SET quesname =?, questext = ?, maxmark = ?, cloid = ? WHERE id=?";
-            $DB->execute($sql_update, array($quesNames[$i], $quesTexts[$i],$maxMarks[$i],  $clos[$i],$quesIdsArray[$i]));
-          
+            if ($i < count($quesIdsArray))
+            { 
+                $sql_update="UPDATE mdl_manual_quiz_question SET quesname =?, questext = ?, maxmark = ?, cloid = ? WHERE id=?";
+                $DB->execute($sql_update, array($quesNames[$i], $quesTexts[$i],$maxMarks[$i],  $clos[$i],$quesIdsArray[$i]));
+            }
+            else
+            {
+                $sql="INSERT INTO mdl_manual_quiz_question (mquizid,quesname,questext,maxmark,cloid,separateattempt) VALUES (?,?,?,?,?,?)";
+                 $DB->execute($sql, array($Id, $quesNames[$i], $quesTexts[$i],$maxMarks[$i], $clos[$i],0));
+               
+            }
+              
         }
 
         echo "<font color = green> Details Updated Successfully </font>";
@@ -422,7 +520,7 @@
         elseif ($type == "finalexam")
              $redirect = "print_final_paper.php?type=$type&course=$courseId";
         
-        redirect($redirect);
+       // redirect($redirect);
     }
     echo $OUTPUT->footer();
     ?>
