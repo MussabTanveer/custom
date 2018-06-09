@@ -61,9 +61,10 @@
 
         else{
             echo "<h3>No other activity found!</h3>";
-            echo $OUTPUT->footer();
         }
-
+        ?>
+        <a class="btn btn-default" href="./report_teacher?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
     {?>

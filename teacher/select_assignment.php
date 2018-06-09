@@ -57,9 +57,11 @@
     <?php            
         }
         else{
-            echo "<h3>No Assignments found!</h3>";
-            echo $OUTPUT->footer();
+            echo "<h3>No assignment found!</h3>";
         }
+        ?>
+        <a class="btn btn-default" href="./report_teacher?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
     {?>

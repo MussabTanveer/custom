@@ -318,7 +318,23 @@
             </div>
 
             <input class="btn btn-info" type="submit" name="save" value="Save"/>
-            
+            <?php
+            if($type == "quiz"){
+            ?>
+            <a class="btn btn-default" href="./print_quiz_paper.php?type=<?php echo $type ?>&course=<?php echo $courseId ?>">Cancel</a>
+            <?php
+            }
+            elseif($type == "midterm"){
+            ?>
+            <a class="btn btn-default" href="./print_mid_paper.php?type=<?php echo $type ?>&course=<?php echo $courseId ?>">Cancel</a>
+            <?php
+            }
+            elseif($type == "finalexam"){
+            ?>
+            <a class="btn btn-default" href="./print_final_paper.php?type=<?php echo $type ?>&course=<?php echo $courseId ?>">Cancel</a>
+            <?php
+            }
+            ?>
 
             <br /><br />
             <div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>

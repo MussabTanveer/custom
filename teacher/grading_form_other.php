@@ -98,6 +98,7 @@ if(!empty($_GET['other']) && !empty($_GET['courseid']))
         <br />
         <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
         <button type="reset" value="Reset" class="btn btn-warning">Clear Form</button>
+        <a class="btn btn-default" href="./grading_form_other_selection.php?type=other&course=<?php echo $course_id ?>">Go Back</a>
     </form>
 
     <script>

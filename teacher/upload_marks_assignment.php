@@ -38,7 +38,7 @@
 
     $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_assign_pro_attempt WHERE assignproid = ?', array($qid));
     if($check){
-        echo "<font color=red>Notice: Sorry, cannot upload marks because they have already been uploaded!</font>";
+        echo "<p style='color:red;'>Notice: Sorry, cannot upload marks because they have already been uploaded!</p>";
         goto end;
     }
 
@@ -137,12 +137,16 @@
  
         }
         else {
-            echo "<font color=red>Please Select Valid Excel File</font>";
+            echo "<p style='color:red;'>Please Select Valid Excel File</p>";
         }
     }
     else {
-        echo "<font color=red>Please Select Excel File</font>";
+        echo "<p style='color:red;'>Please Select Excel File</p>";
     }
+    end:
+    ?>
+    <a class="btn btn-default" href="./report_teacher?course=<?php echo $course_id ?>">Go Back</a>
+    <?php
     }
     else
     {?>
@@ -150,6 +154,5 @@
         <a href="./teacher_courses.php">Back</a>
         <?php
     }
-    end:
     echo $OUTPUT->footer();
     ?>

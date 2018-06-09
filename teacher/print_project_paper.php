@@ -48,7 +48,10 @@
             echo "<br />";
         }
         else
-            echo "<h3><font color = red> No Project Found!</font></h3>";
+            echo "<h3 style='color:red;'>No Project Found!</h3>";
+        ?>
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
 	{?>

@@ -38,6 +38,9 @@
         }
         else
             echo "<font color = red> No Other Activity Found!</font>";
+        ?>
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
 	{?>

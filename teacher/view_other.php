@@ -50,6 +50,9 @@
         else{
             echo "<h3>You do not have any manual $type in this course!</h3>";
         }
+        ?>
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
 	else
 	{?>

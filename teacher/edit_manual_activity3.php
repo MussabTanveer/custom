@@ -188,7 +188,7 @@ if(isset($_GET['id']) && isset($_GET['course']))
 
 
             <button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
-           
+            <a class="btn btn-default" href="./view_other1.php?type=other&course=<?php echo $courseId ?>">Cancel</a>
             </form>
         <?php 
     }

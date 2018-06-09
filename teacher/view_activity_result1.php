@@ -16,14 +16,15 @@
     <script src="../script/jquery/jquery-3.2.1.js"></script>
     <script src="../script/table2excel/jquery.table2excel.min.js"></script>
     <?php
-    if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
+    if(!empty($_GET['quiz']) && !empty($_GET['courseid']) && !empty($_GET['type']))
     {
     $course_id=$_GET['courseid'];
     $course_id = (int)$course_id; // convert course id from string to int
     $coursecontext = context_course::instance($course_id);
     is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
     $qids = array();   
-    $quizId= $_GET['quiz'];
+    $quizId = $_GET['quiz'];
+    $type = $_GET['type'];
     //echo "$quizId";
     $quesnames=array(); 
     $quesmarks=array(); 
@@ -123,7 +124,25 @@
         });
     </script>
 
-<?php
+    <?php
+    if($type == "quiz"){
+    ?>
+    <a class="btn btn-default" href="./view_quiz_result.php?type=<?php echo $type ?>&course=<?php echo $course_id ?>">Go Back</a>
+    <?php
+    }
+    elseif($type == "midterm"){
+    ?>
+    <a class="btn btn-default" href="./view_mid_result.php?type=<?php echo $type ?>&course=<?php echo $course_id ?>">Go Back</a>
+    <?php
+    }
+    elseif($type == "finalexam"){
+    ?>
+    <a class="btn btn-default" href="./view_final_result.php?type=<?php echo $type ?>&course=<?php echo $course_id ?>">Go Back</a>
+    <?php
+    }
+    ?>
+
+    <?php
     }
     else{
         ?>

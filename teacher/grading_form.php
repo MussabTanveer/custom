@@ -34,13 +34,14 @@
     }
 </style>
 <?php
-if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
+if(!empty($_GET['quiz']) && !empty($_GET['courseid']) && !empty($_GET['type']))
 {
     $course_id=$_GET['courseid'];
     $coursecontext = context_course::instance($course_id);
     is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
 
-    $quizId= $_GET['quiz'];
+    $quizId = $_GET['quiz'];
+    $type = $_GET['type'];
     $stdids=array();
     $qids = array();
     $quesnames=array();
@@ -124,6 +125,23 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
         <br />
         <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
         <button type="reset" value="Reset" class="btn btn-warning">Clear Form</button>
+        <?php
+        if($type == "quiz"){
+        ?>
+        <a class="btn btn-default" href="./grading_form_quiz_selection.php?type=<?php echo $type ?>&course=<?php echo $course_id ?>">Go Back</a>
+        <?php
+        }
+        elseif($type == "midterm"){
+        ?>
+        <a class="btn btn-default" href="./grading_form_midterm_selection.php?type=<?php echo $type ?>&course=<?php echo $course_id ?>">Go Back</a>
+        <?php
+        }
+        elseif($type == "finalexam"){
+        ?>
+        <a class="btn btn-default" href="./grading_form_quiz_selection.php?type=<?php echo $type ?>&course=<?php echo $course_id ?>">Go Back</a>
+        <?php
+        }
+        ?>
     </form>
 
     <script>

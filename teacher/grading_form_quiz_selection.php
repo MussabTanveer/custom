@@ -34,13 +34,16 @@
                 $qid = $records->id;
                 $qname = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./grading_form.php?quiz=$qid&courseid=$course_id'>$qname</a>");
+                $table->data[] = array($serialno,"<a href='./grading_form.php?type=quiz&quiz=$qid&courseid=$course_id'>$qname</a>");
             }
             echo html_writer::table($table);
             echo "<br />";
         }
         else
             echo "<h3>You do not have any manual $type in this course!</h3>";
+        ?>
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
 	{?>

@@ -51,7 +51,10 @@
             echo "<br />";
         }
         else
-            echo "<font color = red> No Assignment Found!</font>";
+            echo "<h3 style='color:red;'> No Assignment Found!</h3>";
+        ?>
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
 	{?>

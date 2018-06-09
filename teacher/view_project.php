@@ -98,6 +98,9 @@ echo html_writer::table($table);
   else{
             echo "<h3>No students have submitted project yet!</h3>";
         }
+    ?>
+    <a class="btn btn-default" href="./select_project?type=project&course=<?php echo $courseid ?>">Go Back</a>
+    <?php
 
 
 

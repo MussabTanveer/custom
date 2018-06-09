@@ -31,13 +31,16 @@
                 $aname = $assign->name;
                 $aid   = $assign->id;
                 
-                $table->data[] = array($serialno,"<a href='./grading_form_assignpro.php?as_pro=$aid&courseid=$course_id'>$aname</a>");
+                $table->data[] = array($serialno,"<a href='./grading_form_assignpro.php?type=assign&as_pro=$aid&courseid=$course_id'>$aname</a>");
             }
             echo html_writer::table($table);
             echo "<br />";
         }
         else
-            echo "<font color = red> No Assignment Found!</font>";
+            echo "<p style='color:red;'> No Assignment Found!</p>";
+        ?>
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
 	{?>

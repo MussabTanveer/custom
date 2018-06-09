@@ -34,13 +34,14 @@
     }
 </style>
 <?php
-if(!empty($_GET['as_pro']) && !empty($_GET['courseid']))
+if(!empty($_GET['as_pro']) && !empty($_GET['courseid']) && !empty($_GET['type']))
 {
     $course_id=$_GET['courseid'];
     $coursecontext = context_course::instance($course_id);
     is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
 
-    $as_pro= $_GET['as_pro'];
+    $as_pro = $_GET['as_pro'];
+    $type = $_GET['type'];
     $stdids=array();
     $maxmarks=0;
     $asproDetail=$DB->get_records_sql("SELECT * FROM mdl_manual_assign_pro WHERE id=$as_pro");
@@ -98,6 +99,18 @@ if(!empty($_GET['as_pro']) && !empty($_GET['courseid']))
         <br />
         <input type="submit" value="Submit Result" name="submit" class="btn btn-primary">
         <button type="reset" value="Reset" class="btn btn-warning">Clear Form</button>
+        <?php
+        if($type == "assign"){
+        ?>
+        <a class="btn btn-default" href="./grading_form_assign_selection.php?type=assign&course=<?php echo $course_id ?>">Go Back</a>
+        <?php
+        }
+        elseif($type == "project"){
+        ?>
+        <a class="btn btn-default" href="./grading_form_pro_selection.php?type=project&course=<?php echo $course_id ?>">Go Back</a>
+        <?php
+        }
+        ?>
     </form>
 
     <script>

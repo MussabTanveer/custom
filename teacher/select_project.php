@@ -66,9 +66,11 @@
 
 
         else{
-            echo "<h3>No Projects found!</h3>";
-            echo $OUTPUT->footer();
+            echo "<h3>No project found!</h3>";
         }
+        ?>
+        <a class="btn btn-default" href="./report_teacher?course=<?php echo $course_id ?>">Go Back</a>
+        <?php
     }
     else
     {?>

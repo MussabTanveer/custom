@@ -80,6 +80,9 @@
     else{
        echo "<h3>No students have attempted Assignment yet!</h3>";
     }
+    ?>
+    <a class="btn btn-default" href="./select_other.php?type=other&course=<?php echo $courseid ?>">Go Back</a>
+    <?php
 }
 
 ?>

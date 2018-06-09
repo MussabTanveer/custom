@@ -96,7 +96,7 @@
 
 
 
-    if(isset($_GET['id']) && isset($_GET['course']))
+    if(!empty($_GET['id']) && !empty($_GET['course']))
     {
         
         $Id = $_GET['id'];
@@ -130,9 +130,6 @@
             array_push($levels, $lname); // array of levels
             array_push($lvlno, $lvl); // array of level nos
         }
-
-
-
 
 
         $sql =$DB->get_records_sql('SELECT * FROM mdl_manual_assign_pro WHERE id = ?',array($Id));
@@ -329,7 +326,18 @@
 
 
             <button class="btn btn-info" type="submit"  name="save" id="button" /> Save </button>
-           
+            <?php
+            if($type == "assign"){
+            ?>
+            <a class="btn btn-default" href="./print_assign_paper.php?type=<?php echo $type ?>&course=<?php echo $courseId ?>">Cancel</a>
+            <?php
+            }
+            elseif($type == "project"){
+            ?>
+            <a class="btn btn-default" href="./print_project_paper.php?type=<?php echo $type ?>&course=<?php echo $courseId ?>">Cancel</a>
+            <?php
+            }
+            ?>
             </form>
         <?php 
     }
