@@ -778,7 +778,7 @@ th{
     </script>
 
 <?php
-    echo "<br><a href='./report_teacher.php?course=$course_id'>Back</a>";
+    echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
     }
     else
     {?>

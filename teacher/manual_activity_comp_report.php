@@ -460,7 +460,7 @@
         
         }
 
-        echo "<a href='./display_activities.php?course=$courseid'>Back</a>";
+        echo "<a class='btn btn-default' href='./display_activities.php?course=$courseid'>Go Back</a>";
         
         echo $OUTPUT->footer();
 

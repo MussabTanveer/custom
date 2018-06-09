@@ -1087,7 +1087,7 @@ th{
         else{
             echo "<h5 style='color:red'> <br />Found no mapped graded activity item of this course! </h5> <br /><a href=./grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><a href=./map_grading_item.php?course=$course_id>Map activities to grading policy item</a>.";
         }
-        echo "<br><a href='./report_teacher.php?course=$course_id'>Back</a>";
+        echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
     }
     else
     {?>

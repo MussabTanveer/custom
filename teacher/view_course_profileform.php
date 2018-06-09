@@ -123,10 +123,10 @@
         }
 
         else{
-            echo "<font color=red size=5>Course profile has not been entered by the chairman yet!</font>";
+            echo "<h3 style='color:red'>Course profile has not been entered by the chairman yet!</h3>";
         }
 
-        echo "<a href='./report_teacher.php?course=$course_id'>Back</a>";
+        echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
 
     }
     else {

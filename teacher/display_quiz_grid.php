@@ -273,7 +273,7 @@
         ORDER BY qa.attempt, qa.userid
         */
 
-        echo "<br><br><a href='./display_activities-2.php?course=$course_id'>Back</a>";
+        echo "<br><br><a class='btn btn-default' href='./display_activities-2.php?course=$course_id'>Go Back</a>";
         echo $OUTPUT->footer();
     }
     else

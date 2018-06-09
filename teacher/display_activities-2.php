@@ -87,7 +87,7 @@
                 //$courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$intro</a>");
+                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?type=quiz&quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?type=quiz&quiz=$id&courseid=$course_id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
@@ -106,7 +106,7 @@
                 $id = $records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./view_assignment.php?assignid=$id&courseid=$course_id'>$name</a>", "<a href='./view_assignment.php?assignid=$id&courseid=$course_id'>$intro</a>");
+                $table->data[] = array($serialno, "<a href='./view_assignment.php?type=assign&assignid=$id&courseid=$course_id'>$name</a>", "<a href='./view_assignment.php?type=assign&assignid=$id&courseid=$course_id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
@@ -125,7 +125,7 @@
                 $id = $records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./view_project.php?projectid=$id&courseid=$course_id'>$name</a>", "<a href='./view_project.php?projectid=$id&courseid=$course_id'>$intro</a>");
+                $table->data[] = array($serialno, "<a href='./view_project.php?type=project&projectid=$id&courseid=$course_id'>$name</a>", "<a href='./view_project.php?type=project&projectid=$id&courseid=$course_id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
@@ -145,7 +145,7 @@
                 //$courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$intro</a>");
+                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?type=midterm&quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?type=midterm&quiz=$id&courseid=$course_id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
@@ -165,14 +165,14 @@
                 //$courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?quiz=$id&courseid=$course_id'>$intro</a>");
+                $table->data[] = array($serialno, "<a href='./view_activity_result1.php?type=finalexam&quiz=$id&courseid=$course_id'>$name</a>", "<a href='./view_activity_result1.php?type=finalexam&quiz=$id&courseid=$course_id'>$intro</a>");
             }
             echo html_writer::table($table);
             ?>
             <br />
             <?php
         }
-        echo "<a href='./report_teacher.php?course=$course_id'>Back</a>";
+        echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
     }
     else
     {?>

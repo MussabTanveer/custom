@@ -39,6 +39,8 @@
         
         //echo "Course ID : $course_id";
 
+        echo "<h4 style='color:navy'>Note: Only VIEWED activities can be added to the consolidated report.</h4><br>";
+
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_assign` WHERE course = ? AND id IN (SELECT assignment FROM `mdl_assign_grades`)', array($course_id));
@@ -66,7 +68,7 @@
             $table->head = array('S. No.', 'Name', 'Intro', 'Status');
             foreach ($recQ as $records) {
                 $serialno++;
-                $Status='<span style="color: red;">PENDING</span>';
+                $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
@@ -89,7 +91,7 @@
             }
             foreach ($recA as $records) {
                 $serialno++;
-                $Status='<span style="color: red;">PENDING</span>';
+                $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
@@ -163,7 +165,7 @@
             $table->head = array('S. No.', 'Name', 'Intro', 'Status');
             foreach ($recQ as $records) {
                 $serialno++;
-                $Status='<span style="color: red;">PENDING</span>';
+                $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($mstatusarray); $i++ )
@@ -186,7 +188,7 @@
             }
             foreach ($recA as $records) {
                 $serialno++;
-                $Status='<span style="color: red;">PENDING</span>';
+                $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($mstatusarray); $i++ )
@@ -238,11 +240,11 @@
 
         ?>
 
-        <a style="margin-top: 20px" href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
+        <br><br><a href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
 
         <?php
 
-        echo "<br><br><a href='./report_teacher.php?course=$course_id'>Back</a>";
+        echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
         
     }
     else
