@@ -328,7 +328,7 @@
         
         <button class="btn btn-info" type="submit"  name="save" /> Save and continue </button>
         <input class="btn btn-info" type="submit" name="return" value="Save and return"/>
-		<a class="btn btn-default" type="submit" href="./report_admin.php">Cancel</a>
+		<a class="btn btn-default" type="submit" href="./report_chairman.php">Cancel</a>
     </form>
     <p id=msg> </p>
     <?php

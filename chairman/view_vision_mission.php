@@ -182,7 +182,7 @@
     }
     ?>
     </div>
-    
+    <a class="btn btn-default" type="submit" href="./report_chairman.php">Go Back</a>    
 
     <?php
     echo $OUTPUT->footer();
