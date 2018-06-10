@@ -31,6 +31,7 @@
 	else{
         echo "<h3>No Rubric found!</h3>";
     }
+    echo '<a class="btn btn-default" href="./report_chairman.php">Go Back</a>';
 
     echo $OUTPUT->footer();
 

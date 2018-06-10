@@ -223,8 +223,7 @@
                     });
                 });
             </script>
-
-            <a href="./display_outcome_framework-4.php">Back</a>
+            <a class="btn btn-default" href="./display_outcome_framework-4.php">Go Back</a>
 
             <?php
             echo $OUTPUT->footer();

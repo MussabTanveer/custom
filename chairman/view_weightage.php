@@ -44,7 +44,7 @@
     }
 
     echo "<br><a href='./assign_weightage.php'>Revise Weightage</a>";
-    echo '<br><a class="btn btn-default" type="submit" href="./report_chairman.php">Go Back</a>';
+    echo '<br><a class="btn btn-default" href="./report_chairman.php">Go Back</a>';
 
     echo $OUTPUT->footer();
 ?>
