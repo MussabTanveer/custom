@@ -24,6 +24,26 @@
         $project_id=$_GET['projectid'];
 
         $courseid=$_GET['courseid'];
+
+$dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        if($dn){
+            foreach($dn as $d){
+                $deptName = $d->description;
+            }
+            $deptName = strip_tags($deptName); 
+            echo "<h3 style='text-align:center'>DEPARTMENT OF ".strtoupper($deptName)."</h3>";         
+        }
+        $course = $DB->get_record('course',array('id' => $courseid));
+        echo "<h4 style='text-align:center'>Course Code: <u>".($course->idnumber)."</u>,";
+        echo " Course Title: <u>".($course->fullname)." (".($course->shortname).")</u></h4>";
+        echo "<h4 style='text-align:center'>OBE Activity Detailed Report</h4>";
+
+
+
+
+
+
+
         //echo $assign_id;
 
 
