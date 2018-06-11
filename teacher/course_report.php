@@ -32,6 +32,20 @@ th{
         $coursecontext = context_course::instance($course_id);
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         
+        // Report Header (Dept. name, course code and title)
+        $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        if($dn){
+            foreach($dn as $d){
+                $deptName = $d->description;
+            }
+            $deptName = strip_tags($deptName); 
+            echo "<h3 style='text-align:center'>DEPARTMENT OF ".strtoupper($deptName)."</h3>";         
+        }
+        $course = $DB->get_record('course',array('id' => $course_id));
+        echo "<h4 style='text-align:center'>Course Code: <u>".($course->idnumber)."</u>,";
+        echo " Course Title: <u>".($course->fullname)." (".($course->shortname).")</u></h4>";
+        echo "<h4 style='text-align:center'>OBE Course-wise Marks Assessment Sheet</h4>";
+        
         // Get Grading Items
         $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));
 
