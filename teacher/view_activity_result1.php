@@ -16,7 +16,7 @@
     <script src="../script/jquery/jquery-3.2.1.js"></script>
     <script src="../script/table2excel/jquery.table2excel.min.js"></script>
     <?php
-    if(!empty($_GET['quiz']) && !empty($_GET['courseid']) && !empty($_GET['type']))
+    if(!empty($_GET['quiz']) && !empty($_GET['courseid']))
     {
     $course_id=$_GET['courseid'];
     $course_id = (int)$course_id; // convert course id from string to int
