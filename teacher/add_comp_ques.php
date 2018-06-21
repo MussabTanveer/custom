@@ -12,6 +12,9 @@
         header('Location: ../index.php');
 	}
 	echo $OUTPUT->header();
+	?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <?php
 
     if(isset($_POST['submit']) && isset( $_POST['activityid']) && isset( $_POST['courseid']))
     {
@@ -99,7 +102,8 @@
 					<th> Select CLO </th>
 					<th> PLO </th>
 					<!--<th> PEO </th>-->
-					<th> Taxonomy Level </th>
+					<th> CLO Taxonomy Level </th>
+					<th> Check Level </th>
 				</tr>
 				<?php
 				$qidarray=array();
@@ -137,6 +141,7 @@
 					<td id="plo<?php echo $i ?>"></td>
 					<!--<td id="peo<?php echo $i ?>"></td>-->
 					<td id="tax<?php echo $i ?>"></td>
+					<td><button type="button" class="button btn btn-success" name="submit" value="<?php echo strip_tags($qtext);?>">Check Level</button></td>
 				</tr>
 				<?php
 					$i++;
@@ -152,7 +157,6 @@
 		</form>
 		<?php
 		$rec->close(); // Don't forget to close the recordset!
-		echo $OUTPUT->footer();
 		?>
 		<script>
 			var closid = <?php echo json_encode($closid); ?>;
@@ -186,13 +190,28 @@
 				}
 			}
 		</script>
+		<!-- script to classify questions based on taxonomy level -->
+		<script>
+		$(document).ready(function(){
+			$('.button').click(function() {
+				var q = $(this).val();
+				$.ajax({
+					type : "POST",
+					url : "question_input.php",
+					data : {ques: q},
+					success : function(feedback){
+						alert(feedback);
+					}
+				});
+			});
+		});
+		</script>
 		<?php
 		}
 
 
 		else if(substr($activity_id,0,1) == 'A'){
 			echo "in assignment";
-			echo $OUTPUT->footer();
 		}
 
 
@@ -202,5 +221,7 @@
         <h2 style="color:red;"> Invalid Selection </h2>
         <a href="./display_courses-2.php">Back</a>
     <?php 
-        echo $OUTPUT->footer();
-    }?>
+        
+	}
+	echo $OUTPUT->footer();
+	?>
