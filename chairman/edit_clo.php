@@ -35,6 +35,7 @@
 			$description=$_POST['description'];
 			//$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
 			$kpi = $_POST['kpi'];
+			$cKpi = $_POST['ckpi'];
 			$time = time();
 
 			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ? ', array($id));
@@ -110,6 +111,12 @@
 				$record->kpi = $kpi;
 				
 				$DB->insert_record('clo_kpi', $record);
+
+				$record = new stdClass();
+				$record->cloid = $cloid;
+				$record->kpi = $cKpi;
+				
+				$DB->insert_record('clo_cohort_kpi', $record);
 
 				$transaction->allow_commit();
 			
@@ -233,6 +240,32 @@
 			</div>
 		</div>
 
+		<div class="form-group row fitem ">
+			<div class="col-md-3">
+				<span class="pull-xs-right text-nowrap">
+					<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+				</span>
+				<label class="col-form-label d-inline" for="id_kpi">
+					Passing Percentage Cohort (course)
+				</label>
+			</div>
+			<div class="col-md-9 form-inline felement" data-fieldtype="number">
+				<input type="number"
+						class="form-control"
+						name="ckpi"
+						id="id_ckpi"
+						size=""
+						required
+						placeholder="eg. 50"
+						maxlength="100"
+						step="0.001"
+						min="0" max="100"> %
+				<div class="form-control-feedback" id="id_error_kpi">
+				
+				</div>
+			</div>
+		</div>
+
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
 	
@@ -241,6 +274,7 @@
 		$id=$_GET['edit'];
 		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber FROM mdl_competency WHERE id=?',array($id));
 		$recKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_kpi WHERE cloid=?',array($id));
+		$recCKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_cohort_kpi WHERE cloid=?',array($id));
 		$description = "";
 		$kpi = "";
 		if($rec){
@@ -256,11 +290,19 @@
 				$kpi=$rKPI->kpi;
 			}
 		}
+
+		if($recCKPI){
+			foreach ($recCKPI as $rcKPI){
+				$ckpi=$rcKPI->kpi;
+			}
+		}
+		
 		
 		?>
 	<script>
 	    document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
         document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
+        document.getElementById("id_ckpi").value = <?php echo json_encode($ckpi); ?>;
     </script>
 	
 	<?php
