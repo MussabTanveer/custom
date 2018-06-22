@@ -19,6 +19,8 @@
 	<div>
         <h3>Click the links down below as per need </h3><br>
 
+        <a href="./add_semester.php" class="cool-link">Create Semester</a><br><br>
+
         <a href="./select_frameworktoCourse.php" class="cool-link">Create Courses &amp; Map CLOs</a><br><br>
 
         <a href="../../../course/management.php" class="cool-link">Delete/Edit Courses</a><br><br>
