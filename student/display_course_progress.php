@@ -3,7 +3,7 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("My Progress");
+    $PAGE->set_title("My Overall Progress");
     $PAGE->set_heading("Overall Progress Report");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_course_progress.php');
     
