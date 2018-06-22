@@ -123,7 +123,7 @@
         </div>
 
         <?php
-        
+            echo "<a class='btn btn-default' href='./consolidated_report_selection.php?course=$courseid'>Go Back</a>";
         echo $OUTPUT->footer();
 
         ?>
