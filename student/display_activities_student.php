@@ -26,6 +26,8 @@
             $course_id=$_POST['courseid'];
         //echo "Course ID : $course_id";
 
+        echo "<h4 style='color:navy'>Note: Only <span style='color:green'>VIEWED</span> activities can be added to the progress report.</h4><br>";
+
         // Dispaly all quizzes
         //$rec=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND timeopen != ?', array($course_id, 0));
         $recQ=$DB->get_records_sql('SELECT q.id, q.course, q.name, q.intro 
@@ -42,7 +44,7 @@
 
         $statusQuery=$DB->get_records_sql('SELECT DISTINCT instance, module FROM `mdl_consolidated_report_student` WHERE course = ? AND userid = ?', array($course_id,$USER->id));
 
-         $statusArray = array();
+        $statusArray = array();
         $modArray = array();
 
         foreach ($statusQuery as $state) {
@@ -70,7 +72,7 @@
             foreach ($recQ as $records) {
                 $serialno++;
 
-                $Status='<span style="color: red;">PENDING</span>';
+                $Status='<span style="color: red;">NOT VIEWED</span>';
                  $id = $records->id;
 
                  for ($i=0; $i< sizeof($statusArray); $i++ )
@@ -94,7 +96,7 @@
             foreach ($recA as $records) {
                 $serialno++;
 
-                $Status='<span style="color: red;">PENDING</span>';
+                $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
