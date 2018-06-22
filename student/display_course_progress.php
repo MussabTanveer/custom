@@ -4,7 +4,7 @@
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Progress");
-    $PAGE->set_heading("Semester Progress");
+    $PAGE->set_heading("Overall Progress Report");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/display_course_progress.php');
     
     require_login();
@@ -100,7 +100,7 @@
         <p><?php echo $tot_clear ?> out of <?php echo $tot_comp ?> competencies are proficient (<?php echo $progress ?>% Complete).</p>
         <progress class="progress" value="<?php echo $progress ?>" max="100"></progress>
         <br />
-        <h3>Courses' Progress</h3>
+        <h3>All Courses' Progress</h3>
         <br />
         <?php
         for($i=0;$i<count($rec);$i++){
