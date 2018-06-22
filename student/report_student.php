@@ -20,7 +20,9 @@
 
         <a href="./display_courses_student.php" class="cool-link">My Activity CLO Report</a><br><br>
 
-        <a href="./display_course_progress.php" class="cool-link">My Progress Report</a></br><br>
+        <a href="./display_semester_progress.php" class="cool-link">My Semester Progress Report</a></br><br>
+
+        <a href="./display_course_progress.php" class="cool-link">My Overall Progress Report</a></br><br>
     </div>
 <?php
 
