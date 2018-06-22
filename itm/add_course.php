@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
-<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -14,7 +12,11 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-    
+    ?>
+    <link rel="stylesheet" href="../css/datepicker/wbn-datepicker.css">
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <?php
+
     if((isset($_POST['submit']) && isset( $_POST['fwid'])) || (isset($SESSION->fid11) && $SESSION->fid11 != "xyz") || isset($_POST['save']) || isset($_POST['return']))
     {
         if(isset($_POST['submit']) || (isset($SESSION->fid11) && $SESSION->fid11 != "xyz")){
