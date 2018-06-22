@@ -147,7 +147,7 @@ th{
                         mdl_question_attempt_steps qas
                     WHERE 
                         q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup", "gradedpartial")
                     ORDER BY qa.userid, qu.id',
                     
                     array($instances[$i], 1));
@@ -539,7 +539,7 @@ th{
                         mdl_question_attempt_steps qas
                     WHERE 
                         q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND us.id=qa.userid   AND qu.category=qc.id AND q.id=qa.quiz AND c.id=qu.competencyid
-                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup")
+                        AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup", "gradedpartial")
                     ORDER BY qa.userid, qu.id',
                     
                     array($instances[$pos], 1));
