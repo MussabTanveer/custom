@@ -36,17 +36,18 @@
         }
     
         if(isset($_POST['save']) || isset($_POST['return'])){
+            $semester=trim($_POST['semester']);
             $fullname=trim($_POST['fullname']);
             $shortname=trim($_POST['shortname']);
             $idnumber=trim($_POST['idnumber']); $idnumber=strtoupper($idnumber);
-            $startdate=strtotime($_POST['startdate']);
-            $enddate=strtotime($_POST['enddate']);
+            //$startdate=strtotime($_POST['startdate']);
+            //$enddate=strtotime($_POST['enddate']);
             $summary=trim($_POST['summary_editor']);
             $fw_id=$_POST['fid'];
             $fw_shortname=$_POST['fname'];
             $time = time();
             
-            if(empty($fullname) || empty($shortname) || empty($idnumber))
+            if(empty($fullname) || empty($shortname) || empty($idnumber) || empty($semester))
             {
                 if(empty($fullname))
                 {
@@ -60,11 +61,22 @@
                 {
                     $msg3="<font color='red'>-Please select course code</font>";
                 }
+                if(empty($semester))
+                {
+                    $msg6="<font color='red'>-Please select semester</font>";
+                }
             }
             else{
                 /*$sql="INSERT INTO mdl_course (category, fullname, shortname, idnumber, summary, summaryformat, newsitems, startdate, enddate, timecreated, timemodified, enablecompletion)
                 VALUES (1, '$fullname', '$shortname', '$idnumber', '$summary', 1, 5, '$startdate', '$enddate', '$time', '$time', 1)";
                 $DB->execute($sql);*/
+                $sem=$DB->get_records_sql('SELECT * FROM `mdl_semester` WHERE id = ?', array($semester));
+                if ($sem != NULL){
+                    foreach ($sem as $s) {
+                        $startdate = $s->startdate;
+                        $enddate =  $s->enddate;
+                    }
+                }
 
                 try {
                     $transaction = $DB->start_delegated_transaction();
@@ -82,6 +94,7 @@
                     $record->timecreated = $time;
                     $record->timemodified = $time;
                     $record->enablecompletion = 1;
+                    $record->semesterid = $semester;
                     
                     $courseid = $DB->insert_record('course', $record);
 
@@ -303,6 +316,7 @@
             array_push($ccs, $cCode);
         }
         $ccs = array_unique($ccs); // remove duplicate course codes
+        $semesters=$DB->get_records_sql("SELECT * FROM mdl_semester ORDER BY id DESC");
 
         if(isset($msg4)){
             echo $msg4;
@@ -321,6 +335,36 @@
                 </div>
                 <div class="col-md-9 form-inline felement">
                     <?php echo $fw_shortname; ?>
+                </div>
+            </div>
+
+            <div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label class="col-form-label d-inline" for="id_semester">
+                        Select Semester
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <select required name="semester" class="select custom-select" id="id_semester">
+                        <option value=''>Select..</option>
+                        <?php
+                        foreach ($semesters as $s) {
+                            ?>
+                            <option value='<?php echo $s->id; ?>'><?php echo "$s->name - $s->year"; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <div class="form-control-feedback" id="id_error_semester">
+                    <?php
+                    if(isset($msg6)){
+                        echo $msg6;
+                    }
+                    ?>
+                    </div>
                 </div>
             </div>
 
@@ -394,9 +438,9 @@
                             id="id_fullname"
                             value=""
                             required
-                            placeholder="eg. Software Engineering - Spring - 18"
+                            placeholder="eg. Software Engineering"
                             size="50"
-                            maxlength="254" type="text" >
+                            maxlength="254">
                     <div class="form-control-feedback" id="id_error_fullname">
                     <?php
                     if(isset($msg1)){
@@ -430,7 +474,7 @@
                             required
                             placeholder="eg. SE"
                             size="20"
-                            maxlength="100" type="text">
+                            maxlength="100">
                     <div class="form-control-feedback" id="id_error_shortname">
                     <?php
                     if(isset($msg2)){
@@ -441,6 +485,7 @@
                 </div>
             </div>
 
+            <!--
             <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
@@ -497,7 +542,8 @@
                     </div>
                 </div>
             </div>
-            
+            -->
+
             <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
