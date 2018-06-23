@@ -25,7 +25,7 @@
         <?php
         $serialno = 0;
         $table = new html_table();
-        $table->head = array('S. No.','Name', 'Year' , 'Start Date', 'End Date');
+        $table->head = array('S. No.','Name', 'Year' , 'Start Date', 'End Date', 'Select');
         foreach ($rec as $records) {
 			$serialno++;
             $id = $records->id;
