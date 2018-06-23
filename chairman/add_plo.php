@@ -66,12 +66,12 @@
 			$frameworkid=$_POST['frameworkid'];
 			$framework_shortname=$_POST['framework_shortname'];
 			$cpkpi=$_POST["kpi_cohort_programme"];
-			$cckpi=$_POST["kpi_cohort_course"];
+			//$cckpi=$_POST["kpi_cohort_course"];
 			$iskpi=$_POST["kpi_individual_student"];
 			$peo=$_POST['peo'];
 			$time = time();
 			//echo "peo = $peo";
-			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10' || empty($cpkpi) || empty($cckpi) || empty($iskpi) || is_null($peo) || $peo === NULL || empty($peo))
+			if(empty($shortname) || empty($idnumber) || strlen($shortname)> '30' || strlen($idnumber)>'10' || empty($cpkpi) || empty($iskpi) || is_null($peo) || $peo === NULL || empty($peo))
 			{
 				if(empty($shortname))
 				{
@@ -97,10 +97,7 @@
 				{
 					$msg5="<font color='red'>-Please enter PLO Cohort Programme KPI</font>";
 				}
-				if(empty($cckpi))
-				{
-					$msg6="<font color='red'>-Please enter PLO Cohort Course KPI</font>";
-				}
+				
 				if(empty($iskpi))
 				{
 					$msg7="<font color='red'>-Please enter PLO Individual Student KPI</font>";
@@ -144,10 +141,10 @@
 							$record->kpi = $cpkpi;
 							$DB->insert_record('plo_kpi_cohort_programme', $record);
 							//kpi_cohort_course
-							$record = new stdClass();
-							$record->ploid = $ploid;
-							$record->kpi = $cckpi;
-							$DB->insert_record('plo_kpi_cohort_course', $record);
+							//$record = new stdClass();
+							////$record->ploid = $ploid;
+							//$record->kpi = $cckpi;
+							//$DB->insert_record('plo_kpi_cohort_course', $record);
 							//kpi_individual_student
 							$record = new stdClass();
 							$record->ploid = $ploid;
@@ -374,7 +371,7 @@
 					</div>
 				</div>
 			</div>
-
+<!--
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -411,7 +408,7 @@
 					</div>
 				</div>
 			</div>
-
+-->
 			<div class="form-group row fitem ">
 				<div class="col-md-3">
 					<span class="pull-xs-right text-nowrap">
@@ -499,7 +496,7 @@
 			document.getElementById("id_shortname").value = <?php echo json_encode($shortname); ?>;
 			document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
 			document.getElementById("id_kpi_cohort_programme").value = <?php echo json_encode($cpkpi); ?>;
-			document.getElementById("id_kpi_cohort_course").value = <?php echo json_encode($cckpi); ?>;
+			//document.getElementById("id_kpi_cohort_course").value = <?php echo json_encode($cckpi); ?>;
 			document.getElementById("id_kpi_individual_student").value = <?php echo json_encode($iskpi); ?>;
 			document.getElementById("id_select_peo").value = <?php echo json_encode($peo); ?>;
 		</script>
@@ -553,7 +550,7 @@
 							max: 100,
 							minlength: 1,
 							maxlength: 7
-						},
+						},/*
 						"kpi_cohort_course": {
 							number: true,
 							required: true,
@@ -563,7 +560,7 @@
 							max: 100,
 							minlength: 1,
 							maxlength: 7
-						},
+						},*/
 						"kpi_individual_student": {
 							number: true,
 							required: true,
@@ -595,7 +592,7 @@
 							max: "Please enter percentage less than or equal to 100%.",
 							minlength: "Please enter more than 1 numbers.",
 							maxlength: "Please enter no more than 6 numbers (including decimal part)."
-						},
+						},/*
 						"kpi_cohort_course": {
 							number: "Only numeric values are allowed.",
 							required: "Please enter percentage.",
@@ -605,7 +602,7 @@
 							max: "Please enter percentage less than or equal to 100%.",
 							minlength: "Please enter more than 1 numbers.",
 							maxlength: "Please enter no more than 6 numbers (including decimal part)."
-						},
+						},*/
 						"kpi_individual_student": {
 							number: "Only numeric values are allowed.",
 							required: "Please enter percentage.",
