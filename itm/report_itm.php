@@ -12,7 +12,6 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
-    
 ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
@@ -21,9 +20,11 @@
 
         <a href="./add_semester.php" class="cool-link">Create Semester</a><br><br>
 
+        <a href="./view_semester.php" class="cool-link">Edit/Delete/View Semester</a><br><br>
+
         <a href="./select_frameworktoCourse.php" class="cool-link">Create Courses &amp; Map CLOs</a><br><br>
 
-        <a href="../../../course/management.php" class="cool-link">Delete/Edit Courses</a><br><br>
+        <a href="../../../course/management.php" class="cool-link">Edit/Delete Courses</a><br><br>
         <!--<a href="./select_frameworktopracCourse.php" class="cool-link">Create Practical Courses &amp; Map CLOs</a><br><br>-->
 
         <!--<a href="./select_course.php" class="cool-link">Add CLOs to Courses</a><br><br>-->
