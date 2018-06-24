@@ -3,8 +3,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("My Courses");
-    $PAGE->set_heading("Courses");
+    $PAGE->set_title("My Semesters");
+    $PAGE->set_heading("Semesters");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/select_semester.php');
     
     require_login();
