@@ -30,7 +30,7 @@
         </select>
         <input type="date" name="date" id="id_enddate" class="form-control">
         <input id="inputcheck" name="inputtext" type="text" placeholder="Enter Value" class="form-control">
-        <input id="buttoncheck" type="submit" class="btn btn-info">
+        <input id="buttoncheck" type="submit" value="Search" class="btn btn-info">
         <body onload="datepicker()">
         </p>
     </form>
