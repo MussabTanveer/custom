@@ -18,10 +18,29 @@
     $rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
 
-    if(isset( $_GET['activityid']) && isset($_GET['course']))
+    if(!empty($_GET['course']) && !empty($_GET['activityid']))
     {
         $activity_id=$_GET['activityid'];
         $courseid=$_GET['course'];
+
+$dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        if($dn){
+            foreach($dn as $d){
+                $deptName = $d->description;
+            }
+            $deptName = strip_tags($deptName); 
+            echo "<h3 style='text-align:center'>DEPARTMENT OF ".strtoupper($deptName)."</h3>";         
+        }
+        $course = $DB->get_record('course',array('id' => $courseid));
+        echo "<h4 style='text-align:center'>Course Code: <u>".($course->idnumber)."</u>,";
+        echo " Course Title: <u>".($course->fullname)." (".($course->shortname).")</u></h4>";
+        echo "<h4 style='text-align:center'>OBE Activity CLO Report</h4>";
+
+
+
+
+
+
 
         /******************** QUIZ ***************************/
         if(substr($activity_id,0,1) == 'Q'){
@@ -29,7 +48,7 @@
             $mod = 16;
 
             //Get ques comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
+            $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
         
                 FROM mdl_competency c, mdl_quiz q, mdl_quiz_slots qs, mdl_question qu
         
@@ -51,10 +70,11 @@
                 qa.userid,
                 u.idnumber AS std_id,
                 u.username AS seat_no,
+                substring(u.username,4,8) AS seatorder,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
                 qu.competencyid,
                 SUM(qua.maxmark) AS maxmark,
-                SUM(qua.maxmark*qas.fraction) AS marksobtained
+                SUM(qua.maxmark*COALESCE(qas.fraction, 0)) AS marksobtained
                 FROM
                     mdl_quiz q,
                     mdl_quiz_slots qs,
@@ -65,24 +85,25 @@
                     mdl_question_attempt_steps qas,
                     mdl_user u
                 WHERE
-                    q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                    AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.fraction IS NOT NULL
-                GROUP BY qa.userid, qu.competencyid
-                ORDER BY qa.userid, qu.competencyid',
+                q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
+                AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup", "gradedpartial")
+                GROUP BY seatorder, qu.competencyid
+                ORDER BY seatorder, qu.competencyid',
                 
                 array($quiz_id,1));
 
+            $kpisArray = array();
 
 
             if($rec){
                 $serialno = 0;
                 ?>
-                <h3>Quiz CLO Report</h3>
+                <h3>Activity CLO Report</h3>
                 <!-- Display Students' Quiz Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> S. No. </th>
-                        <th> Student ID </th>
+                        <th> Seat No. </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
@@ -98,70 +119,97 @@
                         <th> <?php echo $comp; ?> </th>
                         <?php
                         }
+                         
                         ?>
                     </tr>
 
-                    <?php
-                    $count = 0; $first = 0; $i = 0;
-                    $tot_stdnt = 0; // total students count
-                    $pass = array(); $fail = array();
-                    
-                    for($x = 0; $x < $tot_comp; $x++) { // initialize array
-                        $pass[$x] = 0;
-                    }
+                <?php
 
-                    foreach ($rec as $records){
-                        if($count === $tot_comp){ // 1 student record collected
-                            $tot_stdnt++;
-                            //echo $count;
-                            ?>
-                            <tr>
-                            <?php
-                            foreach($data_temp as $data){ // loop as many times as comp count
-                                $uid = $data->userid;
-                                $sid = $data->std_id;
-                                $seat = $data->seat_no;
-                                $uname = $data->std_name;
-                                $max = $data->maxmark;
-                                $obt = $data->marksobtained;
-                                
-                                if($first === 0){ // display stud no & name only once
-                                    $serialno++;
-                                    ?>
-                                    <td><?php echo $serialno;?></td>
-                                    <td><?php echo $seat;?></td>
-                                    <td><?php echo $uname;?></td>
-                                    <?php
-                                    $first++;
-                                }
-                    ?>
-                            <td><?php
-                                if( (($obt/$max)*100) > 50){
-                                    $pass[$i]++;
-                                    $i++;
-                                    echo "<font color='green'>Pass</font>";
-                                }
-                                else{
-                                    $i++;
-                                    echo "<font color='red'>Fail</font>";
-                                }
-                                ?>
-                            </td>
-                    <?php
-                            }
-                            $count = 0;
-                            $first = 0;
-                            $i = 0;
-                            unset($data_temp);
-                            ?>
-                            </tr>
-                            <?php
+                foreach ($cloids as $id) {
+                    $kpis=$DB->get_records_sql("SELECT kpi FROM mdl_clo_kpi
+                    WHERE cloid = ? ORDER BY cloid",array($id));
+                    if($kpis) {
+                        foreach($kpis as $kp) {
+                            $kpi = $kp->kpi;
+                            array_push($kpisArray, $kpi);
                         }
-                        //echo $count;
-                        $data_temp[] = $records;
-                        $count++;
                     }
-                    ?>
+                }
+                /*var_dump($kpisArray);echo "<br>";
+                var_dump($cloids);echo "<br>";
+                var_dump($label);*/
+
+                $kpiIndex=0;
+
+                $count = 0; $first = 0; $i = 0;
+                $tot_stdnt = 0; // total students count
+                $pass = array(); $fail = array();
+                    
+                for($x = 0; $x < $tot_comp; $x++) { // initialize array
+                    $pass[$x] = 0;
+                }
+
+                foreach ($rec as $records){
+                    $kpiIndex=0;
+                    if($count === $tot_comp){ // 1 student record collected
+                        $tot_stdnt++;
+                        //echo $count;
+                        ?>
+                        <tr>
+                        <?php
+                        foreach($data_temp as $data){ // loop as many times as comp count
+                            $uid = $data->userid;
+                            $sid = $data->std_id;
+                            $seat = $data->seat_no;
+                            $uname = $data->std_name;
+                            $max = $data->maxmark;
+                            $obt = $data->marksobtained;
+                            
+                            if($first === 0){ // display stud no & name only once
+                                $serialno++;
+                                ?>
+                                <td><?php echo $serialno;?></td>
+                                <td><?php echo strtoupper($seat);?></td>
+                                <td><?php echo $uname;?></td>
+                                <?php
+                                $first++;
+                            }
+                        ?>
+                        <td><?php
+                            //echo "Obt =$obt max= $max";
+                            //  echo "<br>";
+                            //  echo "$kpisArray[$kpiIndex]";
+                            $kpiToPass = $kpisArray[$kpiIndex];
+                            $kpiIndex++;
+                            //  echo "$kpiToPass<br>";
+
+                            if( (($obt/$max)*100) >= $kpiToPass){
+                                $pass[$i]++;
+                                $i++;
+                                echo "<font color='green'>Pass</font>";
+                            }
+                            else{
+                                $i++;
+                                echo "<font color='red'>Fail</font>";
+                            }
+                            ?>
+                        </td>
+                    <?php
+                        }
+                        $count = 0;
+                        $first = 0;
+                        $i = 0;
+                        unset($data_temp);
+                        ?>
+                        </tr>
+                        <?php
+                    }
+                    //echo $count;
+                    $data_temp[] = $records;
+                    $count++;
+                }
+                $kpiIndex=0;
+                ?>
 
                     <tr>
                         <?php // now print very last student record
@@ -178,20 +226,22 @@
                                 $serialno++;
                                 ?>
                                 <td><?php echo $serialno;?></td>
-                                <td><?php echo $seat;?></td>
+                                <td><?php echo strtoupper($seat);?></td>
                                 <td><?php echo $uname;?></td>
                                 <?php
                                 $first++;
                             }
                             ?>
                         <td><?php
-                            if( (($obt/$max)*100) > 50){
-                                //echo $pass[0];
-                               // var_dump($pass);
-                               // echo "$pass[$i]";
+                            // echo "Obt =$obt max= $max";
+                            // echo "<br>";
+                            //  echo "$kpisArray[$kpiIndex]";
+                            $kpiToPass = $kpisArray[$kpiIndex];
+                            $kpiIndex++;
+                            // echo "$kpiToPass<br>";
+
+                            if( (($obt/$max)*100) >= $kpiToPass){
                                 $pass[$i]++;
-                                //echo $pass[$i]--;
-                                 //var_dump($pass);
                                 $i++;
                                 echo "<font color='green'>Pass</font>";
                             }
@@ -205,7 +255,6 @@
                         }
                         ?>
                     </tr>
-                    
                 </table>
                 
                 <button id="myButton" class="btn btn-primary">Export to Excel</button>
@@ -226,14 +275,23 @@
                 }
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                /*$rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.form = ?', array($courseid, $mod, $a_id,"online"));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x])";
+                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
                         $DB->execute($sql);
                     }
-                }*/
+                }
+             else
+                {
+                    for($x=0; $x<$tot_comp; $x++){
+                      //  var_dump($cloids);
+
+                        $sql_update="UPDATE mdl_consolidated_report SET course=?,module=?,instance=?,cloid=?,pass=? ,fail=?,form=?  WHERE course=? AND module = ? AND instance = ? AND form = ? AND cloid = ?";
+                        $DB->execute($sql_update, array($courseid, $mod, $a_id, $cloids[$x],  $pass[$x],$fail[$x],'online', $courseid,  $mod, $a_id,'online' , $cloids[$x]));
+                    }
+                }
                 
             }
             else{
@@ -242,12 +300,12 @@
 
         }
         /******************* ASSIGNMENT **********************/
-        else if(substr($activity_id,0,1) == 'A'){
+        else if(substr($activity_id,0,1) == 'A') {
             $assign_id = substr($activity_id,1);
             $mod = 1;
 
             //Get assign comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+            $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
             
                     FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
             
@@ -274,6 +332,7 @@
                 ORDER BY ag.userid',
                 
             array($assign_id,-1));
+              $kpisArray = array();
 
             if($rec){
                 $serialno = 0;
@@ -283,7 +342,7 @@
                 <table class="generaltable">
                     <tr class="table-head">
                         <th> S. No. </th>
-                        <th> Student ID </th>
+                        <th> Seat No. </th>
                         <th> Student Name </th>
                         <?php
                         $tot_comp = 0; // total comp count
@@ -303,8 +362,32 @@
                     </tr>
 
                     <?php
+
+                        //var_dump($cloids);
+                      foreach ($cloids as $id) {
+            
+            
+                    $kpis=$DB->get_records_sql("SELECT kpi FROM mdl_clo_kpi
+                    WHERE cloid = ? ORDER BY cloid",array($id));
+
+                    if($kpis)
+                    {
+
+                        foreach($kpis as $kp)
+                        {
+                            $kpi = $kp->kpi;
+                            array_push($kpisArray, $kpi);
+                        }
+                     }
+                
+                  }
+                  /*var_dump($kpisArray);echo "<br>";
+                  var_dump($cloids);echo "<br>";
+                  var_dump($label);*/
+
                     $i=0; $tot_stdnt = 0; // total students count
                     $pass = array(); $fail = array();
+                       $kpiIndex = 0;
                     for($x = 0; $x < $tot_comp; $x++) { // initialize array
                         $pass[$x] = 0;
                     }
@@ -331,15 +414,21 @@
                             for($k=0;$k<$tot_comp;$k++){
                             ?>
                             <td><?php
-                                if($result > 50){
+                            // echo "Obt =$obt max= $max";
+                            //  echo "<br>";
+                            //  echo "$pass[$i] at i = $i<br>";
+                            // echo "<br>";
+                            $kpiToPass = $kpisArray[$kpiIndex];
+                            //  $kpiIndex++;
+                            // echo "$kpiToPass<br>";
+
+                                if($result >= $kpiToPass ){
                                     $pass[$i]++;
-                                   // var_dump($pass);
-                                   // echo "</br>$i";
-                                    $i++;
+                                    // $i++;
                                     echo "<font color='green'>Pass</font>";
                                 }
                                 else{
-                                    $i++;
+                                    // $i++;
                                     echo "<font color='red'>Fail</font>";
                                 }
                                 ?>
@@ -349,7 +438,6 @@
                         ?>
                         </tr>
                         <?php
-                    
                     }
                     ?>
                     
@@ -370,22 +458,30 @@
 
                 $rec->close(); // Don't forget to close the recordset!
                 $a_id = substr($activity_id,1);
-                /*$rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ?', array($courseid, $mod, $a_id));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.form = ?', array($courseid, $mod, $a_id,'online'));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x])";
+                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
                         $DB->execute($sql);
                     }
-                }*/
-            
+                }
+                 else
+                {
+                    for($x=0; $x<$tot_comp; $x++){
+                      //  var_dump($cloids);
+
+                        $sql_update="UPDATE mdl_consolidated_report SET course=?,module=?,instance=?,cloid=?,pass=? ,fail=?,form=?  WHERE course=? AND module = ? AND instance = ? AND form = ? AND cloid = ?";
+                        $DB->execute($sql_update, array($courseid, $mod, $a_id, $cloids[$x],  $pass[$x],$fail[$x],'online', $courseid,  $mod, $a_id,'online' , $cloids[$x]));
+                    }
+                }
             }
             else{
                 echo "<h3>No students have attempted the activity!</h3>";
             }
-        
         }
 
+        echo "<a class='btn btn-default' href='./display_activities.php?course=$courseid'>Go Back</a>";
 
         echo $OUTPUT->footer();
 
@@ -410,20 +506,20 @@
             }]
 
         };
-		
+        
         window.onload = function() {
             var ctx = document.getElementById("canvas").getContext("2d");
             window.myBar = new Chart(ctx, {
                 type: 'horizontalBar',
                 data: barChartData,
                 options: {
-					scales: {
-						yAxes: [{
-							ticks: {
-								beginAtZero:true
-							}
-						}]
-					},
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    },
                     responsive: true,
                     legend: {
                         position: 'top',
@@ -452,11 +548,12 @@
     </script>
 
         <?php
+        
     }
     else
     {?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="./display_courses-3.php">Back</a>
+        <a href="./teacher_courses.php">Back</a>
     <?php 
         echo $OUTPUT->footer();
     }?>

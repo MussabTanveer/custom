@@ -289,6 +289,15 @@ $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?
                         $DB->execute($sql);
                     }
                 }
+             else
+                {
+                    for($x=0; $x<$tot_comp; $x++){
+                      //  var_dump($cloids);
+
+                        $sql_update="UPDATE mdl_consolidated_report SET course=?,module=?,instance=?,cloid=?,pass=? ,fail=?,form=?  WHERE course=? AND module = ? AND instance = ? AND form = ? AND cloid = ?";
+                        $DB->execute($sql_update, array($courseid, $mod, $a_id, $cloids[$x],  $pass[$x],$fail[$x],'online', $courseid,  $mod, $a_id,'online' , $cloids[$x]));
+                    }
+                }
                 
             }
             else{
@@ -461,6 +470,15 @@ $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?
                     for($x=0; $x<$tot_comp; $x++){
                         $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
                         $DB->execute($sql);
+                    }
+                }
+                 else
+                {
+                    for($x=0; $x<$tot_comp; $x++){
+                      //  var_dump($cloids);
+
+                        $sql_update="UPDATE mdl_consolidated_report SET course=?,module=?,instance=?,cloid=?,pass=? ,fail=?,form=?  WHERE course=? AND module = ? AND instance = ? AND form = ? AND cloid = ?";
+                        $DB->execute($sql_update, array($courseid, $mod, $a_id, $cloids[$x],  $pass[$x],$fail[$x],'online', $courseid,  $mod, $a_id,'online' , $cloids[$x]));
                     }
                 }
             }
