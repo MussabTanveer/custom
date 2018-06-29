@@ -18,9 +18,9 @@
 	<div>
         <h3>Click the links down below as per need </h3><br>
 
-        <a href="./display_courses_student2.php" class="cool-link">My Activity Marks Report</a><br><br>
+        <a href="./select_semester_marks.php" class="cool-link">My Activity Marks Report</a><br><br>
 
-        <a href="./display_courses_student.php" class="cool-link">My Activity CLO Report</a><br><br>
+        <a href="./select_semester_clo.php" class="cool-link">My Activity CLO Report</a><br><br>
 
         <a href="./select_semester.php" class="cool-link">My Semester Progress Report</a></br><br>
 
