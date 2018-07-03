@@ -17,30 +17,36 @@
     <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 	<div>
-        <a href="./add_semester.php" class="cool-link">Create Semester</a><br><br>
+        <a href="javascript:void(0)" id="sem_click" onclick="toggle_visibility('sem_click', 'sem');" class="cool-link"><span class="fa fa-chevron-down"></span> Semesters</a><br><br>
+        <div id="sem" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./add_semester.php" class="cool-link">&#10070; Create Semester</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./view_semester.php" class="cool-link">&#10070; Edit/Delete/View Semester</a><br><br>
+        </div>
 
-        <a href="./view_semester.php" class="cool-link">Edit/Delete/View Semester</a><br><br>
+        <a href="javascript:void(0)" id="crs_click" onclick="toggle_visibility('crs_click', 'crs');" class="cool-link"><span class="fa fa-chevron-down"></span> Courses</a><br><br>
+        <div id="crs" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./select_frameworktoCourse.php" class="cool-link">&#10070; Create Courses &amp; Map CLOs</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./select_course_edit.php" class="cool-link">&#10070; Edit Courses</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../../../course/management.php" class="cool-link">&#10070; Delete Courses</a><br><br>
+        </div>
 
-        <a href="./select_frameworktoCourse.php" class="cool-link">Create Courses &amp; Map CLOs</a><br><br>
-
-        <a href="./select_course_edit.php" class="cool-link">Edit Courses</a><br><br>
-
-        <a href="../../../course/management.php" class="cool-link">Delete Courses</a><br><br>
         <!--<a href="./select_frameworktopracCourse.php" class="cool-link">Create Practical Courses &amp; Map CLOs</a><br><br>-->
 
         <!--<a href="./select_course.php" class="cool-link">Add CLOs to Courses</a><br><br>-->
 
-        <a href="../../../cohort/index.php" class="cool-link">Add/Edit/Delete/View Cohorts</a><br><br>
+        <a href="javascript:void(0)" id="usr_click" onclick="toggle_visibility('usr_click', 'usr');" class="cool-link"><span class="fa fa-chevron-down"></span> Users</a><br><br>
+        <div id="usr" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="../../../cohort/index.php" class="cool-link">&#10070; Add/Edit/Delete/View Cohorts</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../../../user/editadvanced.php?id=-1" class="cool-link">&#10070; Add a New User</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../../../admin/tool/uploaduser/index.php" class="cool-link">&#10070; Upload Users</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../../../admin/user/user_bulk.php" class="cool-link">&#10070; Bulk User Actions</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="../../../admin/user.php" class="cool-link">&#10070; View/Edit/Delete Users</a><br><br>
+        </div>
 
-        <a href="../../../user/editadvanced.php?id=-1" class="cool-link">Add a New User</a><br><br>
-        
-        <a href="../../../admin/tool/uploaduser/index.php" class="cool-link">Upload Users</a><br><br>
-        
-        <a href="../../../admin/user/user_bulk.php" class="cool-link">Bulk User Actions</a><br><br>
-        
-        <a href="../../../admin/user.php" class="cool-link">View/Edit/Delete Users</a><br><br>
-        
-        <a href="./select_course_enrol.php" class="cool-link">Enrol/Unenrol Users from Courses</a><br><br>
+        <a href="javascript:void(0)" id="enrol_click" onclick="toggle_visibility('enrol_click', 'enrol');" class="cool-link"><span class="fa fa-chevron-down"></span> Enrollment</a><br><br>
+        <div id="enrol" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./select_course_enrol.php" class="cool-link">&#10070; Enrol/Unenrol Users from Courses</a><br><br>
+        </div>
     </div>
 
     <script type="text/javascript">
