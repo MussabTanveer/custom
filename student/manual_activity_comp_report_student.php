@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Activity CLO");
     $PAGE->set_heading("Activity CLO Report");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/activity_comp_report_student.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/manual_activity_comp_report_student.php');
     
     require_login();
     if($SESSION->oberole != "student"){
@@ -31,12 +31,12 @@
             $mod = 16;
             //Get ques comp
             $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
-
-            FROM mdl_competency c, mdl_quiz q, mdl_quiz_slots qs, mdl_question qu
-
-            WHERE q.id=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.competencyid = c.id
-            
-            ORDER BY qu.competencyid",
+        
+                FROM mdl_competency c, mdl_manual_quiz q, mdl_manual_quiz_question mqu, mdl_manual_quiz_attempt qa
+        
+                WHERE q.id=? AND mqu.cloid = c.id AND q.id=mqu.mquizid AND mqu.mquizid=qa.quizid AND q.id=qa.quizid
+                
+                ORDER BY mqu.cloid",
             
             array($quiz_id));
             
@@ -46,25 +46,20 @@
                 u.idnumber AS std_id,
                 u.username AS seat_no,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
-                qu.competencyid,
-                SUM(qua.maxmark) AS maxmark,
-                SUM(qua.maxmark*COALESCE(qas.fraction, 0)) AS marksobtained
+                qu.cloid,
+                SUM(qu.maxmark) AS maxmark,
+               SUM(qa.obtmark) AS marksobtained
                 FROM
-                    mdl_quiz q,
-                    mdl_quiz_slots qs,
-                    mdl_question qu,
-                    mdl_question_categories qc,
-                    mdl_quiz_attempts qa,
-                    mdl_question_attempts qua,
-                    mdl_question_attempt_steps qas,
+                    mdl_manual_quiz q,
+                    mdl_manual_quiz_question qu,
+                    mdl_manual_quiz_attempt qa,
                     mdl_user u
                 WHERE
-                qa.userid=? AND q.id=? AND qa.attempt=? AND q.id=qs.quizid AND qu.id=qs.questionid AND qu.category=qc.id AND q.id=qa.quiz AND qa.userid=u.id
-                    AND qa.uniqueid=qua.questionusageid AND qu.id=qua.questionid AND qua.id=qas.questionattemptid AND qas.state IN ("gradedright", "gradedwrong", "gaveup", "gradedpartial")
-                GROUP BY qa.userid, qu.competencyid
-                ORDER BY qa.userid, qu.competencyid',
+                qa.userid=? AND q.id=? AND q.id=qa.quizid AND qa.userid=u.id AND q.id=qu.mquizid AND qa.questionid=qu.id
+                GROUP BY qa.userid, qu.cloid
+                ORDER BY qa.userid, qu.cloid',
                 
-            array($USER->id,$quiz_id,1));
+            array($USER->id,$quiz_id));
             
             if($rec ){
                 ?>
@@ -208,7 +203,7 @@
                 }
                 $rec->close(); // Don't forget to close the recordset!
                 
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report_student cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.userid = ? AND cr.form = ?', array($courseid, $mod, $quiz_id, $USER->id,'online'));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report_student cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.userid = ? AND cr.form = ?', array($courseid, $mod, $quiz_id, $USER->id,'manual'));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
@@ -218,12 +213,12 @@
                         else{
                             $status = 0;
                         }
-                        $sql="INSERT INTO mdl_consolidated_report_student (course, userid, module, instance, cloid, status,form) VALUES ($courseid, $USER->id, $mod, $quiz_id, $cloids[$x], $status,'online')";
+                        $sql="INSERT INTO mdl_consolidated_report_student (course, userid, module, instance, cloid, status,form) VALUES ($courseid, $USER->id, $mod, $quiz_id, $cloids[$x], $status,'manual')";
                         $DB->execute($sql);
                     }
                 }
 
-                    else
+                 else
                 {
                     for($x=0; $x<$tot_comp; $x++){
                     
@@ -235,9 +230,13 @@
                         }
 
                         $sql_update="UPDATE mdl_consolidated_report_student SET course=?,userid = ?,module=?,instance=?,cloid=?,status=?,form=?  WHERE course=? AND module = ? AND instance = ? AND form = ? AND cloid = ? AND userid = ?";
-                        $DB->execute($sql_update, array($courseid,$USER->id, $mod, $quiz_id, $cloids[$x], $status ,'online', $courseid,  $mod, $quiz_id,'online' , $cloids[$x], $USER->id));
+                        $DB->execute($sql_update, array($courseid,$USER->id, $mod, $quiz_id, $cloids[$x], $status ,'manual', $courseid,  $mod, $quiz_id,'manual' , $cloids[$x], $USER->id));
                     }
                 }
+
+
+
+
 
             }
             else{
@@ -251,32 +250,32 @@
             $mod = 1;
 
             //Get assign comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+            $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
             
-                    FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+                    FROM mdl_competency c,mdl_manual_assign_pro a
             
-                    WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
+                    WHERE a.id=? AND a.cloid=c.id
                     
-                    ORDER BY cmc.competencyid",
+                    ORDER BY a.cloid",
                     
-                    array($assign_id,$courseid,$mod));
+                    array($assign_id));
                     
             $rec=$DB->get_recordset_sql(
                 'SELECT
                 ag.userid,
                 u.idnumber AS std_id,
                 CONCAT(u.firstname, " ", u.lastname) AS std_name,
-                a.grade AS maxmark,
-                ag.grade AS marksobtained
+                a.maxmark AS maxmark,
+                ag.obtmark AS marksobtained
                 FROM
-                    mdl_assign a,
-                    mdl_assign_grades ag,
+                    mdl_manual_assign_pro a,
+                    mdl_manual_assign_pro_attempt ag,
                     mdl_user u
                 WHERE
-                    ag.userid=? AND a.id=? AND ag.grade != ? AND ag.userid=u.id AND a.id=ag.assignment
+                    a.id=? AND ag.userid = ? AND ag.userid=u.id  AND a.id=ag.assignproid 
                 ORDER BY ag.userid',
                 
-            array($USER->id,$assign_id,-1));
+            array($assign_id,$USER->id));
 
             if($rec){
             ?>
@@ -366,7 +365,7 @@
 
                 $rec->close(); // Don't forget to close the recordset!
                 
-                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report_student cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.userid = ? AND cr.form = ?', array($courseid, $mod, $assign_id, $USER->id,'online'));
+                $rec=$DB->get_records_sql('SELECT * FROM mdl_consolidated_report_student cr WHERE cr.course = ? AND cr.module = ? AND cr.instance = ? AND cr.userid = ? AND cr.form = ?', array($courseid, $mod, $assign_id, $USER->id,'manual'));
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
@@ -376,7 +375,7 @@
                         else{
                             $status = 0;
                         }
-                        $sql="INSERT INTO mdl_consolidated_report_student (course, userid, module, instance, cloid, status,form) VALUES ($courseid, $USER->id, $mod, $assign_id, $cloids[$x], $status,'online')";
+                        $sql="INSERT INTO mdl_consolidated_report_student (course, userid, module, instance, cloid, status,form) VALUES ($courseid, $USER->id, $mod, $assign_id, $cloids[$x], $status,'manual')";
                         $DB->execute($sql);
                     }
                 }
@@ -394,10 +393,9 @@
                         }
 
                         $sql_update="UPDATE mdl_consolidated_report_student SET course=?,userid = ?,module=?,instance=?,cloid=?,status=?,form=?  WHERE course=? AND module = ? AND instance = ? AND form = ? AND cloid = ? AND userid = ?";
-                        $DB->execute($sql_update, array($courseid,$USER->id, $mod, $quiz_id, $cloids[$x], $status ,'online', $courseid,  $mod, $quiz_id,'online' , $cloids[$x], $USER->id));
+                        $DB->execute($sql_update, array($courseid,$USER->id, $mod, $assign_id, $cloids[$x], $status ,'manual', $courseid,  $mod, $assign_id,'manual' , $cloids[$x], $USER->id));
                     }
                 }
-
             
             }
             else{
