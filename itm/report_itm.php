@@ -3,8 +3,8 @@
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_title("ITM Reports & Forms");
-    $PAGE->set_heading("ITM Reports & Forms");
+    $PAGE->set_title("IT Manager Forms");
+    $PAGE->set_heading("IT Manager Forms");
     $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/itm/report_itm.php');
     
     require_login();
