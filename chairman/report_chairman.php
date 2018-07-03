@@ -16,8 +16,6 @@
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 	<div>
-        <h3>Click the links down below as per need </h3><br>
-        
         <a href="javascript:void(0)" id="vnm_click" onclick="toggle_visibility('vnm_click', 'vnm');" class="cool-link"><span class="fa fa-chevron-down"></span> Vision & Mission</a><br><br>
         <div id="vnm" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="./define_vision_mission.php" class="cool-link">&#10070; Define Vision &amp; Mission</a><br>

@@ -14,10 +14,9 @@
     echo $OUTPUT->header();
 ?>
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 	<div>
-        <h3>Click the links down below as per need </h3><br>
-
         <a href="./add_semester.php" class="cool-link">Create Semester</a><br><br>
 
         <a href="./view_semester.php" class="cool-link">Edit/Delete/View Semester</a><br><br>
@@ -43,6 +42,21 @@
         
         <a href="./select_course_enrol.php" class="cool-link">Enrol/Unenrol Users from Courses</a><br><br>
     </div>
+
+    <script type="text/javascript">
+        function toggle_visibility(id_click, id) {
+            var e = document.getElementById(id);
+            var e_click = document.getElementById(id_click).getElementsByTagName("span")[0];
+            if(e.style.display == 'block') {
+                e.style.display = 'none';
+                e_click.className = "fa fa-chevron-down";
+            }
+            else {
+                e.style.display = 'block';
+                e_click.className = "fa fa-chevron-up";
+            }
+        }
+    </script>
 <?php
 
 echo $OUTPUT->footer();

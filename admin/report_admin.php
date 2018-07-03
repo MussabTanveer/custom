@@ -13,8 +13,6 @@
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
 	<div>
-        <h3>Click the links down below as per need </h3><br>
-
         <a href="./guidelines.php" target="_blank" class="cool-link">Admin Guidelines</a><br><br>
 
         <a href="./define_vision_mission.php" class="cool-link">Define Vision &amp; Mission</a><br><br>
