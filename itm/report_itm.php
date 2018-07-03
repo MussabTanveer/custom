@@ -26,7 +26,7 @@
 
         <a href="./select_course_edit.php" class="cool-link">Edit Courses</a><br><br>
 
-        <a href="../../../course/management.php" class="cool-link">Edit/Delete Courses (Moodle)</a><br><br>
+        <a href="../../../course/management.php" class="cool-link">Delete Courses</a><br><br>
         <!--<a href="./select_frameworktopracCourse.php" class="cool-link">Create Practical Courses &amp; Map CLOs</a><br><br>-->
 
         <!--<a href="./select_course.php" class="cool-link">Add CLOs to Courses</a><br><br>-->
