@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("My Semesters");
     $PAGE->set_heading("Semesters");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/select_semester.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/student/select_semester_marks.php');
     
     require_login();
     if($SESSION->oberole != "student"){
@@ -17,7 +17,7 @@
     <?php
 
     // Dispaly all semesters
-    $action="display_semester_progress.php";
+    $action="display_courses_student.php";
     require '../templates/select_semester_template.php';
 
     echo $OUTPUT->footer();

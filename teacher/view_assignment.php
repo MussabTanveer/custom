@@ -19,7 +19,7 @@
     <script src="../script/table2excel/jquery.table2excel.min.js"></script>
     <?php
 
-    if(!empty($_GET['assignid']) && !empty($_GET['courseid']) && !empty($_GET['type']))
+    if(!empty($_GET['assignid']) && !empty($_GET['courseid']))
     {
     $assign_id=$_GET['assignid'];
     //echo $assign_id;

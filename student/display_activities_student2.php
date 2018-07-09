@@ -79,21 +79,17 @@
     <form method="post" action="display_online_assignmentreport.php" id="form_check2">
 
     <?php
-                $serialno = 0;
-                $table = new html_table();
-                $table->head = array('S. No.', 'Name', 'Intro','Select');
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro','Select');
             foreach ($reca as $records) {
                 $serialno++;
                 $id = $records->id;
                 $aname=$records->name;
                 $aintro=$records->intro;
-    $table->data[] = array($serialno,$aname,$aintro,'<input type="radio" value="'.$id.'" name="assignid">');
-
+                $table->data[] = array($serialno,$aname,$aintro,'<input type="radio" value="'.$id.'" name="assignid">');
             }
-
-    echo html_writer::table($table);
-    
-
+            echo html_writer::table($table);
     ?>
     
     <input type='submit' value='NEXT' name='submit1' class="btn btn-primary">
@@ -101,7 +97,6 @@
     }
     ?>
     </form>
-
 
     <p id="msg"></p>
     <script>
@@ -117,11 +112,9 @@
     <?php
     $recmq=$DB->get_records_sql('SELECT DISTINCT q.id, q.courseid, q.name, q.description FROM mdl_manual_quiz q, mdl_manual_quiz_attempt qa WHERE q.courseid = ? AND q.id=qa.quizid AND qa.userid = ?',array($course_id,$USER->id));
 
-
-
     if($recmq){
 
-    echo "<h3>Manual Quiz</h3>";
+    echo "<h3>Manual Quizzes/Midterm</h3>";
 
     ?>
 
@@ -170,28 +163,24 @@
 
     if($recma){
 
-    echo "<h3>Manual Assignment</h3>";
+    echo "<h3>Manual Assignments</h3>";
 
     ?>
 
     <form method="post" action="display_manual_assignreport.php" id="form_check4">
 
     <?php
-                $serialno = 0;
-                $table = new html_table();
-                $table->head = array('S. No.', 'Name', 'Intro','Select');
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro','Select');
             foreach ($recma as $records) {
                 $serialno++;
                 $id = $records->id;
                 $maname=$records->name;
                 $maintro=$records->description;
-    $table->data[] = array($serialno,$maname,$maintro,'<input type="radio" value="'.$id.'" name="maid">');
-
+                $table->data[] = array($serialno,$maname,$maintro,'<input type="radio" value="'.$id.'" name="maid">');
             }
-
-    echo html_writer::table($table);
-    
-
+            echo html_writer::table($table);
     ?>
     
 
@@ -225,20 +214,17 @@
     <form method="post" action="display_manual_projectreport.php" id="form_check5">
 
     <?php
-                $serialno = 0;
-                $table = new html_table();
-                $table->head = array('S. No.', 'Name', 'Intro','Select');
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro','Select');
             foreach ($recpa as $records) {
                 $serialno++;
                 $id = $records->id;
                 $mpname=$records->name;
                 $mpintro=$records->description;
-    $table->data[] = array($serialno,$mpname,$mpintro,'<input type="radio" value="'.$id.'" name="mpid">');
-
+                $table->data[] = array($serialno,$mpname,$mpintro,'<input type="radio" value="'.$id.'" name="mpid">');
             }
-
-    echo html_writer::table($table);
-    
+            echo html_writer::table($table);
 
     ?>
     
@@ -254,18 +240,17 @@
 
     <p id="msg"></p>
     <script>
-            $('#form_check5').on('submit', function (e) {
-                if ($("input[type=radio]:checked").length === 0) {
-                    e.preventDefault();
-                    $("#msg").html(" ");
-                    return false;
-                }
-            });
-            </script>
-
-
-        <?php
-            
+    $('#form_check5').on('submit', function (e) {
+        if ($("input[type=radio]:checked").length === 0) {
+            e.preventDefault();
+            $("#msg").html(" ");
+            return false;
         }
-        echo $OUTPUT->footer();
-        ?>
+    });
+    </script>
+
+    <?php
+        
+    }
+    echo $OUTPUT->footer();
+    ?>
