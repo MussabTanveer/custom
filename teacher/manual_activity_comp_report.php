@@ -24,12 +24,13 @@
     {
         $activity_id=$_POST['activityid'];
         $courseid=$_POST['courseid'];*/
-    if(!empty($_GET['course']) && !empty($_GET['activityid']))
+    if(!empty($_GET['course']) && !empty($_GET['activityid']) && !empty($_GET['module']))
     {
         $activity_id=$_GET['activityid'];
+        $mod=$_GET['module'];
         $courseid=$_GET['course'];
 
-$dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
         if($dn){
             foreach($dn as $d){
                 $deptName = $d->description;
@@ -44,14 +45,9 @@ $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?
 
 
 
-
-
-
-
         /******************** QUIZ ***************************/
         if(substr($activity_id,0,1) == 'Q'){
             $quiz_id = substr($activity_id,1);
-            $mod = 16;
             //echo "$quiz_id";
             //Get ques comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
@@ -309,7 +305,6 @@ $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?
         /******************* ASSIGNMENT **********************/
         else if(substr($activity_id,0,1) == 'A'){
             $assign_id = substr($activity_id,1);
-            $mod = 1;
            // echo "Assignment";
             //Get assign comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname

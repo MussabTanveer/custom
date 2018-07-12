@@ -99,9 +99,216 @@
             echo "<h3>No Online activity found!</h3>";
         }
 
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND module = ?', array($course_id, -1));
+        $mstatusarray = array();
+        $mmodArray = array();
 
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+        // Dispaly all Manual Quizzes
+        $recMQ = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)",array($course_id,-1));
+        if($recMQ){
+            echo "<h3>Manual Quizzes</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            foreach ($recMQ as $records) {
+                $serialno++;
+                $id = $records->id;
+                $Status='<span style="color: red;">NOT VIEWED</span>';
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+                    if($id == $mstatusarray[$i] && $mmodArray[$i] == -1)
+                    {
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        break;
+                    }
+                }
+                //$courseid = $records->course;
+                $id = 'Q'.$records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-1'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-1'>$intro</a>", $Status);
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND module = ?', array($course_id, -4));
+        $mstatusarray = array();
+        $mmodArray = array();
 
-        $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+        // Dispaly all Manual Assignments
+        $recMA=$DB->get_records_sql('SELECT * FROM  `mdl_manual_assign_pro` WHERE courseid = ? AND module= ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id,'-4'));
+        if($recMA){
+            echo "<h3>Manual Assignments</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            foreach ($recMA as $records) {
+                $serialno++;
+                $id = $records->id;
+                $Status='<span style="color: red;">NOT VIEWED</span>';
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+                    if($id == $mstatusarray[$i] && $mmodArray[$i] == -4)
+                    {
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        break;
+                    }
+                }
+                $id = 'A'.$records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-4'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-4'>$intro</a>", $Status);
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND module = ?', array($course_id, -5));
+        $mstatusarray = array();
+        $mmodArray = array();
+
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+        // Dispaly all Manual Projects
+        $recMP=$DB->get_records_sql('SELECT * FROM  `mdl_manual_assign_pro` WHERE courseid = ? AND module= ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id,'-5'));
+        if($recMP){
+            echo "<h3>Manual Projects</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            foreach ($recMP as $records) {
+                $serialno++;
+                $id = $records->id;
+                $Status='<span style="color: red;">NOT VIEWED</span>';
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+                    if($id == $mstatusarray[$i] && $mmodArray[$i] == -5)
+                    {
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        break;
+                    }
+                }
+                $id = 'A'.$records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-5'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-5'>$intro</a>", $Status);
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND module = ?', array($course_id, -2));
+        $mstatusarray = array();
+        $mmodArray = array();
+
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+        // Dispaly all Manual Midterm
+        $recMM = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)",array($course_id,-2));
+        if($recMM){
+            echo "<h3>Manual Midterm</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            foreach ($recMM as $records) {
+                $serialno++;
+                $id = $records->id;
+                $Status='<span style="color: red;">NOT VIEWED</span>';
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+                    if($id == $mstatusarray[$i] && $mmodArray[$i] == -2)
+                    {
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        break;
+                    }
+                }
+                //$courseid = $records->course;
+                $id = 'Q'.$records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-2'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-2'>$intro</a>", $Status);
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND module = ?', array($course_id, -3));
+        $mstatusarray = array();
+        $mmodArray = array();
+
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+        // Dispaly all Manual Final
+        $recMF = $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)",array($course_id,-3));
+        if($recMF){
+            echo "<h3>Manual Final Exam</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            foreach ($recMF as $records) {
+                $serialno++;
+                $id = $records->id;
+                $Status='<span style="color: red;">NOT VIEWED</span>';
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+                    if($id == $mstatusarray[$i] && $mmodArray[$i] == -3)
+                    {
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        break;
+                    }
+                }
+                //$courseid = $records->course;
+                $id = 'Q'.$records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-3'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-3'>$intro</a>", $Status);
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+
+        /*$recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
         $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,"manual"));
 
@@ -199,7 +406,7 @@
         else{
             echo "<h3>No Manual activity found!</h3>";
         }
-
+        */
         ?>
 
         <br><br><a href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
