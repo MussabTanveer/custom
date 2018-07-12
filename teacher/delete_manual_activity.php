@@ -26,12 +26,15 @@
          if ($type == "quiz")
             {
                  $sql = "DELETE FROM mdl_manual_quiz WHERE id = $Id";
-                $DB->execute($sql);
+                 $DB->execute($sql);
 
                 $sql = "DELETE FROM mdl_manual_quiz_attempt WHERE quizid = $Id";
                 $DB->execute($sql);
 
                 $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
+                $DB->execute($sql);
+
+                $sql = "DELETE FROM mdl_parent_mapping WHERE  childid = $Id AND module=-1";
                 $DB->execute($sql);
 
                 echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
@@ -52,6 +55,9 @@
             $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
             $DB->execute($sql);
 
+            $sql = "DELETE FROM mdl_parent_mapping WHERE  childid = $Id AND module=-2";
+           $DB->execute($sql);
+
             echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
 
         ?>
@@ -70,6 +76,9 @@
             $sql = "DELETE FROM mdl_manual_quiz_question WHERE  mquizid = $Id";
             $DB->execute($sql);
 
+            $sql = "DELETE FROM mdl_parent_mapping WHERE  childid = $Id AND module=-3";
+           $DB->execute($sql);
+
             echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
 
             ?>
@@ -84,6 +93,9 @@
 
             $sql = "DELETE FROM mdl_manual_assign_pro_attempt WHERE assignproid = $Id";
             $DB->execute($sql); 
+
+            $sql = "DELETE FROM mdl_parent_mapping WHERE  childid = $Id AND module=-5";
+           $DB->execute($sql);
 
          echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
             ?>
@@ -100,6 +112,9 @@
             $sql = "DELETE FROM mdl_manual_assign_pro_attempt WHERE assignproid = $Id";
             $DB->execute($sql); 
 
+           $sql = "DELETE FROM mdl_parent_mapping WHERE  childid = $Id AND module=-4";
+           $DB->execute($sql);
+
          echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
             ?>
             <a href="./print_assign_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
@@ -114,6 +129,9 @@
 
             $sql = "DELETE FROM mdl_manual_other_attempt WHERE otherid = $Id";
             $DB->execute($sql); 
+
+            $sql = "DELETE FROM mdl_parent_mapping WHERE  childid = $Id AND module=-6";
+           $DB->execute($sql);
 
          echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
             ?>
