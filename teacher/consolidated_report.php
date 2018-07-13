@@ -31,9 +31,9 @@
         
 
         $rec=$DB->get_recordset_sql(
-            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass,cr.fail, c.idnumber, cr.form
-            FROM mdl_consolidated_report cr, mdl_competency c
-            WHERE cr.cloid=c.id AND cr.course=? AND cr.instance IN (".implode(',',$activities).")
+            "SELECT cr.id, cr.course, cr.module, cr.instance, cr.cloid, cr.pass, cr.fail, c.idnumber, cr.form, pm.parentid
+            FROM mdl_consolidated_report cr, mdl_competency c, mdl_parent_activity pa, mdl_parent_mapping pm
+            WHERE cr.cloid=c.id AND cr.course=? AND cr.instance=pm.childid AND pm.parentid=pa.id AND cr.instance IN (".implode(',',$activities).")
             ORDER BY cr.cloid",
             array($courseid));
 
@@ -58,6 +58,7 @@
             $f = $records->fail;
             $m = $records->module;
             $in = $records->instance;
+            $pid = $records->parentid;
             $form = $records->form;
             if($m == 16 && $form == "online"){
                 $recName=$DB->get_records_sql(
