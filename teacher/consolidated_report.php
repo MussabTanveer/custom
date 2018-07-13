@@ -82,7 +82,7 @@
                 }
             }
 
-            else if($m == 16 && $form == "manual"){
+            else if(($m == -1 || $m == -2  || $m == -3) && $form == "manual"){
                 $recName=$DB->get_records_sql(
                     'SELECT name
                     FROM mdl_manual_quiz
@@ -94,7 +94,7 @@
                 }
             }
 
-             else if($m == 1 && $form == "manual"){
+             else if(($m == -4 || $m == -5)  && $form == "manual"){
                 $recName=$DB->get_records_sql(
                     'SELECT name
                     FROM mdl_manual_assign_pro
