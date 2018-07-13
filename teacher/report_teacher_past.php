@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="../css/cool-link/style.css" />
 
 	<div>
-    <h5 style="color: green"> Note: You can only view past course profile, grading policy and reports. Any changes in past course are strictly prohibited. </h5><br>
+    <h5 style="color: green"> Note: You can only view past course profile, grading policy and reports. Past courses are not Editable. </h5><br>
         <h3> Click the links down below as per need </h3><br>
 
         <!--<a <?php echo "href='./view_course_profile.php?course=$course_id'" ?> class="cool-link">View Course Profile</a><br><br>--> <!--For PDF Course Profile View-->

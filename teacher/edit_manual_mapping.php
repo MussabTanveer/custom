@@ -50,7 +50,7 @@
              
               if ($flag == "A")
               {
-                echo "Assignment";
+                //echo "Assignment";
 
                  $getParent = $DB->get_records_sql("SELECT * FROM mdl_parent_mapping WHERE childid =? AND module = ?",array($ActivityId,$module));
 

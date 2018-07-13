@@ -141,7 +141,7 @@
 					<td id="plo<?php echo $i ?>"></td>
 					<!--<td id="peo<?php echo $i ?>"></td>-->
 					<td id="tax<?php echo $i ?>"></td>
-					<td><button type="button" class="button btn btn-success" name="submit" value="<?php echo strip_tags($qtext);?>">Check Level</button></td>
+					<td><button type="button" class="button btn btn-success" name="submit"value="<?php echo strip_tags($qtext);?>">Check Level</button></td>
 				</tr>
 				<?php
 					$i++;
