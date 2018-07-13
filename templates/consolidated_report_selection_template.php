@@ -100,7 +100,7 @@
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
-                    if($id == $statusArray[$i] && $modArray[$i] == 16 && $formArray[$i] == "manual")
+                    if($id == $statusArray[$i] && ($modArray[$i] == -1 || $modArray[$i] == -2 || $modArray[$i] == -3) && $formArray[$i] == "manual")
                     {
                         $serialno++;
                         $Status='<span style="color: #006400;">VIEWED</span>';
@@ -124,7 +124,7 @@
 
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
-                    if($id == $statusArray[$i] && $modArray[$i] == 1 && $formArray[$i] == "manual")
+                    if($id == $statusArray[$i] && ($modArray[$i] == -4 || $modArray[$i] == -5) && $formArray[$i] == "manual")
                     {
                         $serialno++;
                         $Status='<span style="color: #006400;">VIEWED</span>';
