@@ -47,7 +47,7 @@ th{
         echo "<h4 style='text-align:center'>OBE Course-wise Marks Assessment Sheet</h4>";
         
         // Get Grading Items
-        $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem ORDER BY mg.id", array($course_id));
+        $rec=$DB->get_records_sql("SELECT * FROM mdl_grading_policy gp, mdl_grading_mapping mg WHERE gp.courseid = ? AND gp.id = mg.gradingitem AND gp.courseid = mg.courseid ORDER BY mg.id", array($course_id));
 
         // Get all students of course
         $recStudents=$DB->get_records_sql("SELECT u.id AS sid, substring(u.username,4,8) AS seatorder, u.username AS seatnum, u.firstname, u.lastname
@@ -90,6 +90,7 @@ th{
             $quizCount=0;       //online
             $assignCount=0;     //online
             $projectCount=0;    //manual
+            $otherCount=0;      //manual
             $MquizCount=0;      //manual
             $MassignCount=0;    //manual
             
@@ -97,6 +98,7 @@ th{
             $flagmid = 0;       //online
             $flagfinal = 0;     //manual
             $flagproject = 0;   //manual
+            $flagother = 0;     //manual
             $flagassign = 0;    //online
             $flagmquiz = 0;     //manual
             $flagmmid = 0;      //manual
@@ -382,10 +384,7 @@ th{
                 {
                     if ($gnames[$i]=="assignment" && $modules[$i]==-4)
                     {
-                        $flagmassign = 1;
-                        $MassignCount++;
-                        
-                        $recMAssign=$DB->get_recordset_sql(
+                        $recMAssign=$DB->get_records_sql(
                             'SELECT
                             u.username AS seat_no,
                             a.name AS assign_name,
@@ -410,6 +409,10 @@ th{
                         $mamax = 0;
                         $massignname = "";
 
+                        if($recMAssign) {
+                            $flagmassign = 1;
+                            $MassignCount++;
+                        }
                         foreach($recMAssign as $as){
                             $massignname = $as->assign_name;
                             $un = $as->seat_no;
@@ -450,10 +453,7 @@ th{
                 {
                     if ($gnames[$i]=="project" && $modules[$i]==-5)
                     {
-                        $flagproject = 1;
-                        $projectCount++;
-                        
-                        $recProject=$DB->get_recordset_sql(
+                        $recProject=$DB->get_records_sql(
                             'SELECT
                             u.username AS seat_no,
                             a.name AS pro_name,
@@ -477,6 +477,10 @@ th{
                         $pmax=0;
                         $proname = "";
 
+                        if($recProject) {
+                            $flagproject = 1;
+                            $projectCount++;
+                        }
                         foreach($recProject as $as){
                             $proname = $as->pro_name;
                             $un = $as->seat_no;
@@ -500,6 +504,76 @@ th{
                         array_push($seatnosPMulti,$seatnosP);
                         array_push($closPMulti,$closP);
                         array_push($resultPMulti,$resultP);
+                        
+                    }
+                        
+                }
+            }
+
+            /****** MANUAL OTHER ******/
+            if(in_array("other", $gnames) && in_array(-6, $modules)){
+                
+                $seatnosOMulti = array();
+                $closOMulti = array();
+                $resultOMulti = array();
+                $maxmarkO = array();
+                $namesO = array();
+
+                for($i=0; $i<count($gnames); $i++)
+                {
+                    if ($gnames[$i]=="other" && $modules[$i]==-6)
+                    {
+                        $recOther=$DB->get_records_sql(
+                            'SELECT
+                            u.username AS seat_no,
+                            o.name AS other_name,
+                            o.maxmark AS maxmark,
+                            att.obtmark AS marksobtained,
+                            c.shortname
+                            FROM
+                                mdl_manual_other o,
+                                mdl_user u,
+                                mdl_manual_other_attempt att,
+                                mdl_competency c
+                            WHERE
+                                o.id=? AND att.userid=u.id AND o.id=att.otherid AND o.cloid=c.id
+                            ORDER BY att.userid',
+                            
+                        array($instances[$i]));
+                        
+                        $seatnosO = array();
+                        $closO = array();
+                        $resultO = array();
+                        $omax=0;
+                        $othername = "";
+
+                        if($recOther) {
+                            $flagother = 1;
+                            $otherCount++;
+                        }
+                        foreach($recOther as $o){
+                            $othername = $o->other_name;
+                            $un = $o->seat_no;
+                            $clo = $o->shortname;
+                            $omax = $o->maxmark; $omax = number_format($omax, 2); // 2 decimal places
+                            $mobtained = $o->marksobtained; $mobtained = number_format($mobtained, 2);
+                            /*if( (($mobtained/$pmax)*100) > 50){
+                                array_push($resultP,"<font color='green'>P</font>");
+                            }
+                            else{
+                                array_push($resultP,"<font color='red'>F</font>");
+                            }*/
+                            array_push($resultO,$mobtained);
+                            array_push($seatnosO,$un);
+                            array_push($closO,$clo);
+                        }
+                        array_push($namesO,$othername);
+                        array_push($maxmarkO,$omax);
+                        $closO = array_unique($closO);
+                        
+                        array_push($seatnosOMulti,$seatnosO);
+                        array_push($closOMulti,$closO);
+                        array_push($resultOMulti,$resultO);
                         
                     }
                         
@@ -732,7 +806,14 @@ th{
                     /****** MANUAL PROJECT ******/
                     for($i=0 ; $i<$projectCount; $i++)
                     {?>
-                        <th>Project</th>
+                        <th><?php echo $namesP[$i] ?></th>
+                        <?php
+                    }
+
+                    /****** MANUAL OTHER ******/
+                    for($i=0 ; $i<$otherCount; $i++)
+                    {?>
+                        <th><?php echo $namesO[$i] ?></th>
                         <?php
                     }
                     
@@ -794,6 +875,13 @@ th{
                     for($i=0 ; $i<$projectCount; $i++)
                     {?>
                         <th><?php echo $maxmarkP[$i] ?></th>
+                    <?php
+                    }
+
+                    /****** MANUAL OTHER ******/
+                    for($i=0 ; $i<$otherCount; $i++)
+                    {?>
+                        <th><?php echo $maxmarkO[$i] ?></th>
                     <?php
                     }
                     
@@ -878,6 +966,21 @@ th{
                         <?php
                         for($j=0; $j<count($closPMulti[$i]); $j++){
                            echo $closPMulti[$i][$j];
+                           echo " ";
+                        }
+                        ?>
+                        </th>
+                        <?php
+                    }
+
+                    /****** MANUAL OTHER ******/
+                    for($i=0; $i<$otherCount; $i++)
+                    {
+                        ?>
+                        <th>
+                        <?php
+                        for($j=0; $j<count($closOMulti[$i]); $j++){
+                           echo $closOMulti[$i][$j];
                            echo " ";
                         }
                         ?>
@@ -1005,6 +1108,25 @@ th{
                                         $flag=1;
                                         ?>
                                         <td> <?php echo $resultPMulti[$i][$j]; ?> </td>
+                                        <?php
+                                    }
+                                }
+                                if($flag==0)
+                                {
+                                    echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
+                                }
+                            }
+
+                            /****** MANUAL OTHER ******/
+                            for($i=0; $i<$otherCount; $i++)
+                            {
+                                $flag=0;
+                                for($j=0; $j<count($seatnosOMulti[$i]); $j++){
+                                    if($seatno == $seatnosOMulti[$i][$j])
+                                    {
+                                        $flag=1;
+                                        ?>
+                                        <td> <?php echo $resultOMulti[$i][$j]; ?> </td>
                                         <?php
                                     }
                                 }
