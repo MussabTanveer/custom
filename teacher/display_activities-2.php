@@ -172,6 +172,25 @@
             <br />
             <?php
         }
+        // Dispaly all Manual Others
+        $recMO=$DB->get_records_sql('SELECT * FROM  `mdl_manual_other` WHERE courseid = ? AND id IN (SELECT otherid FROM `mdl_manual_other_attempt`)', array($course_id));
+        if($recMA){
+            echo "<h3>Manual Other</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro');
+            foreach ($recMO as $records) {
+                $serialno++;
+                $id = $records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./view_other2.php?otherid=$id&courseid=$course_id'>$name</a>", "<a href='./view_other2.php?otherid=$id&courseid=$course_id'>$intro</a>");
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
         echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
     }
     else
