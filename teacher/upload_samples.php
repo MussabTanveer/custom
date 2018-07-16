@@ -5,7 +5,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Upload Sample");
     $PAGE->set_heading("Upload Sample");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/grading_form_quiz_selection.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/upload_samples.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
@@ -174,18 +174,38 @@
 
 
 
-if(!empty($_GET['quiz']) && !empty($_GET['courseid']) && !empty($_GET['type']))
+if(!empty($_GET['instance']) && !empty($_GET['courseid']) && !empty($_GET['type']))
 {
     $course_id=$_GET['courseid'];
     $coursecontext = context_course::instance($course_id);
     is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
 
-    $quizId = $_GET['quiz'];
+    $instance = $_GET['instance'];
     $type = $_GET['type'];
 
     if ($type == "quiz")
     {
         $mod=-1;
+    }
+    elseif ($type == "assign")
+    {
+        $mod=-4;
+    }
+    elseif ($type == "project")
+    {
+        $mod=-5;
+    }
+     elseif ($type == "midterm")
+    {
+        $mod=-2;
+    }
+     elseif ($type == "finalexam")
+    {
+        $mod=-3;
+    }
+     elseif ($type == "other")
+    {
+        $mod=-6;
     }
 ?>
 
@@ -254,10 +274,12 @@ if(!empty($_GET['quiz']) && !empty($_GET['courseid']) && !empty($_GET['type']))
 
 
             <input type="hidden" name="mod" value="<?php echo $mod; ?>">
-            <input type="hidden" name="instance" value="<?php echo $quizId; ?>">
+            <input type="hidden" name="instance" value="<?php echo $instance; ?>">
 
         <input class="btn btn-info" type="submit" name="Upload" value="Upload">
+        <a class="btn btn-default" href="./report_teacher.php?course=<?php echo $course_id ?>">Go Back</a>
     </form>
+
     
 
 <?php
@@ -266,3 +288,5 @@ else
 {
     echo "<font color=red size = 20px> Error </font>";
 }
+
+  echo $OUTPUT->footer();
