@@ -674,13 +674,22 @@ th{
         </tr>
         <?php
         $cohort_clo_stat = array(); // cohort course clo status -> increment for pass
+        $activity_clo_stat = array(); // activity clo status -> increment for pass
+        $total_attempts = 0;
+        for($i=0; $i<count($closid); $i++) {
+            $total_attempts += $closidCountActivity[$i];
+        }
+        //print_r($total_attempts);
+        for($i=0; $i<$total_attempts; $i++)
+            $activity_clo_stat[$i] = 0; // initialize all clos count with 0
         for($i=0; $i<count($closid); $i++)
             $cohort_clo_stat[$i] = 0; // initialize all clos status with 0
         
         foreach ($seatnos as $seatno) {
-        $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
-        for($i=0; $i<count($closid); $i++)
-            $ind_stud_clo_stat[$i] = 0; // set all clos status to fail
+            $attempt_idx = 0; // re-initialize index for every student
+            $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
+            for($i=0; $i<count($closid); $i++)
+                $ind_stud_clo_stat[$i] = 0; // set all clos status to fail
         
         ?>
         <tr>
@@ -699,14 +708,19 @@ th{
                                 if($resultQMulti[$j][$k] >= $clospasspercent[$i]){
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i></td>";
                                     $ind_stud_clo_stat[$i] = 1; // set status pass
+                                    $activity_clo_stat[$attempt_idx]++; // increment for attempt pass
+                                    $attempt_idx++;
                                 }
-                                else
+                                else {
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i></td>";
+                                    $attempt_idx++;
+                                }
                             }
                         }
                         if($flag==0)
                         {
                             echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
+                            $attempt_idx++;
                         }
                     }
                 for($j=0; $j<($assignids/*+count($massignids)*/); $j++)
@@ -720,14 +734,19 @@ th{
                                 if($resultAMulti[$j][$k] >= $clospasspercent[$i]){
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i></td>";
                                     $ind_stud_clo_stat[$i] = 1; // set status pass
+                                    $activity_clo_stat[$attempt_idx]++; // increment for attempt pass
+                                    $attempt_idx++;
                                 }
-                                else
+                                else {
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i></td>";
+                                    $attempt_idx++;
+                                }
                             }
                         }
                         if($flag==0)
                         {
                             echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
+                            $attempt_idx++;
                         }
                     }
             }
@@ -744,6 +763,7 @@ th{
         </tr>
         <?php
         }
+        //print_r($activity_clo_stat);
         // Total Colspan for last 2 rows
         $colspan = 0;
         for($i=0; $i<count($closid); $i++) {
@@ -751,6 +771,18 @@ th{
         }
         $colspan++; // include seat num col
         ?>
+        <tr>
+            <th>CLO Attempts Level Aggregate</th>
+            <?php
+            /****** CLO Attempts Level Aggregate (Quantitative) ******/
+            for($i=0; $i<$total_attempts; $i++) {
+                echo "<td>".(($activity_clo_stat[$i]/count($recStudents))*100)."%</td>";
+            }
+            for($i=0; $i<count($closid); $i++) {
+                echo "<td></td>";
+            }
+            ?>
+        </tr>
         <tr>
             <!--Course Level Aggregate Response (Quantitative)-->
             <th colspan="<?php echo $colspan; ?>" style="text-align: right;">Course Level Aggregate Response (Quantitative):</th>
