@@ -776,7 +776,7 @@ th{
             <?php
             /****** CLO Attempts Level Aggregate (Quantitative) ******/
             for($i=0; $i<$total_attempts; $i++) {
-                echo "<td>".(($activity_clo_stat[$i]/count($recStudents))*100)."%</td>";
+                echo "<td>".number_format((($activity_clo_stat[$i]/count($recStudents))*100),3)."%</td>";
             }
             for($i=0; $i<count($closid); $i++) {
                 echo "<td></td>";
@@ -789,7 +789,7 @@ th{
             <?php
             /****** Course CLOS status (Quantitative) ******/
             for($i=0; $i<count($closid); $i++) {
-                echo "<td>".(($cohort_clo_stat[$i]/count($recStudents))*100)."%</td>";
+                echo "<td>".number_format((($cohort_clo_stat[$i]/count($recStudents))*100),3)."%</td>";
             }
             ?>
         </tr>
