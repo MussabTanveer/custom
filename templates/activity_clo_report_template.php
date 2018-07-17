@@ -308,6 +308,53 @@
             <?php
         }
 
+
+        $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND module = ?', array($course_id, -6));
+        $mstatusarray = array();
+        $mmodArray = array();
+
+        foreach ($statusQuery as $state) {
+           
+            $sta = $state->instance;
+            $mod = $state ->module;
+           
+            array_push($mstatusarray, $sta);
+            array_push($mmodArray, $mod);
+        }
+        // Dispaly all Manual Other
+        $recMO = $DB->get_records_sql("SELECT * FROM mdl_manual_other WHERE courseid = ? AND module = ? AND id IN (SELECT otherid FROM `mdl_manual_other_attempt`)",array($course_id,-6));
+        if($recMO){
+            echo "<h3>Manual Other</h3>";
+            $serialno = 0;
+            $table = new html_table();
+            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            foreach ($recMO as $records) {
+                $serialno++;
+                $id = $records->id;
+                $Status='<span style="color: red;">NOT VIEWED</span>';
+                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                {
+                    if($id == $mstatusarray[$i] && $mmodArray[$i] == -6)
+                    {
+                        $Status='<span style="color: #006400;">VIEWED</span>';
+                        break;
+                    }
+                }
+                //$courseid = $records->course;
+                $id = 'O'.$records->id;
+                $name = $records->name;
+                $intro = $records->description;
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-6'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-6'>$intro</a>", $Status);
+            }
+            echo html_writer::table($table);
+            ?>
+            <br />
+            <?php
+        }
+
+
+
+
         /*$recQ=$DB->get_records_sql('SELECT * FROM  `mdl_manual_quiz` WHERE courseid = ? AND id IN (SELECT quizid FROM `mdl_manual_quiz_attempt`)', array($course_id));
         $recA=$DB->get_records_sql('SELECT * FROM `mdl_manual_assign_pro` WHERE courseid = ? AND id IN (SELECT assignproid FROM `mdl_manual_assign_pro_attempt`)', array($course_id));
         $statusQuery=$DB->get_records_sql('SELECT id, instance, module FROM `mdl_consolidated_report` WHERE course = ? AND form = ?', array($course_id,"manual"));
