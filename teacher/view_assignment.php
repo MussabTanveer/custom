@@ -49,13 +49,13 @@
 
     //$id=$_POST['id'];
     //echo $id;
-    $rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.idnumber,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($assign_id));
+    $rec1=$DB->get_recordset_sql('SELECT ma.name,ma.maxmark,comp.shortname,ma.cloid, comp.id from mdl_manual_assign_pro ma,mdl_competency comp WHERE comp.id=ma.cloid AND ma.id=?',array($assign_id));
 
     if($rec1){
 
         foreach ($rec1 as $records) {
             $name = $records->name;
-            $clo=$records->idnumber;
+            $clo=$records->shortname;
             $maxmark=$records->maxmark;
         }
 
