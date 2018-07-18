@@ -23,8 +23,30 @@
     if(!empty($_GET['otherid']) && isset($_GET['courseid']))
     {
     $other_id=$_GET['otherid'];
-     $courseid=$_GET['courseid'];
+    $courseid=$_GET['courseid'];
     //echo $other_id;
+
+    // Report Header (Uni. name, Dept. name, course code and title)
+    $un=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("un"));
+    if($un){
+        foreach($un as $u){
+            $uniName = $u->description;
+        }
+        $uniName = strip_tags($uniName); 
+        echo "<h3 style='text-align:center'>".strtoupper($uniName)."</h3>";         
+    }
+    $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+    if($dn){
+        foreach($dn as $d){
+            $deptName = $d->description;
+        }
+        $deptName = strip_tags($deptName); 
+        echo "<h3 style='text-align:center'>".strtoupper($deptName)."</h3>";         
+    }
+    $course = $DB->get_record('course',array('id' => $courseid));
+    echo "<h4 style='text-align:center'>Course Code: <u>".($course->idnumber)."</u>,";
+    echo " Course Title: <u>".($course->fullname)." (".($course->shortname).")</u></h4>";
+    echo "<h4 style='text-align:center'>Activity Detailed Report</h4>";
     
     //$id=$_POST['id'];
     //echo $id;
