@@ -119,9 +119,10 @@
                             array_push($criteriaDesc, $description);
                         }
                         $criteriaMaxScore = array();
-                        $scount = array();
-                        $sscoreMulti = array();
-                        $snoMulti = array();
+                        $criteriaMinScore = array();
+                        //$scount = array();
+                        //$sscoreMulti = array();
+                        //$snoMulti = array();
                         ?>
                         
                         <br />
@@ -130,32 +131,36 @@
                             $maxScales=0;
                             for($i=0; $i<count($criteriaDesc); $i++){
                                 $maxScore = 0;
-                                $scount[$i] = 0;
-                                $sscore = array();
-                                $sno = array();
+                                $minScore = 100000;
+                                //$scount[$i] = 0;
+                                //$sscore = array();
+                                //$sno = array();
                             ?>
                             <tr>
                                 <th>Criterion <?php echo ($i+1)."<br>".$criteriaDesc[$i] ?></th>
                                 <?php
                                 $scaleInfo=$DB->get_records_sql('SELECT * FROM mdl_rubric_scale WHERE rubric = ? AND criterion = ?', array($rubric_id, $criteriaId[$i]));
                                 $temp=0;
-                                $sc = 1;
+                                //$sc = 1;
                                 foreach ($scaleInfo as $sInfo) {
-                                    $scount[$i]++;
+                                    //$scount[$i]++;
                                     //$id = $sInfo->id;
                                     $description = $sInfo->description;
                                     $score = $sInfo->score;
-                                    array_push($sscore, $score);
-                                    array_push($sno, "Scale ".$sc);
+                                    //array_push($sscore, $score);
+                                    //array_push($sno, "Scale ".$sc);
                                     echo "<td>$description<br>Score: $score</td>";
                                     if($score>$maxScore)
                                         $maxScore = $score;
+                                    if($score<$minScore)
+                                        $minScore = $score;
                                     $temp++;
-                                    $sc++;
+                                    //$sc++;
                                 }
                                 array_push($criteriaMaxScore, $maxScore);
-                                array_push($sscoreMulti, $sscore);
-                                array_push($snoMulti, $sno);
+                                array_push($criteriaMinScore, $minScore);
+                                //array_push($sscoreMulti, $sscore);
+                                //array_push($snoMulti, $sno);
                                 if($temp>$maxScales)
                                     $maxScales=$temp;
                                 ?>
@@ -256,8 +261,8 @@
                         //foreach ($cnames as $cname){
                         ?>
                             <td style="background-color: #ECEEEF;">
-                                <!--<input type="number" name="marks[]" step="0.001" min="0" max="<?php echo $criteriaMaxScore[$i]; ?>" required />-->
-                                <select name="marks[]" class="select custom-select" required>
+                                <input type="number" name="marks[]" step="0.001" min="<?php echo $criteriaMinScore[$i]; ?>" max="<?php echo $criteriaMaxScore[$i]; ?>" required />
+                                <!--<select name="marks[]" class="select custom-select" required>
                                     <?php
                                     for($j=0; $j<$scount[$i]; $j++){
                                     ?>
@@ -265,7 +270,7 @@
                                     <?php
                                     }
                                     ?>
-                                </select>
+                                </select>-->
                             </td >
                     <?php
                         }  ?>
