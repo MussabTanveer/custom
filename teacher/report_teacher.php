@@ -47,7 +47,8 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz_result.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; View Result</a><br>
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_quiz_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_quiz_selection.php?type=quiz&course=$course_id&upload=1'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_quiz_selection.php?type=quiz&course=$course_id&upload=0'" ?> class="cool-link">&#10070; View Sample Solution</a><br>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" id="manual_assign_click" onclick="toggle_visibility('manual_assign_click', 'manual_assign');" class="cool-link"><span class="fa fa-chevron-down"></span> Assignment</a><br>
                 <div id="manual_assign" style="display: none">
@@ -57,7 +58,8 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_assign_pro.php?type=assign&course=$course_id'" ?> class="cool-link">&#10070; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_assignment?type=assign&course=$course_id'" ?> class="cool-link">&#10070; View Results</a><br>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_assign_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_assign_selection.php?type=assign&course=$course_id&upload=1'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_assign_selection.php?type=quiz&course=$course_id&upload=0'" ?> class="cool-link">&#10070; View Sample Solution</a><br>
                 </div>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" id="manual_pro_click" onclick="toggle_visibility('manual_pro_click', 'manual_pro');" class="cool-link"><span class="fa fa-chevron-down"></span> Project</a><br>
@@ -68,7 +70,8 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_assign_pro.php?type=project&course=$course_id'" ?> class="cool-link">&#10070; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_project.php?type=project&course=$course_id'" ?> class="cool-link">&#10070; View Result</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_pro_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_pro_selection.php?type=project&course=$course_id&upload=1'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_pro_selection.php?type=project&course=$course_id&upload=0'" ?> class="cool-link">&#10070; View Sample Solution</a><br>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" id="manual_mt_click" onclick="toggle_visibility('manual_mt_click', 'manual_mt');" class="cool-link"><span class="fa fa-chevron-down"></span> Midterm</a><br>
                 <div id="manual_mt" style="display: none">
@@ -78,7 +81,8 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_quiz.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=midterm&course=$course_id'" ?> class="cool-link">&#10070; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_mid_result.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; View Result</a><br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_midterm_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_midterm_selection.php?type=midterm&course=$course_id&upload=1'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_midterm_selection.php?type=midterm&course=$course_id&upload=0'" ?> class="cool-link">&#10070; View Sample Solution</a><br>
                 </div>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" id="manual_fe_click" onclick="toggle_visibility('manual_fe_click', 'manual_fe');" class="cool-link"><span class="fa fa-chevron-down"></span> Final Exam</a><br>
                 <div id="manual_fe" style="display: none">
@@ -88,7 +92,8 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_quiz.php?type=finalexam&course=$course_id'" ?> class="cool-link">&#10070; Upload Result</a></a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_final_result.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; View Result</a><br>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_final_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_final_selection.php?type=finalexam&course=$course_id&upload=1'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_final_selection.php?type=finalexam&course=$course_id&upload=0'" ?> class="cool-link">&#10070; View Sample Solution</a><br>
                 </div>
            
                  
@@ -101,7 +106,9 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10070; Upload Result</a><br>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./select_other.php?type=other&course=$course_id'" ?> class="cool-link">&#10070; View Results</a><br>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_other_selection.php?type=quiz&course=$course_id'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_other_selection.php?type=other&course=$course_id&upload=1'" ?> class="cool-link">&#10070; Upload Sample Solution</a><br>
+
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a <?php echo "href='./sample_paper_other_selection.php?type=other&course=$course_id&upload=0'" ?> class="cool-link">&#10070; View Sample Solution</a><br>
                 </div>
 
                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./map_manual_activity.php?course=<?php echo $course_id; ?>" class="cool-link">&#10070; Map Subactivities To Parent Activity</a><br>

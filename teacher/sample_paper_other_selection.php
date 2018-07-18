@@ -13,13 +13,15 @@
     }
     echo $OUTPUT->header();
     
-    if(!empty($_GET['course']))
+    if(!empty($_GET['type']) && !empty($_GET['course']) && isset($_GET['upload']))
     {
         $course_id=$_GET['course'];
         $coursecontext = context_course::instance($course_id);
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         //echo "$course_id";
         $others= $DB->get_records_sql("SELECT * FROM mdl_manual_other WHERE courseid = ? AND module = ?",array($course_id,-6));
+
+        $upload = $_GET['upload'];
 
         if($others)
         {
@@ -31,7 +33,10 @@
                 $aname = $other->name;
                 $aid   = $other->id;
                 
-                $table->data[] = array($serialno,"<a href='./upload_samples.php?type=other&instance=$aid&courseid=$course_id'>$aname</a>");
+                if ($upload)
+                    $table->data[] = array($serialno,"<a href='./upload_samples.php?type=other&instance=$aid&courseid=$course_id'>$aname</a>");
+                else
+                    $table->data[] = array($serialno,"<a href='./view_samples.php?type=other&instance=$aid&courseid=$course_id'>$aname</a>");
             }
             echo html_writer::table($table);
             echo "<br />";
