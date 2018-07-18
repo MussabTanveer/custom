@@ -724,7 +724,7 @@
         window.onload = function() {
             var ctx = document.getElementById("canvas").getContext("2d");
             window.myBar = new Chart(ctx, {
-                type: 'horizontalBar',
+                type: 'bar',
                 data: barChartData,
                 options: {
 					scales: {
