@@ -58,6 +58,16 @@
         if(substr($activity_id,0,1) == 'Q'){
             $quiz_id = substr($activity_id,1);
             //echo "$quiz_id";
+
+            $rec1=$DB->get_recordset_sql('SELECT mq.name FROM mdl_manual_quiz mq WHERE mq.id=?',array($quiz_id));
+
+            if($rec1){
+                foreach ($rec1 as $r) {
+                    $name = $r->name;
+                }
+                echo "<h3>".$name."</h3>";
+            }
+
             //Get ques comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
         
@@ -97,7 +107,6 @@
             if($rec){
                 $serialno = 0;
                 ?>
-                <h3>Activity CLO Report</h3>
                 <!-- Display Students' Quiz Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
@@ -311,12 +320,13 @@
             }
 
         }
-        /******************* ASSIGNMENT **********************/
+        /******************* ASSIGNMENT/PROJECT **********************/
         else if(substr($activity_id,0,1) == 'A'){
             $assign_id = substr($activity_id,1);
-           // echo "Assignment";
+            // echo "Assignment";
+
             //Get assign comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname, a.name
             
                 FROM mdl_competency c, mdl_manual_assign_pro a
         
@@ -325,6 +335,13 @@
                 ORDER BY a.cloid",
                 
                 array($assign_id));
+            
+            if($recordsComp){
+                foreach ($recordsComp as $r) {
+                    $name = $r->name;
+                }
+                echo "<h3>".$name."</h3>";
+            }
                     
             $rec=$DB->get_recordset_sql(
                 'SELECT
@@ -351,7 +368,6 @@
             if($rec){
                 $serialno = 0;
             ?>
-                <h3>Assignment CLO Report</h3>
                 <!-- Display Students' Assign Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
@@ -508,7 +524,7 @@
             $assign_id = substr($activity_id,1);
           //  echo "$assign_id";
             //Get assign comp
-            $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+            $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname, a.name
             
                 FROM mdl_competency c, mdl_manual_other a
         
@@ -517,6 +533,13 @@
                 ORDER BY a.cloid",
                 
                 array($assign_id));
+
+            if($recordsComp){
+                foreach ($recordsComp as $r) {
+                    $name = $r->name;
+                }
+                echo "<h3>".$name."</h3>";
+            }
                     
             $rec=$DB->get_recordset_sql(
                 'SELECT
@@ -543,7 +566,6 @@
             if($rec){
                 $serialno = 0;
             ?>
-                <h3>Other Activity CLO Report</h3>
                 <!-- Display Students' Assign Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">

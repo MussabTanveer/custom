@@ -49,6 +49,18 @@
     echo "<h4 style='text-align:center'>Activity Detailed Report</h4>";
 
     //echo "$quizId";
+
+    $rec1=$DB->get_recordset_sql('SELECT mq.name FROM mdl_manual_quiz mq WHERE mq.id=?',array($quizId));
+
+    if($rec1){
+
+        foreach ($rec1 as $r) {
+            $name = $r->name;
+        }
+
+        echo "<h3>".$name."</h3>";
+    }
+
     $quesnames=array(); 
     $quesmarks=array(); 
         
@@ -78,18 +90,21 @@
     //var_dump($obtMarks);
     if($ques)
     {
+        $quizmaxmark = 0; // maxmarks of quiz
         foreach ($ques as $q) {
             $qname = $q->quesname;
             $id = $q->id;
             $maxmark=$q->maxmark; 
             //$cloid=$q->cloid;
             $shortname=$q->shortname;
+            $quizmaxmark += $maxmark;
             array_push ($cloShortNames,$shortname);
             //array_push ($cloids,$cloid);
             array_push ($quesnames,$qname);
             array_push ($qids,$id);
             array_push ($quesmarks,$maxmark);
         }
+        echo "<h3>"."Max Marks:"." ".$quizmaxmark."</h3>";
     }
     //var_dump($quesnames);
     //var_dump($qids);

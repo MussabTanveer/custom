@@ -54,6 +54,20 @@
         //echo "<h3>Quiz Question Grid</h3>";
         //$rec1=$DB->get_recordset_sql('SELECT DISTINCT us.idnumber FROM mdl_user us, mdl_quiz_attempts qa 
         // WHERE us.id=qa.userid');
+        $rec1=$DB->get_recordset_sql('SELECT q.name, q.grade FROM mdl_quiz q WHERE q.id=?',array($quiz_id));
+
+        if($rec1){
+
+            foreach ($rec1 as $r) {
+                $name = $r->name;
+                $maxmark=$r->grade;
+            }
+
+            echo "<h3>".$name."</h3>";
+
+            echo "<h3>"."Max Marks:"." ".$maxmark."</h3>";
+        }
+
         $quiz_ques=$DB->get_records_sql('SELECT * from mdl_quiz_slots WHERE quizid=?', array($quiz_id));
         $tot_ques = count($quiz_ques);
         $rec=$DB->get_recordset_sql(

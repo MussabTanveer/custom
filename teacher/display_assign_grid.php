@@ -50,7 +50,7 @@
         //echo "Assign ID : $assign_id";
         
         //Get assign comp
-        $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+        $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname, a.name, a.grade
         
         FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
 
@@ -61,10 +61,14 @@
         array($assign_id,$course_id,1));
 
         // Display Assign Info
-        echo "<h3>Assignment ";
+        echo "<h3>";
         foreach ($recordsComp as $recC) {
+            $name = $recC->name;
+            echo "$name";
             $comp = $recC->shortname;
-            echo "$comp";
+            echo " ($comp)";
+            $maxmarks = $recC->grade;
+            echo "<br>Max Marks: $maxmarks";
         }
         echo "</h3>";
             

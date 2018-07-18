@@ -57,6 +57,18 @@
             $quiz_id = substr($activity_id,1);
             $mod = 16;
 
+            $rec1=$DB->get_recordset_sql('SELECT q.name, q.grade FROM mdl_quiz q WHERE q.id=?',array($quiz_id));
+
+            if($rec1){
+
+                foreach ($rec1 as $r) {
+                    $name = $r->name;
+                    $maxmark=$r->grade;
+                }
+
+                echo "<h3>".$name."</h3>";
+            }
+
             //Get ques comp
 		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
         
@@ -108,7 +120,6 @@
             if($rec){
                 $serialno = 0;
                 ?>
-                <h3>Activity CLO Report</h3>
                 <!-- Display Students' Quiz Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
@@ -315,15 +326,23 @@
             $mod = 1;
 
             //Get assign comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
+		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname, a.name
             
-                    FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+                FROM mdl_competency c, mdl_assign a, mdl_course_modules cm, mdl_competency_modulecomp cmc
+        
+                WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
+                
+                ORDER BY cmc.competencyid",
+                
+                array($assign_id,$courseid,$mod));
             
-                    WHERE a.id=? AND cm.course=? AND cm.module=? AND a.id=cm.instance AND cm.id=cmc.cmid AND cmc.competencyid=c.id
-                    
-                    ORDER BY cmc.competencyid",
-                    
-                    array($assign_id,$courseid,$mod));
+                // Display Assign Info
+            echo "<h3>";
+            foreach ($recordsComp as $recC) {
+                $name = $recC->name;
+                echo "$name";
+            }
+            echo "</h3>";
                     
             $rec=$DB->get_recordset_sql(
                 'SELECT
@@ -347,7 +366,6 @@
             if($rec){
                 $serialno = 0;
             ?>
-                <h3>Assignment CLO Report</h3>
                 <!-- Display Students' Assign Competency Results -->
                 <table class="generaltable">
                     <tr class="table-head">
