@@ -40,6 +40,10 @@
                 $sql = "DELETE FROM mdl_grading_mapping WHERE  courseid = ? AND module = -1 AND instance = ?";
                 $DB->execute($sql, array($courseId, $Id));
 
+
+                $sql = "DELETE FROM mdl_sample_solution WHERE module = -1 AND instance = ?";
+                $DB->execute($sql, array($Id));
+
                 echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
            ?>
                 <a href="./print_quiz_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
@@ -63,6 +67,9 @@
 
             $sql = "DELETE FROM mdl_grading_mapping WHERE  courseid = ? AND module = -2 AND instance = ?";
             $DB->execute($sql, array($courseId, $Id));
+
+            $sql = "DELETE FROM mdl_sample_solution WHERE module = -2 AND instance = ?";
+                $DB->execute($sql, array($Id));
 
             echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
 
@@ -88,6 +95,9 @@
             $sql = "DELETE FROM mdl_grading_mapping WHERE  courseid = ? AND module = -3 AND instance = ?";
             $DB->execute($sql, array($courseId, $Id));
 
+            $sql = "DELETE FROM mdl_sample_solution WHERE module = -3 AND instance = ?";
+                $DB->execute($sql, array($Id));
+
             echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
 
             ?>
@@ -108,6 +118,10 @@
 
             $sql = "DELETE FROM mdl_grading_mapping WHERE  courseid = ? AND module = -5 AND instance = ?";
             $DB->execute($sql, array($courseId, $Id));
+
+
+            $sql = "DELETE FROM mdl_sample_solution WHERE module = -5 AND instance = ?";
+                $DB->execute($sql, array($Id));
             
             echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
             ?>
@@ -130,6 +144,9 @@
             $sql = "DELETE FROM mdl_grading_mapping WHERE  courseid = ? AND module = -4 AND instance = ?";
             $DB->execute($sql, array($courseId, $Id));
 
+            $sql = "DELETE FROM mdl_sample_solution WHERE module = -4 AND instance = ?";
+                $DB->execute($sql, array($Id));
+
          echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
             ?>
             <a href="./print_assign_paper.php?type=<?php echo $type; ?>&course=<?php echo $courseId; ?> "> Go Back </a>
@@ -150,6 +167,9 @@
 
         $sql = "DELETE FROM mdl_grading_mapping WHERE  courseid = ? AND module = -6 AND instance = ?";
         $DB->execute($sql, array($courseId, $Id));
+
+        $sql = "DELETE FROM mdl_sample_solution WHERE module = -6 AND instance = ?";
+                $DB->execute($sql, array($Id));
 
          echo "<font color = green> Activity has been Deleted Successfully </font><br>"; 
             ?>
