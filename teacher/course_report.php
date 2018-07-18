@@ -13,9 +13,39 @@
     }
     echo $OUTPUT->header();
 ?>
+<link href="../css/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet">
+<script src="../script/perfect-scrollbar/perfect-scrollbar.js"></script>
+
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 <script src="../script/table2excel/jquery.table2excel.js"></script>
 <style>
+#container {
+    position: relative;
+    margin: 0px auto;
+    padding: 0px;
+    width: 100%;
+    overflow: auto;
+}
+
+/* Change the alignment of scrollbars */
+/* Recommendation: modify CSS directly */
+.ps__rail-x {
+    top: 0px;
+    bottom: auto; /* If using `top`, there shouldn't be a `bottom`. */
+}
+.ps__rail-y {
+    left: 0px;
+    right: auto; /* If using `left`, there shouldn't be a `right`. */
+}
+.ps__thumb-x {
+    top: 2px;
+    bottom: auto; /* If using `top`, there shouldn't be a `bottom`. */
+}
+.ps__thumb-y {
+    left: 2px;
+    right: auto; /* If using `left`, there shouldn't be a `right`. */
+}
+
 td{
     text-align:center;
 }
@@ -778,6 +808,7 @@ th{
             ?>
 
             <!-- Now display data in formatted way -->
+            <div id="container">
             <table class="generaltable" border="1">
                 <tr>
                     <th>Seat Number</th>
@@ -1023,7 +1054,7 @@ th{
                 foreach ($seatnos as $seatno) {
                     ?>
                     <tr> 
-                        <td>  <?php echo strtoupper($seatno) ?> </td>
+                        <th>  <?php echo strtoupper($seatno) ?> </th>
                         <?php
 
                             /****** ONLINE QUIZZES ******/
@@ -1211,6 +1242,11 @@ th{
                 ?>
 
             </table>
+            </div>
+
+            <script>
+                new PerfectScrollbar('#container');
+            </script>
 
             <button id="myButton" class="btn btn-primary">Export to Excel</button>
 
