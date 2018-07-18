@@ -13,7 +13,7 @@
     }
     echo $OUTPUT->header();
 
-    if(!empty($_GET['type']) && !empty($_GET['course']))
+    if(!empty($_GET['type']) && !empty($_GET['course']) && isset($_GET['upload']))
     {
         $course_id=$_GET['course'];
         $coursecontext = context_course::instance($course_id);
@@ -21,6 +21,7 @@
         // echo "$course_id";
         $type=$_GET['type'];
         //echo " Activity Type : $type";
+        $upload = $_GET['upload'];
         
         $quizzes= $DB->get_records_sql("SELECT * FROM mdl_manual_quiz WHERE courseid = ? AND module = ?",array($course_id,-1));
 
@@ -34,7 +35,10 @@
                 $qid = $records->id;
                 $qname = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./upload_samples.php?type=quiz&instance=$qid&courseid=$course_id'>$qname</a>");
+                if ($upload)
+                    $table->data[] = array($serialno,"<a href='./upload_samples.php?type=quiz&instance=$qid&courseid=$course_id'>$qname</a>");
+                else
+                     $table->data[] = array($serialno,"<a href='./view_samples.php?type=quiz&instance=$qid&courseid=$course_id'>$qname</a>");
             }
             echo html_writer::table($table);
             echo "<br />";
