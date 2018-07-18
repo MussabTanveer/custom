@@ -59,7 +59,7 @@
             $quiz_id = substr($activity_id,1);
             //echo "$quiz_id";
             //Get ques comp
-		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.idnumber
+		    $recordsComp=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname
         
                 FROM mdl_competency c, mdl_manual_quiz q, mdl_manual_quiz_question mqu, mdl_manual_quiz_attempt qa
         
@@ -110,9 +110,9 @@
                         $cloids = array();
                         foreach ($recordsComp as $recC) {
                             $compid = $recC->id;
-                            $comp = $recC->idnumber;
+                            $comp = $recC->shortname;
                             array_push($cloids, $compid); // array of clo ids
-                            array_push($label, $comp); // array of clo idnumbers
+                            array_push($label, $comp); // array of clo names
                             $tot_comp++;
                             
                         ?>
