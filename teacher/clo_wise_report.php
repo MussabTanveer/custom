@@ -13,6 +13,9 @@
 	}
     echo $OUTPUT->header();
 ?>
+<script src="../script/chart/Chart.bundle.js"></script>
+<script src="../script/chart/utils.js"></script>
+
 <script src="../script/jquery/jquery-3.2.1.js"></script>
 <script src="../script/table2excel/jquery.table2excel.js"></script>
 <style>
@@ -799,6 +802,11 @@ th{
             for($i=0; $i<count($closid); $i++) {
                 echo "<td>".number_format((($cohort_clo_stat[$i]/count($recStudents))*100),3)."%</td>";
             }
+            $pass = array(); $fail = array();
+            for($i=0; $i<count($closid); $i++) {
+                array_push($pass, number_format((($cohort_clo_stat[$i]/count($recStudents))*100),3));
+                array_push($fail, (100 - number_format((($cohort_clo_stat[$i]/count($recStudents))*100),3)));
+            }
             ?>
         </tr>
         <tr>
@@ -829,6 +837,59 @@ th{
                 });
             });
         });
+    </script>
+
+    <div id="container" style="width: 100%;">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Vertical Bar Chart -->
+    <script>
+        var color = Chart.helpers.color;
+        var barChartData = {
+            labels: <?php echo json_encode($clonames); ?>,
+            datasets: [{
+                label: 'Pass',
+                backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.green,
+                borderWidth: 1,
+                data: <?php echo json_encode($pass); ?>
+            }, {
+                label: 'Fail',
+                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                borderColor: window.chartColors.red,
+                borderWidth: 1,
+                data: <?php echo json_encode($fail); ?>
+            }]
+
+        };
+		
+        window.onload = function() {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					},
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Course Level CLO Status'
+                    }
+                }
+            });
+
+        };
+
     </script>
 
 <?php
