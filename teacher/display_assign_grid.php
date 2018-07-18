@@ -24,20 +24,27 @@
         is_enrolled($coursecontext, $USER->id) || die('<h3>You are not enrolled in this course!</h3>'.$OUTPUT->footer());
         $assign_id=$_GET['assignid'];
 
- $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
+        // Report Header (Uni. name, Dept. name, course code and title)
+        $un=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("un"));
+        if($un){
+            foreach($un as $u){
+                $uniName = $u->description;
+            }
+            $uniName = strip_tags($uniName); 
+            echo "<h3 style='text-align:center'>".strtoupper($uniName)."</h3>";         
+        }
+        $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("dn"));
         if($dn){
             foreach($dn as $d){
                 $deptName = $d->description;
             }
             $deptName = strip_tags($deptName); 
-            echo "<h3 style='text-align:center'>DEPARTMENT OF ".strtoupper($deptName)."</h3>";         
+            echo "<h3 style='text-align:center'>".strtoupper($deptName)."</h3>";         
         }
         $course = $DB->get_record('course',array('id' => $course_id));
         echo "<h4 style='text-align:center'>Course Code: <u>".($course->idnumber)."</u>,";
         echo " Course Title: <u>".($course->fullname)." (".($course->shortname).")</u></h4>";
-        echo "<h4 style='text-align:center'>OBE Activity Detailed Report</h4>";
-
-
+        echo "<h4 style='text-align:center'>Activity Detailed Report</h4>";
 
 
         //echo "Assign ID : $assign_id";
