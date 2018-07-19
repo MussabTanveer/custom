@@ -148,15 +148,46 @@
 		if(isset($_POST['save']))
 		{
 			$description=$_POST['criteriondesc'];
-			
+			$scaleDesc=array();
+            $scaleScore=array();
+			$i = 1;
+			if(isset($_POST['scaledesc'.$i])) {
+				foreach ($_POST['scaledesc'.$i] as $sd)
+				{
+					array_push($scaleDesc,$sd);	
+				}
+			}
+			if(isset($_POST['scalescore'.$i])) {
+				foreach ($_POST['scalescore'.$i] as $ss)
+				{
+					array_push($scaleScore,$ss);	
+				}
+			}
 			if(empty($description))
 			{
 				$msgCDesc="<font color='red'>-Please enter criterion's description</font>";
 			}
             else{
-				$sql="UPDATE mdl_rubric_criterion SET description=? WHERE id=?";
-				$DB->execute($sql, array($description, $criterion_id));
-				$msgSuces = "<font color='green'><b>Rubric's criterion successfully updated!</b></font><br />";
+				try {
+					$transaction = $DB->start_delegated_transaction();
+					$sql="UPDATE mdl_rubric_criterion SET description=? WHERE id=?";
+					$DB->execute($sql, array($description, $criterion_id));
+					if($scaleScore) {
+						// Insert Scales Info
+						for ($j=0; $j < count($scaleScore); $j++) { 
+							$record = new stdClass();
+							$record->rubric = $rubric_id;
+							$record->criterion = $criterion_id;
+							$record->description = $scaleDesc[$j];
+							$record->score = $scaleScore[$j];
+							$DB->insert_record('rubric_scale', $record);
+						}
+					}
+					$transaction->allow_commit();
+					$msgSuces = "<font color='green'><b>Rubric's criterion successfully updated!</b></font><br />";
+				} catch(Exception $e) {
+					$transaction->rollback($e);
+				}
 			}
 		}
 	
@@ -194,13 +225,55 @@
                 </div>
             </div>
         </div>
+
+		<div id="dynamicScale1" style="padding-left: 25px;">
+			<div id="CS1">
+				<input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale('dynamicScale1',1,1);">
+			</div>
+		</div>
+		<br>
 		
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
 
 	<script>
 		document.getElementById("id_criteriondesc").value = <?php echo json_encode($description); ?>;
-	</script>
+		
+		// script to add scales to form
+        
+        function addScale(divName, cno, sno){ // param1: criterion's scale div, param2: criterion num, param3: scale num
+            var divScaleWrap = document.createElement('div');
+            var divid = "scale"+cno+sno;
+            divScaleWrap.setAttribute("id", divid);
+            document.getElementById(divName).appendChild(divScaleWrap);
+
+            var newdiv = document.createElement('div');
+            newdiv.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale </b></div><div class="col-md-8"><i id="crossS'+cno+sno+'" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            divScaleWrap.appendChild(newdiv);
+            
+            var newdiv1 = document.createElement('div');
+            newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+cno+'[]" class="form-control" rows="3" cols="40" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+cno+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="100" step="0.001" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
+            divScaleWrap.appendChild(newdiv1);
+
+            var divIdRmv = "CS"+cno;
+            var element = document.getElementById(divIdRmv);
+            element.parentNode.removeChild(element);
+
+            var idname = "#crossS" + cno + sno;
+            var divname = "#scale" + cno + sno;
+            $(idname).click(function(){
+                $(divname).remove();
+            });
+
+            sno++; // point to next add scale
+
+            var mainDiv = document.getElementById(divName);
+			var newdiv2 = document.createElement('div');
+            newdiv2.innerHTML = '<div id="CS'+cno+'"><input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale(\'dynamicScale'+cno+'\','+cno+','+sno+');"></div>';
+            mainDiv.appendChild(newdiv2);
+            
+        }
+    </script>
 	
 	<br />
 	<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
