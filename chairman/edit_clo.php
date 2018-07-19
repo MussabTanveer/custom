@@ -22,12 +22,63 @@
 		-webkit-appearance: none;
 	}
 </style>
-
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/jquery/jquery-2.1.3.js"></script>
 <?php
+
+
 	if(!empty($_GET['edit']) && !empty($_GET['fwid']))
 	{
-		$id=$_GET['edit'];
+		$cid=$_GET['edit'];
 		$fw_id=$_GET['fwid'];
+
+
+		//Get plo with its name and idnumber
+		$plos=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE competencyframeworkid = ? AND idnumber LIKE "plo%" ORDER BY id', array($fw_id));
+		
+		if($plos){
+			$ploNameArray=array(); $ploIdArray=array(); $ploIdnumberArray=array();
+			foreach ($plos as $plo) {
+				$id =  $plo->id;
+				$name = $plo->shortname;
+				$idnumber =  $plo->idnumber;
+				array_push($ploIdnumberArray,$idnumber);
+				array_push($ploNameArray,$name);
+				array_push($ploIdArray,$id);
+			}
+		}
+
+
+		//Get domains
+        $recDomains=$DB->get_records_sql("SELECT * FROM mdl_taxonomy_domain");
+		if($recDomains){
+			$domid = array(); $domname = array();
+			foreach ($recDomains as $recD) {
+				$did = $recD->id;
+				$dn = $recD->name;
+				array_push($domid, $did); // array of dom ids
+				array_push($domname, $dn); // array of dom names
+			}
+		}
+
+
+		//Get level with its name and domain name
+        $recLevels=$DB->get_records_sql("SELECT txl.id, txl.name AS level_name, txl.level, txd.name AS domain_name FROM mdl_taxonomy_levels txl, mdl_taxonomy_domain txd WHERE txl.domainid=txd.id");
+		if($recLevels){
+			$levelid = array(); $lname = array(); $dname = array(); $lvlshortname = array();
+			foreach ($recLevels as $recL) {
+				$lid = $recL->id;
+				$lvl = $recL->level;
+				$ln = $recL->level_name;
+				$dn = $recL->domain_name;
+				array_push($levelid, $lid); // array of level ids
+				array_push($lvlshortname, $lvl); // array of level names
+				array_push($lname, $ln); // array of level names
+				array_push($dname, $dn); // array of domain names
+			}
+		}
+		//var_dump($levelid);
+
 		
 		if(isset($_POST['save']))
 		{
@@ -36,13 +87,21 @@
 			//$idnumber=$_POST['idnumber']; $idnumber=strtoupper($idnumber);
 			$kpi = $_POST['kpi'];
 			$cKpi = $_POST['ckpi'];
-			$time = time();
+			$plo = $_POST['plos'];
+			$domain = $_POST['domains'];
+			$levelid = $_POST['levels'];
 
-			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ? ', array($id));
+		//	echo "$plo $domain $level";
+
+
+			$time = time();
+			//echo "$cid";
+
+			$revisions=$DB->get_records_sql('SELECT * FROM `mdl_competency` where id = ? ', array($cid));
 			
 			if($revisions){
 				foreach ($revisions as $revision){
-					$plo = $revision->parentid;
+					//$plo = $revision->parentid;
 					$fwidd= $revision->competencyframeworkid; 
 					$shortname = $revision->shortname;
 					$idnumber = $revision->idnumber;
@@ -51,11 +110,11 @@
 			
 			$levels=$DB->get_records_sql('SELECT * FROM `mdl_taxonomy_clo_level` where cloid = ? ', array($id));
 			
-			if($levels){
-				foreach ($levels as $level){
-					$levelid = $level->levelid;
-				}
-			}
+			//if($levels){
+			//	foreach ($levels as $level){
+					//$levelid = $level->levelid;
+			//	}
+			//}
 			
 			/*$sql="INSERT INTO mdl_competency (shortname, description, descriptionformat, idnumber, competencyframeworkid, parentid, path, sortorder, timecreated, timemodified, usermodified) 
 			VALUES ('$shortname', '$description', '1', '$idnumber','$fwidd' ,'$plo', '/0/', '0', '$time', '$time',$USER->id)";
@@ -98,7 +157,7 @@
 				$DB->execute($sql);*/
 
 				$record = new stdClass();
-				$record->cloid = $id;
+				$record->cloid = $cid;
 				$record->revision = $cloid;
 				
 				$DB->insert_record('clo_revision', $record);
@@ -117,6 +176,10 @@
 				$record->kpi = $cKpi;
 				
 				$DB->insert_record('clo_cohort_kpi', $record);
+
+
+
+
 
 				$transaction->allow_commit();
 			
@@ -184,6 +247,8 @@
 				</div>
 			</div>
 		</div>
+
+
         <!--
 		<div class="form-group row fitem">
 			<div class="col-md-3">
@@ -266,22 +331,108 @@
 			</div>
 		</div>
 
+
+
+		<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_plo">
+						Map to PLO
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select  onChange="dropdownPlo(this.value, 0)" name="plos" class="select custom-select" id="id_plo">
+						<option value=''>Choose..</option>
+						<?php
+						foreach ($plos as $plo) {
+							$id =  $plo->id;
+							$name = $plo->shortname;
+							$idnumber = $plo->idnumber;
+						?>
+						<option value='<?php echo $id; ?>' title="<?php echo $name; ?>"><?php echo $idnumber; ?></option>
+						<?php
+						}
+						?>
+					</select>
+					<span id="plosidnumber0"></span>
+					<div class="form-control-feedback" id="id_error_plo">
+					</div>
+				</div>
+			</div>
+
+
+		<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_domain">
+						Taxonomy Domain
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select id="id_domain" required onChange="dropdownDomain(this.value, 0)" name="domains" class="select custom-select">
+						<option value=''>Choose..</option>
+						<?php
+						foreach ($recDomains as $recD) {
+							$did = $recD->id;
+							$dn = $recD->name;
+							?>
+							<option value="<?php echo $did; ?>"><?php echo $dn; ?></option>
+						<?php
+						}
+						?>
+					</select>
+					<div class="form-control-feedback" id="id_error_level">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row fitem ">
+				<div class="col-md-3">
+					<span class="pull-xs-right text-nowrap">
+						<abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+					</span>
+					<label class="col-form-label d-inline" for="id_level">
+						Taxonomy Level
+					</label>
+				</div>
+				<div class="col-md-9 form-inline felement">
+					<select id="id_level" required onChange="dropdownLevel(this.value)" name="levels" class="select custom-select">
+						<option value=''>Choose..</option>
+					</select>
+					<span id="dname0"></span>
+					<span id="lname0"></span>
+					
+					<div class="form-control-feedback" id="id_error_level">
+					</div>
+				</div>
+			</div>
+
+
+			<div id="rubric_dd"></div>
+
+
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
 	
 	<?php
 		if(isset($_GET['edit'])){
 		$id=$_GET['edit'];
-		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber FROM mdl_competency WHERE id=?',array($id));
+		$rec=$DB->get_records_sql('SELECT shortname,description,idnumber,parentid FROM mdl_competency WHERE id=?',array($id));
 		$recKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_kpi WHERE cloid=?',array($id));
 		$recCKPI=$DB->get_records_sql('SELECT kpi FROM mdl_clo_cohort_kpi WHERE cloid=?',array($id));
 		$description = "";
 		$kpi = "";
+		$recLevel=$DB->get_records_sql('SELECT * FROM mdl_taxonomy_clo_level WHERE cloid=?',array($id));
 		if($rec){
 			foreach ($rec as $records){
 				$shortname=$records->shortname;
 				$description=$records->description;
 				$idnumber=$records->idnumber;
+				$parentid = $records->parentid;
 
 			}
 		}
@@ -296,14 +447,146 @@
 				$ckpi=$rcKPI->kpi;
 			}
 		}
-		
-		
+		if($recLevel){
+			foreach ($recLevel as $rcLevel){
+				$level=$rcLevel->levelid;
+			}
+		}
+		$recLevel=$DB->get_records_sql('SELECT * FROM mdl_taxonomy_levels WHERE id=?',array($level));
+		if($recLevel){
+			foreach ($recLevel as $rcLevel){
+				$levelName=$rcLevel->name;
+				$domainid=$rcLevel->domainid;
+			}
+		}
+			//echo "$levelName";
+
+		$recDomain=$DB->get_records_sql('SELECT * FROM mdl_taxonomy_domain WHERE id=?',array($domainid));
+		if($recLevel){
+			foreach ($recDomain as $rcDomain){
+				$DomainName=$rcDomain->name;
+				//$domainid=$rcDomain->domainid;
+			}
+		}
+			//echo $DomainName;
+		if ($DomainName == "cognitive")
+			$DomainNo =1;
+		elseif ($DomainName == "psychomotor")
+			$DomainNo =2;
+		elseif ($DomainName == "affective")
+			$DomainNo =3;
+
+		//echo "$level $levelName";
+		$LevelInfo = "Current Level: $level ($levelName)";
+
 		?>
 	<script>
 	    document.getElementById("id_description").value = <?php echo json_encode($description); ?>;
         document.getElementById("id_kpi").value = <?php echo json_encode($kpi); ?>;
         document.getElementById("id_ckpi").value = <?php echo json_encode($ckpi); ?>;
+        document.getElementById("id_plo").value = <?php echo json_encode($parentid); ?>;
+        document.getElementById("lname0").innerHTML = <?php echo json_encode($LevelInfo); ?>;
+        document.getElementById("id_domain").value = <?php echo json_encode($DomainNo); ?>;
     </script>
+
+
+    <script>
+		    $(document).ready(function() {
+				$("#id_domain").change(function() {
+					var domain_id = $(this).val();
+					//domain_id=1;
+					console.log(domain_id);
+					if(domain_id != "") {
+						$.ajax({
+							url:"get-levels.php",
+							data:{d_id:domain_id},
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$("#id_level").html(resp);
+							}
+						});
+					}
+					else {
+						$("#id_level").html("<option value=''>Choose..</option>");
+					}
+					if(domain_id == 2 ||domain_id == 3) {
+						$.ajax({
+							url:"get-rubrics.php",
+							type:'POST',
+							success:function(response) {
+							var resp = $.trim(response);
+							$("#rubric_dd").html(resp);
+							}
+						});
+					}
+					else {
+						$("#rubric_dd").html("");
+					}
+				});
+			});
+		</script>
+
+
+
+
+    	<script>
+			// display plo name of particular plo
+			var ploIdName = <?php echo json_encode($ploNameArray); ?>;
+			var ploId = <?php echo json_encode($ploIdArray); ?>;
+			//console.log(ploIdName);
+			function dropdownPlo(value,id){
+				document.getElementById("msg").innerHTML = "";
+				var plosidnumber = "plosidnumber" + id;
+				if(value == 'NULL'){
+					document.getElementById(plosidnumber).innerHTML = "";
+				}
+				else{
+					for(var i=0; i<ploIdName.length ; i++){
+						if(ploId[i] == value){
+							document.getElementById(plosidnumber).innerHTML = ploIdName[i];
+							break;
+						}
+					}
+				}
+			}
+		</script>
+
+
+		<script>
+			// display level and domain names of particular level 
+			var levelid = <?php echo json_encode($levelid); ?>;
+			var lnames = <?php echo json_encode($lname); ?>;
+			var dnames = <?php echo json_encode($dname); ?>;
+			/*alert(closid);
+			alert(plos);
+			alert(peos);*/
+			//console.log(lnames);
+			function dropdownLevel(value){
+				var lname = "lname0";
+				var dname = "dname0";
+				//console.log(value);
+				//console.log(id);
+				if(value == ''){
+					document.getElementById(lname).innerHTML = "";
+					document.getElementById(dname).innerHTML = "";
+					//console.log("Im WOrking");
+				}
+				else{
+					for(var i=0; i<levelid.length ; i++){
+						if(levelid[i] == value){
+							//console.log("Im WOrking");
+							//document.getElementById(dname).innerHTML = dnames[i];
+							document.getElementById(lname).innerHTML = "("+lnames[i]+")";
+							break;
+						}
+					}
+				}
+			}
+		</script>
+
+
+
 	
 	<?php
 		}
