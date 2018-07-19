@@ -1,4 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -10,6 +9,7 @@
     echo $OUTPUT->header();
     require_login();
     ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
     <?php
     if ((isset($_GET['cohort_dd'])||isset($_GET['inputtext'])) && isset($_GET['dropdown'])){
         $name=$_GET['inputtext'];

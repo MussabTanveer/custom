@@ -1,7 +1,3 @@
-<script src="../script/sweet-alert/sweetalert.min.js"></script>
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/validation/jquery.validate.js"></script>
-<script src="../script/validation/additional-methods.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -16,6 +12,10 @@
 	$rec1=$DB->get_records_sql('SELECT us.username FROM mdl_user us, mdl_role r,mdl_role_assignments ra   WHERE us.id=ra.userid AND r.id=ra.roleid AND  r.shortname=? AND us.id=? ',array('chairman',$USER->id));
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
 ?>
+<script src="../script/sweet-alert/sweetalert.min.js"></script>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <style>
 	label.error {
 		color: red;

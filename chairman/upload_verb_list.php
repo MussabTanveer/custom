@@ -1,6 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/validation/jquery.validate.js"></script>
-<script src="../script/validation/additional-methods.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -16,6 +13,9 @@
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
 
 ?>
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/validation/jquery.validate.js"></script>
+<script src="../script/validation/additional-methods.min.js"></script>
 <style>
 	label.error {
 		color: red;

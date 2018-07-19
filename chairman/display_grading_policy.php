@@ -1,4 +1,3 @@
-<script src="../script/sweet-alert/sweetalert.min.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -13,6 +12,9 @@
         header('Location: ../index.php');
     }
     echo $OUTPUT->header();
+    ?>
+    <script src="../script/sweet-alert/sweetalert.min.js"></script>
+    <?php
      
    // if(isset($_GET['course'])){
         //$course_id=$_GET['course'];

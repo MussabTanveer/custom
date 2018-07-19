@@ -1,5 +1,3 @@
-<script src="../script/jquery/jquery-3.2.1.js"></script>
-<script src="../script/jquery/jquery-2.1.3.js"></script>
 <?php
     require_once('../../../config.php');
     //require_once($CFG->dirroot.'/lib/form/editor.php');
@@ -18,6 +16,8 @@
     $rec1 || die('<h2>This page is for Chairperson only!</h2>'.$OUTPUT->footer());
     
     ?>
+    <script src="../script/jquery/jquery-3.2.1.js"></script>
+    <script src="../script/jquery/jquery-2.1.3.js"></script>
 
     <script type="text/javascript" >
 
