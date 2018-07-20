@@ -91,6 +91,11 @@
 			$domain = $_POST['domains'];
 			$levelid = $_POST['levels'];
 
+			if (isset($_POST['rubrics'][0]))
+				$rubricId = $_POST['rubrics'][0];
+			//echo "$rubricId";
+			//var_dump($_POST['rubrics'][0]);
+
 		//	echo "$plo $domain $level";
 
 
@@ -177,7 +182,14 @@
 				
 				$DB->insert_record('clo_cohort_kpi', $record);
 
-
+				if (isset($_POST['rubrics'][0]))
+				{
+					$record = new stdClass();
+					$record->cloid = $cloid;
+					$record->rubric = $rubricId;
+					
+					$DB->insert_record('clo_rubric', $record);
+				}
 
 
 
@@ -412,7 +424,7 @@
 			</div>
 
 
-			<div id="rubric_dd"></div>
+			<div id="rubric_dd"> </div>
 
 
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
@@ -457,6 +469,7 @@
 			foreach ($recLevel as $rcLevel){
 				$levelName=$rcLevel->name;
 				$domainid=$rcLevel->domainid;
+				$level=$rcLevel->level;
 			}
 		}
 			//echo "$levelName";
@@ -477,7 +490,27 @@
 			$DomainNo =3;
 
 		//echo "$level $levelName";
-		$LevelInfo = "Current Level: $level ($levelName)";
+		$LevelInfo = "Current Level: " .substr($level, 1). " ($levelName)";
+
+		$recRubric=$DB->get_records_sql('SELECT * FROM mdl_clo_rubric WHERE cloid=?',array($id));
+		if($recRubric){
+			foreach ($recRubric as $rcRubric){
+				$RubricID=$rcRubric->rubric;
+				//$domainid=$rcDomain->domainid;
+			}
+
+			$recRubric=$DB->get_records_sql('SELECT * FROM mdl_rubric WHERE id=?',array($RubricID));
+		if($recRubric){
+			foreach ($recRubric as $rcRubric){
+				$RubricName=$rcRubric->name;
+				//$domainid=$rcDomain->domainid;
+			}
+		}
+		}
+
+	
+
+	//	echo "$RubricName";
 
 		?>
 	<script>
@@ -487,12 +520,13 @@
         document.getElementById("id_plo").value = <?php echo json_encode($parentid); ?>;
         document.getElementById("lname0").innerHTML = <?php echo json_encode($LevelInfo); ?>;
         document.getElementById("id_domain").value = <?php echo json_encode($DomainNo); ?>;
+
     </script>
 
 
     <script>
 		    $(document).ready(function() {
-				$("#id_domain").change(function() {
+				$("#id_domain").on('change',function() {
 					var domain_id = $(this).val();
 					//domain_id=1;
 					console.log(domain_id);
@@ -519,6 +553,8 @@
 							$("#rubric_dd").html(resp);
 							}
 						});
+
+					//	document.getElementById("id_rubric").innerHTML = <?php// echo json_encode($RubricName); ?>;
 					}
 					else {
 						$("#rubric_dd").html("");
