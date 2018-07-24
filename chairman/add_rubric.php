@@ -442,9 +442,10 @@
 
             sno++; // point to next add scale
 
-            var newdiv2 = document.createElement('div');
+            var mainDiv = document.getElementById(divName);
+			var newdiv2 = document.createElement('div');
             newdiv2.innerHTML = '<div id="CS'+cno+'"><input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale(\'dynamicScale'+cno+'\','+cno+','+sno+');"></div>';
-            divScaleWrap.appendChild(newdiv2);
+            mainDiv.appendChild(newdiv2);
             
             //i++;
         }
