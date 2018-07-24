@@ -1,5 +1,5 @@
 <?php 
-
+/*
 
  // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
@@ -176,3 +176,5 @@
             echo "<h3>No quizzes found!</h3>";
             echo $OUTPUT->footer();
         }
+
+        */

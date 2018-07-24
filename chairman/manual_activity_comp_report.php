@@ -496,7 +496,7 @@ $dn=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?
         
         }
 
-        echo "<a class='btn btn-default' href='./display_activities.php?course=$courseid'>Go Back</a>";
+        echo "<a class='btn btn-default' href='./report_chairman.php'>Go Back</a>";
         
         echo $OUTPUT->footer();
 

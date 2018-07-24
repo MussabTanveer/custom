@@ -1,5 +1,5 @@
 <?php
-    require_once('../../../config.php');
+   /* require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
     $PAGE->set_pagelayout('standard');
@@ -19,7 +19,7 @@
     /*if(isset($_POST['view_consolidated']) && isset( $_POST['courseid']))
     {	
         $course_id=$_POST['courseid'];*/
-    if(!empty($_GET['course']))
+    /*if(!empty($_GET['course']))
     {
         $course_id=$_GET['course'];
         require '../templates/consolidated_report_selection_template.php';
@@ -33,3 +33,4 @@
     <?php
         echo $OUTPUT->footer();
     }?>
+*/

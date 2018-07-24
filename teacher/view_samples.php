@@ -74,14 +74,14 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name','Description');
+            $table->head = array('S. No.', 'Name','Description','Edit','Delete');
             foreach ($samples as $records) {
                 $serialno++;
                 $id = $records->id;
                 $name = $records->name;
                 $desc = $records->description;
                 
-                $table->data[] = array($serialno,"<a href='./display_samples.php?id=$id'>$name</a>",$desc);
+                $table->data[] = array($serialno,"<a href='./display_samples.php?id=$id'>$name</a>",$desc,"<a href='./edit_sample_paper.php?id=$id&courseid=$course_id&type=$type' title='Edit') ><i class='icon fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a>","<a href='./delete_sample_paper.php?id=$id&courseid=$course_id&type=$type' title='Delete' onClick=\"return confirm('Are you sure you want to delete this sample paper?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>");
             
             }
             echo html_writer::table($table);

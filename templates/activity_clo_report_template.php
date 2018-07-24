@@ -456,6 +456,6 @@
         */
         ?>
 
-        <br><br><a href="consolidated_report_selection.php?course=<?php echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a>
+        <!--<br><br><a href="consolidated_report_selection.php?course=<?php// echo $course_id; ?>" class="btn btn-success">View Consolidated Report</a> -->
 
     
