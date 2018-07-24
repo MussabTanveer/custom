@@ -56,7 +56,9 @@
             <table id="myTable" style="border: medium solid #000;" border="3" width="100%" cellpadding="10px">
                 <?php
                 $maxScales=0;
+                $critFlag=0;
                 for($i=0; $i<count($criteriaDesc); $i++){
+                    $critFlag=1;
                 ?>
                 <tr>
                     <th>Criterion <?php echo ($i+1)." <a href='edit_rubric.php?edit=criterion&rubric=$rubric_id&criterion=$criteriaId[$i]&num=".($i+1)."'><i class='fa fa-pencil text-info' aria-hidden='true' title='Edit' aria-label='Edit'></i></a> <a href='delete_rubric_criterion_scale.php?rubric=$rubric_id&criterion=$criteriaId[$i]'><i class='fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a><br>".$criteriaDesc[$i] ?></th>
@@ -88,15 +90,18 @@
             <script>
                 // create table header row
                 var max = <?php echo json_encode($maxScales); ?>;
-                var table = document.getElementById("myTable");
-                var row = table.insertRow(0);
-                var headerCell = document.createElement("th");
-                headerCell.innerHTML = "Criteria";
-                row.appendChild(headerCell);
-                for (var i = 0; i < max; i++) {
+                var flag = <?php echo json_encode($critFlag); ?>;
+                if(flag) {
+                    var table = document.getElementById("myTable");
+                    var row = table.insertRow(0);
                     var headerCell = document.createElement("th");
-                    headerCell.innerHTML = "Scale " + (i+1);
+                    headerCell.innerHTML = "Criteria";
                     row.appendChild(headerCell);
+                    for (var i = 0; i < max; i++) {
+                        var headerCell = document.createElement("th");
+                        headerCell.innerHTML = "Scale " + (i+1);
+                        row.appendChild(headerCell);
+                    }
                 }
             </script>
 
