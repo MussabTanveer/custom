@@ -46,41 +46,43 @@
             $scaleDesc=array();
             $scaleScore=array();
             $i = 1;
-            foreach ($_POST['criteriondesc'] as $cd)
-            {
-                // Insert Criterion Info
-                $record = new stdClass();
-                $record->rubric = $rubricid;
-                $record->description = $cd;
-                $criterionid = $DB->insert_record('rubric_criterion', $record);
-                //var_dump($cd); echo "<br>";
-                //array_push($criterionDesc,$cd);
-                while(!isset($_POST['scalescore'.$i])){
-                    $i++;
-                }
-                foreach ($_POST['scaledesc'.$i] as $sd)
+            if(isset($_POST['criteriondesc'])) {
+                foreach ($_POST['criteriondesc'] as $cd)
                 {
-                    array_push($scaleDesc,$sd);	
-                }
-                foreach ($_POST['scalescore'.$i] as $ss)
-                {
-                    array_push($scaleScore,$ss);	
-                }
-
-                // Insert Scales Info
-                for ($j=0; $j < count($scaleScore); $j++) { 
+                    // Insert Criterion Info
                     $record = new stdClass();
                     $record->rubric = $rubricid;
-                    $record->criterion = $criterionid;
-                    $record->description = $scaleDesc[$j];
-                    $record->score = $scaleScore[$j];
-                    $DB->insert_record('rubric_scale', $record);
+                    $record->description = $cd;
+                    $criterionid = $DB->insert_record('rubric_criterion', $record);
+                    //var_dump($cd); echo "<br>";
+                    //array_push($criterionDesc,$cd);
+                    while(!isset($_POST['scalescore'.$i])){
+                        $i++;
+                    }
+                    foreach ($_POST['scaledesc'.$i] as $sd)
+                    {
+                        array_push($scaleDesc,$sd);	
+                    }
+                    foreach ($_POST['scalescore'.$i] as $ss)
+                    {
+                        array_push($scaleScore,$ss);	
+                    }
+
+                    // Insert Scales Info
+                    for ($j=0; $j < count($scaleScore); $j++) { 
+                        $record = new stdClass();
+                        $record->rubric = $rubricid;
+                        $record->criterion = $criterionid;
+                        $record->description = $scaleDesc[$j];
+                        $record->score = $scaleScore[$j];
+                        $DB->insert_record('rubric_scale', $record);
+                    }
+                    //var_dump($scaleDesc); echo "<br>";
+                    //var_dump($scaleScore); echo "<br>";
+                    unset($scaleDesc); unset($scaleScore); // remove arrays
+                    $scaleDesc=array(); $scaleScore=array(); // reinitialize arrays
+                    $i++;
                 }
-                //var_dump($scaleDesc); echo "<br>";
-                //var_dump($scaleScore); echo "<br>";
-                unset($scaleDesc); unset($scaleScore); // remove arrays
-                $scaleDesc=array(); $scaleScore=array(); // reinitialize arrays
-                $i++;
             }
 
             $transaction->allow_commit();
