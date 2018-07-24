@@ -43,23 +43,75 @@
 		
 		if(isset($_POST['save']))
 		{
-			$name=$_POST['rubricname'];
-			$description=$_POST['rubricdesc'];
-            
-			if(empty($name))
-			{
-				$msgRName="<font color='red'>-Please enter rubric's name</font>";
+			try {
+				$transaction = $DB->start_delegated_transaction();
+				$name=$_POST['rubricname'];
+				$description=$_POST['rubricdesc'];
+
+				$scaleDesc=array();
+				$scaleScore=array();
+				$i = 1;
+				if(isset($_POST['criteriondesc'])) {
+					foreach ($_POST['criteriondesc'] as $cd)
+					{
+						// Insert Criterion Info
+						$record = new stdClass();
+						$record->rubric = $rubric_id;
+						$record->description = $cd;
+						$criterionid = $DB->insert_record('rubric_criterion', $record);
+						//var_dump($cd); echo "<br>";
+						//array_push($criterionDesc,$cd);
+						while(!isset($_POST['scalescore'.$i])){
+							$i++;
+						}
+						foreach ($_POST['scaledesc'.$i] as $sd)
+						{
+							array_push($scaleDesc,$sd);	
+						}
+						foreach ($_POST['scalescore'.$i] as $ss)
+						{
+							array_push($scaleScore,$ss);	
+						}
+
+						// Insert Scales Info
+						for ($j=0; $j < count($scaleScore); $j++) { 
+							$record = new stdClass();
+							$record->rubric = $rubric_id;
+							$record->criterion = $criterionid;
+							$record->description = $scaleDesc[$j];
+							$record->score = $scaleScore[$j];
+							$DB->insert_record('rubric_scale', $record);
+						}
+						//var_dump($scaleDesc); echo "<br>";
+						//var_dump($scaleScore); echo "<br>";
+						unset($scaleDesc); unset($scaleScore); // remove arrays
+						$scaleDesc=array(); $scaleScore=array(); // reinitialize arrays
+						$i++;
+					}
+				}
+				
+				if(empty($name))
+				{
+					$msgRName="<font color='red'>-Please enter rubric's name</font>";
+				}
+				else{
+					$sql="UPDATE mdl_rubric SET name=?, description=? WHERE id=?";
+					$DB->execute($sql, array($name, $description, $rubric_id));
+					$msgSuces = "<font color='green'><b>Rubric successfully updated!</b></font><br />";
+				}
+				$transaction->allow_commit();
+			} catch(Exception $e) {
+				$transaction->rollback($e);
+				$msgFail = "<font color='red'><b>Rubric failed to update!</b></font>";
 			}
-            else{
-				$sql="UPDATE mdl_rubric SET name=?, description=? WHERE id=?";
-				$DB->execute($sql, array($name, $description, $rubric_id));
-				$msgSuces = "<font color='green'><b>Rubric successfully updated!</b></font><br />";
-            }
 		}
 	
 		if(isset($msgSuces)){
 			echo $msgSuces;
 			goto label1;
+		}
+		else if(isset($msgFail)){
+			echo $msgFail;
 		}
 
 	echo "<br />";
@@ -112,6 +164,19 @@
                 </div>
             </div>
         </div>
+
+		<div id="dynamicCriterion">
+		</div>
+
+		</br>
+        <div class="row">
+            <div class="col-md-4">
+                <input class="btn btn-success" type="button" value="&#10133; Criterion" onClick="addCriterion('dynamicCriterion');">
+            </div>
+            <div class="col-md-8">
+            </div>
+        </div>
+        <br />
 		
 		<input class="btn btn-info" type="submit" name="save" value="Save"/>
 	</form>
@@ -119,8 +184,125 @@
 	<script>
 		document.getElementById("id_rubricname").value = <?php echo json_encode($name); ?>;
 		document.getElementById("id_rubricdesc").value = <?php echo json_encode($description); ?>;
-	</script>
-	
+		
+		// script to add criteria to form
+		var c =1;
+        
+        function addCriterion(divName){
+            var divCritWrap = document.createElement('div');
+            var divid = "crit"+c;
+            divCritWrap.setAttribute("id", divid);
+            document.getElementById(divName).appendChild(divCritWrap);
+
+            var newdiv = document.createElement('div');
+            newdiv.innerHTML = '<br><div class="row"><div class="col-md-4"><h4 style="color: olive;">Criterion </h4></div><div class="col-md-8"><i id="crossC'+c+'" class="fa fa-times" style="font-size:28px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            divCritWrap.appendChild(newdiv);
+            
+            var newdiv1 = document.createElement('div');
+            newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_criteriondesc">Description</label></div><div class="col-md-9 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_criteriondesc" name="criteriondesc[]" class="form-control" rows="4" cols="80" spellcheck="true" maxlength="500"></textarea></div></div><div class="form-control-feedback" id="id_error_criteriondesc" style="display: none;"></div></div></div>';
+            divCritWrap.appendChild(newdiv1);
+            
+            var scaleDiv = document.createElement('div');
+            dynScaleid = "dynamicScale"+c;
+            scaleDiv.id = dynScaleid;
+            scaleDiv.style.paddingLeft = "25px";
+            
+            var newdiv2 = document.createElement('div');
+            newdiv2.innerHTML = '<div class="row"><div class="col-md-4"><h5 style="color: chocolate; display: inline;">Scales</h5></div><div class="col-md-8"></div></div>';
+            scaleDiv.appendChild(newdiv2);
+
+            var scaleDiv1 = document.createElement('div');
+            scale1id = "scale"+c+"1";
+            scaleDiv1.id = scale1id;
+            scaleDiv.appendChild(scaleDiv1);
+
+            var newdiv3 = document.createElement('div');
+            newdiv3.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale</b></div><div class="col-md-8"><i id="crossS'+c+'1" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            scaleDiv1.appendChild(newdiv3);
+
+            var newdiv4 = document.createElement('div');
+            newdiv4.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+c+'[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+c+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="7" step="0.001" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
+            scaleDiv1.appendChild(newdiv4);
+
+            var scaleDiv2 = document.createElement('div');
+            scale2id = "scale"+c+"2";
+            scaleDiv2.id = scale2id;
+            scaleDiv.appendChild(scaleDiv2);
+
+            var newdiv5 = document.createElement('div');
+            newdiv5.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale</b></div><div class="col-md-8"><i id="crossS'+c+'2" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            scaleDiv2.appendChild(newdiv5);
+
+            var newdiv6 = document.createElement('div');
+            newdiv6.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+c+'[]" class="form-control" rows="3" cols="40" spellcheck="true" maxlength="200"></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+c+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="7" step="0.001" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
+            scaleDiv2.appendChild(newdiv6);
+
+            var newdiv7 = document.createElement('div');
+            newdiv7.innerHTML = '<div id="CS'+c+'"><input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale(\'dynamicScale'+c+'\','+c+',3);"></div>';
+            scaleDiv.appendChild(newdiv7);
+            
+            divCritWrap.appendChild(scaleDiv);
+            
+            //remove criterion
+            var idname = "#crossC" + c;
+            var divname = "#crit" + c;
+            $(idname).click(function(){
+                $(divname).remove();
+            });
+
+            //remove scales
+            var idname1 = "#crossS" + c + "1";
+            var divname1 = "#scale" + c + "1";
+            $(idname1).click(function(){
+                $(divname1).remove();
+            });
+            var idname2 = "#crossS" + c + "2";
+            var divname2 = "#scale" + c + "2";
+            $(idname2).click(function(){
+                $(divname2).remove();
+            });
+            
+            c++;
+        }
+
+        // script to add scales to form
+        //var i = 3;
+        
+        function addScale(divName, cno, sno){ // param1: criterion's scale div, param2: criterion num, param3: scale num
+            var divScaleWrap = document.createElement('div');
+            var divid = "scale"+cno+sno;
+            divScaleWrap.setAttribute("id", divid);
+            document.getElementById(divName).appendChild(divScaleWrap);
+
+            var newdiv = document.createElement('div');
+            newdiv.innerHTML = '<div class="row"><div class="col-md-4"><b style="color: teal;">Scale </b></div><div class="col-md-8"><i id="crossS'+cno+sno+'" class="fa fa-times" style="font-size:20px;color:red;cursor:pointer" title="Remove"></i></div></div>';
+            divScaleWrap.appendChild(newdiv);
+            
+            var newdiv1 = document.createElement('div');
+            newdiv1.innerHTML = '<div class="form-group row fitem"><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scaledesc">Description</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="editor"><div><div><textarea required id="id_scaledesc" name="scaledesc'+cno+'[]" class="form-control" rows="3" cols="40" spellcheck="true" ></textarea></div></div><div class="form-control-feedback" id="id_error_scaledesc"  style="display: none;"></div></div><div class="col-md-2 col-sm-3"><span class="pull-xs-right text-nowrap"><abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr></span><label class="col-form-label d-inline" for="id_scalescore">Score</label></div><div class="col-md-4 col-sm-3 form-inline felement" data-fieldtype="number"><input type="number" class="form-control" name="scalescore'+cno+'[]" id="id_scalescore" size="" required placeholder="eg. 1" maxlength="100" step="0.001" min="0" max="100"><div class="form-control-feedback" id="id_error_scalescore"></div></div></div>';
+            divScaleWrap.appendChild(newdiv1);
+
+            var divIdRmv = "CS"+cno;
+            var element = document.getElementById(divIdRmv);
+            element.parentNode.removeChild(element);
+
+            var idname = "#crossS" + cno + sno;
+            var divname = "#scale" + cno + sno;
+            $(idname).click(function(){
+                $(divname).remove();
+            });
+
+            sno++; // point to next add scale
+
+            var mainDiv = document.getElementById(divName);
+			var newdiv2 = document.createElement('div');
+            newdiv2.innerHTML = '<div id="CS'+cno+'"><input class="btn btn-warning" type="button" value="&#10133; Scale" onClick="addScale(\'dynamicScale'+cno+'\','+cno+','+sno+');"></div>';
+            mainDiv.appendChild(newdiv2);
+            
+            //i++;
+        }
+    </script>
+
 	<br />
 	<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 		
