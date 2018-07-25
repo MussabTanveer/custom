@@ -246,22 +246,20 @@
                 
                 if($users)
                 {
+                    $indx = 0;
                     foreach ($users as $user ) {
-                    
                     ?>
                     <tr>
-
                         <td>
                             <?php echo $user->seatnum; array_push ($stdids,$user->sid); ?>
                         </td>
                         <?php
-
-  
+                        
                         for($i=0; $i<count($cids); $i++){
                         //foreach ($cnames as $cname){
                         ?>
                             <td style="background-color: #ECEEEF;">
-                                <input type="number" name="marks[]" step="0.001" min="<?php echo $criteriaMinScore[$i]; ?>" max="<?php echo $criteriaMaxScore[$i]; ?>" required />
+                                <input type="number" name="marks[<?php echo $indx; ?>]" step="0.001" min="<?php echo $criteriaMinScore[$i]; ?>" max="<?php echo $criteriaMaxScore[$i]; ?>" />
                                 <!--<select name="marks[]" class="select custom-select" required>
                                     <?php
                                     for($j=0; $j<$scount[$i]; $j++){
@@ -273,7 +271,9 @@
                                 </select>-->
                             </td >
                     <?php
-                        }  ?>
+                            $indx++;
+                        }
+                    ?>
                     </tr> <?php
                     }
                 }

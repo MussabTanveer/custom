@@ -21,9 +21,16 @@
         
         // Check marks already entered or not
         $edit = 0;
+        $useridsupdate = array();
         $check=$DB->get_records_sql('SELECT * FROM mdl_assessment_attempt WHERE aid=?',array($a_id));
         if($check){
            $edit = 1;
+           foreach($check as $c){
+                $userid = $c->userid;
+                array_push($useridsupdate, $userid);
+            }
+            $useridsupdate = array_unique($useridsupdate);
+            $useridsupdate = array_values($useridsupdate);
         }
 
         $cidarray = array();
@@ -39,6 +46,9 @@
         $marksarray = array();
 		foreach ($_POST['marks'] as $mobt)
 		{
+            if($mobt == "") {
+                $mobt = NULL;
+            }
 			array_push($marksarray,$mobt);
         }
         // var_dump ($c_count); echo "<br>";
@@ -47,6 +57,42 @@
         // var_dump ($sidarray); echo "<br>";
         // var_dump ($marksarray); echo "<br>";
 
+        //FILTER DATA FOR NULL RECORDS
+        $ccount=0; // to track crit count
+        $flag = 0;
+        $i = 0;
+        $lens = count($sidarray);
+        $lenm = count($marksarray);
+        for ($j=0 ; $j<$lens; $j++){ // loop stud id times
+            for (; $i<$lenm; $i++){ // loop marks obt time (for inserting marks of particular stud crit count times)
+                $ccount++;
+                if($marksarray[$i] != NULL){
+                    //echo "hello";
+                    //echo is_null($marksarray[$i]);
+                    $flag = 1; // true if student record has marks
+                }
+                if($ccount == $c_count){
+                    $i++;
+                    $ccount=0; // set crit count to 0
+                    break;
+                }
+            }
+            if(!$flag){
+                //echo "hello";
+                unset($sidarray[$j]); // remove student seat number
+                for($c=0; $c<$c_count; $c++){
+                    unset($marksarray[$i-$c_count+$c]); // remove student marks
+                }
+            }
+            $flag = 0;
+        }
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
+        $sidarray = array_values($sidarray);
+        $marksarray = array_values($marksarray);
+        //print_r ($sidarray); echo "<br>";
+        //print_r ($marksarray); echo "<br>";
+        
         // INSERT DATA
         $i = 0; // initialize
         $cidx = 0; // to track criteria index
@@ -65,8 +111,18 @@
                         $DB->insert_record('assessment_attempt', $record);
                     }
                     else {
-                        $sql_update="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
-                        $DB->execute($sql_update, array($marksarray[$i], $a_id, $sidarray[$j], $cidarray[$cidx]));
+                        if(in_array($sidarray[$j], $useridsupdate)){
+                            $sql_update="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
+                            $DB->execute($sql_update, array($marksarray[$i], $a_id, $sidarray[$j], $cidarray[$cidx]));
+                        }
+                        else{
+                            $record = new stdClass();
+                            $record->aid = $a_id;
+                            $record->userid = $sidarray[$j];
+                            $record->cid = $cidarray[$cidx];
+                            $record->obtmark = $marksarray[$i];
+                            $DB->insert_record('assessment_attempt', $record);
+                        }
                     }
                     //$sql="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES ('$aid','$stdids[$j]','$cids[$qidx]','$mrkobt[$i]')";
                     //$DB->execute($sql);
