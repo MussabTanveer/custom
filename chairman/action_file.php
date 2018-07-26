@@ -91,5 +91,6 @@
             echo html_writer::table($table);
         }
    	}
+    echo "<a class='btn btn-default' href='./display_students'>Go Back</a>";
     echo $OUTPUT->footer();
 ?>

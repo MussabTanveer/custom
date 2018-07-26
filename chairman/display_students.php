@@ -18,7 +18,7 @@
     if(isset($_POST['inputtext'])){
         $nam=$_POST['inputtext'];
     }
-    //query to get all cohorts    
+    //query to get all cohorts
     $rec2=$DB->get_records_sql('SELECT c.name from mdl_cohort as c');
 ?>
 
@@ -117,5 +117,6 @@
             echo html_writer::table($table);
         }
    	}
+    echo "<a class='btn btn-default' href='./report_chairman'>Go Back</a>";
     echo $OUTPUT->footer();
 ?>

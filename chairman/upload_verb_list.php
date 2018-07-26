@@ -146,6 +146,6 @@
             echo "<font color = red >Incorrect File Type. Only PDFs are allowed</font>";
       
     }
-    echo '<a class="btn btn-default" href="./report_chairman.php">Go Back</a>';
+    echo '<br><a class="btn btn-default" href="./report_chairman.php">Go Back</a>';
     echo $OUTPUT->footer();
 ?>

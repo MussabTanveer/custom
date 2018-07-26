@@ -172,15 +172,14 @@
             };
             </script>
             <?php
-            echo $OUTPUT->footer();
         }
         else{
             echo "<h3>No courses found!</h3>";
-            echo $OUTPUT->footer();
         }
     }
     else{
         echo "<h3>Invalid Selection!</h3>";
-        echo $OUTPUT->footer();
     }
+    echo "<a class='btn btn-default' href='./display_students'>Go Back</a>";
+    echo $OUTPUT->footer();
 ?>
