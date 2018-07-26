@@ -41,6 +41,7 @@
         ?>
         <input type='submit' value='NEXT' name='submit' class="btn btn-primary">
         </form>
+        <br>
         <a class="btn btn-default" href="./report_chairman.php">Go Back</a>
         <br />
         <p id="msg"></p>
