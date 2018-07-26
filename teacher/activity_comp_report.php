@@ -300,8 +300,8 @@
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
-                        $DB->execute($sql);
+                     //   $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
+                       //$DB->execute($sql);
                     }
                 }
              else
@@ -490,8 +490,8 @@
                 
                 if($rec == NULL){
                     for($x=0; $x<$tot_comp; $x++){
-                        $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
-                        $DB->execute($sql);
+                       // $sql="INSERT INTO mdl_consolidated_report (course, module, instance, cloid, pass, fail,form) VALUES ($courseid, $mod, $a_id, $cloids[$x], $pass[$x], $fail[$x],'online')";
+                       // $DB->execute($sql);
                     }
                 }
                  else

@@ -1,7 +1,7 @@
 
      <?php 
 
-        echo "<h4 style='color:navy'>Note: Only VIEWED activities can be added to the consolidated report.</h4><br>";
+      //  echo "<h4 style='color:navy'>Note: Only VIEWED activities can be added to the consolidated report.</h4><br>";
 
         // Dispaly all quizzes
         $recQ=$DB->get_records_sql('SELECT * FROM  `mdl_quiz` WHERE course = ? AND id IN (SELECT quiz FROM `mdl_quiz_attempts`)', array($course_id));
@@ -27,13 +27,13 @@
             $serialno = 0;
             $table = new html_table();
             echo "<h3>Online Activities</h3>";
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recQ as $records) {
                 $serialno++;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
+               // $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
 
-                for ($i=0; $i< sizeof($statusArray); $i++ )
+                /*for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
                       if($id == $statusArray[$i] && $modArray[$i] == 16)
@@ -42,20 +42,20 @@
                             break;
                         }
 
-                }
+                }*/
                 
                 $id = 'Q'.$records->id;
                 $courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->intro;
                 
-                $table->data[] = array($serialno, "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>");//, $Status);
             }
             foreach ($recA as $records) {
                 $serialno++;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
+               // $Status='<span style="color: red;">NOT VIEWED</span>';
                 $id = $records->id;
-
+/*
                 for ($i=0; $i< sizeof($statusArray); $i++ )
                 {
 
@@ -65,12 +65,12 @@
                             break;
                         }
 
-                }
+                }*/
                 $id = 'A'.$records->id;
                 $courseid = $records->course;
                 $name = $records->name;
                 $intro = $records->intro;
-                $table->data[] = array($serialno, "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$name</a>", "<a href='./activity_comp_report.php?course=$course_id&activityid=$id'>$intro</a>");//, $Status);
             }
             
             echo html_writer::table($table);
@@ -117,24 +117,24 @@
             echo "<h3>Manual Quizzes</h3>";
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recMQ as $records) {
                 $serialno++;
                 $id = $records->id;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
-                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+               // $Status='<span style="color: red;">NOT VIEWED</span>';
+               /* for ($i=0; $i< sizeof($mstatusarray); $i++ )
                 {
                     if($id == $mstatusarray[$i] && $mmodArray[$i] == -1)
                     {
                         $Status='<span style="color: #006400;">VIEWED</span>';
                         break;
                     }
-                }
+                }*/
                 //$courseid = $records->course;
                 $id = 'Q'.$records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-1'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-1'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-1'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-1'>$intro</a>");//, $Status);
             }
             echo html_writer::table($table);
             ?>
@@ -159,23 +159,23 @@
             echo "<h3>Manual Assignments</h3>";
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recMA as $records) {
                 $serialno++;
                 $id = $records->id;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
-                for ($i=0; $i< sizeof($mstatusarray); $i++ )
+                //$Status='<span style="color: red;">NOT VIEWED</span>';
+               /* for ($i=0; $i< sizeof($mstatusarray); $i++ )
                 {
                     if($id == $mstatusarray[$i] && $mmodArray[$i] == -4)
                     {
                         $Status='<span style="color: #006400;">VIEWED</span>';
                         break;
                     }
-                }
+                }*/
                 $id = 'A'.$records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-4'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-4'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-4'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-4'>$intro</a>");//, $Status);
             }
             echo html_writer::table($table);
             ?>
@@ -200,11 +200,11 @@
             echo "<h3>Manual Projects</h3>";
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recMP as $records) {
                 $serialno++;
                 $id = $records->id;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
+                /*$Status='<span style="color: red;">NOT VIEWED</span>';
                 for ($i=0; $i< sizeof($mstatusarray); $i++ )
                 {
                     if($id == $mstatusarray[$i] && $mmodArray[$i] == -5)
@@ -212,11 +212,11 @@
                         $Status='<span style="color: #006400;">VIEWED</span>';
                         break;
                     }
-                }
+                }*/
                 $id = 'A'.$records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-5'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-5'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-5'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-5'>$intro</a>");//, $Status);
             }
             echo html_writer::table($table);
             ?>
@@ -241,11 +241,11 @@
             echo "<h3>Manual Midterm</h3>";
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recMM as $records) {
                 $serialno++;
                 $id = $records->id;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
+                /*$Status='<span style="color: red;">NOT VIEWED</span>';
                 for ($i=0; $i< sizeof($mstatusarray); $i++ )
                 {
                     if($id == $mstatusarray[$i] && $mmodArray[$i] == -2)
@@ -253,12 +253,12 @@
                         $Status='<span style="color: #006400;">VIEWED</span>';
                         break;
                     }
-                }
+                }*/
                 //$courseid = $records->course;
                 $id = 'Q'.$records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-2'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-2'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-2'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-2'>$intro</a>");//, $Status);
             }
             echo html_writer::table($table);
             ?>
@@ -283,11 +283,11 @@
             echo "<h3>Manual Final Exam</h3>";
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recMF as $records) {
                 $serialno++;
                 $id = $records->id;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
+                /*$Status='<span style="color: red;">NOT VIEWED</span>';
                 for ($i=0; $i< sizeof($mstatusarray); $i++ )
                 {
                     if($id == $mstatusarray[$i] && $mmodArray[$i] == -3)
@@ -295,12 +295,12 @@
                         $Status='<span style="color: #006400;">VIEWED</span>';
                         break;
                     }
-                }
+                }*/
                 //$courseid = $records->course;
                 $id = 'Q'.$records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-3'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-3'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-3'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-3'>$intro</a>");//, $Status);
             }
             echo html_writer::table($table);
             ?>
@@ -327,11 +327,11 @@
             echo "<h3>Manual Other</h3>";
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name', 'Intro', 'Status');
+            $table->head = array('S. No.', 'Name', 'Intro');
             foreach ($recMO as $records) {
                 $serialno++;
                 $id = $records->id;
-                $Status='<span style="color: red;">NOT VIEWED</span>';
+                /*$Status='<span style="color: red;">NOT VIEWED</span>';
                 for ($i=0; $i< sizeof($mstatusarray); $i++ )
                 {
                     if($id == $mstatusarray[$i] && $mmodArray[$i] == -6)
@@ -339,12 +339,12 @@
                         $Status='<span style="color: #006400;">VIEWED</span>';
                         break;
                     }
-                }
+                }*/
                 //$courseid = $records->course;
                 $id = 'O'.$records->id;
                 $name = $records->name;
                 $intro = $records->description;
-                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-6'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-6'>$intro</a>", $Status);
+                $table->data[] = array($serialno, "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-6'>$name</a>", "<a href='./manual_activity_comp_report.php?course=$course_id&activityid=$id&module=-6'>$intro</a>");//, $Status);
             }
             echo html_writer::table($table);
             ?>
