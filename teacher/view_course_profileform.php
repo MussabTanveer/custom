@@ -120,12 +120,13 @@
             echo "<h3>Books</h3>";
             echo $book;
             echo "<br><br>";
+            require '../templates/print_template.html';
         }
 
         else{
             echo "<h3 style='color:red'>Course profile has not been entered by the chairman yet!</h3>";
         }
-
+        
         echo "<a class='btn btn-default' href='./report_teacher.php?course=$course_id'>Go Back</a>";
 
     }

@@ -797,6 +797,7 @@
     </script>
 
     <button id="myButton" class="btn btn-primary">Export to Excel</button>
+    <?php require 'print_template.html'; ?>
 
     <!-- Export html Table to xls -->
     <script type="text/javascript" >

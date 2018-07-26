@@ -60,6 +60,7 @@
                     echo "<h4 style='color:red'>Grading Policy is not 100%</h4><a href=grading_policy.php?course=$course_id>Add a grading policy item</a>.<br /><br />";
                 echo html_writer::table($table);
             }
+            require '../templates/print_template.html';
         }
         else
             echo "<h4 style='color:red'> <br />Found no Graded Activity of this Course! </h4>";

@@ -279,6 +279,7 @@
                 </table>
                 
                 <button id="myButton" class="btn btn-primary">Export to Excel</button>
+                <?php require '../templates/print_template.html'; ?>
                 
                 <div id="container" style="width: 100%;">
                     <canvas id="canvas"></canvas>
@@ -472,6 +473,7 @@
                 </table>
 
                 <button id="myButton" class="btn btn-primary">Export to Excel</button>
+                <?php require '../templates/print_template.html'; ?>
                 
                 <div id="container" style="width: 100%;">
                     <canvas id="canvas"></canvas>
