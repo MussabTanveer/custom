@@ -224,6 +224,8 @@
                     });
                 });
             </script>
+
+            <?php require '../templates/print_template.html'; ?>
             <a class="btn btn-default" href="./display_outcome_framework-4.php">Go Back</a>
 
             <?php

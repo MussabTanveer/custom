@@ -85,6 +85,7 @@
             
             <br><br>
             <button id="myButton" class="btn btn-primary">Export to Excel</button>
+            <?php require '../templates/print_template.html'; ?>
             <a class="btn btn-default" href="./select_rubric.php">Go Back</a>
             
             <script>

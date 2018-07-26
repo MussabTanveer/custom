@@ -182,6 +182,7 @@
     }
     ?>
     </div>
+    <?php require '../templates/print_template.html'; ?>
     <a class="btn btn-default" href="./report_chairman.php">Go Back</a>    
 
     <?php
