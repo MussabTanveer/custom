@@ -40,7 +40,7 @@
 
         if($rec){
             ?>
-            <form method="post" action="display_activities.php" id="form_check">
+            <form method="post" action="clo_wise_report_chairman.php" id="form_check">
             <?php
             $serialno = 0;
             $table = new html_table();
@@ -51,14 +51,16 @@
                 $fname = $records->fullname;
                 $sname = $records->shortname;
                 $idnum = $records->idnumber;
-                $table->data[] = array($serialno, $fname, $sname, $idnum, '<input type="radio" value="'.$id.'" name="courseid">');
+                $table->data[] = array($serialno, $fname, $sname, $idnum, '<input type="radio" value="'.$id.'" name="course">');
             }
             echo html_writer::table($table);
             ?>
-            <input type='submit' value='NEXT' name='submit' class="btn btn-primary">
+            <input type='hidden' value='<?php echo $tid ?>' name='tid'>
+            <input type='submit' value='View Report' name='submit' class="btn btn-primary">
             </form>
             <br />
             <p id="msg"></p>
+            <a class='btn btn-default' href='./display_teachers.php'>Go Back</a>
 
             <script>
             $('#form_check').on('submit', function (e) {

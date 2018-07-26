@@ -32,6 +32,8 @@
         }
     }
 
+    echo "<a class='btn btn-default' href='./report_chairman'>Go Back</a>";
+
 
     
     echo $OUTPUT->footer();
