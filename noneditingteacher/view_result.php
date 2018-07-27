@@ -147,16 +147,19 @@
             }
         }
         
-        $obtMarksA=$DB->get_records_sql("SELECT att.id,substring(u.username,4,8) AS seatorder, u.username, att.cid, att.obtmark FROM mdl_assessment_attempt att, mdl_user u WHERE aid=? AND att.userid=u.id ORDER BY seatorder, att.cid", array($aid));
+        $obtMarksA=$DB->get_records_sql("SELECT att.id,substring(u.username,4,8) AS seatorder, u.username, att.cid, att.obtmark, att.userid FROM mdl_assessment_attempt att, mdl_user u WHERE att.aid=? AND att.userid=u.id ORDER BY seatorder, att.cid", array($aid));
         $userNames = array();
         $obtMarks = array();
+        $userIds = array();
         if($obtMarksA)
         {
             foreach ($obtMarksA as $omark) {
                 $username = $omark->username;
                 $obtmark=$omark->obtmark;
+                $userId = $omark->userid;
                 array_push($userNames,$username);
                 array_push($obtMarks,$obtmark);
+                array_push($userIds, $userId);
             }
         }
         else
@@ -167,7 +170,7 @@
         
         ?>
         <h3><u>Result</u></h3>
-        <table border='10' cellpadding='15' id ="mytable">
+        <table class="generaltable" id ="mytable">
         <tr>
         <th> Seat No. </th>
         <?php
@@ -177,6 +180,7 @@
         }
         ?>
         <th> Total </th>
+        <th> Delete </th>
         </tr>
         <?php
         $i = 0;
@@ -194,6 +198,7 @@
             <?php
             }?>
             <td ><?php echo $sum; ?></td>
+            <td><?php $u = $i-1; echo"<a href='delete_assessment_marks.php?aid=$aid&userId=$userIds[$u]&courseid=$course_id'><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete'onClick=\"return confirm('Are you sure you want to delete the marks of assessment for the following Roll No.?')\" aria-label='Delete'></i></a><br>"; ?></td>
         </tr>
         <?php
         }
