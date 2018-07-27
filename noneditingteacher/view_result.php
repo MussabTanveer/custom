@@ -205,7 +205,10 @@
         ?>
     </table>
     <br />
-    <button id="myButton" class="btn btn-success">Export to Excel</button>
+    <button id="myButton" class="btn btn-primary">Export to Excel</button>
+    <?php require '../templates/print_template.html'; ?>
+    <a class="btn btn-default" href="./report_teacher_practical.php?course=<?php echo $course_id ?>">Go Back</a>
+
     <!-- Export html Table to xls -->
     <script type="text/javascript" >
         $(document).ready(function(e){
@@ -223,7 +226,7 @@
     else{
         ?>
         <h2 style="color:red;"> Invalid Selection </h2>
-        <a href="../teacher/teacher_courses.php">Back</a>
+        <a href="../teacher/teacher_courses.php">Go Back</a>
     <?php
     }
 down:
