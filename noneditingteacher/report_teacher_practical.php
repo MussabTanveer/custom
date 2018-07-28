@@ -73,7 +73,10 @@
                 <div id="as<?php echo $a ?>" style="display: none">
                     <!--&nbsp;&nbsp;&nbsp;<a <?php echo "href='./print_grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print Empty Grading Sheet </a><br>-->
                     &nbsp;&nbsp;&nbsp;<a <?php echo "href='./assessment_marks.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Enter Assessment Marks</a><br>
-                    &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_result.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; View Result</a><br>
+                    &nbsp;&nbsp;&nbsp;<a <?php echo "href='./view_result.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; View Result</a>
+                    <br>
+                    &nbsp;&nbsp;&nbsp; <a <?php echo "href='./grading_sheet.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Print Empty Grading Sheet</a><br>
+                     &nbsp;&nbsp;&nbsp;<a <?php echo "href='./upload_results.php?course=$course_id&assessmentid=$id'" ?>  class="cool-link">&#10070; Upload Result</a><br>
                 </div>
                 <hr />
 
