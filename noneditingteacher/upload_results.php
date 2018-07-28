@@ -132,7 +132,7 @@
         <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
 
          <div class="btn btn-default btn-file">
-            <input  type="file" name="assessmentmarks" id="assessmentmarks" placeholder="Only excel files are allowed!">
+            <input  type="file" name="assessmentmarks" id="assessmentmarks" placeholder="Only CSV files are allowed!">
         </div>
         <input class="btn btn-info" type="submit" name="Upload" value="Upload" >
         
@@ -141,7 +141,7 @@
         // check file name is not empty
         if (!empty($_FILES['assessmentmarks']['name'])) {
             
-            // Get File extension eg. 'CSV' to check file is excel sheet
+            // Get File extension eg. 'CSV' to check file is CSV sheet
             $pathinfo = pathinfo($_FILES["assessmentmarks"]["name"]);
             
             // check file has extension CSV, CSV and also check 
@@ -152,7 +152,7 @@
                 // Temporary file name
                 $inputFileName = $_FILES['assessmentmarks']['tmp_name']; 
             
-                // Read excel file by using ReadFactory object.
+                // Read CSV file by using ReadFactory object.
                 $reader = ReaderFactory::create(Type::CSV);
         
                 // Open file
@@ -160,11 +160,11 @@
                 $count = 1;
                 $abc=1;
                     
-                //Number of sheet in excel file
+                //Number of sheet in CSV file
                 foreach ($reader->getSheetIterator() as $sheet) {
                     if($abc>=1){
                     
-                    // Number of Rows in Excel sheet
+                    // Number of Rows in CSV sheet
                     foreach ($sheet->getRowIterator() as $row) {
                         if($count==1){
                             $c1=count($row);
@@ -186,13 +186,13 @@
                             }
                         }
     
-                        // It reads data after header. In the my excel sheet, 
+                        // It reads data after header. In the my CSV sheet, 
                         // header is in the first row. 
                         if ($count > 1) {
                         
                         //$arri = array_map('strval', $arr);
                         
-                        // Data of excel sheet
+                        // Data of CSV sheet
                         $c1=count($row);
                         $sn=$row[0];
                         $rec=$DB->get_records_sql('SELECT id  FROM mdl_user WHERE username = ?', array($sn));
@@ -245,13 +245,13 @@
             if($checkbit){
                 echo "<h3 style='color:red;'>Some students with obtained marks greater than maximum marks are assigned 0.</h3>";
             }
-            //Close excel file
+            //Close CSV file
             $reader->close();
         } else {
-            echo "<p style='color:red;'>Please Select Valid Excel File</p>";
+            echo "<p style='color:red;'>Please Select Valid CSV File</p>";
         }
     } else {
-        echo "<p style='color:red;'>Please Select Excel File</p>";
+        echo "<p style='color:red;'>Please Select CSV File</p>";
     }
     end:
     ?>
