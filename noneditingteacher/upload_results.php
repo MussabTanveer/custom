@@ -7,7 +7,7 @@
     $PAGE->set_pagelayout('standard');
     $PAGE->set_title("Upload Results");
     $PAGE->set_heading("Upload Results");
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/upload_results.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/noneditingteacher/upload_results.php');
     
     require_login();
     if($SESSION->oberole != "teacher"){
