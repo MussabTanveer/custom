@@ -1,7 +1,7 @@
 <?php 
     require_once('../../../config.php');
     require_once('../script/spout-2.4.3/spout-2.4.3/src/Spout/Autoloader/autoload.php');
-    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/teacher/export.php');
+    $PAGE->set_url($CFG->wwwroot.'/local/ned_obe/noneditingteacher/grading_sheet.php');
     use Box\Spout\Writer\WriterFactory;
     use Box\Spout\Common\Type;
     require_login();
@@ -85,24 +85,24 @@
             array_push($stdids,$id);
             array_push($seatnos,$seatno);
         }
-        // Get all questions of quiz
-        $recQues=$DB->get_records_sql('SELECT * FROM mdl_rubric_criterion WHERE rubric = ?', array($rubric_id));
+        // Get all Criterion of Rubric
+        $recCriterion=$DB->get_records_sql('SELECT * FROM mdl_rubric_criterion WHERE rubric = ?', array($rubric_id));
 
         // push question ids and names to array
-        $quesids = array();
-        $quesnames = array();
-        foreach($recQues as $records){
+        $CriterionIds = array();
+        $CriterionDesc = array();
+        foreach($recCriterion as $records){
             $id = $records->id;
-            $name = $records->description ;
-            array_push($quesids,$id);
-            array_push($quesnames,$name);
+            $desc = $records->description ;
+            array_push($CriterionIds,$id);
+            array_push($CriterionDesc,$desc);
         }
         //exporting data to file
         $add=1;
         $arr=array();
         $arr[0]="Seatno";
-        foreach ($quesnames as $ques){
-            $arr[$add]=$ques;
+        foreach ($CriterionDesc as $desc){
+            $arr[$add]=$desc;
             $add++;
         }
 
