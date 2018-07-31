@@ -96,6 +96,7 @@
        // echo "<br/>";
         //var_dump($criterion);
       //  echo count($criterion);
+        
 
         $criterionCount = count(array_unique($criterion));
         //echo $criterionCount;
@@ -119,8 +120,9 @@
             $criterionIndex++;
         }
         //echo "$k";
-
-       // var_dump(array_values(array_unique($maxmarks)));
+        //var_dump($maxmarks);
+        //var_dump(array_values(array_unique($maxmarks)));
+        $maxmarks=(array_values(array_unique($maxmarks)));
         $check=$DB->get_records_sql('SELECT *  FROM mdl_assessment_attempt WHERE aid = ?', array($assessmentid));
         $checkbit=0;
         if($check){
@@ -219,15 +221,15 @@
                             // $sn4=$row[4];
                             
                             if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
-                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','$cloid','${$pfix.strtolower($x)}')";
+                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
                                 $DB->execute($sql1);   
                             }
                             elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
-                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','$cloid',0)";
+                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
                                 $DB->execute($sql1);
                             }
                             elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
-                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','$cloid',0)";
+                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
                                 $DB->execute($sql1);
                                 $checkbit=1;
                             }
