@@ -35,11 +35,20 @@
     foreach($assignmarks as $assg){
         $marks=$assg->maxmark;
     }  
-
+    $useridsupdate = array();  
     $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_assign_pro_attempt WHERE assignproid = ?', array($qid));
+    $edit=0;
     if($check){
-        echo "<p style='color:red;'>Notice: Sorry, cannot upload marks because they have already been uploaded!</p>";
-        goto end;
+        $edit=1;
+       // echo "<p style='color:red;'>Notice: Sorry, cannot upload marks because they have already been uploaded!</p>";
+       // goto end;
+
+        foreach($check as $c){
+                $userid = $c->userid;
+                array_push($useridsupdate, $userid);
+            }
+            $useridsupdate = array_unique($useridsupdate);
+            $useridsupdate = array_values($useridsupdate);
     }
 
 ?>
@@ -105,19 +114,38 @@
                             for($x=1;$x<$c1;$x++){
                                 $pfix="sn";
                                 ${$pfix.strtolower($x)}=$row[$x];
-                                if(${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $marks ){
-                                    $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid','${$pfix.strtolower($x)}')";
-                                    $DB->execute($sql1);
-                                }
-                                elseif(${$pfix.strtolower($x)} == "" && $uid <> "A"){
-                                    $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
-                                    $DB->execute($sql1);
-                                }
-                                elseif (${$pfix.strtolower($x)} > $marks && $uid <> "A") {
-                                    $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
-                                    $DB->execute($sql1);
-                                    $checkbit=1;
-                                }
+                                if (${$pfix.strtolower($x)} == "")
+                                     continue; 
+                                if (!$edit){
+                                    if(${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $marks ){
+                                        $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid','${$pfix.strtolower($x)}')";
+                                        $DB->execute($sql1);
+                                    }
+                                    elseif(${$pfix.strtolower($x)} == "" && $uid <> "A"){
+                                        $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                                        $DB->execute($sql1);
+                                    }
+                                    elseif (${$pfix.strtolower($x)} > $marks && $uid <> "A") {
+                                        $sql1="INSERT INTO mdl_manual_assign_pro_attempt (assignproid,userid,obtmark) VALUES('$qid','$uid',0)";
+                                        $DB->execute($sql1);
+                                        $checkbit=1;
+                                    }
+                            } else {
+
+                                if(in_array($uid, $useridsupdate)){
+                                    $sql1="UPDATE mdl_manual_assign_pro_attempt SET obtmark=? WHERE assignproid=? AND userid=?";
+                                     $DB->execute($sql1, array(${$pfix.strtolower($x)}, $qid, $uid));
+                                            }
+                                    else{
+                                         $record = new stdClass();
+                                         $record->assignproid = $qid;
+                                        $record->userid = $uid;
+                                        // $record->questionid = ${$a.strtolower($x)};
+                                         $record->obtmark = ${$pfix.strtolower($x)};
+                                         $DB->insert_record('manual_assign_pro_attempt', $record);
+                                         }
+                            }
+                            
                             }
                         }
                         $count++;

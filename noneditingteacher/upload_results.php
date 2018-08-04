@@ -77,11 +77,6 @@
             }
         }
 
-
-
-
-
-
         $assessmentid=$_GET['assessmentid'];     
         $criterionMaxMarks = $DB->get_records_sql('SELECT * From mdl_rubric_scale Where rubric =?',array($rubric_id));  
         $checkcount = 0;
@@ -122,12 +117,25 @@
         //echo "$k";
         //var_dump($maxmarks);
         //var_dump(array_values(array_unique($maxmarks)));
+        $useridsupdate = array();
         $maxmarks=(array_values(array_unique($maxmarks)));
         $check=$DB->get_records_sql('SELECT *  FROM mdl_assessment_attempt WHERE aid = ?', array($assessmentid));
         $checkbit=0;
+        $edit=0;
         if($check){
-            echo "<p style='color:red'>Sorry, cannot upload marks because they have already been uploaded!</p>";
-            goto end;
+            $edit=1;
+            //echo "<p style='color:red'>Sorry, cannot upload marks because they have already been uploaded!</p>";
+
+            foreach($check as $c){
+                $userid = $c->userid;
+                array_push($useridsupdate, $userid);
+            }
+            $useridsupdate = array_unique($useridsupdate);
+            $useridsupdate = array_values($useridsupdate);
+
+          //  var_dump($useridsupdate);
+
+            //goto end;
         }
 
 ?>
@@ -219,19 +227,37 @@
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-                            
-                            if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
-                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
-                                $DB->execute($sql1);   
+                            if (${$pfix.strtolower($x)} == "")
+                                continue;
+                            if (!$edit){
+                                if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
+                                    $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
+                                    $DB->execute($sql1);   
+                                }
+                                elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
+                                    $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
+                                    $DB->execute($sql1);
+                                }
+                                elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
+                                    $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
+                                    $DB->execute($sql1);
+                                    $checkbit=1;
+                              }
                             }
-                            elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
-                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
-                                $DB->execute($sql1);
-                            }
-                            elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
-                                $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
-                                $DB->execute($sql1);
-                                $checkbit=1;
+                            else
+                            {
+                                 if(in_array($uid, $useridsupdate)){
+                                $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
+                                 $DB->execute($sql1, array(${$pfix.strtolower($x)}, $assessmentid, $uid, ${$a.strtolower($x)}));
+                                        }
+                                else{
+                                     $record = new stdClass();
+                                     $record->aid = $assessmentid;
+                                    $record->userid = $uid;
+                                     $record->cid = ${$a.strtolower($x)};
+                                     $record->obtmark = ${$pfix.strtolower($x)};
+                                     $DB->insert_record('assessment_attempt', $record);
+                                     }
                             }
                         }
                     }

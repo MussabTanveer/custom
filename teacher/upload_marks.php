@@ -38,13 +38,24 @@
             $checkcount++;
             $maxmarks[$checkcount] = $marks->maxmark ;  
             
-        }      
+        } 
+        $useridsupdate = array();     
         $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_quiz_attempt WHERE quizid = ?', array($qid));
         $checkbit=0;
+        $edit=0;
         if($check){
-            echo "<p style='color:red'>Sorry, cannot upload marks because they have already been uploaded!</p>";
-            goto end;
+            $edit=1;
+            //echo "<p style='color:red'>Sorry, cannot upload marks because they have already been uploaded!</p>";
+           // goto end;
+             foreach($check as $c){
+                $userid = $c->userid;
+                array_push($useridsupdate, $userid);
+            }
+            $useridsupdate = array_unique($useridsupdate);
+            $useridsupdate = array_values($useridsupdate);
+
         }
+       // var_dump($useridsupdate);
 
 ?>
         <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
@@ -134,19 +145,37 @@
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-                            
-                            if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
-                                $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
-                                $DB->execute($sql1);   
-                            }
-                            elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
-                                $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
-                                $DB->execute($sql1);
-                            }
-                            elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
-                                $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
-                                $DB->execute($sql1);
-                                $checkbit=1;
+                            if (${$pfix.strtolower($x)} == "")
+                                     continue; 
+                            if (!$edit){
+                                if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
+                                    $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
+                                    $DB->execute($sql1);   
+                                }
+                                elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
+                                    $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
+                                    $DB->execute($sql1);
+                                }
+                                elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
+                                    $sql1="INSERT INTO mdl_manual_quiz_attempt (quizid,userid,questionid,obtmark) VALUES('$qid','$uid','${$a.strtolower($x)}',0)";
+                                    $DB->execute($sql1);
+                                    $checkbit=1;
+                                }
+                            } else {
+
+                                if(in_array($uid, $useridsupdate)){
+                                $sql1="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
+                                 $DB->execute($sql1, array(${$pfix.strtolower($x)}, $qid, $uid, ${$a.strtolower($x)}));
+                                        }
+                                else{
+                                     $record = new stdClass();
+                                     $record->quizid = $qid;
+                                    $record->userid = $uid;
+                                     $record->questionid = ${$a.strtolower($x)};
+                                     $record->obtmark = ${$pfix.strtolower($x)};
+                                     $DB->insert_record('manual_quiz_attempt', $record);
+                                     }
+
                             }
                         }
                     }
