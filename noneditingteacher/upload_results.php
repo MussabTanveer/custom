@@ -246,10 +246,14 @@
                             }
                             else
                             {
-                                 if(in_array($uid, $useridsupdate)){
+                                 if(in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} <= $maxmarks[$x]){
                                 $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
                                  $DB->execute($sql1, array(${$pfix.strtolower($x)}, $assessmentid, $uid, ${$a.strtolower($x)}));
-                                        }
+                                }
+                                elseif (in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} > $maxmarks[$x]) {
+                                     $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
+                                 $DB->execute($sql1, array(0, $assessmentid, $uid, ${$a.strtolower($x)}));
+                                }
                                 else{
                                      $record = new stdClass();
                                      $record->aid = $assessmentid;

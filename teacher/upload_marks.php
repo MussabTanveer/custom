@@ -163,10 +163,16 @@
                                 }
                             } else {
 
-                                if(in_array($uid, $useridsupdate)){
-                                $sql1="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
-                                 $DB->execute($sql1, array(${$pfix.strtolower($x)}, $qid, $uid, ${$a.strtolower($x)}));
-                                        }
+                                if(in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} <= $maxmarks[$x])
+                                {
+                                    $sql1="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
+                                     $DB->execute($sql1, array(${$pfix.strtolower($x)}, $qid, $uid, ${$a.strtolower($x)}));
+                                } 
+                                elseif (in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} > $maxmarks[$x]) {
+                                    $sql1="UPDATE mdl_manual_quiz_attempt SET obtmark=? WHERE quizid=? AND userid=? AND questionid=?";
+                                     $DB->execute($sql1, array(0, $qid, $uid, ${$a.strtolower($x)}));
+                                     $checkbit=1;
+                                }
                                 else{
                                      $record = new stdClass();
                                      $record->quizid = $qid;

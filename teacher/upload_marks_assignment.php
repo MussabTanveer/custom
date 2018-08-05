@@ -132,10 +132,16 @@
                                     }
                             } else {
 
-                                if(in_array($uid, $useridsupdate)){
+                                if(in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} <= $marks){
                                     $sql1="UPDATE mdl_manual_assign_pro_attempt SET obtmark=? WHERE assignproid=? AND userid=?";
                                      $DB->execute($sql1, array(${$pfix.strtolower($x)}, $qid, $uid));
-                                            }
+                                       }
+                                      elseif (in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} > $marks) {
+                                         $sql1="UPDATE mdl_manual_assign_pro_attempt SET obtmark=? WHERE assignproid=? AND userid=?";
+                                     $DB->execute($sql1, array(0, $qid, $uid));
+                                         $checkbit=1;
+                                        // echo $checkbit;
+                                        // echo "<br/>";                                     }
                                     else{
                                          $record = new stdClass();
                                          $record->assignproid = $qid;
@@ -154,7 +160,8 @@
                 $abc++;
             }
             if($sql1){
-                echo "<h3 style='color:green;'>Result has been uploaded!</h3>";   
+                echo "<h3 style='color:green;'>Result has been uploaded!</h3>"; 
+                //echo $checkbit;  
             }
             if($checkbit){
                 echo "<h3 style='color:red;'>Some students with obtained marks greater than maximum marks are assigned 0.</h3>";
