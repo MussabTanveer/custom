@@ -78,9 +78,9 @@
         }
 
         $assessmentid=$_GET['assessmentid'];     
-        $criterionMaxMarks = $DB->get_records_sql('SELECT * From mdl_rubric_scale Where rubric =?',array($rubric_id));  
+        $criterionMaxMarks = $DB->get_records_sql('SELECT * From mdl_rubric_scale Where rubric =?',array($rubric_id));
         $checkcount = 0;
-        $maxmarks[$checkcount] = 0;
+        //$maxmarks[$checkcount] = 0;
         foreach ($criterionMaxMarks as $marks){
             $checkcount++;
             $maxmarks[$checkcount] = $marks->score ; 
@@ -94,31 +94,51 @@
         
 
         $criterionCount = count(array_unique($criterion));
+        $criterionUnique = array_values(array_unique($criterion));
         //echo $criterionCount;
         $criterionIndex = 1;
-        $k = array();
+        $k = 0;
+        $maxmarksNew = array();
+        array_push($maxmarksNew, 0);
+        //var_dump($criterionUnique); echo "<br>";
+        //var_dump($criterion); echo "<br>";
+        //var_dump($maxmarks); echo "<br>";
 
-        for ($i=1 ; $i<=count($criterion); $i++)
+        for ($i=0 ; $i<$criterionCount; $i++)
         {
-            $c = $criterion[$i];
+            $c = $criterionUnique[$i];
+            //echo "C: $c<br>";
            // if (in_array($c, $k) )
                // continue;
 
-            for ($j=1 ; $j<=count($criterion); $j++)
+            for ($j=0; $j<=count($criterion); $j++)
             {
-                if($criterion[$j] == $c)
-                    $k=$j;
+                if($criterion[$j] == $c) {
+                        //echo "M: $maxmarks[$j]";
+                        //echo "K: $k<br>";
+                    if($k < $maxmarks[$j]) {
+                        $k = $maxmarks[$j];
+                        
+                        //$maxmarks[$criterionIndex]=$maxmarks[$j];
+                        //$criterionIndex++;
+                    }
+                    
+                }
             }
-       //  echo " $k <br/>";
-           // var_dump($k);
-            $maxmarks[$criterionIndex]=$maxmarks[$k];
-            $criterionIndex++;
+            //echo "K: $k";
+            array_push($maxmarksNew, $k);
+            $k = 0;
+            //  echo " $k <br/>";
+            // var_dump($k);
+            
         }
         //echo "$k";
-        //var_dump($maxmarks);
+        
         //var_dump(array_values(array_unique($maxmarks)));
         $useridsupdate = array();
-        $maxmarks=(array_values(array_unique($maxmarks)));
+        //$maxmarks=(array_values(array_unique($maxmarks)));
+        //echo "MM: <br>";
+        //var_dump($maxmarksNew);
         $check=$DB->get_records_sql('SELECT *  FROM mdl_assessment_attempt WHERE aid = ?', array($assessmentid));
         $checkbit=0;
         $edit=0;
@@ -133,7 +153,7 @@
             $useridsupdate = array_unique($useridsupdate);
             $useridsupdate = array_values($useridsupdate);
 
-          //  var_dump($useridsupdate);
+          //var_dump($useridsupdate);
 
             //goto end;
         }
@@ -156,7 +176,7 @@
             
             // check file has extension CSV, CSV and also check 
             // file is not empty
-            if (($pathinfo['extension'] == 'CSV' || $pathinfo['extension'] == 'CSV') 
+            if (($pathinfo['extension'] == 'CSV' || $pathinfo['extension'] == 'csv') 
             && $_FILES['assessmentmarks']['size'] > 0 ) {
             
                 // Temporary file name
@@ -181,12 +201,15 @@
                             for($x=1;$x<$c1;$x++){
                             //$prefix = "pre";
                             //${$prefix.strtolower($x)}=$row[$x];
-                            $criterionIds=$row[$x];
+                            $criterionIds= utf8_encode($row[$x]);
+                            //echo "$criterionIds <br/>";
                             $rec1=$DB->get_records_sql('SELECT id  FROM mdl_rubric_criterion WHERE description = ? AND rubric = ?', array($criterionIds, $rubric_id));
                             if($rec1){
                                 $a="question";
                                 foreach ($rec1 as $record1){
-                                ${$a.strtolower($x)}=$record1->id;}
+                                    ${$a.strtolower($x)}=$record1->id; 
+                                    //echo "${$a.strtolower($x)} <br/>";
+                                }
                             }
                             // echo ${$prefix.strtolower($x)};
                             // $a=$row[1];
@@ -215,7 +238,7 @@
                             $uid="A";
                         }
                         
-                        $checkbit=0;
+                        
                         for($x=1;$x<$c1;$x++){                   
                 
                             $pfix="sn";
@@ -229,16 +252,18 @@
                             // $sn4=$row[4];
                             if (${$pfix.strtolower($x)} == "")
                                 continue;
+
                             if (!$edit){
-                                if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){
+                                if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarksNew[$x] ){
                                     $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
+
                                     $DB->execute($sql1);   
                                 }
                                 elseif (${$pfix.strtolower($x)} == "" && $uid <> "A" ){
                                     $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
                                     $DB->execute($sql1);
                                 }
-                                elseif (${$pfix.strtolower($x)} > $maxmarks[$x] && $uid <> "A"){
+                                elseif (${$pfix.strtolower($x)} > $maxmarksNew[$x] && $uid <> "A"){
                                     $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}',0)";
                                     $DB->execute($sql1);
                                     $checkbit=1;
@@ -246,13 +271,18 @@
                             }
                             else
                             {
-                                 if(in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} <= $maxmarks[$x]){
-                                $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
-                                 $DB->execute($sql1, array(${$pfix.strtolower($x)}, $assessmentid, $uid, ${$a.strtolower($x)}));
+                                //echo "UID: $uid<br>";
+                                
+                                if(in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} <= $maxmarksNew[$x]){
+                                    //echo "CM: ${$pfix.strtolower($x)}<br/>";
+                                    $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
+                                    $DB->execute($sql1, array(${$pfix.strtolower($x)}, $assessmentid, $uid, ${$a.strtolower($x)}));
                                 }
-                                elseif (in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} > $maxmarks[$x]) {
+                                elseif (in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} > $maxmarksNew[$x]) {
+                                     //echo "CM: ${$pfix.strtolower($x)}<br/>";
                                      $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
                                  $DB->execute($sql1, array(0, $assessmentid, $uid, ${$a.strtolower($x)}));
+                                 $checkbit=1;
                                 }
                                 else{
                                      $record = new stdClass();
