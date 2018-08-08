@@ -162,7 +162,7 @@
         <form id="uploadMarks" method="POST" enctype="multipart/form-data" class="mform">
 
          <div class="btn btn-default btn-file">
-            <input  type="file" name="assessmentmarks" id="assessmentmarks" placeholder="Only CSV files are allowed!">
+            <input  type="file" name="assessmentmarks" id="assessmentmarks" placeholder="Only XLSX files are allowed!">
         </div>
         <input class="btn btn-info" type="submit" name="Upload" value="Upload" >
         
@@ -171,30 +171,30 @@
         // check file name is not empty
         if (!empty($_FILES['assessmentmarks']['name'])) {
             
-            // Get File extension eg. 'CSV' to check file is CSV sheet
+            // Get File extension eg. 'XLSX' to check file is XLSX sheet
             $pathinfo = pathinfo($_FILES["assessmentmarks"]["name"]);
             
-            // check file has extension CSV, CSV and also check 
+            // check file has extension XLSX, XLSX and also check 
             // file is not empty
-            if (($pathinfo['extension'] == 'CSV' || $pathinfo['extension'] == 'csv') 
+            if (($pathinfo['extension'] == 'XLSX' || $pathinfo['extension'] == 'xlsx') 
             && $_FILES['assessmentmarks']['size'] > 0 ) {
             
                 // Temporary file name
                 $inputFileName = $_FILES['assessmentmarks']['tmp_name']; 
             
-                // Read CSV file by using ReadFactory object.
-                $reader = ReaderFactory::create(Type::CSV);
+                // Read XLSX file by using ReadFactory object.
+                $reader = ReaderFactory::create(Type::XLSX);
         
                 // Open file
                 $tempfile=$reader->open($inputFileName);
                 $count = 1;
                 $abc=1;
                     
-                //Number of sheet in CSV file
+                //Number of sheet in XLSX file
                 foreach ($reader->getSheetIterator() as $sheet) {
                     if($abc>=1){
                     
-                    // Number of Rows in CSV sheet
+                    // Number of Rows in XLSX sheet
                     foreach ($sheet->getRowIterator() as $row) {
                         if($count==1){
                             $c1=count($row);
@@ -219,13 +219,13 @@
                             }
                         }
     
-                        // It reads data after header. In the my CSV sheet, 
+                        // It reads data after header. In the my XLSX sheet, 
                         // header is in the first row. 
                         if ($count > 1) {
                         
                         //$arri = array_map('strval', $arr);
                         
-                        // Data of CSV sheet
+                        // Data of XLSX sheet
                         $c1=count($row);
                         $sn=$row[0];
                         $rec=$DB->get_records_sql('SELECT id  FROM mdl_user WHERE username = ?', array($sn));
@@ -250,9 +250,14 @@
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-                            if (${$pfix.strtolower($x)} == "")
+                             // echo "${$pfix.strtolower($x)}<br/>";
+                           // if (${$pfix.strtolower($x)} == 0 && ${$pfix.strtolower($x)} !=/ "") 
+                             //   goto below;
+                            
+                            if (${$pfix.strtolower($x)} === '' )
                                 continue;
-
+                          //  below:
+                            // echo "${$pfix.strtolower($x)}<br/>";
                             if (!$edit){
                                 if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarksNew[$x] ){
                                     $sql1="INSERT INTO mdl_assessment_attempt (aid,userid,cid,obtmark) VALUES('$assessmentid','$uid','${$a.strtolower($x)}','${$pfix.strtolower($x)}')";
@@ -272,7 +277,7 @@
                             else
                             {
                                 //echo "UID: $uid<br>";
-                                
+                               // echo "${$pfix.strtolower($x)}<br/>";
                                 if(in_array($uid, $useridsupdate) && ${$pfix.strtolower($x)} <= $maxmarksNew[$x]){
                                     //echo "CM: ${$pfix.strtolower($x)}<br/>";
                                     $sql1="UPDATE mdl_assessment_attempt SET obtmark=? WHERE aid=? AND userid=? AND cid=?";
@@ -307,13 +312,13 @@
             if($checkbit){
                 echo "<h3 style='color:red;'>Some students with obtained marks greater than maximum marks are assigned 0.</h3>";
             }
-            //Close CSV file
+            //Close XLSX file
             $reader->close();
         } else {
-            echo "<p style='color:red;'>Please Select Valid CSV File</p>";
+            echo "<p style='color:red;'>Please Select Valid XLSX File</p>";
         }
     } else {
-        echo "<p style='color:red;'>Please Select CSV File</p>";
+        echo "<p style='color:red;'>Please Select XLSX File</p>";
     }
     end:
     ?>

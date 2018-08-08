@@ -107,11 +107,11 @@
         }
 
         //Creating file type
-        $inputFileName = "Grading_sheet.CSV";
+        $inputFileName = "Grading_sheet.XLSX";
         
-        // for CSV files
-        $writer = WriterFactory::create(Type::CSV);
-        //$writer = WriterFactory::create(Type::CSV); // for CSV files
+        // for XLSX files
+        $writer = WriterFactory::create(Type::XLSX);
+        //$writer = WriterFactory::create(Type::XLSX); // for XLSX files
         //$writer = WriterFactory::create(Type::ODS); // for ODS files
         $tempfile=$writer->openToFile($inputFileName); // write data to a file or to a PHP stream
         //$writer->openToBrowser($fileName); // stream data directly to the browser
@@ -121,8 +121,8 @@
         //$writer->addRows($multipleRows); // add multiple rows at a time
         //  $writer->setTempFolder('E:/');
         $writer->close();  
-        header('Content-Type:Grading_sheet/CSV');
+        header('Content-Type:Grading_sheet/XLSX');
         header('Content-disposition: attachment; filename="'.$inputFileName.'";');
-        readfile("Grading_sheet.CSV");  
+        readfile("Grading_sheet.XLSX");  
     }
 ?>
