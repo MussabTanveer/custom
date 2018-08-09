@@ -227,6 +227,9 @@
 
             <?php require '../templates/print_template.html'; ?>
             <a class="btn btn-default" href="./display_outcome_framework-4.php">Go Back</a>
+            <br/>
+            <br/>
+             <a class="btn btn-default" href="./report_chairman.php">Go Back to Chairman Reports & Forms</a>
 
             <?php
             echo $OUTPUT->footer();

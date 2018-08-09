@@ -485,7 +485,9 @@
 			<input class="btn btn-info" type="submit" name="save" value="Save and continue"/>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
             <a class="btn btn-default" type="submit" href="./select_frameworktoPLO.php">Cancel</a>
-			
+            <br/>
+            <br/>
+			 <a class="btn btn-default" href="./report_chairman.php">Go Back to Chairman Reports & Forms</a>
 		</form>
 		<?php
 		//echo $shortname;
@@ -620,8 +622,9 @@
 				});
 			});
 		</script>
-
+  
 		<?php 
+
 			echo $OUTPUT->footer();
 	}
 	else

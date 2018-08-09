@@ -757,6 +757,9 @@ require_once('../../../config.php');
 			<button class="btn btn-info" type="submit"  name="save" id="button" /> Save and continue </button>
 			<input class="btn btn-info" type="submit" name="return" value="Save and return"/>
             <a class="btn btn-default" type="submit" href="./select_frameworktoCLO.php">Cancel</a>
+            <br/>
+            <br/>
+			 <a class="btn btn-default" href="./report_chairman.php">Go Back to Chairman Reports & Forms</a>
 			<br /><br />
 			<div class="fdescription required">There are required fields in this form marked <i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required field" aria-label="Required field"></i>.</div>
 		</form>
