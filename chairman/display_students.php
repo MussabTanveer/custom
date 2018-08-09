@@ -61,7 +61,7 @@
 
 <?php
     //query to show all students
-    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid ORDER BY u.idnumber');
+    $rec=$DB->get_records_sql('SELECT distinct u.id, u.username,substring(u.username,4,8) AS seatorder, CONCAT( u.firstname, " ", u.lastname ) AS student , u.idnumber FROM mdl_course as c, mdl_role_assignments AS ra, mdl_user AS u, mdl_context AS ct WHERE c.id = ct.instanceid AND ra.roleid =5 AND ra.userid = u.id AND ct.id = ra.contextid ORDER BY seatorder');
     
     $serialno=0;
     $batches=array();
