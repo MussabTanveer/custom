@@ -17,17 +17,24 @@
     {
         
         $rubricId = $_GET['id'];
-        $sql = "DELETE FROM mdl_rubric WHERE id = $rubricId";
-        $DB->execute($sql);
 
-        $sql = "DELETE FROM mdl_rubric_criterion WHERE rubric = $rubricId";
-        $DB->execute($sql);
+        $flag=$DB->get_records_sql('SELECT * FROM mdl_clo_rubric WHERE rubric = ?', array($rubricId));
 
-        $sql = "DELETE FROM mdl_rubric_scale WHERE  rubric = $rubricId";
-        $DB->execute($sql);
+        if (!$flag)
+        {
+            $sql = "DELETE FROM mdl_rubric WHERE id = $rubricId";
+            $DB->execute($sql);
 
-        echo "<font color = green> Rubric has been Deleted Successfully </font><br>"; 
-     
+            $sql = "DELETE FROM mdl_rubric_criterion WHERE rubric = $rubricId";
+            $DB->execute($sql);
+
+            $sql = "DELETE FROM mdl_rubric_scale WHERE  rubric = $rubricId";
+            $DB->execute($sql);
+
+            echo "<font color = green> Rubric has been Deleted Successfully </font><br>"; 
+        }
+        else
+             echo "<font color = red> The Rubric cannot be deleted as it is attached with CLO. </font><br>"; 
         ?>
 
          <a href="./select_rubric.php" > Go Back </a>
