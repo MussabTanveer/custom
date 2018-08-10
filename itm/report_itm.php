@@ -17,6 +17,12 @@
     <script src="../script/jquery/jquery-3.2.1.js"></script>
 
 	<div>
+        <a href="javascript:void(0)" id="bat_click" onclick="toggle_visibility('bat_click', 'bat');" class="cool-link"><span class="fa fa-chevron-down"></span> Batches</a><br><br>
+        <div id="bat" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./add_batch.php" class="cool-link">&#10070; Create Batch</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="./view_batch.php" class="cool-link">&#10070; Edit/Delete/View Batch</a><br><br>
+        </div>
+
         <a href="javascript:void(0)" id="sem_click" onclick="toggle_visibility('sem_click', 'sem');" class="cool-link"><span class="fa fa-chevron-down"></span> Semesters</a><br><br>
         <div id="sem" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="./add_semester.php" class="cool-link">&#10070; Create Semester</a><br>
