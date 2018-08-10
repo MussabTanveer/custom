@@ -22,11 +22,12 @@
         $semester_id = $_GET['semester'];
         if(isset($_POST['save'])){
             $name=trim($_POST['name']);
+            $batch=trim($_POST['bat']);
             $year=trim($_POST['year']);
             $startdate=strtotime($_POST['startdate']);
             $enddate=strtotime($_POST['enddate']);
             
-            if(empty($name) || empty($year))
+            if(empty($name) || empty($batch) || empty($year))
             {
                 if(empty($name))
                 {
@@ -36,19 +37,23 @@
                 {
                     $msg2="<font color='red'>-Please enter year</font>";
                 }
+                if(empty($batch))
+                {
+                    $msg3="<font color='red'>-Please select batch</font>";
+                }
             }
             else{
                 try {
                     $transaction = $DB->start_delegated_transaction();
 
-                    $sql_update1="UPDATE mdl_semester SET name=?, year=?, startdate=?, enddate=? WHERE id=?";
-                    $DB->execute($sql_update1, array($name, $year, $startdate, $enddate, $semester_id));
+                    $sql_update1="UPDATE mdl_semester SET name=?, year=?, startdate=?, enddate=?, batchid=? WHERE id=?";
+                    $DB->execute($sql_update1, array($name, $year, $startdate, $enddate, $batch, $semester_id));
                     
                     $sql_update2="UPDATE mdl_course SET startdate=?, enddate=? WHERE semesterid=?";
                     $DB->execute($sql_update2, array($startdate, $enddate, $semester_id));
 
                     $transaction->allow_commit();
-                    $msg4 = "<br><h4 style='color: red'>Semester information updated!</h4>";
+                    $msg4 = "<br><h4 style='color: green'>Semester information updated!</h4>";
                 } catch(Exception $e) {
                     $msg4 = "<br><h4 style='color: red'>Semester information update failed!</h4>";
                     $transaction->rollback($e);
@@ -56,6 +61,7 @@
                 }
             }
         }
+        $batches=$DB->get_records_sql("SELECT * FROM mdl_batch ORDER BY id DESC LIMIT 12");
         if(isset($msg4)){
 			echo $msg4;
 			goto label;
@@ -63,7 +69,36 @@
         ?>
         <br />
         <form method='post' action="" class="mform">
-
+            <div class="form-group row fitem">
+                <div class="col-md-3">
+                    <span class="pull-xs-right text-nowrap">
+                        <abbr class="initialism text-danger" title="Required"><i class="icon fa fa-exclamation-circle text-danger fa-fw " aria-hidden="true" title="Required" aria-label="Required"></i></abbr>
+                    </span>
+                    <label class="col-form-label d-inline" for="id_bat">
+                        Select Batch
+                    </label>
+                </div>
+                <div class="col-md-9 form-inline felement" data-fieldtype="text">
+                    <select required name="bat" class="select custom-select" id="id_bat">
+                        <option value=''>Select..</option>
+                        <?php
+                        foreach ($batches as $b) {
+                            ?>
+                            <option value='<?php echo $b->id; ?>'><?php echo "$b->name"; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <div class="form-control-feedback" id="id_error_bat">
+                    <?php
+                    if(isset($msg3)){
+                        echo $msg3;
+                    }
+                    ?>
+                    </div>
+                </div>
+            </div>
+            
             <div class="form-group row fitem">
                 <div class="col-md-3">
                     <span class="pull-xs-right text-nowrap">
@@ -179,6 +214,7 @@
                     $year = $s->year;
                     $startdate = $s->startdate;
                     $enddate = $s->enddate;
+                    $batch = $s->batchid;
                 }
             }
         }
@@ -186,6 +222,7 @@
         $enddate = date('Y-m-d', $enddate);
         ?>
         <script>
+            document.getElementById("id_bat").value = <?php echo json_encode($batch); ?>;
             document.getElementById("id_name").value = <?php echo json_encode($name); ?>;
             document.getElementById("id_year").value = <?php echo json_encode($year); ?>;
             document.getElementById("id_startdate").value = <?php echo json_encode($startdate); ?>;
