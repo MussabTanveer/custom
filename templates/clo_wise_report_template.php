@@ -654,6 +654,7 @@
         $cohort_clo_stat = array(); // cohort course clo status -> increment for pass
         $activity_clo_stat = array(); // activity clo status -> increment for pass
         $total_attempts = 0;
+        $all_clo_pass = 0;
         for($i=0; $i<count($closid); $i++) {
             $total_attempts += $closidCountActivity[$i];
         }
@@ -668,6 +669,7 @@
             $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
             for($i=0; $i<count($closid); $i++)
                 $ind_stud_clo_stat[$i] = 0; // set all clos status to fail
+            $flag_all_clo_pass = 1;
         
         ?>
         <tr>
@@ -734,12 +736,16 @@
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i></td>";
                     $cohort_clo_stat[$i]++;
                 }
-                else
+                else {
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i></td>";
+                    $flag_all_clo_pass = 0;
+                }
             }
             ?>
         </tr>
         <?php
+        if($flag_all_clo_pass)
+            $all_clo_pass++;
         }
         //print_r($activity_clo_stat);
         // Total Colspan for last 2 rows
@@ -776,18 +782,44 @@
             }
             ?>
         </tr>
+        <!--
         <tr>
-            <!--Course Level Status (pass/fail)-->
-            <th colspan="<?php echo $colspan; ?>" style="text-align: right;">Course Level Status (pass/fail):</th>
+            <!--Individual CLO Status (pass/fail)-->
+            <!--<th colspan="<?php echo $colspan; ?>" style="text-align: right;">Course Level Status (pass/fail):</th>-->
             <?php
             /****** Course CLOS status (pass/fail) ******/
-            for($i=0; $i<count($closid); $i++) {
+            /* for($i=0; $i<count($closid); $i++) {
                 if(($cohort_clo_stat[$i]/count($recStudents))*100 >= $clocohortpasspercent[$i])
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i></td>";
                 else
                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i></td>";
-            }
+            } */
             ?>
+        <!--
+        </tr>
+        -->
+        <tr>
+            <!--Percentage of students passed in all CLOs-->
+            <th colspan="<?php echo $colspan; ?>" style="text-align: right;">Percentage of students passed in all CLOs:</th>
+            <td colspan="<?php echo count($closid); ?>">
+            <?php
+            /****** Percentage of students passed in all CLOs ******/
+            echo number_format($all_clo_pass/count($recStudents)*100, 3)."%";
+            ?>
+            </td>
+        </tr>
+        <tr>
+            <!--Course Level Status (pass/fail)-->
+            <th colspan="<?php echo $colspan; ?>" style="text-align: right;">Course Level Status (pass/fail):</th>
+            <td colspan="<?php echo count($closid); ?>">
+            <?php
+            /****** Course CLOS status (pass/fail) ******/
+            if(($all_clo_pass/count($recStudents))*100 >= 50)
+                echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i>";
+            else
+                echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i>";
+            ?>
+            </td>
         </tr>
     </table>
     </div>
