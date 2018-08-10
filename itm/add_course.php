@@ -316,7 +316,7 @@
             array_push($ccs, $cCode);
         }
         $ccs = array_unique($ccs); // remove duplicate course codes
-        $semesters=$DB->get_records_sql("SELECT * FROM mdl_semester ORDER BY id DESC");
+        $semesters=$DB->get_records_sql("SELECT * FROM mdl_semester ORDER BY id DESC LIMIT 12");
 
         if(isset($msg4)){
             echo $msg4;
