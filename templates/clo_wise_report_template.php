@@ -20,6 +20,10 @@
         echo "<h4 style='text-align:center'>Course Code: <u>".($course->idnumber)."</u>,";
         echo " Course Title: <u>".($course->fullname)." (".($course->shortname).")</u></h4>";
         echo "<h4 style='text-align:center'>Course CLO-Wise Assessment Sheet</h4>";
+        echo "<div style='float: right;'><h5>Key:</h5>";
+        echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'> Fail </i><br>";
+        echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'> Pass </i><br>";
+        echo "<i class='fa fa-times' aria-hidden='true'> Not attempted </i><br><br></div>";
         
         // Get all students of course
         $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, substring(u.username,4,8) AS seatorder, u.firstname, u.lastname
