@@ -320,7 +320,7 @@ label.error {
                         rules: {
                             
                             "pactivity[]":{
-                                required: true
+                                required: false
                             }
                         }
                     });
