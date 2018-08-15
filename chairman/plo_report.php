@@ -63,7 +63,7 @@
 
 
         		$Cloname=$c->idnumber;
-        		echo $Cloname;
+        		//echo $Cloname;
 
 
         		$course=substr($Cloname,0,6);
