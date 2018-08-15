@@ -55,7 +55,7 @@
         <?php
         }
         
-        $clos=$DB->get_records_sql('SELECT idnumber FROM mdl_competency WHERE idnumber=?',array("$Ploid")); //all clos of the plo
+        $clos=$DB->get_records_sql('SELECT idnumber FROM mdl_competency WHERE parentid=?',array("$Ploid")); //all clos of the plo
 
         if($clos){
 
@@ -63,6 +63,7 @@
 
 
         		$Cloname=$c->idnumber;
+        		echo $Cloname;
         	}
         }
 
