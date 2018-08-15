@@ -55,7 +55,12 @@
         <?php
         }
         
-        $clos=$DB->get_records_sql('SELECT idnumber FROM mdl_competency WHERE parentid=?',array("$Ploid")); //all clos of the plo
+        $shortnames = array();
+        $idnumbers = array();
+        $semesterids = array();
+        $courseids = array();
+
+        $clos=$DB->get_records_sql('SELECT * FROM mdl_competency WHERE parentid=?',array("$Ploid")); //all clos of the plo
 
         if($clos){
 
@@ -67,9 +72,134 @@
 
 
         		$course=substr($Cloname,0,6);
-        		echo $course;
+        		//echo $course;
+
+                 $courses=$DB->get_records_sql('SELECT * FROM mdl_course WHERE idnumber=?',array($course)); 
+
+                if($courses){
+
+                    foreach($courses as $course){
+
+                        $shortname = $course->shortname;
+                        $idnumber = $course->idnumber;
+                        $semesterId = $course->semesterid;
+                        $courseid = $course->id;
+                        
+
+                      //  echo "$shortname $idnumber $semesterId<br/>";
+
+                        $batchCourses=$DB->get_records_sql('SELECT * FROM mdl_semester WHERE id=?',array($semesterId)); 
+
+                        if($batchCourses){
+                            foreach($batchCourses as $batchCourse)
+                            {
+                                $batchid = $batchCourse->batchid;
+                                if ($batchid == $batchID)
+                                {
+                                    echo "displaying batch ones<br/>";
+                                    echo "$shortname $idnumber $semesterId $courseid<br/>";
+                                    array_push($shortnames, $shortname);
+                                    array_push($idnumbers, $idnumber);
+                                    array_push($semesterids, $semesterId);
+                                    array_push($courseids, $courseid);
+
+                                } 
+                            }
+                        }
+
+                    }
+                 }
+
+
         	}
         }
+
+        $shortnames = array_values(array_unique($shortnames));
+        $idnumbers = array_values(array_unique($idnumbers));
+        $semesterids = array_values(array_unique($semesterids));
+        $courseids = array_values(array_unique($courseids));
+
+        $courseid = $courseids[0];
+
+       // echo "$courseid";
+
+
+
+        // Get all students of course
+        $recStudents=$DB->get_records_sql("SELECT u.id AS sid, u.username AS seatnum, substring(u.username,4,8) AS seatorder, u.firstname, u.lastname
+        FROM mdl_role_assignments ra, mdl_user u, mdl_course c, mdl_context cxt
+        WHERE ra.userid = u.id
+        AND ra.contextid = cxt.id
+        AND cxt.contextlevel = ?
+        AND cxt.instanceid = c.id
+        AND c.id = ?
+        AND (roleid=5) ORDER BY seatorder", array(50, $courseid));
+
+        $stdids = array();
+        $seatnos = array();
+        foreach($recStudents as $records){
+            $id = $records->sid;
+            $seatno = $records->seatnum ;
+            array_push($stdids,$id);
+            array_push($seatnos,$seatno);
+        }
+
+        var_dump($stdids);
+        echo "<br/>";
+        var_dump($seatnos);
+
+
+       
+        var_dump($shortnames);
+        echo "<br/>";
+        var_dump($idnumbers);
+        echo "<br/>";
+        var_dump($semesterids);
+        echo "<br/>";
+        var_dump($courseids);
+       // $idnumbers[1]="CS-111";
+       // $idnumbers[2]="CS-121";
+        ?>
+        <table border="2px">
+            <?php
+                ?>
+            <tr>
+                    <th>Serial No.</th>
+
+                     <th>Seat No.</th>
+                <?php
+                foreach($idnumbers as $idn)
+                {?> 
+                    
+                    <th><?php echo $idn;?></th>
+                    <?php
+
+                }
+            ?>
+            <th>PLO Status (pass/fail)</th>
+        </tr>
+        
+            <?php
+            $i=1;
+                foreach($seatnos as $sn)
+                {
+            ?>  <tr>
+                <td><?php echo $i; ?></td>
+                <td><?php echo $sn; ?></td>
+                <td></td>
+                <td></td>
+                </tr>
+            <?php
+                $i++;
+                }
+            ?>    
+        
+        </table>
+
+        <?php
+
+       
+
 
 
         echo $OUTPUT->footer();
