@@ -55,7 +55,16 @@
         <?php
         }
         
-        
+        $clos=$DB->get_records_sql('SELECT idnumber FROM mdl_competency WHERE idnumber=?',array("$Ploid")); //all clos of the plo
+
+        if($clos){
+
+        	foreach($clos as $c){
+
+
+        		$Cloname=$c->idnumber;
+        	}
+        }
 
 
         echo $OUTPUT->footer();
