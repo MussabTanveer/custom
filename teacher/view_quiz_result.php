@@ -28,13 +28,13 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Quiz Name');
+            $table->head = array('S. No.', 'Quiz Name','Delete');
             foreach ($quizzes as $records) {
                 $serialno++;
                 $qid = $records->id;
                 $qname = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./view_activity_result1.php?type=quiz&quiz=$qid&courseid=$course_id'>$qname</a>");
+                $table->data[] = array($serialno,"<a href='./view_activity_result1.php?type=quiz&quiz=$qid&courseid=$course_id'>$qname</a>","<a href='./delete_manual_activity_marks.php?id=$qid&course=$course_id&type=quiz' title='Delete' onClick=\"return confirm('Are you sure you want to delete marks of this activity?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>");
             }
             echo html_writer::table($table);
             echo "<br />";

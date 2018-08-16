@@ -113,13 +113,25 @@
 
         	}
         }
-
+        echo "<br/>";
+        echo "<br/>";
+        echo "Before Unique";
+        echo "<br/>";
+        var_dump($shortnames);
+        echo "<br/>";
+        var_dump($idnumbers);
+        echo "<br/>";
+        var_dump($semesterids);
+        echo "<br/>";
+        var_dump($courseids);
+         echo "<br/>";
+          echo "<br/>";
         $shortnames = array_values(array_unique($shortnames));
         $idnumbers = array_values(array_unique($idnumbers));
         $semesterids = array_values(array_unique($semesterids));
         $courseids = array_values(array_unique($courseids));
 
-        $courseid = $courseids[0];
+        $courseid = $courseids[2];
 
        // echo "$courseid";
 
@@ -187,6 +199,8 @@
                 <td><?php echo $i; ?></td>
                 <td><?php echo $sn; ?></td>
                 <td></td>
+                <td></td>
+                 <td></td>
                 <td></td>
                 </tr>
             <?php

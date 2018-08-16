@@ -1,4 +1,4 @@
-<?php 
+v<?php 
    require_once('../../../config.php');
     $context = context_system::instance();
     $PAGE->set_context($context);
@@ -28,13 +28,13 @@
         {
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Midterm Name');
+            $table->head = array('S. No.', 'Midterm Name','Delete');
             foreach ($midterms as $records) {
                 $serialno++;
                 $qid = $records->id;
                 $qname = $records->name;
                 
-                $table->data[] = array($serialno,"<a href='./view_activity_result1.php?type=midterm&quiz=$qid&courseid=$course_id'>$qname</a>");
+                $table->data[] = array($serialno,"<a href='./view_activity_result1.php?type=midterm&quiz=$qid&courseid=$course_id'>$qname</a>","<a href='./delete_manual_activity_marks.php?id=$qid&course=$course_id&type=midterm' title='Delete' onClick=\"return confirm('Are you sure you want to delete marks of this activity?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>");
             
             }
 

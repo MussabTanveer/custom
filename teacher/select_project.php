@@ -31,7 +31,7 @@
             <?php
             $serialno = 0;
             $table = new html_table();
-            $table->head = array('S. No.', 'Name');
+            $table->head = array('S. No.', 'Name','Delete');
 
             foreach ($rec as $records) {
                 $serialno++;
@@ -40,7 +40,7 @@
                 $name = $records->name;
                 $description = $records->description;
 
-                $table->data[] = array($serialno,"<a href='./view_project.php?projectid=$id&courseid=$course_id'>$name</a>" );
+                $table->data[] = array($serialno,"<a href='./view_project.php?projectid=$id&courseid=$course_id'>$name</a>","<a href='./delete_manual_activity_marks.php?id=$id&course=$course_id&type=project' title='Delete' onClick=\"return confirm('Are you sure you want to delete marks of this activity?')\" ><i class='icon fa fa-trash text-danger' aria-hidden='true' title='Delete' aria-label='Delete'></i></a>" );
             }
 
             echo html_writer::table($table);
