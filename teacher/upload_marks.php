@@ -134,7 +134,7 @@
                             $uid="A";
                         }
                         
-                        $checkbit=0;
+                       // $checkbit=0;
                         for($x=1;$x<$c1;$x++){                   
                 
                             $pfix="sn";
@@ -145,7 +145,7 @@
                             // $sn2=$row[2];
                             // $sn3=$row[3];
                             // $sn4=$row[4];
-                            if (${$pfix.strtolower($x)} == "")
+                            if (${$pfix.strtolower($x)} === "")
                                      continue; 
                             if (!$edit){
                                 if (${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $maxmarks[$x] ){

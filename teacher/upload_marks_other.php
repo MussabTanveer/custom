@@ -109,7 +109,7 @@
                             for($x=1;$x<$c1;$x++){
                                 $pfix="sn";
                                 ${$pfix.strtolower($x)}=$row[$x];
-                                if (${$pfix.strtolower($x)} == "")
+                                if (${$pfix.strtolower($x)} === "")
                                      continue; 
 
                                  if (!$edit){

@@ -38,6 +38,7 @@
     $useridsupdate = array();  
     $check=$DB->get_records_sql('SELECT *  FROM mdl_manual_assign_pro_attempt WHERE assignproid = ?', array($qid));
     $edit=0;
+    $checkbit=0;
     if($check){
         $edit=1;
        // echo "<p style='color:red;'>Notice: Sorry, cannot upload marks because they have already been uploaded!</p>";
@@ -110,11 +111,11 @@
                                 $uid="A";
                             }
 
-                            $checkbit=0;
+                            
                             for($x=1;$x<$c1;$x++){
                                 $pfix="sn";
                                 ${$pfix.strtolower($x)}=$row[$x];
-                                if (${$pfix.strtolower($x)} == "")
+                                if (${$pfix.strtolower($x)} === "")
                                      continue; 
                                 if (!$edit){
                                     if(${$pfix.strtolower($x)} <> "" && $uid <> "A" && ${$pfix.strtolower($x)} <= $marks ){
@@ -141,7 +142,8 @@
                                      $DB->execute($sql1, array(0, $qid, $uid));
                                          $checkbit=1;
                                         // echo $checkbit;
-                                        // echo "<br/>";                                     }
+                                        // echo "<br/>";                                     
+                                     }
                                     else{
                                          $record = new stdClass();
                                          $record->assignproid = $qid;
