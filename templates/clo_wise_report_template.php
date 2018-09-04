@@ -107,6 +107,7 @@
             array_push($childidsMulti, $childids); // array of all child activity ids
             array_push($childmodulesMulti, $childmodules); // array of all child modules
         }
+
         /*var_dump($parentids); echo "<br>";
         var_dump($childidsMulti); echo "<br>";
         var_dump($childmodulesMulti); echo "<br>";*/
@@ -149,6 +150,7 @@
 
         $quizids = 0;
         $assignids = 0;
+        $assessids = 0;
         
         /**** ONLINE+MANUAL QUIZZES & ASSIGNMENTS ****/
         // Find students quiz records
@@ -431,6 +433,122 @@
                 $mod=0;
             }
         }
+
+        // Find attached rubric
+        $recRub=$DB->get_recordset_sql('SELECT
+            clo.id AS cloid,
+            clo.shortname,
+            clo.idnumber,
+            clo.description,
+            plo.shortname as ploname,
+            plo.idnumber,
+            taxlvl.id AS lvlid,
+            taxlvl.name,
+            taxlvl.level,
+            taxdom.name as taxname
+            FROM
+            mdl_competency clo,
+            mdl_competency plo, 
+            mdl_competency_coursecomp compcour,
+            mdl_taxonomy_clo_level taxclolvl,
+            mdl_taxonomy_levels taxlvl,
+            mdl_taxonomy_domain taxdom
+            WHERE clo.id=compcour.competencyid and clo.id=taxclolvl.cloid and taxclolvl.levelid=taxlvl.id and taxlvl.domainid=taxdom.id and plo.id=clo.parentid and courseid=?'
+            ,array($course_id));
+        
+        if($recRub){
+            $acloid = 0; $levelid = 0;
+            $flag=0;
+            foreach ($recRub as $records) {
+                $flag++;
+                $acloid = $records->cloid;
+                $levelid = $records->lvlid;
+                if($levelid>=7) // level belongs to psychomotor or affective domain
+                    break;
+            }
+            if($flag){
+                $flagR=0; $rubric_id=0;
+                $recR=$DB->get_records_sql('SELECT rubric FROM mdl_clo_rubric WHERE cloid=?', array($acloid));
+                foreach ($recR as $R) {
+                    $flagR++;
+                    $rubric_id = $R->rubric;
+                }
+                if($flagR){
+                    // Get Assessments
+                    $rubMaxM=$DB->get_records_sql("SELECT rs.id, MAX(rs.score) AS maxmark, rs.criterion FROM mdl_rubric r, mdl_rubric_scale rs WHERE r.id=? AND r.id=rs.rubric GROUP BY rs.criterion", array($rubric_id));
+                    $assessmaxmarks=0;
+                    foreach ($rubMaxM as $asmm) {
+                        $assessmaxmarks += $asmm->maxmark;
+                    }
+                    // Get Assessments
+                    $assessAct=$DB->get_records_sql("SELECT * FROM `mdl_practical_assessment` WHERE courseid = ? ", array($course_id));
+                    $asIdsArr = array(); $asnames = array();
+                    foreach ($assessAct as $asid) {
+                        $id = $asid->id;
+                        $name = $asid->assessment;
+                        array_push($asIdsArr, $id); // array of assessment ids
+                        array_push($asnames, $name); // array of assessment names
+                    }
+
+                    // Find students assessment records
+                    $seatnosAsMulti = array();
+                    $closUniqueAsMulti = array();
+                    $closAsMulti = array();
+                    $resultAsMulti = array();
+                    $cloAsCount = array();
+                    $assessnames = array();
+
+                    // ASSESSMENTS
+                    for($a=0; $a < count($asIdsArr); $a++){
+                        $seatnosAs = array();
+                        $closAs = array();
+                        $resultAs = array();
+
+                        $activityname = $asnames[$a];
+                        $actid = $asIdsArr[$a];// ASSESSMENTS
+                        
+                        $recAssess=$DB->get_recordset_sql(
+                        'SELECT
+                        att.id,
+                        substring(u.username,4,8) AS seatorder,
+                        u.username AS seat_no,
+                        SUM(att.obtmark) AS marksobtained,
+                        att.userid
+                        FROM mdl_assessment_attempt att, mdl_user u
+                        WHERE att.aid=? AND att.userid=u.id
+                        GROUP BY att.userid
+                        ORDER BY seatorder, att.cid'
+                        , array($actid));
+                        
+                        foreach($recAssess as $rA){
+                            $un = $rA->seat_no;
+                            $clo=$acloid;
+                            $asmax = $assessmaxmarks; $asmax = number_format($asmax, 2); // 2 decimal places
+                            $mobtained = $rA->marksobtained; $mobtained = number_format($mobtained, 2);
+                            /*if( (($mobtained/$qmax)*100) > 50){
+                                array_push($resultQ,"P");
+                            }
+                            else{
+                                array_push($resultQ,"F");
+                            }*/
+                            array_push($resultAs,(($mobtained/$asmax)*100));
+                            array_push($seatnosAs,$un);
+                            array_push($closAs,$clo);
+                        }
+                        $assessids++;
+                        $cloAsUnique = array_unique($closAs);
+                        array_push($cloAsCount,count($cloAsUnique));
+                        array_push($seatnosAsMulti,$seatnosAs);
+                        array_push($closUniqueAsMulti,$cloAsUnique);
+                        array_push($closAsMulti,$closAs);
+                        array_push($resultAsMulti,$resultAs);
+                        array_push($assessnames,$activityname);
+                    }
+                }
+            }
+        }
+        
+        
         /*var_dump($quiznames); echo "<br>";
         var_dump($cloQCount); echo "<br>";
         var_dump($seatnosQMulti); echo "<br>";
@@ -610,6 +728,11 @@
                 if(in_array($closid[$j], $closUniqueAMulti[$i]))
                     $closidCountActivity[$j]++;
         
+        for($i=0; $i<($assessids); $i++)
+            for($j=0; $j<count($closid); $j++)
+                if(in_array($closid[$j], $closUniqueAsMulti[$i]))
+                    $closidCountActivity[$j]++;
+        
     ?>
     <!-- Now display data in formatted way -->
     <div id="container">
@@ -643,6 +766,12 @@
                     if(in_array($closid[$i], $closUniqueAMulti[$j])){
                     ?>
                     <th><?php echo $assignnames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
+                    <?php
+                    }
+                for($j=0; $j<($assessids/*+count($massignids)*/); $j++)
+                    if(in_array($closid[$i], $closUniqueAsMulti[$j])){
+                    ?>
+                    <th><?php echo $assessnames[$j]."<br>(Attempt: ".$attemptno.")"; $attemptno++; ?></th>
                     <?php
                     }
             }
@@ -679,7 +808,7 @@
         <tr>
             <th> <?php echo strtoupper($seatno) ?> </th>
             <?php
-            /****** QUIZZES/ASSIGNMENTS RECORDS ******/
+            /****** QUIZZES/ASSIGNMENTS/ASSESSMENT RECORDS ******/
             for($i=0; $i<count($closid); $i++){
                 for($j=0; $j<($quizids/*+count($mquizids)*/); $j++)
                     if(in_array($closid[$i], $closUniqueQMulti[$j])){
@@ -716,6 +845,32 @@
                                 $flag=1;
                                 //if($resultAMulti[$j][$k] == 'P')
                                 if($resultAMulti[$j][$k] >= $clospasspercent[$i]){
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i></td>";
+                                    $ind_stud_clo_stat[$i] = 1; // set status pass
+                                    $activity_clo_stat[$attempt_idx]++; // increment for attempt pass
+                                    $attempt_idx++;
+                                }
+                                else {
+                                    echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #FE3939'><span style='display: none'>F</span></i></td>";
+                                    $attempt_idx++;
+                                }
+                            }
+                        }
+                        if($flag==0)
+                        {
+                            echo '<td><i class="fa fa-times" aria-hidden="true"></i><span style="display: none">&#10005;</span></td>';
+                            $attempt_idx++;
+                        }
+                    }
+                for($j=0; $j<($assessids/*+count($massignids)*/); $j++)
+                    if(in_array($closid[$i], $closUniqueAsMulti[$j])){
+                        $flag=0;
+                        for($k=0; $k<count($seatnosAsMulti[$j]); $k++){
+                            if($seatno == $seatnosAsMulti[$j][$k] && $closid[$i] == $closAsMulti[$j][$k])
+                            {
+                                $flag=1;
+                                //if($resultAMulti[$j][$k] == 'P')
+                                if($resultAsMulti[$j][$k] >= $clospasspercent[$i]){
                                     echo "<td><i class='fa fa-square' aria-hidden='true' style='color: #05E177'><span style='display: none'>P</span></i></td>";
                                     $ind_stud_clo_stat[$i] = 1; // set status pass
                                     $activity_clo_stat[$attempt_idx]++; // increment for attempt pass
