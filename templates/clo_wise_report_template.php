@@ -933,16 +933,25 @@
                         echo "$closid[$i]<br/>";
                         echo "$ind_stud_clo_stat[$i]<br/>";*/
 
-                         $flag=$DB->get_records_sql('SELECT * FROM  `mdl_clo_wise_result` WHERE courseid = ? AND userid = ? AND cloid = ?', array($course_id,$stdids[$stdIdIndexToStore],$closid[$i] ));
+                         
+
+                         
+
+                       
+                         /*$flag=$DB->get_records_sql('SELECT * FROM  `mdl_clo_wise_result` WHERE courseid = ? AND userid = ? AND cloid = ?', array($course_id,$stdids[$stdIdIndexToStore],$closid[$i] ));
                          if($flag) //update
                          {
                              $sql_update="UPDATE mdl_clo_wise_result SET status =?       WHERE userid=? AND courseid = ? AND cloid = ?";
                                 
-                             // $DB->execute($sql_update, array($ind_stud_clo_stat[$i], $stdids[$stdIdIndexToStore], $course_id ,$closid[$i] ));
+                              $DB->execute($sql_update, array($ind_stud_clo_stat[$i], $stdids[$stdIdIndexToStore], $course_id ,$closid[$i] ));
                         }
 
-                         /*if(!$flag)//insert
-                            $lastinsertid = $DB->insert_record('clo_wise_result', $record);*/
+                         if(!$flag)//insert
+                            $lastinsertid = $DB->insert_record('clo_wise_result', $record); */
+
+
+
+
 
                     }
             
