@@ -938,12 +938,12 @@
                          {
                              $sql_update="UPDATE mdl_clo_wise_result SET status =?       WHERE userid=? AND courseid = ? AND cloid = ?";
                                 
-                              $DB->execute($sql_update, array($ind_stud_clo_stat[$i],
-                               $stdids[$stdIdIndexToStore], $course_id ,$closid[$i] ));
+                             // $DB->execute($sql_update, array($ind_stud_clo_stat[$i], $stdids[$stdIdIndexToStore], $course_id ,$closid[$i] ));
                         }
 
-                         if(!$flag)//insert
-                            $lastinsertid = $DB->insert_record('clo_wise_result', $record);
+                         /*if(!$flag)//insert
+                            $lastinsertid = $DB->insert_record('clo_wise_result', $record);*/
+
                     }
             
                 $stdIdIndexToStore++;

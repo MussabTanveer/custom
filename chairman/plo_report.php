@@ -171,6 +171,81 @@
         var_dump($courseids);
        // $idnumbers[1]="CS-111";
        // $idnumbers[2]="CS-121";
+        $flag=0;
+        $j=1;
+        $plosclosid = array();
+        $statusArray = array();
+        $statusArrayIndex=0;
+        $chunksize = 0;
+
+        foreach ($courseids as $c)
+         {
+
+             $sql=$DB->get_records_sql('SELECT Distinct cloid FROM  `mdl_clo_wise_result` WHERE courseid = ?', array($c));
+            if($sql){
+                foreach($sql as $s){
+                   // $userid = $s->userid;
+                    $cloid = $s->cloid;
+                   // $courseid = $s->courseid;
+                   // $status  = $s->status;
+
+
+                    $sql1=$DB->get_records_sql('SELECT * FROM  `mdl_competency` WHERE id = ?', array($cloid));
+                    if($sql1)
+                    {
+                        foreach ($sql1 as $s1)
+                        {
+                            $parentid = $s1->parentid;
+                            if ($parentid == $Ploid)
+                                $flag=1;
+                        }
+                    }
+                    if($flag)
+                    {
+                        /*if ($j =1)
+                        {
+                            $tempStatus = $status;
+                            $tempUserId = $userid;
+                            $tempCourseId = $courseid;
+                            $statusArray[$statusArrayIndex] = $tempStatus;
+                            $statusArrayIndex++
+                            $j=2;
+                            $chunksize++;
+                        }
+
+                    if ($tempUserId == $userid && $tempCourseId == $courseid && $j!=1)
+                        {
+                            $chunksize++;
+                            $tempStatus = $status;
+                          
+                            $statusArray[$statusArrayIndex] = $tempStatus;
+                             $statusArrayIndex++
+
+                        }
+                        if( $tempUserId != $userid && $tempCourseId == $courseid && $j!=1)
+
+                        {
+                            $chunksize=0;
+                             $tempUserId = $userid;   
+                             $tempStatus = $status;
+                          
+                            $statusArray[$statusArrayIndex] = $tempStatus;
+                            $statusArrayIndex++
+
+                        }*/
+                        echo "Printing PLO's Clos";
+                        echo "<br/>  $cloid  <br/>";
+                        array_push($plosclosid, $cloid);
+                    }
+                    $flag =0;
+
+
+                }    
+        }
+    }
+
+    //var_dump($plosclosid);
+
         ?>
         <table border="2px">
             <?php
@@ -202,7 +277,26 @@
                      <?php 
                      foreach($idnumbers as $idn)
                      {?> 
-                         <td></td>
+                         <td><?php 
+                            echo "$sn $idn"; 
+
+                            $courses=$DB->get_records_sql('SELECT * FROM mdl_course WHERE idnumber=?',array($idn)); 
+
+                            if($courses){
+
+                                 foreach($courses as $course)
+                                 {
+
+                                        $id = $course->id;
+                                        echo "<br/>$id";
+
+                                 }
+                             }
+
+
+
+
+                         ?></td>
                      
 
                      <?php 
