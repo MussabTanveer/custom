@@ -756,13 +756,13 @@
                    
                     
                 }*/
-                 echo $stdids[$stdIdIndexToStore];
+                /* echo $stdids[$stdIdIndexToStore];
                  echo "<br/>";
                 //echo "$seatno<br/>";
                 echo "$course_id<br/>"; 
                 var_dump($closid); echo "<br/>";  
                   var_dump($ind_stud_clo_stat);
-                  echo "<br/>"; 
+                  echo "<br/>"; */
 
                    for ($i=0 ; $i<count($closid); $i++)
                    {
