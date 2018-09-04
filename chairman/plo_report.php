@@ -122,7 +122,7 @@
         var_dump($idnumbers);
         echo "<br/>";
         var_dump($semesterids);
-        echo "<br/>";
+        echo "<br/> Course Ids ";
         var_dump($courseids);
          echo "<br/>";
           echo "<br/>";
@@ -131,7 +131,7 @@
         $semesterids = array_values(array_unique($semesterids));
         $courseids = array_values(array_unique($courseids));
 
-        $courseid = $courseids[2];
+        $courseid = $courseids[0];
 
        // echo "$courseid";
 
@@ -196,12 +196,19 @@
                 foreach($seatnos as $sn)
                 {
             ?>  <tr>
-                <td><?php echo $i; ?></td>
-                <td><?php echo $sn; ?></td>
-                <td></td>
-                <td></td>
-                 <td></td>
-                <td></td>
+                    <td><?php echo $i; ?></td>
+                     <td><?php echo $sn; ?></td>
+                    
+                     <?php 
+                     foreach($idnumbers as $idn)
+                     {?> 
+                         <td></td>
+                     
+
+                     <?php 
+                     }
+                 ?>
+                        <td>   </td>
                 </tr>
             <?php
                 $i++;

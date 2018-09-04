@@ -667,7 +667,7 @@
             $activity_clo_stat[$i] = 0; // initialize all clos count with 0
         for($i=0; $i<count($closid); $i++)
             $cohort_clo_stat[$i] = 0; // initialize all clos status with 0
-        
+        $stdIdIndexToStore=0;
         foreach ($seatnos as $seatno) {
             $attempt_idx = 0; // re-initialize index for every student
             $ind_stud_clo_stat = array(); // individual student clo status -> 1 for pass, 0 for fail
@@ -745,6 +745,53 @@
                     $flag_all_clo_pass = 0;
                 }
             }
+
+
+            //code for storing the results into the database
+                
+                /*for ($i=0; $<$stdids; $i++)
+                {
+                  
+                    echo "<br/>";
+                   
+                    
+                }*/
+                 echo $stdids[$stdIdIndexToStore];
+                 echo "<br/>";
+                //echo "$seatno<br/>";
+                echo "$course_id<br/>"; 
+                var_dump($closid); echo "<br/>";  
+                  var_dump($ind_stud_clo_stat);
+                  echo "<br/>"; 
+
+                   for ($i=0 ; $i<count($closid); $i++)
+                   {
+                        $record = new stdClass();
+                        $record->userid = $stdids[$stdIdIndexToStore];
+                        $record->courseid = $course_id;
+                        $record->cloid = $closid[$i];
+                        $record->status = $ind_stud_clo_stat[$i];
+
+                        /*echo "<br/><br/><br/>";
+                        echo "$stdids[$stdIdIndexToStore]<br/>";
+                        echo "$course_id<br/>";
+                        echo "$closid[$i]<br/>";
+                        echo "$ind_stud_clo_stat[$i]<br/>";*/
+
+                         $flag=$DB->get_records_sql('SELECT * FROM  `mdl_clo_wise_result` WHERE courseid = ? AND userid = ? AND cloid = ?', array($course_id,$stdids[$stdIdIndexToStore],$closid[$i] ));
+                         if($flag) //update
+                         {
+                             $sql_update="UPDATE mdl_clo_wise_result SET status =?       WHERE userid=? AND courseid = ? AND cloid = ?";
+                                
+                              $DB->execute($sql_update, array($ind_stud_clo_stat[$i],
+                               $stdids[$stdIdIndexToStore], $course_id ,$closid[$i] ));
+                        }
+
+                         if(!$flag)//insert
+                            $lastinsertid = $DB->insert_record('clo_wise_result', $record);
+                    }
+            
+                $stdIdIndexToStore++;
             ?>
         </tr>
         <?php
