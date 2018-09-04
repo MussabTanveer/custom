@@ -84,6 +84,7 @@
                 $a++;
             }
             ?>
+            <h4><a <?php echo "href='./assessment_clo_report.php?course=$course_id'" ?> class="cool-link">Assessment CLO Report</a></h4><br>
         <?php
         }
         ?>
