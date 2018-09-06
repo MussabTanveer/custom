@@ -15,9 +15,11 @@
     if(isset($_POST['plosid'])  )
     {
         $Ploid = $_POST['plosid'];
-        echo "$Ploid";
+    //    echo "$Ploid";
         $batchID = $_POST['batchID'];
-        echo "<br/>$batchID";
+   //     echo "<br/>$batchID";
+        $frameworkId = $_POST['fwid'];
+    //    echo "<br/> $frameworkId";
 
         // Report Header (Uni. name, Dept. name, course code and title)
         $un=$DB->get_records_sql('SELECT * FROM  `mdl_vision_mission` WHERE idnumber = ?', array("un"));
@@ -96,8 +98,8 @@
                                 $batchid = $batchCourse->batchid;
                                 if ($batchid == $batchID)
                                 {
-                                    echo "displaying batch ones<br/>";
-                                    echo "$shortname $idnumber $semesterId $courseid<br/>";
+                                 //   echo "displaying batch ones<br/>";
+                                 //   echo "$shortname $idnumber $semesterId $courseid<br/>";
                                     array_push($shortnames, $shortname);
                                     array_push($idnumbers, $idnumber);
                                     array_push($semesterids, $semesterId);
@@ -113,25 +115,26 @@
 
         	}
         }
-        echo "<br/>";
+     /*   echo "<br/>";
         echo "<br/>";
         echo "Before Unique";
         echo "<br/>";
         var_dump($shortnames);
         echo "<br/>";
         var_dump($idnumbers);
-        echo "<br/>";
+        echo "<br/> semesterids ";
         var_dump($semesterids);
         echo "<br/> Course Ids ";
         var_dump($courseids);
          echo "<br/>";
-          echo "<br/>";
+          echo "<br/>";  */
         $shortnames = array_values(array_unique($shortnames));
         $idnumbers = array_values(array_unique($idnumbers));
         $semesterids = array_values(array_unique($semesterids));
         $courseids = array_values(array_unique($courseids));
 
         $courseid = $courseids[0];
+        $semesterid = $semesterids[0];
 
        // echo "$courseid";
 
@@ -155,7 +158,7 @@
             array_push($stdids,$id);
             array_push($seatnos,$seatno);
         }
-
+/*
         var_dump($stdids);
         echo "<br/>";
         var_dump($seatnos);
@@ -168,7 +171,7 @@
         echo "<br/>";
         var_dump($semesterids);
         echo "<br/>";
-        var_dump($courseids);
+        var_dump($courseids);  */
        // $idnumbers[1]="CS-111";
        // $idnumbers[2]="CS-121";
         $flag=0;
@@ -233,8 +236,8 @@
                             $statusArrayIndex++
 
                         }*/
-                        echo "Printing PLO's Clos";
-                        echo "<br/>  $cloid  <br/>";
+                      //  echo "Printing PLO's Clos";
+                    //    echo "<br/>  $cloid  <br/>";
                         array_push($plosclosid, $cloid);
                     }
                     $flag =0;
@@ -244,10 +247,11 @@
         }
     }
 
-    //var_dump($plosclosid);
+   // var_dump($plosclosid);
+    $total =0;
 
         ?>
-        <table border="2px">
+        <table class="generaltable" border="1">
             <?php
                 ?>
             <tr>
@@ -256,7 +260,7 @@
                      <th>Seat No.</th>
                 <?php
                 foreach($idnumbers as $idn)
-                {?> 
+                { $total++;?> 
                     
                     <th><?php echo $idn;?></th>
                     <?php
@@ -269,7 +273,9 @@
             <?php
             $i=1;
                 foreach($seatnos as $sn)
-                {
+                {   
+                    $PloStatus=0;
+
             ?>  <tr>
                     <td><?php echo $i; ?></td>
                      <td><?php echo $sn; ?></td>
@@ -278,22 +284,67 @@
                      foreach($idnumbers as $idn)
                      {?> 
                          <td><?php 
-                            echo "$sn $idn"; 
+                           // echo "$sn $idn"; 
 
-                            $courses=$DB->get_records_sql('SELECT * FROM mdl_course WHERE idnumber=?',array($idn)); 
+                            $courses=$DB->get_records_sql('SELECT * FROM mdl_course WHERE idnumber=? AND semesterid =? ',array($idn,$semesterid)); 
 
                             if($courses){
 
                                  foreach($courses as $course)
                                  {
 
-                                        $id = $course->id;
-                                        echo "<br/>$id";
+                                        $cid = $course->id;
+                                       // echo "<br/>$cid";
+
+                                 }
+                             }
+
+                             $userids=$DB->get_records_sql('SELECT * FROM mdl_user WHERE username=? ',array($sn)); 
+
+
+                            if($userids){
+
+                                 foreach($userids as $uid)
+                                 {
+
+                                        $usrid = $uid->id;
+                                       // echo "<br/>$usrid";
 
                                  }
                              }
 
 
+                                $getStatus=$DB->get_records_sql('SELECT * FROM mdl_clo_wise_result WHERE userid =?  AND courseid=? ',array($usrid,$cid)); 
+
+                            $statusValue =1 ;
+                            $temp = array();
+                            
+                            if($getStatus){
+
+                                 foreach($getStatus as $gs)
+                                 {
+
+                                        $status = $gs->status;
+                                        $scloid = $gs->cloid;
+                                        if (in_array($scloid, $plosclosid))
+                                         {  
+                                           // echo "<br/>$status";
+                                            array_push($temp, $status);
+
+                                            
+                                          }
+
+                                 }
+                                // var_dump($temp);
+
+                                 if(in_array(0, $temp))
+                                   echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'>  </i><br>";
+                                else
+                                  {
+                                    echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'>  </i><br>";
+                                    $PloStatus++;
+                                 }
+                             }
 
 
                          ?></td>
@@ -302,7 +353,16 @@
                      <?php 
                      }
                  ?>
-                        <td>   </td>
+                        <td> <?php //echo $PloStatus; echo $total;
+
+                            if(($PloStatus/$total) * 100 >= 50)
+                            {
+                                echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'>  </i><br>";
+                            }
+                            else
+                                echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'>  </i><br>";
+                         ?> 
+                        </td>
                 </tr>
             <?php
                 $i++;
@@ -311,9 +371,17 @@
         
         </table>
 
+        <form action="plo_selection.php" method="post">
+
+            <input type="hidden" name="batchID" value="<?php echo $batchID; ?>">
+             <input type="hidden" name="frameworkid" value="<?php echo $frameworkId; ?>">
+             <input style="margin-top: 20px" class="btn btn-default"type="submit" name="submit" value="Go Back">
+
+        </form>
+
         <?php
 
-       
+        
 
 
 

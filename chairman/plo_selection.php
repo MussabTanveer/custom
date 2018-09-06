@@ -59,6 +59,7 @@
             echo html_writer::table($table);
             ?>
             <input type="hidden" name="batchID" value="<?php echo $batchID; ?>">
+            <input type="hidden" name="fwid" value="<?php echo $frameworkid; ?>">
             <input type='submit' value='NEXT' name='submit' class="btn btn-primary">
             </form>
             <?php
