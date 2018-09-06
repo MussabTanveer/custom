@@ -34,10 +34,22 @@
             &nbsp;&nbsp;&nbsp;<a href="./display_outcome_framework-4.php" class="cool-link">&#10070; View Bloom's Taxonomy Mapping</a><br><br>
         </div>
 
+            
+            <a href="javascript:void(0)" id="pr_click" onclick="toggle_visibility('pr_click', 'pr');" class="cool-link"><span class="fa fa-chevron-down"></span> PLO Report</a><br><br>
+        <div id="pr" style="display: none">
+            &nbsp;&nbsp;&nbsp;<a href="./select_batch.php" class="cool-link">&#10070; View
+            PLO Report</a><br><br>
+        </div>
+
+
         <a href="javascript:void(0)" id="cr_click" onclick="toggle_visibility('cr_click', 'cr');" class="cool-link"><span class="fa fa-chevron-down"></span> CLO Reports</a><br><br>
         <div id="cr" style="display: none">
             &nbsp;&nbsp;&nbsp;<a href="./display_teachers.php" class="cool-link">&#10070; View Teacher's Course CLO Report</a><br>
             &nbsp;&nbsp;&nbsp;<a href="./display_students.php" class="cool-link">&#10070; View Student's CLO Progress</a><br><br>
+        </div>
+
+        
+            
         </div>
 
         <a href="javascript:void(0)" id="vl_click" onclick="toggle_visibility('vl_click', 'vl');" class="cool-link"><span class="fa fa-chevron-down"></span> Verb List</a><br><br>

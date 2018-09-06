@@ -1,3 +1,5 @@
+<script src="../script/jquery/jquery-3.2.1.js"></script>
+<script src="../script/table2excel/jquery.table2excel.js"></script>
 <?php
     require_once('../../../config.php');
     $context = context_system::instance();
@@ -338,10 +340,10 @@
                                 // var_dump($temp);
 
                                  if(in_array(0, $temp))
-                                   echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'>  </i><br>";
+                                   echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'> <span style='display: none'>F</span> </i><br>";
                                 else
                                   {
-                                    echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'>  </i><br>";
+                                    echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'> <span style='display: none'>P</span> </i><br>";
                                     $PloStatus++;
                                  }
                              }
@@ -357,10 +359,10 @@
 
                             if(($PloStatus/$total) * 100 >= 50)
                             {
-                                echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'>  </i><br>";
+                                echo "<i class='fa fa-square' aria-hidden='true' style='color: #05E177'> <span style='display: none'>P</span> </i><br>";
                             }
                             else
-                                echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'>  </i><br>";
+                                echo "<i class='fa fa-square' aria-hidden='true' style='color: #FE3939'> <span style='display: none'>F</span> </i><br>";
                          ?> 
                         </td>
                 </tr>
@@ -371,6 +373,12 @@
         
         </table>
 
+        
+
+        <?php require '../templates/print_template.html'; ?>
+
+        <button id="myButton" class="btn btn-primary" style="margin-left: 20px">Export to Excel</button>
+
         <form action="plo_selection.php" method="post">
 
             <input type="hidden" name="batchID" value="<?php echo $batchID; ?>">
@@ -378,7 +386,6 @@
              <input style="margin-top: 20px" class="btn btn-default"type="submit" name="submit" value="Go Back">
 
         </form>
-
         <?php
 
         
@@ -392,3 +399,18 @@
         echo "<font color=red> Something went wrong :( </font>";
         echo $OUTPUT->footer();
     }
+
+?>
+
+<!-- Export html Table to xls -->
+    <script type="text/javascript" >
+        $(document).ready(function(e){
+            $("#myButton").click(function(e){ 
+                $(".generaltable").table2excel({
+                    name: "file name",
+                    filename: "PLO-Report",
+                    fileext: ".xls"
+                });
+            });
+        });
+    </script>
