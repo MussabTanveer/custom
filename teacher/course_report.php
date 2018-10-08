@@ -157,8 +157,8 @@ th{
                 {
                     if ($gnames[$i]=="quiz" && $modules[$i]==16)
                     {
-                        $flagquiz = 1;
-                        $quizCount++;
+                        // $flagquiz = 1;
+                        // $quizCount++;
 
                     $recQuiz=$DB->get_recordset_sql(
                     'SELECT
@@ -224,6 +224,10 @@ th{
                         
                         //echo $quizname;
                     }
+                    if($quizname != ""){
+                        $quizCount++;
+                        $flagquiz = 1;
+                    }
                     array_push($namesQ,$quizname);
                     $qnameQuizUnique = array_unique($qnamesQ);
                     array_push($tot_quesQuiz,count($qnameQuizUnique));
@@ -255,8 +259,8 @@ th{
                 {
                     if ($gnames[$i]=="quiz" && $modules[$i]==-1)
                     {
-                        $flagmquiz = 1;
-                        $MquizCount++;
+                        // $flagmquiz = 1;
+                        // $MquizCount++;
 
                     $recMQuiz=$DB->get_recordset_sql(
                     'SELECT
@@ -311,6 +315,10 @@ th{
                         
                         //echo $quizname;
                     }
+                    if($quizname != ""){
+                        $MquizCount++;
+                        $flagmquiz = 1;
+                    }
                     array_push($namesMQ,$quizname);
                     $qnameMQuizUnique = array_unique($qnamesMQ);
                     array_push($tot_quesMQuiz,count($qnameMQuizUnique));
@@ -322,7 +330,7 @@ th{
                     array_push($closMQMulti,$closMQ);
                     array_push($resultMQMulti,$resultMQ);
                     }
-                        
+                    
                 }
                 // echo "$quizCount";
                 //var_dump($quiznames);
@@ -341,8 +349,8 @@ th{
                 {
                     if ($gnames[$i]=="assignment" && $modules[$i]==1)
                     {
-                        $flagassign = 1;
-                        $assignCount++;
+                        // $flagassign = 1;
+                        // $assignCount++;
 
                         //Get assign comp
                         $recAssignCLO=$DB->get_records_sql("SELECT DISTINCT c.id, c.shortname AS clo_name
@@ -391,6 +399,10 @@ th{
                             }*/
                             array_push($resultA,$mobtained);
                             array_push($seatnosA,$un);
+                        }
+                        if($assignname != ""){
+                            $assignCount++;
+                            $flagassign = 1;
                         }
                         array_push($namesA,$assignname);
                         array_push($maxmarkA,$amax);
