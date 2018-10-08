@@ -27,5 +27,7 @@
         }
          echo html_writer::table($table);
     }
+    else
+        echo "<font color = red> No Batch Found </font>";
     echo $OUTPUT->footer();
 ?>
